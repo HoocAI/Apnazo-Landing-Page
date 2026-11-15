@@ -1426,13 +1426,38 @@
         display: none !important;
       }
       .hero {
-        padding-bottom: 48px;
+        min-height: 100vh;
+        min-height: 100dvh;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding-bottom: max(20px, env(safe-area-inset-bottom, 0px));
+        box-sizing: border-box;
+      }
+      .hero .in {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        box-sizing: border-box;
       }
       .body {
+        flex: 1;
         grid-template-columns: 1fr;
-        padding-top: 28px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding-top: 16px;
+        padding-bottom: 16px;
         gap: 0;
         text-align: center;
+      }
+      .body > div {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
       }
       .body form {
         margin: 0 auto;
@@ -1480,10 +1505,13 @@
         padding-right: max(16px, env(safe-area-inset-right, 0px));
       }
       .hero {
-        padding-bottom: 24px;
+        min-height: 100vh;
+        min-height: 100dvh;
+        padding-bottom: max(16px, env(safe-area-inset-bottom, 0px));
       }
       .body {
-        padding-top: 10px;
+        padding-top: 6px;
+        padding-bottom: 12px;
         gap: 0;
       }
       .tag {
@@ -1623,10 +1651,7 @@
       .card-back .back-footer {
         font-size: 11px;
       }
-      .sv {
-        padding: 20px 0 44px;
-      }
-      .why, .band, .city, .faq {
+      .sv, .why, .band, .city, .faq {
         padding: 48px 0;
       }
       .how {
