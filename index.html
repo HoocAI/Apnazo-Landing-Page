@@ -31,7 +31,8 @@
 
     html {
       scroll-behavior: smooth;
-      scroll-padding-top: 70px;
+      scroll-padding-top: 80px;
+      overflow-x: hidden;
     }
 
     body {
@@ -42,6 +43,7 @@
       font: 400 16px/1.55 var(--body);
       -webkit-font-smoothing: antialiased;
       overflow-x: hidden;
+      width: 100%;
     }
 
     img {
@@ -138,6 +140,12 @@
     .hero {
       position: relative;
       padding-bottom: 128px;
+      overflow-x: clip;
+    }
+
+    .sv, .why, .band, .city, .faq, .ctasec {
+      position: relative;
+      overflow-x: clip;
     }
 
     .hero::before, .sv::before {
@@ -180,10 +188,14 @@
       align-items: center;
       justify-content: space-between;
       gap: 16px;
-      margin-top: max(16px, env(safe-area-inset-top, 0px));
+      margin-top: max(14px, env(safe-area-inset-top, 0px));
       padding: 12px 16px 12px 24px;
       border-radius: 20px;
-      position: relative;
+      position: sticky;
+      top: max(12px, env(safe-area-inset-top, 0px));
+      z-index: 1000;
+      backdrop-filter: blur(24px) saturate(1.6);
+      -webkit-backdrop-filter: blur(24px) saturate(1.6);
     }
 
     nav .links {
@@ -1289,6 +1301,9 @@
         grid-template-columns: repeat(2, 1fr);
         gap: 20px;
       }
+      .card-flip-wrap, .card-flipper {
+        min-height: 260px;
+      }
       .five {
         grid-template-columns: repeat(3, 1fr);
         gap: 20px;
@@ -1299,7 +1314,7 @@
       .rew {
         grid-template-columns: 1fr;
         gap: 36px;
-        padding: 48px 36px;
+        padding: 44px 32px;
       }
       .biz {
         grid-template-columns: 1fr;
@@ -1310,91 +1325,9 @@
     @media (max-width: 860px) {
       nav {
         flex-wrap: wrap;
-        padding: 12px 18px;
-        border-radius: 20px;
-        position: relative;
-      }
-      nav .wm {
-        font-size: 24px;
-      }
-      .hamburger-btn {
-        display: inline-flex;
-      }
-      nav .links {
-        display: none;
-        order: 3;
-        width: 100%;
-      }
-      nav .links.menu-open {
-        display: flex;
-        flex-direction: column;
-        gap: 6px;
-        padding: 16px 4px 6px;
-        margin-top: 12px;
-        border-top: 1px solid rgba(15, 67, 179, 0.1);
-        animation: navMenuDrop 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-      }
-      @keyframes navMenuDrop {
-        from { opacity: 0; transform: translateY(-8px); }
-        to { opacity: 1; transform: translateY(0); }
-      }
-      nav .links.menu-open a {
-        font-size: 16px;
-        font-weight: 600;
-        color: var(--ink);
-        padding: 10px 14px;
-        border-radius: 12px;
-        width: 100%;
-        display: block;
-      }
-      nav .links.menu-open a:hover {
-        background: rgba(15, 67, 179, 0.08);
-        color: var(--blue);
-      }
-      nav .links a::after {
-        display: none;
-      }
-      .body {
-        grid-template-columns: 1fr;
-        padding-top: 40px;
-        gap: 48px;
-        text-align: center;
-      }
-      .body form {
-        margin: 0 auto;
-      }
-      .lede {
-        margin: 0 auto 28px;
-      }
-      .trust {
-        justify-content: center;
-      }
-      .steps {
-        grid-template-columns: 1fr;
-        gap: 20px;
-      }
-      .step {
-        padding: 32px 28px;
-      }
-      .sv, .why, .band, .city, .faq {
-        padding: 80px 0;
-      }
-      .how {
-        padding: 0 0 80px !important;
-      }
-      .p1 {
-        left: 2%;
-        top: 15%;
-      }
-      .p2 {
-        right: 2%;
-        top: 65%;
-      }
-    }
-
-    @media (max-width: 640px) {
-      nav {
-        padding: 10px 14px;
+        padding: 10px 16px;
+        border-radius: 18px;
+        margin-top: 10px;
       }
       nav .wm {
         font-size: 22px;
@@ -1404,169 +1337,445 @@
       }
       .nav-actions .btn {
         font-size: 13px;
-        padding: 9px 14px;
+        padding: 8px 14px;
         border-radius: 10px;
+        font-weight: 600;
       }
       .hamburger-btn {
+        display: inline-flex;
         width: 38px;
         height: 38px;
       }
-      .in {
-        padding-left: 16px;
-        padding-right: 16px;
+      nav .links {
+        display: none;
+        order: 3;
+        width: 100%;
       }
-      h1 {
-        font-size: clamp(34px, 9vw, 48px);
-        margin: 16px 0 14px;
+      nav .links.menu-open {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        padding: 12px 4px 6px;
+        margin-top: 10px;
+        border-top: 1px solid rgba(15, 67, 179, 0.1);
+        animation: navMenuDrop 0.25s cubic-bezier(0.16, 1, 0.3, 1);
       }
-      h2 {
-        font-size: clamp(28px, 7.5vw, 38px);
+      @keyframes navMenuDrop {
+        from { opacity: 0; transform: translateY(-8px); }
+        to { opacity: 1; transform: translateY(0); }
       }
-      .lede {
-        font-size: 17px;
+      nav .links.menu-open a {
+        font-size: 15px;
+        font-weight: 600;
+        color: var(--ink);
+        padding: 10px 14px;
+        border-radius: 12px;
+        width: 100%;
+        display: block;
       }
-      .grid {
+      nav .links.menu-open a:hover,
+      nav .links.menu-open a:active {
+        background: rgba(15, 67, 179, 0.08);
+        color: var(--blue);
+      }
+      nav .links a::after {
+        display: none;
+      }
+      .body {
         grid-template-columns: 1fr;
-        gap: 16px;
+        padding-top: 32px;
+        gap: 40px;
+        text-align: center;
       }
-      .card-flip-wrap {
-        min-height: 270px;
-      }
-      .card-flipper {
-        min-height: 270px;
-      }
-      .card-front, .card-back {
-        padding: 26px 22px;
-        border-radius: 26px;
-      }
-      .five {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 20px 14px;
-      }
-      .five > :nth-child(5) {
-        grid-column: span 2;
-        max-width: 240px;
+      .body form {
         margin: 0 auto;
       }
-      .f .ib {
-        width: 60px;
-        height: 60px;
-        margin-bottom: 12px;
+      .lede {
+        margin: 0 auto 24px;
       }
-      .f h3 {
-        font-size: 16px;
-      }
-      .f p {
-        font-size: 13px;
-      }
-      form {
-        flex-direction: column;
-        padding: 10px;
-        border-radius: 16px;
-        width: 100%;
-        max-width: 100%;
-      }
-      form input {
-        padding: 12px 14px;
-        width: 100%;
-      }
-      form button.btn {
-        width: 100%;
-        padding: 14px 20px;
+      .trust {
+        justify-content: center;
       }
       .pop {
         display: none;
       }
+      .steps {
+        grid-template-columns: 1fr;
+        gap: 18px;
+      }
+      .step {
+        padding: 28px 24px;
+      }
+      .sv, .why, .band, .city, .faq {
+        padding: 64px 0;
+      }
+      .how {
+        padding: 0 0 64px !important;
+      }
+      .band {
+        padding: 0 0 64px;
+      }
+      .city {
+        padding: 0 0 64px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .in {
+        padding-left: max(16px, env(safe-area-inset-left, 0px));
+        padding-right: max(16px, env(safe-area-inset-right, 0px));
+      }
+      .hero {
+        padding-bottom: 56px;
+      }
+      .body {
+        padding-top: 18px;
+        gap: 30px;
+      }
+      h1 {
+        font-size: clamp(32px, 8.5vw, 42px);
+        line-height: 1.1;
+        letter-spacing: -0.04em;
+        margin: 12px 0 12px;
+      }
+      h2 {
+        font-size: clamp(24px, 6.8vw, 32px);
+        line-height: 1.18;
+      }
+      .head {
+        margin-bottom: 24px;
+        text-align: center;
+      }
+      .lede {
+        font-size: 16px;
+        line-height: 1.5;
+        margin-bottom: 22px;
+      }
+      form {
+        flex-direction: column;
+        padding: 6px;
+        border-radius: 18px;
+        width: 100%;
+        max-width: 100%;
+        gap: 8px;
+        box-shadow: 0 12px 32px -4px rgba(15, 67, 179, 0.12);
+      }
+      form input {
+        padding: 14px 16px;
+        width: 100%;
+        font-size: 16px; /* 16px strictly avoids iOS auto-zoom */
+        border-radius: 12px;
+        text-align: center;
+        background: rgba(255, 255, 255, 0.9);
+      }
+      form button.btn {
+        width: 100%;
+        padding: 14px 20px;
+        font-size: 15.5px;
+        font-weight: 700;
+        border-radius: 12px;
+      }
+      .note {
+        font-size: 12.5px;
+        margin-top: 10px;
+        text-align: center;
+      }
+      .trust {
+        gap: 8px 14px;
+        font-size: 12.5px;
+        margin-top: 16px;
+        justify-content: center;
+      }
+      .trust span {
+        gap: 6px;
+      }
+      .trust svg {
+        width: 15px;
+        height: 15px;
+      }
       .phone {
-        width: min(300px, 92vw);
-        border-radius: 40px;
+        width: min(300px, 90vw);
+        border-radius: 38px;
         padding: 8px;
       }
       .scr {
-        border-radius: 32px;
-        padding: 18px 14px;
+        border-radius: 30px;
+        padding: 16px 12px;
+        gap: 10px;
+      }
+      .grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+      }
+      .card-flip-wrap, .card-flipper {
+        min-height: 236px;
+      }
+      .card-front, .card-back {
+        padding: 22px 18px;
+        border-radius: 22px;
+      }
+      .card-front .ib {
+        width: 50px;
+        height: 50px;
+        border-radius: 14px;
+        margin-bottom: 12px;
+      }
+      .card-front .ib svg {
+        width: 24px;
+        height: 24px;
+      }
+      .card-front h3 {
+        font-size: 22px;
+        margin-bottom: 4px;
+      }
+      .card-front p {
+        font-size: 14px;
+        line-height: 1.4;
+      }
+      .card-back h4 {
+        font-size: 18px;
+        margin-bottom: 8px;
+      }
+      .card-back ul {
+        gap: 6px;
+        margin-bottom: 10px;
+      }
+      .card-back li {
+        font-size: 12.5px;
+        line-height: 1.35;
+      }
+      .card-back .back-footer {
+        font-size: 11px;
+      }
+      .sv, .why, .band, .city, .faq {
+        padding: 48px 0;
+      }
+      .how {
+        padding: 0 0 48px !important;
+      }
+      .band {
+        padding: 0 0 48px;
+      }
+      .city {
+        padding: 0 0 48px;
+      }
+      .steps {
         gap: 12px;
       }
-      .rew {
-        padding: 32px 20px;
-        border-radius: 32px;
+      .step {
+        padding: 22px 18px;
+        border-radius: 20px;
+      }
+      .step .n {
+        width: 38px;
+        height: 38px;
+        font-size: 17px;
+        margin-bottom: 12px;
+        border-radius: 12px;
+      }
+      .step h3 {
+        font-size: 20px;
+        margin-bottom: 4px;
+      }
+      .step p {
+        font-size: 14px;
+        line-height: 1.45;
+      }
+      .five {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+      .five > :nth-child(5) {
+        grid-column: span 1;
+        max-width: 100%;
+        margin: 0;
+      }
+      .f {
+        display: flex;
+        align-items: center;
         text-align: left;
+        gap: 14px;
+        padding: 14px 16px;
+        border-radius: 18px;
+        background: rgba(255, 255, 255, 0.78);
+        border: 1px solid rgba(255, 255, 255, 0.95);
+        box-shadow: 0 6px 18px -4px rgba(15, 67, 179, 0.05);
+      }
+      .f .ib {
+        width: 44px;
+        height: 44px;
+        margin: 0;
+        flex-shrink: 0;
+        border-radius: 13px;
+      }
+      .f .ib svg {
+        width: 20px;
+        height: 20px;
+      }
+      .f > div:last-child {
+        min-width: 0;
+      }
+      .f h3 {
+        font-size: 15.5px;
+        margin-bottom: 2px;
+        font-weight: 700;
+      }
+      .f p {
+        font-size: 13px;
+        margin: 0;
+        color: var(--muted);
+        line-height: 1.35;
+      }
+      .rew {
+        padding: 24px 16px;
+        border-radius: 26px;
+        gap: 20px;
+        text-align: left;
+      }
+      .rew h2 {
+        font-size: clamp(23px, 6.2vw, 28px);
+      }
+      .rew p {
+        font-size: 14.5px;
+        margin: 10px 0 14px;
       }
       .reward-perk {
         padding: 14px 16px;
         border-radius: 18px;
         gap: 8px;
+        width: 100%;
+        margin-top: 14px;
+      }
+      .rcards {
+        gap: 10px;
       }
       .rc {
-        padding: 16px 18px;
-        border-radius: 20px;
+        padding: 14px 16px;
+        border-radius: 18px;
+        gap: 12px;
+      }
+      .rc .ib {
+        width: 42px;
+        height: 42px;
+        border-radius: 12px;
+        flex-shrink: 0;
+      }
+      .rc b {
+        font-size: 14.5px;
+      }
+      .rc span {
+        font-size: 12.5px;
       }
       .biz > div {
-        padding: 28px 20px;
-        border-radius: 28px;
+        padding: 24px 18px;
+        border-radius: 22px;
+      }
+      .biz .a h2 {
+        font-size: clamp(23px, 6.2vw, 28px);
+      }
+      .biz .a p {
+        font-size: 14.5px;
+        margin: 10px 0 16px;
+      }
+      .biz .btn {
+        width: 100%;
+        max-width: 220px;
+        padding: 13px 18px;
+        font-size: 14.5px;
+      }
+      .biz h3 {
+        font-size: 20px;
+        margin-bottom: 14px;
       }
       .biz li {
-        font-size: 16px;
+        font-size: 14.5px;
+        gap: 10px;
       }
       .cityc {
-        padding: 64px 18px 150px;
-        border-radius: 32px;
+        padding: 40px 16px 115px;
+        border-radius: 26px;
       }
       .cityc h2 {
-        font-size: 26px;
+        font-size: clamp(21px, 5.8vw, 26px);
       }
       .cityc p {
-        font-size: 16px;
+        font-size: 14px;
+        margin: 8px auto 0;
+        max-width: 22em;
       }
       .faq details {
-        padding: 18px 20px;
-        border-radius: 18px;
+        padding: 15px 16px;
+        border-radius: 16px;
       }
       .faq summary {
-        font-size: 17px;
-      }
-      .faq details p {
         font-size: 15px;
       }
+      .faq details p {
+        font-size: 13.5px;
+        margin-top: 8px;
+      }
       .cta {
-        padding: 40px 18px;
-        border-radius: 28px;
+        padding: 34px 16px;
+        border-radius: 24px;
       }
       .cta h2 {
-        font-size: 30px;
+        font-size: clamp(24px, 6.5vw, 30px);
       }
       .cta p {
-        font-size: 16px;
-        margin: 12px 0 22px;
+        font-size: 14.5px;
+        margin: 8px 0 18px;
       }
       .cta .btn {
         width: 100%;
         max-width: 260px;
+        padding: 13px 20px;
+        font-size: 14.5px;
+      }
+      footer {
+        padding-bottom: max(24px, env(safe-area-inset-bottom, 0px));
       }
       footer .in {
         flex-direction: column;
         text-align: center;
-        gap: 12px;
+        gap: 8px;
+      }
+      footer .wm {
+        font-size: 21px;
       }
       footer .r {
+        font-size: 12.5px;
         text-align: center;
       }
     }
 
     @media (max-width: 380px) {
-      .five {
-        grid-template-columns: 1fr;
+      nav {
+        padding: 8px 12px;
       }
-      .five > :nth-child(5) {
-        grid-column: span 1;
+      nav .wm {
+        font-size: 19px;
+      }
+      .nav-actions .btn {
+        font-size: 11.5px;
+        padding: 6px 10px;
+      }
+      .hamburger-btn {
+        width: 34px;
+        height: 34px;
       }
       h1 {
-        font-size: 30px;
+        font-size: 28px;
+      }
+      h2 {
+        font-size: 22px;
+      }
+      .card-front, .card-back {
+        padding: 18px 14px;
       }
       .trust {
         flex-direction: column;
         align-items: center;
-        gap: 10px;
+        gap: 8px;
       }
     }
 
@@ -1931,36 +2140,46 @@
         <div class="ib">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-6.200 7-11.500A7 7 0 0 0 5 9.500C5 14.800 12 21 12 21z"/><circle cx="12" cy="9.500" r="2.500"/></svg>
         </div>
-        <h3>Local &amp; Trusted</h3>
-        <p>Businesses from your own neighbourhood</p>
+        <div>
+          <h3>Local &amp; Trusted</h3>
+          <p>Businesses from your own neighbourhood</p>
+        </div>
       </div>
       <div class="f">
         <div class="ib">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6h12v10H2zM14 9h4l3 3v4h-7"/><circle cx="7" cy="17.500" r="1.600"/><circle cx="17" cy="17.500" r="1.600"/></svg>
         </div>
-        <h3>Fast &amp; Reliable Delivery</h3>
-        <p>On time, every time</p>
+        <div>
+          <h3>Fast &amp; Reliable Delivery</h3>
+          <p>On time, every time</p>
+        </div>
       </div>
       <div class="f">
         <div class="ib">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13 13 20a2 2 0 0 1-3 0L3 13V4h9l8 8a1.400 1.400 0 0 1 0 1z"/><circle cx="7.500" cy="8.500" r="1.200"/></svg>
         </div>
-        <h3>Best Prices</h3>
-        <p>Fair deals, every day</p>
+        <div>
+          <h3>Best Prices</h3>
+          <p>Fair deals, every day</p>
+        </div>
       </div>
       <div class="f">
         <div class="ib">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13M5 12v8h14v-8M12 8c-2-4-6-3-5 0M12 8c2-4 6-3 5 0"/></svg>
         </div>
-        <h3>Reward Points &amp; Referral Benefits</h3>
-        <p>Earn as you order and invite</p>
+        <div>
+          <h3>Reward Points &amp; Referral Benefits</h3>
+          <p>Earn as you order and invite</p>
+        </div>
       </div>
       <div class="f">
         <div class="ib">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14v-2a8 8 0 0 1 16 0v2M4 14h3v5H4zM17 14h3v5h-3zM20 19c0 1.500-2 2-5 2"/></svg>
         </div>
-        <h3>Dedicated Support</h3>
-        <p>A real person when you need one</p>
+        <div>
+          <h3>Dedicated Support</h3>
+          <p>A real person when you need one</p>
+        </div>
       </div>
     </div>
   </div>
