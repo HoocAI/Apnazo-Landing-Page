@@ -1143,6 +1143,8 @@
     .cityc h2 {
       max-width: 14em;
       margin: 0 auto 14px;
+      position: relative;
+      z-index: 2;
     }
 
     .cityc p {
@@ -1150,6 +1152,13 @@
       font-size: 19px;
       margin: 0 auto;
       max-width: 30em;
+      position: relative;
+      z-index: 2;
+    }
+
+    .cityc .eyebrow {
+      position: relative;
+      z-index: 2;
     }
 
     .cityc svg {
@@ -1159,6 +1168,7 @@
       bottom: 0;
       width: 100%;
       height: 170px;
+      pointer-events: none;
     }
 
     .faq {
@@ -1438,6 +1448,13 @@
       .city {
         padding: 0 0 64px;
       }
+      .cityc {
+        padding: 56px 20px 130px;
+        border-radius: 32px;
+      }
+      .cityc svg {
+        height: 100px;
+      }
     }
 
     @media (max-width: 640px) {
@@ -1446,64 +1463,86 @@
         padding-right: max(16px, env(safe-area-inset-right, 0px));
       }
       .hero {
-        padding-bottom: 40px;
+        padding-bottom: 24px;
       }
       .body {
-        padding-top: 14px;
+        padding-top: 10px;
         gap: 0;
       }
+      .tag {
+        font-size: 12px;
+        padding: 6px 13px;
+        margin-bottom: 6px;
+      }
       h1 {
-        font-size: clamp(32px, 8.5vw, 42px);
+        font-size: clamp(30px, 8.2vw, 40px);
         line-height: 1.1;
         letter-spacing: -0.04em;
-        margin: 12px 0 12px;
+        margin: 10px 0 10px;
       }
       h2 {
-        font-size: clamp(24px, 6.8vw, 32px);
+        font-size: clamp(23px, 6.5vw, 30px);
         line-height: 1.18;
       }
       .head {
-        margin-bottom: 24px;
+        margin-bottom: 20px;
         text-align: center;
       }
       .lede {
-        font-size: 16px;
-        line-height: 1.5;
-        margin-bottom: 22px;
+        font-size: 15.5px;
+        line-height: 1.45;
+        margin: 0 auto 18px;
+        max-width: 23em;
       }
       form {
         flex-direction: column;
-        padding: 6px;
-        border-radius: 18px;
+        padding: 8px;
+        border-radius: 20px;
+        background: rgba(255, 255, 255, 0.94);
+        border: 1px solid rgba(15, 67, 179, 0.14);
+        box-shadow: 0 16px 36px -6px rgba(15, 67, 179, 0.13);
         width: 100%;
-        max-width: 100%;
+        max-width: 380px;
         gap: 8px;
-        box-shadow: 0 12px 32px -4px rgba(15, 67, 179, 0.12);
+        margin: 0 auto;
       }
       form input {
-        padding: 14px 16px;
+        padding: 13px 16px;
         width: 100%;
         font-size: 16px; /* 16px strictly avoids iOS auto-zoom */
-        border-radius: 12px;
+        border-radius: 14px;
         text-align: center;
-        background: rgba(255, 255, 255, 0.9);
+        background: #f3f6fe;
+        border: 1px solid rgba(15, 67, 179, 0.1);
+        color: var(--ink);
+        box-sizing: border-box;
+      }
+      form input:focus {
+        background: #ffffff;
+        border-color: var(--blue);
+        box-shadow: 0 0 0 3px rgba(15, 67, 179, 0.12);
       }
       form button.btn {
         width: 100%;
         padding: 14px 20px;
         font-size: 15.5px;
         font-weight: 700;
-        border-radius: 12px;
+        border-radius: 14px;
+        background: linear-gradient(135deg, #ff7a00, #ff5500);
+        box-shadow: 0 8px 20px -2px rgba(255, 122, 0, 0.35);
+        color: #fff;
       }
       .note {
         font-size: 12.5px;
-        margin-top: 10px;
+        margin-top: 8px;
         text-align: center;
+        min-height: 18px;
       }
       .trust {
         gap: 8px 14px;
         font-size: 12.5px;
-        margin-top: 16px;
+        margin-top: 14px;
+        margin-bottom: 8px;
         justify-content: center;
       }
       .trust span {
@@ -1567,7 +1606,10 @@
       .card-back .back-footer {
         font-size: 11px;
       }
-      .sv, .why, .band, .city, .faq {
+      .sv {
+        padding: 20px 0 44px;
+      }
+      .why, .band, .city, .faq {
         padding: 48px 0;
       }
       .how {
@@ -1712,16 +1754,21 @@
         gap: 10px;
       }
       .cityc {
-        padding: 40px 16px 115px;
+        padding: 40px 18px 90px;
         border-radius: 26px;
       }
       .cityc h2 {
         font-size: clamp(21px, 5.8vw, 26px);
+        margin: 0 auto 10px;
       }
       .cityc p {
         font-size: 14px;
-        margin: 8px auto 0;
+        line-height: 1.45;
+        margin: 0 auto;
         max-width: 22em;
+      }
+      .cityc svg {
+        height: 62px;
       }
       .faq details {
         padding: 15px 16px;
@@ -1791,6 +1838,12 @@
       }
       .card-front, .card-back {
         padding: 18px 14px;
+      }
+      .cityc {
+        padding: 34px 14px 80px;
+      }
+      .cityc svg {
+        height: 52px;
       }
       .trust {
         flex-direction: column;
