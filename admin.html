@@ -6,21 +6,24 @@
   <title>Admin Portal · Apnazo</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@600;700;800&display=swap">
   <style>
     :root {
       --primary: #0f43b3;
-      --text: #111827;
-      --text-muted: #6b7280;
-      --bg: #f9fafb;
-      --surface: #ffffff;
-      --border: #e5e7eb;
+      --deep: #0a2a75;
+      --orange: #ff7a00;
+      --text: #0b1b45;
+      --text-muted: #5a6785;
+      --bg: #f3f7ff;
+      --surface: rgba(255, 255, 255, 0.82);
+      --border: rgba(15, 67, 179, 0.09);
       --success: #059669;
-      --success-bg: #ecfdf5;
+      --success-bg: rgba(5, 150, 105, 0.08);
       --warning: #b45309;
-      --warning-bg: #fffbeb;
+      --warning-bg: rgba(245, 158, 11, 0.09);
       --danger: #dc2626;
-      --danger-bg: #fef2f2;
+      --danger-bg: rgba(239, 68, 68, 0.08);
+      --display: "Sora", -apple-system, sans-serif;
       --font: 'Inter', -apple-system, sans-serif;
     }
     * { box-sizing: border-box; }
@@ -34,6 +37,34 @@
       display: flex;
       flex-direction: column;
       -webkit-font-smoothing: antialiased;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Ambient Floating Gradient Orbs */
+    .ambient-orb {
+      position: fixed;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .orb-1 {
+      width: 580px;
+      height: 580px;
+      background: var(--primary);
+      filter: blur(140px);
+      opacity: 0.15;
+      right: -100px;
+      top: -100px;
+    }
+    .orb-2 {
+      width: 480px;
+      height: 480px;
+      background: var(--orange);
+      filter: blur(140px);
+      opacity: 0.13;
+      left: -120px;
+      bottom: -60px;
     }
 
     /* Login Screen Container */
@@ -45,13 +76,17 @@
       padding: 20px;
     }
     .login-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 36px 32px;
+      background: rgba(255, 255, 255, 0.82);
+      border: 1px solid rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(28px) saturate(1.6);
+      -webkit-backdrop-filter: blur(28px) saturate(1.6);
+      border-radius: 22px;
+      padding: 38px 34px;
       width: 100%;
-      max-width: 400px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      max-width: 420px;
+      box-shadow: 0 20px 50px -10px rgba(15, 67, 179, 0.12), 0 2px 6px rgba(0,0,0,0.02);
+      position: relative;
+      z-index: 1;
     }
     .brand-title {
       font-size: 22px;
@@ -409,6 +444,10 @@
         <div class="detail-row"><span>Bank Beneficiary</span><span id="dBankBeneficiary">-</span></div>
         <div class="detail-row"><span>GSTIN</span><span id="dGstin" style="font-family:monospace;">-</span></div>
         <div class="detail-row"><span>Category Licence</span><span id="dLicence">-</span></div>
+        <div class="detail-row"><span>Bank Account</span><span id="dBankAcc">-</span></div>
+        <div class="detail-row"><span>IFSC Code</span><span id="dBankIfsc">-</span></div>
+        <div class="detail-row"><span>GSTIN</span><span id="dGstin">-</span></div>
+        <div class="detail-row"><span>Category Licence</span><span id="dLicence">-</span></div>
       </div>
       <div style="display:flex; gap: 8px; margin-top: 16px;">
         <button class="btn" style="flex:1; background:var(--primary); color:#fff;" onclick="drawerAction('GREEN', 'STARTER')">Approve Starter</button>
@@ -681,6 +720,10 @@
       document.getElementById('dBankBeneficiary').textContent = s.bank?.beneficiaryName || b.ownerName || 'N/A';
       document.getElementById('dGstin').textContent = s.gst?.hasGst ? (s.gst?.gstin || 'GST Declared (Pending)') : 'Exempt / No GST (< 20L)';
       document.getElementById('dLicence').textContent = (s.licence?.type || 'Licence') + ': ' + (s.licence?.number || 'N/A');
+      document.getElementById('dBankAcc').textContent = s.bank?.accountNumber || 'N/A';
+      document.getElementById('dBankIfsc').textContent = s.bank?.ifsc || 'N/A';
+      document.getElementById('dGstin').textContent = s.gst?.hasGst ? (s.gst?.gstin || 'Pending') : 'Exempt / No GST';
+      document.getElementById('dLicence').textContent = (s.licence?.type || 'Standard') + ': ' + (s.licence?.number || 'Pending');
       document.getElementById('drawerOverlay').classList.add('open');
     }
 
