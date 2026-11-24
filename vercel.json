@@ -1,6 +1,8 @@
 {
   "version": 2,
   "rewrites": [
+    { "source": "/api/auth/otp/send", "destination": "/api/auth-otp-send" },
+    { "source": "/api/auth/otp/verify", "destination": "/api/auth-otp-verify" },
     { "source": "/api/admin/login", "destination": "/api/admin-login" },
     { "source": "/api/admin/agreement", "destination": "/api/agreement" },
     { "source": "/api/agreement", "destination": "/api/agreement" },

@@ -567,10 +567,14 @@
 
       <div id="otpSection" class="hidden">
         <div class="field">
-          <label id="s2OtpLabel">Enter 6-Digit OTP <span class="opt">Demo: 123456</span></label>
-          <input type="number" id="otpInput" placeholder="123456" maxlength="6" value="123456" style="letter-spacing: 4px; font-weight: 600; text-align: center;">
+          <label id="s2OtpLabel">Enter 6-Digit OTP</label>
+          <input type="tel" id="otpInput" placeholder="• • • • • •" maxlength="6" value="" style="letter-spacing: 6px; font-weight: 600; text-align: center; font-size: 18px;" autocomplete="one-time-code">
         </div>
-        <p style="font-size: 13px; color: var(--text-muted); margin: 0 0 14px;"><span id="s2ResendText">Resend OTP in</span> <strong id="resendTimer">30</strong>s</p>
+        <div id="otpFeedback"></div>
+        <p style="font-size: 13px; color: var(--text-muted); margin: 0 0 14px; display: flex; align-items: center; justify-content: space-between;">
+          <span><span id="s2ResendText">Resend OTP in</span> <strong id="resendTimer">30</strong>s</span>
+          <button type="button" id="resendOtpBtn" class="btn btn-secondary" style="display:none; width:auto; padding:4px 12px; font-size:12px; margin:0;" onclick="handleSendOtp()">Resend OTP</button>
+        </p>
       </div>
 
       <button class="btn btn-primary" id="sendOtpBtn" onclick="handleSendOtp()">Send OTP</button>
@@ -1478,33 +1482,117 @@
       }
     }
 
+    var otpCooldownTimer = null;
+
     function handleSendOtp() {
-      var m = document.getElementById('mobileInput').value.trim();
-      if (m.length < 10) {
-        alert('Please enter a valid 10-digit mobile number.');
+      var m = document.getElementById('mobileInput').value.trim().replace(/\D/g, '').slice(-10);
+      var sendBtn = document.getElementById('sendOtpBtn');
+      var fb = document.getElementById('otpFeedback');
+      if (fb) fb.innerHTML = '';
+
+      if (!/^[6-9]\d{9}$/.test(m)) {
+        alert('Please enter a valid 10-digit Indian mobile number.');
         return;
       }
       state.mobile = m;
-      document.getElementById('otpSection').classList.remove('hidden');
-      document.getElementById('sendOtpBtn').classList.add('hidden');
-      document.getElementById('verifyOtpBtn').classList.remove('hidden');
 
-      var sec = 30;
-      var timer = setInterval(function(){
+      sendBtn.disabled = true;
+      sendBtn.textContent = 'Sending OTP...';
+
+      fetch('/api/auth/otp/send', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ mobile: m })
+      })
+      .then(r => r.json())
+      .then(res => {
+        sendBtn.disabled = false;
+        sendBtn.textContent = TRANSLATIONS[state.lang]?.sendOtpBtn || 'Send OTP';
+
+        if (res.success) {
+          document.getElementById('otpSection').classList.remove('hidden');
+          document.getElementById('sendOtpBtn').classList.add('hidden');
+          document.getElementById('verifyOtpBtn').classList.remove('hidden');
+          document.getElementById('otpInput').value = '';
+          document.getElementById('otpInput').focus();
+
+          var msg = '✓ ' + (res.message || ('OTP sent to +91 ' + m));
+          if (res.devOtp) {
+            msg += ' <span style="font-weight:600; color:var(--primary); margin-left:4px;">(Dev Code: ' + res.devOtp + ')</span>';
+          }
+          if (fb) fb.innerHTML = '<div class="alert alert-success">' + msg + '</div>';
+
+          startResendCountdown(30);
+          autosave();
+        } else {
+          if (fb) fb.innerHTML = '<div class="alert alert-danger">' + (res.error || 'Failed to send OTP') + '</div>';
+        }
+      })
+      .catch(err => {
+        sendBtn.disabled = false;
+        sendBtn.textContent = TRANSLATIONS[state.lang]?.sendOtpBtn || 'Send OTP';
+        if (fb) fb.innerHTML = '<div class="alert alert-danger">Network error sending OTP. Please try again.</div>';
+      });
+    }
+
+    function startResendCountdown(seconds) {
+      if (otpCooldownTimer) clearInterval(otpCooldownTimer);
+      var sec = seconds;
+      var timerEl = document.getElementById('resendTimer');
+      var resendBtn = document.getElementById('resendOtpBtn');
+      if (resendBtn) resendBtn.style.display = 'none';
+      if (timerEl) timerEl.textContent = sec;
+
+      otpCooldownTimer = setInterval(function(){
         sec--;
-        document.getElementById('resendTimer').textContent = sec;
-        if (sec <= 0) clearInterval(timer);
+        if (timerEl) timerEl.textContent = sec;
+        if (sec <= 0) {
+          clearInterval(otpCooldownTimer);
+          if (resendBtn) resendBtn.style.display = 'inline-block';
+        }
       }, 1000);
-      autosave();
     }
 
     function handleVerifyOtp() {
+      var m = (state.mobile || document.getElementById('mobileInput').value.trim()).replace(/\D/g, '').slice(-10);
       var otp = document.getElementById('otpInput').value.trim();
-      if (otp !== '123456' && otp.length !== 6) {
-        alert('Invalid OTP. Please enter 123456 for demo.');
+      var verifyBtn = document.getElementById('verifyOtpBtn');
+      var fb = document.getElementById('otpFeedback');
+
+      if (otp.length !== 6) {
+        if (fb) fb.innerHTML = '<div class="alert alert-danger">Please enter the full 6-digit OTP received on your mobile.</div>';
         return;
       }
-      goToStep(3);
+
+      verifyBtn.disabled = true;
+      verifyBtn.textContent = 'Verifying...';
+      if (fb) fb.innerHTML = '<div class="alert alert-warning">Verifying code with server...</div>';
+
+      fetch('/api/auth/otp/verify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ mobile: m, otp: otp })
+      })
+      .then(r => r.json())
+      .then(res => {
+        verifyBtn.disabled = false;
+        verifyBtn.textContent = TRANSLATIONS[state.lang]?.verifyOtpBtn || 'Verify & Continue →';
+
+        if (res.success && res.verified) {
+          state.mobileVerified = true;
+          if (fb) fb.innerHTML = '<div class="alert alert-success">✓ Phone number verified successfully.</div>';
+          setTimeout(function(){
+            goToStep(3);
+          }, 400);
+        } else {
+          if (fb) fb.innerHTML = '<div class="alert alert-danger">' + (res.error || 'Invalid OTP. Please check the code and try again.') + '</div>';
+        }
+      })
+      .catch(err => {
+        verifyBtn.disabled = false;
+        verifyBtn.textContent = TRANSLATIONS[state.lang]?.verifyOtpBtn || 'Verify & Continue →';
+        if (fb) fb.innerHTML = '<div class="alert alert-danger">Network error verifying OTP. Please try again.</div>';
+      });
     }
 
     function applyReferral() {

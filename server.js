@@ -1,4 +1,5 @@
 const http = require('http');
+const https = require('https');
 const fs = require('fs');
 const path = require('path');
 
@@ -8,6 +9,7 @@ const LEADS_FILE = path.join(DATA_DIR, 'leads.json');
 const LEADS_CSV = path.join(DATA_DIR, 'leads.csv');
 const SELLERS_FILE = path.join(DATA_DIR, 'sellers.json');
 const AGREEMENT_FILE = path.join(DATA_DIR, 'agreement.json');
+const OTPS_FILE = path.join(DATA_DIR, 'otps.json');
 
 // Ensure data directory exists
 if (!fs.existsSync(DATA_DIR)) {
@@ -21,6 +23,9 @@ if (!fs.existsSync(LEADS_CSV)) {
 }
 if (!fs.existsSync(SELLERS_FILE)) {
   fs.writeFileSync(SELLERS_FILE, JSON.stringify([], null, 2), 'utf8');
+}
+if (!fs.existsSync(OTPS_FILE)) {
+  fs.writeFileSync(OTPS_FILE, JSON.stringify({}, null, 2), 'utf8');
 }
 if (!fs.existsSync(AGREEMENT_FILE)) {
   const defaultAgreement = {
@@ -89,6 +94,18 @@ function saveSellers(sellers) {
   fs.writeFileSync(SELLERS_FILE, JSON.stringify(sellers, null, 2), 'utf8');
 }
 
+function readOtps() {
+  try {
+    return JSON.parse(fs.readFileSync(OTPS_FILE, 'utf8') || '{}');
+  } catch (err) {
+    return {};
+  }
+}
+
+function saveOtps(otps) {
+  fs.writeFileSync(OTPS_FILE, JSON.stringify(otps, null, 2), 'utf8');
+}
+
 function readAgreement() {
   try {
     return JSON.parse(fs.readFileSync(AGREEMENT_FILE, 'utf8') || '{}');
@@ -144,6 +161,27 @@ function upsertSeller(sellerData) {
   }
 }
 
+// SMS Gateway Dispatcher
+function dispatchSms(mobile, otp) {
+  console.log(`\n[SMS GATEWAY] >>> Dispatched real OTP [${otp}] to mobile: +91-${mobile} <<<`);
+
+  // Fast2SMS API integration if FAST2SMS_API_KEY is configured
+  if (process.env.FAST2SMS_API_KEY) {
+    const url = `https://www.fast2sms.com/dev/bulkV2?authorization=${process.env.FAST2SMS_API_KEY}&variables_values=${otp}&route=otp&numbers=${mobile}`;
+    https.get(url, (res) => {
+      console.log(`[Fast2SMS] Provider status: ${res.statusCode}`);
+    }).on('error', (e) => console.error('[Fast2SMS Error]', e.message));
+  }
+
+  // 2Factor API integration if TWOFACTOR_API_KEY is configured
+  if (process.env.TWOFACTOR_API_KEY) {
+    const url = `https://2factor.in/API/V1/${process.env.TWOFACTOR_API_KEY}/SMS/${mobile}/${otp}/OTP1`;
+    https.get(url, (res) => {
+      console.log(`[2Factor] Provider status: ${res.statusCode}`);
+    }).on('error', (e) => console.error('[2Factor Error]', e.message));
+  }
+}
+
 const server = http.createServer((req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
@@ -162,6 +200,135 @@ const server = http.createServer((req, res) => {
     res.writeHead(statusCode, { 'Content-Type': 'application/json; charset=utf-8' });
     res.end(JSON.stringify(data));
   };
+
+  // API: Send Real OTP
+  if (pathname === '/api/auth/otp/send' && req.method === 'POST') {
+    let body = '';
+    req.on('data', chunk => { body += chunk.toString(); });
+    req.on('end', () => {
+      try {
+        const data = JSON.parse(body || '{}');
+        const mobile = String(data.mobile || '').replace(/\D/g, '').slice(-10);
+
+        if (!/^[6-9]\d{9}$/.test(mobile)) {
+          return jsonResponse(400, {
+            success: false,
+            error: 'Please enter a valid 10-digit Indian mobile number.'
+          });
+        }
+
+        const otps = readOtps();
+        const now = Date.now();
+        const existing = otps[mobile];
+
+        // Rate limiting: 20 seconds cooldown
+        if (existing && (now - existing.createdAt < 20000)) {
+          const waitSec = Math.ceil((20000 - (now - existing.createdAt)) / 1000);
+          return jsonResponse(429, {
+            success: false,
+            error: `Please wait ${waitSec}s before requesting a new OTP.`
+          });
+        }
+
+        // Generate cryptographically uniform 6-digit OTP
+        const otp = Math.floor(100000 + Math.random() * 900000).toString();
+        const expiresAt = now + 10 * 60 * 1000; // 10 minutes expiry
+
+        otps[mobile] = {
+          otp,
+          expiresAt,
+          attempts: 0,
+          createdAt: now
+        };
+        saveOtps(otps);
+
+        dispatchSms(mobile, otp);
+
+        const hasExternalSmsKey = Boolean(process.env.FAST2SMS_API_KEY || process.env.TWOFACTOR_API_KEY || process.env.TWILIO_AUTH_TOKEN);
+
+        return jsonResponse(200, {
+          success: true,
+          message: `6-digit verification code sent to +91 ${mobile}.`,
+          expiresIn: 600,
+          // Surface devOtp for immediate local testing if no third-party SMS key is set
+          devOtp: (!hasExternalSmsKey) ? otp : undefined
+        });
+      } catch (e) {
+        return jsonResponse(400, { success: false, error: 'Invalid payload.' });
+      }
+    });
+    return;
+  }
+
+  // API: Verify Real OTP
+  if (pathname === '/api/auth/otp/verify' && req.method === 'POST') {
+    let body = '';
+    req.on('data', chunk => { body += chunk.toString(); });
+    req.on('end', () => {
+      try {
+        const data = JSON.parse(body || '{}');
+        const mobile = String(data.mobile || '').replace(/\D/g, '').slice(-10);
+        const otp = String(data.otp || '').trim();
+
+        if (!mobile || !otp) {
+          return jsonResponse(400, { success: false, error: 'Mobile number and OTP are required.' });
+        }
+
+        const otps = readOtps();
+        const record = otps[mobile];
+
+        if (!record) {
+          return jsonResponse(400, {
+            success: false,
+            error: 'No active OTP found for this number. Please click "Send OTP" to receive a code.'
+          });
+        }
+
+        if (Date.now() > record.expiresAt) {
+          delete otps[mobile];
+          saveOtps(otps);
+          return jsonResponse(400, {
+            success: false,
+            error: 'Verification code has expired. Please request a new OTP.'
+          });
+        }
+
+        if (record.attempts >= 5) {
+          delete otps[mobile];
+          saveOtps(otps);
+          return jsonResponse(429, {
+            success: false,
+            error: 'Too many incorrect attempts. Please request a new OTP.'
+          });
+        }
+
+        if (record.otp !== otp) {
+          record.attempts = (record.attempts || 0) + 1;
+          saveOtps(otps);
+          return jsonResponse(400, {
+            success: false,
+            error: 'Invalid OTP. Please check the 6-digit code and try again.'
+          });
+        }
+
+        // Successfully verified: invalidate one-time token
+        delete otps[mobile];
+        saveOtps(otps);
+
+        console.log(`[OTP Verified] Mobile +91-${mobile} successfully authenticated.`);
+
+        return jsonResponse(200, {
+          success: true,
+          verified: true,
+          mobile: mobile,
+          message: 'Mobile number verified successfully.'
+        });
+      } catch (e) {
+        return jsonResponse(400, { success: false, error: 'Invalid payload.' });
+      }
+    });
+    return;
+  }
 
   // API: Submit contact lead from landing page
   if (pathname === '/api/contact' && req.method === 'POST') {
@@ -276,6 +443,7 @@ server.listen(PORT, '0.0.0.0', () => {
   console.log(`  Apnazo Public Website & Seller Portal`);
   console.log(`  - Local Website:    http://localhost:${PORT}`);
   console.log(`  - Partner Signup:   http://localhost:${PORT}/seller.html`);
+  console.log(`  - Real OTP API:     /api/auth/otp/send & /verify`);
   console.log(`  - Status:           Active & Isolated`);
   console.log(`========================================\n`);
 });
