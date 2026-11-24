@@ -742,7 +742,7 @@
         </p>
       </div>
 
-      <button class="btn btn-primary" id="sendOtpBtn" onclick="handleResendOtp()">Send OTP</button>
+      <button class="btn btn-primary" id="sendOtpBtn" onclick="handleSendOtp()">Send OTP</button>
       <button class="btn btn-primary hidden" id="verifyOtpBtn" onclick="handleVerifyOtp()">Verify &amp; Continue &rarr;</button>
       <button class="btn btn-secondary" id="s2BackBtn" onclick="goToStep(1)">&larr; Back</button>
     </div>
@@ -1653,8 +1653,13 @@
     var otpCooldownTimer = null;
     var existingSellerRecord = null;
 
+    function getCleanMobileInput() {
+      var inp = document.getElementById('mobileInput');
+      return (inp ? inp.value : '').trim().replace(/\D/g, '').slice(-10);
+    }
+
     function handleSendOtp() {
-      var m = document.getElementById('mobileInput').value.trim().replace(/\D/g, '').slice(-10);
+      var m = getCleanMobileInput();
       var sendBtn = document.getElementById('sendOtpBtn');
       var fb = document.getElementById('otpFeedback');
       if (fb) fb.innerHTML = '';
@@ -1681,13 +1686,17 @@
     }
 
     function handleResendOtp() {
-      var m = state.mobile || document.getElementById('mobileInput').value.trim().replace(/\D/g, '').slice(-10);
+      var m = getCleanMobileInput();
+      if (!/^[6-9]\d{9}$/.test(m)) {
+        m = state.mobile;
+      }
       var fb = document.getElementById('otpFeedback');
-      var sendBtn = document.getElementById('sendOtpBtn');
+      var sendBtn = document.getElementById('resendOtpBtn');
       if (!m || !/^[6-9]\d{9}$/.test(m)) {
-        alert('Please enter a valid 10-digit mobile number.');
+        alert('Please enter a valid 10-digit Indian mobile number.');
         return;
       }
+      state.mobile = m;
       sendOtpRequest(m, sendBtn, fb);
     }
 
@@ -1784,7 +1793,8 @@
     }
 
     function handleVerifyOtp() {
-      var m = (state.mobile || document.getElementById('mobileInput').value.trim()).replace(/\D/g, '').slice(-10);
+      var m = getCleanMobileInput() || state.mobile;
+      state.mobile = m;
       var otp = document.getElementById('otpInput').value.trim();
       var verifyBtn = document.getElementById('verifyOtpBtn');
       var fb = document.getElementById('otpFeedback');
@@ -2096,7 +2106,25 @@
     updateProgress(1);
     loadAgreement();
 
-    // Check if an application was already submitted on this device
+    // Reset OTP section whenever user edits or types a new mobile number
+var mInput = document.getElementById('mobileInput');
+if (mInput) {
+  mInput.addEventListener('input', function() {
+    var clean = this.value.trim().replace(/\D/g, '').slice(-10);
+    if (state.mobile && clean !== state.mobile) {
+      document.getElementById('otpSection').classList.add('hidden');
+      document.getElementById('sendOtpBtn').classList.remove('hidden');
+      document.getElementById('verifyOtpBtn').classList.add('hidden');
+      var fb = document.getElementById('otpFeedback');
+      if (fb) fb.innerHTML = '';
+      var otpIn = document.getElementById('otpInput');
+      if (otpIn) otpIn.value = '';
+      if (otpCooldownTimer) clearInterval(otpCooldownTimer);
+    }
+  });
+}
+
+// Check if an application was already submitted on this device
     if (state.submitted) {
       showAlreadyRegisteredModal(state);
     }
