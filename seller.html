@@ -817,6 +817,28 @@
       </div>
     </div>
 
+    <!-- Already Submitted / Register Again Modal -->
+    <div id="alreadyRegisteredModal" style="position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.45); z-index:1000; display:none; align-items:center; justify-content:center; padding:20px;">
+      <div style="background:#fff; max-width:480px; width:100%; border-radius:14px; padding:28px 24px; box-shadow:0 10px 25px rgba(0,0,0,0.15);">
+        <div style="font-size:30px; margin-bottom:8px;">📋</div>
+        <h2 style="margin:0 0 8px; font-size:19px; font-weight:600; color:var(--text);">Application Already Submitted</h2>
+        <p style="margin:0 0 14px; font-size:13.5px; color:var(--text-muted); line-height:1.5;">
+          An application for <strong id="existStoreName" style="color:var(--text);">Your Store</strong> with phone <strong id="existMobile" style="color:var(--text);">+91 ...</strong> has already been submitted.
+        </p>
+        <div class="alert alert-warning" style="margin-bottom:18px;">
+          Current Status: <strong id="existStatus">Active / Starter Tier</strong><br>
+          <small style="color:var(--text-muted);">Application ID: <span id="existId">...</span></small>
+        </div>
+        <p style="font-size:13px; font-weight:500; color:var(--text); margin:0 0 12px;">
+          You submitted already. Want to register again or view your dashboard?
+        </p>
+        <div style="display:flex; flex-direction:column; gap:8px;">
+          <button type="button" class="btn btn-primary" onclick="openExistingDashboard()">Go to Seller Dashboard &rarr;</button>
+          <button type="button" class="btn btn-secondary" onclick="registerAgain()">Register a New Store / Start Again</button>
+        </div>
+      </div>
+    </div>
+
     <!-- S11: Decision Engine Result -->
     <div class="card hidden" id="step-11">
       <div id="decisionGreen" class="hidden">
@@ -1487,6 +1509,7 @@
     }
 
     var otpCooldownTimer = null;
+    var existingSellerRecord = null;
 
     function handleSendOtp() {
       var m = document.getElementById('mobileInput').value.trim().replace(/\D/g, '').slice(-10);
@@ -1500,6 +1523,22 @@
       }
       state.mobile = m;
 
+      // Check if this mobile has already submitted an application
+      fetch('/api/seller/profile?mobile=' + m)
+        .then(r => r.json())
+        .then(profileRes => {
+          if (profileRes.success && profileRes.seller && (profileRes.seller.submitted || profileRes.seller.status)) {
+            showAlreadyRegisteredModal(profileRes.seller);
+            return;
+          }
+          sendOtpRequest(m, sendBtn, fb);
+        })
+        .catch(() => {
+          sendOtpRequest(m, sendBtn, fb);
+        });
+    }
+
+    function sendOtpRequest(m, sendBtn, fb) {
       sendBtn.disabled = true;
       sendBtn.textContent = 'Sending OTP...';
 
@@ -1520,10 +1559,7 @@
           document.getElementById('otpInput').value = '';
           document.getElementById('otpInput').focus();
 
-          var msg = '✓ ' + (res.message || ('OTP sent to +91 ' + m));
-          if (res.devOtp) {
-            msg += ' <span style="font-weight:600; color:var(--primary); margin-left:4px;">(Dev Code: ' + res.devOtp + ')</span>';
-          }
+          var msg = '✓ ' + (res.message || ('6-digit verification code sent to +91 ' + m + '.'));
           if (fb) fb.innerHTML = '<div class="alert alert-success">' + msg + '</div>';
 
           startResendCountdown(30);
@@ -1537,6 +1573,43 @@
         sendBtn.textContent = TRANSLATIONS[state.lang]?.sendOtpBtn || 'Send OTP';
         if (fb) fb.innerHTML = '<div class="alert alert-danger">Network error sending OTP. Please try again.</div>';
       });
+    }
+
+    function showAlreadyRegisteredModal(seller) {
+      existingSellerRecord = seller;
+      var modal = document.getElementById('alreadyRegisteredModal');
+      document.getElementById('existStoreName').textContent = seller.basics?.bizName || 'Your Store';
+      document.getElementById('existMobile').textContent = '+91 ' + seller.mobile;
+      document.getElementById('existStatus').textContent = (seller.status || 'Active') + ' (' + (seller.tier || 'STARTER') + ')';
+      document.getElementById('existId').textContent = seller.id || 'N/A';
+      if (modal) modal.style.display = 'flex';
+    }
+
+    function openExistingDashboard() {
+      if (existingSellerRecord) {
+        state = Object.assign(state, existingSellerRecord);
+        localStorage.setItem('apnazo_seller_draft', JSON.stringify(state));
+      }
+      var modal = document.getElementById('alreadyRegisteredModal');
+      if (modal) modal.style.display = 'none';
+      goToDashboard();
+    }
+
+    function registerAgain() {
+      var modal = document.getElementById('alreadyRegisteredModal');
+      if (modal) modal.style.display = 'none';
+      localStorage.removeItem('apnazo_seller_draft');
+      state.id = null;
+      state.submitted = false;
+      state.basics = { bizName: '', ownerName: '', category: 'Retail & Grocery', address: '', pincode: '' };
+      state.pan = { panNumber: '', registeredName: '', verified: false };
+      state.gst = { hasGst: true, gstin: '', tradeName: '', verified: false };
+      state.bank = { accountNumber: '', ifsc: '', beneficiaryName: '', nameMatchScore: 0, verified: false };
+      state.licence = { type: 'FSSAI', number: '', verified: false };
+
+      var sendBtn = document.getElementById('sendOtpBtn');
+      var fb = document.getElementById('otpFeedback');
+      sendOtpRequest(state.mobile, sendBtn, fb);
     }
 
     function startResendCountdown(seconds) {
@@ -1763,21 +1836,42 @@
         return;
       }
 
+      state.submitted = true;
+      state.submittedAt = new Date().toISOString();
+
+      if (state.bank.nameMatchScore >= 80) {
+        state.decision = 'GREEN';
+        state.tier = 'STARTER';
+        state.status = 'Active';
+      } else {
+        state.decision = 'AMBER';
+        state.tier = 'UNDER_REVIEW';
+        state.status = 'Pending Admin Review';
+      }
+
+      // Explicitly push entire seller application payload to backend for immediate admin panel visibility
+      fetch('/api/seller/profile/save', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(state)
+      }).then(r => r.json()).then(res => {
+        if (res && res.seller && res.seller.id) {
+          state.id = res.seller.id;
+          localStorage.setItem('apnazo_seller_draft', JSON.stringify(state));
+        }
+      }).catch(function(){});
+
       goToStep(11);
       var greenDiv = document.getElementById('decisionGreen');
       var amberDiv = document.getElementById('decisionAmber');
 
-      if (state.bank.nameMatchScore >= 80) {
+      if (state.decision === 'GREEN') {
         greenDiv.classList.remove('hidden');
         amberDiv.classList.add('hidden');
-        state.decision = 'GREEN';
-        state.tier = 'STARTER';
       } else {
         amberDiv.classList.remove('hidden');
         greenDiv.classList.add('hidden');
-        state.decision = 'AMBER';
       }
-      autosave();
     }
 
     function reSubmitBank() {
@@ -1859,6 +1953,11 @@
     applyLanguage(initLang);
     updateProgress(1);
     loadAgreement();
+
+    // Check if an application was already submitted on this device
+    if (state.submitted) {
+      showAlreadyRegisteredModal(state);
+    }
   </script>
 
 </body>

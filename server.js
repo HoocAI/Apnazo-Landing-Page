@@ -161,25 +161,23 @@ function upsertSeller(sellerData) {
   }
 }
 
-// SMS Gateway Dispatcher
+// SMS Gateway Configuration (APIHome / apisol)
+const APIHOME_API_KEY = process.env.APIHOME_API_KEY || '3864528b7d85d9fed83716fd4a3bff3750151';
+const APIHOME_URL = process.env.APIHOME_URL || 'https://apisol.in/panel/api/bulksms/';
+
 function dispatchSms(mobile, otp) {
-  console.log(`\n[SMS GATEWAY] >>> Dispatched real OTP [${otp}] to mobile: +91-${mobile} <<<`);
+  const cleanMobile = String(mobile).replace(/\D/g, '').slice(-10);
+  const msg = `Your Apnazo partner verification code is ${otp}. Valid for 10 minutes.`;
+  console.log(`\n[SMS GATEWAY] >>> Sending real OTP via APIHome/apisol to +91-${cleanMobile} <<<`);
 
-  // Fast2SMS API integration if FAST2SMS_API_KEY is configured
-  if (process.env.FAST2SMS_API_KEY) {
-    const url = `https://www.fast2sms.com/dev/bulkV2?authorization=${process.env.FAST2SMS_API_KEY}&variables_values=${otp}&route=otp&numbers=${mobile}`;
-    https.get(url, (res) => {
-      console.log(`[Fast2SMS] Provider status: ${res.statusCode}`);
-    }).on('error', (e) => console.error('[Fast2SMS Error]', e.message));
-  }
-
-  // 2Factor API integration if TWOFACTOR_API_KEY is configured
-  if (process.env.TWOFACTOR_API_KEY) {
-    const url = `https://2factor.in/API/V1/${process.env.TWOFACTOR_API_KEY}/SMS/${mobile}/${otp}/OTP1`;
-    https.get(url, (res) => {
-      console.log(`[2Factor] Provider status: ${res.statusCode}`);
-    }).on('error', (e) => console.error('[2Factor Error]', e.message));
-  }
+  const url = `${APIHOME_URL}?key=${encodeURIComponent(APIHOME_API_KEY)}&mobile=${encodeURIComponent(cleanMobile)}&message=${encodeURIComponent(msg)}`;
+  https.get(url, (res) => {
+    let body = '';
+    res.on('data', c => body += c);
+    res.on('end', () => {
+      console.log(`[APIHome SMS Gateway] Response: ${body}`);
+    });
+  }).on('error', (e) => console.error('[APIHome SMS Error]', e.message));
 }
 
 const server = http.createServer((req, res) => {
@@ -244,14 +242,10 @@ const server = http.createServer((req, res) => {
 
         dispatchSms(mobile, otp);
 
-        const hasExternalSmsKey = Boolean(process.env.FAST2SMS_API_KEY || process.env.TWOFACTOR_API_KEY || process.env.TWILIO_AUTH_TOKEN);
-
         return jsonResponse(200, {
           success: true,
           message: `6-digit verification code sent to +91 ${mobile}.`,
-          expiresIn: 600,
-          // Surface devOtp for immediate local testing if no third-party SMS key is set
-          devOtp: (!hasExternalSmsKey) ? otp : undefined
+          expiresIn: 600
         });
       } catch (e) {
         return jsonResponse(400, { success: false, error: 'Invalid payload.' });

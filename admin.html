@@ -402,6 +402,10 @@
         <div class="detail-row"><span>PAN Name</span><span id="dPanName">-</span></div>
         <div class="detail-row"><span>Bank Beneficiary</span><span id="dBankBeneficiary">-</span></div>
         <div class="detail-row"><span>Match Score</span><span id="dBankScore">-</span></div>
+        <div class="detail-row"><span>Bank Account</span><span id="dBankAcc">-</span></div>
+        <div class="detail-row"><span>IFSC Code</span><span id="dBankIfsc">-</span></div>
+        <div class="detail-row"><span>GSTIN</span><span id="dGstin">-</span></div>
+        <div class="detail-row"><span>Category Licence</span><span id="dLicence">-</span></div>
       </div>
       <div style="display:flex; gap: 8px; margin-top: 16px;">
         <button class="btn" style="flex:1; background:var(--primary); color:#fff;" onclick="drawerAction('GREEN', 'STARTER')">Approve Starter</button>
@@ -665,6 +669,10 @@
       document.getElementById('dPanName').textContent = s.pan?.registeredName || 'N/A';
       document.getElementById('dBankBeneficiary').textContent = s.bank?.beneficiaryName || 'N/A';
       document.getElementById('dBankScore').textContent = (s.bank?.nameMatchScore ?? 0) + '%';
+      document.getElementById('dBankAcc').textContent = s.bank?.accountNumber || 'N/A';
+      document.getElementById('dBankIfsc').textContent = s.bank?.ifsc || 'N/A';
+      document.getElementById('dGstin').textContent = s.gst?.hasGst ? (s.gst?.gstin || 'Pending') : 'Exempt / No GST';
+      document.getElementById('dLicence').textContent = (s.licence?.type || 'Standard') + ': ' + (s.licence?.number || 'Pending');
       document.getElementById('drawerOverlay').classList.add('open');
     }
 

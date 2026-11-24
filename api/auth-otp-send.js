@@ -20,16 +20,15 @@ function saveOtps(otps) {
   } catch(e) {}
 }
 
+const APIHOME_API_KEY = process.env.APIHOME_API_KEY || '3864528b7d85d9fed83716fd4a3bff3750151';
+const APIHOME_URL = process.env.APIHOME_URL || 'https://apisol.in/panel/api/bulksms/';
+
 function dispatchSms(mobile, otp) {
-  console.log(`[SMS GATEWAY] OTP [${otp}] sent to +91-${mobile}`);
-  if (process.env.FAST2SMS_API_KEY) {
-    const url = `https://www.fast2sms.com/dev/bulkV2?authorization=${process.env.FAST2SMS_API_KEY}&variables_values=${otp}&route=otp&numbers=${mobile}`;
-    https.get(url, (res) => {}).on('error', () => {});
-  }
-  if (process.env.TWOFACTOR_API_KEY) {
-    const url = `https://2factor.in/API/V1/${process.env.TWOFACTOR_API_KEY}/SMS/${mobile}/${otp}/OTP1`;
-    https.get(url, (res) => {}).on('error', () => {});
-  }
+  const cleanMobile = String(mobile).replace(/\D/g, '').slice(-10);
+  const msg = `Your Apnazo partner verification code is ${otp}. Valid for 10 minutes.`;
+  console.log(`[SMS GATEWAY] Sending real OTP via APIHome/apisol to +91-${cleanMobile}`);
+  const url = `${APIHOME_URL}?key=${encodeURIComponent(APIHOME_API_KEY)}&mobile=${encodeURIComponent(cleanMobile)}&message=${encodeURIComponent(msg)}`;
+  https.get(url, () => {}).on('error', () => {});
 }
 
 module.exports = async (req, res) => {
@@ -64,13 +63,10 @@ module.exports = async (req, res) => {
     saveOtps(otps);
     dispatchSms(mobile, otp);
 
-    const hasExternalKey = Boolean(process.env.FAST2SMS_API_KEY || process.env.TWOFACTOR_API_KEY);
-
     return res.status(200).json({
       success: true,
       message: `6-digit verification code sent to +91 ${mobile}.`,
-      expiresIn: 600,
-      devOtp: (!hasExternalKey) ? otp : undefined
+      expiresIn: 600
     });
   } catch(e) {
     return res.status(400).json({ success: false, error: 'Invalid payload.' });
