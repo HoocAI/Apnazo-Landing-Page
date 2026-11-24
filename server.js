@@ -8,6 +8,11 @@ const LEADS_FILE = path.join(DATA_DIR, 'leads.json');
 const LEADS_CSV = path.join(DATA_DIR, 'leads.csv');
 const SELLERS_FILE = path.join(DATA_DIR, 'sellers.json');
 
+// Admin Credentials
+const ADMIN_USER = process.env.ADMIN_USER || 'admin@apnazo.com';
+const ADMIN_PASS = process.env.ADMIN_PASS || 'ApnazoAdmin@2026';
+const ADMIN_SESSION_TOKEN = 'apnazo_secure_session_token_2026_x7k';
+
 // Ensure data directory exists
 if (!fs.existsSync(DATA_DIR)) {
   fs.mkdirSync(DATA_DIR, { recursive: true });
@@ -95,7 +100,6 @@ function upsertSeller(sellerData) {
 
   const now = new Date().toISOString();
   if (existingIndex >= 0) {
-    // Merge updates
     const existing = sellers[existingIndex];
     sellers[existingIndex] = {
       ...existing,
@@ -107,7 +111,6 @@ function upsertSeller(sellerData) {
     saveSellers(sellers);
     return sellers[existingIndex];
   } else {
-    // Create new seller profile
     const newId = `SEL-${new Date().getFullYear()}${String(new Date().getMonth() + 1).padStart(2, '0')}-${String(sellers.length + 1).padStart(3, '0')}`;
     const newSeller = {
       id: newId,
@@ -121,7 +124,7 @@ function upsertSeller(sellerData) {
           timestamp: now,
           actor: 'System Risk Engine',
           decision: sellerData.decision || 'GREEN',
-          reason: sellerData.decision === 'AMBER' ? 'Soft mismatch or manual review flag triggered during onboarding.' : 'Automated checks passed.'
+          reason: sellerData.decision === 'AMBER' ? 'Soft mismatch or manual review flag triggered.' : 'Automated checks passed.'
         }
       ]
     };
@@ -131,11 +134,24 @@ function upsertSeller(sellerData) {
   }
 }
 
+// Authentication Helper
+function isAuthenticated(req) {
+  const cookieHeader = req.headers['cookie'] || '';
+  const authHeader = req.headers['authorization'] || '';
+
+  if (cookieHeader.includes(`apnazo_admin_session=${ADMIN_SESSION_TOKEN}`)) {
+    return true;
+  }
+  if (authHeader.startsWith('Bearer ') && authHeader.slice(7).trim() === ADMIN_SESSION_TOKEN) {
+    return true;
+  }
+  return false;
+}
+
 const server = http.createServer((req, res) => {
-  // CORS headers
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 
   if (req.method === 'OPTIONS') {
     res.writeHead(204);
@@ -146,7 +162,6 @@ const server = http.createServer((req, res) => {
   const parsedUrl = new URL(req.url, `http://${req.headers.host}`);
   const pathname = parsedUrl.pathname;
 
-  // Helper for JSON response
   const jsonResponse = (statusCode, data) => {
     res.writeHead(statusCode, { 'Content-Type': 'application/json; charset=utf-8' });
     res.end(JSON.stringify(data));
@@ -177,7 +192,7 @@ const server = http.createServer((req, res) => {
         console.log(`[Apnazo Lead] ${newLead.contact} (${newLead.source})`);
         return jsonResponse(200, {
           success: true,
-          message: 'Thank you! Your information has been saved successfully. We will notify you when Apnazo launches in Rourkela!'
+          message: 'Thank you! Your information has been saved successfully.'
         });
       } catch (e) {
         return jsonResponse(400, { success: false, error: 'Invalid JSON payload.' });
@@ -186,14 +201,22 @@ const server = http.createServer((req, res) => {
     return;
   }
 
-  // API: Get leads JSON
+  // API: Get leads JSON (Protected for admin)
   if (pathname === '/api/leads' && req.method === 'GET') {
+    if (!isAuthenticated(req)) {
+      return jsonResponse(401, { success: false, error: 'Unauthorized' });
+    }
     const leads = readLeads();
     return jsonResponse(200, { success: true, count: leads.length, leads });
   }
 
-  // API: Download leads CSV
+  // API: Download leads CSV (Protected)
   if (pathname === '/api/leads/export.csv' && req.method === 'GET') {
+    if (!isAuthenticated(req)) {
+      res.writeHead(401, { 'Content-Type': 'text/plain' });
+      res.end('Unauthorized: Admin login required.');
+      return;
+    }
     if (fs.existsSync(LEADS_CSV)) {
       res.writeHead(200, {
         'Content-Type': 'text/csv; charset=utf-8',
@@ -207,7 +230,7 @@ const server = http.createServer((req, res) => {
     return;
   }
 
-  // API: Save or autosave seller profile
+  // API: Save or autosave seller profile (Public to sellers)
   if (pathname === '/api/seller/profile/save' && req.method === 'POST') {
     let body = '';
     req.on('data', chunk => { body += chunk.toString(); });
@@ -215,10 +238,8 @@ const server = http.createServer((req, res) => {
       try {
         const data = JSON.parse(body || '{}');
         const savedSeller = upsertSeller(data);
-        console.log(`[Seller Saved] ${savedSeller.id} - ${savedSeller.basics?.bizName || 'Draft'} (${savedSeller.mobile})`);
         return jsonResponse(200, { success: true, seller: savedSeller });
       } catch (e) {
-        console.error('Error saving seller profile:', e);
         return jsonResponse(400, { success: false, error: 'Invalid seller payload.' });
       }
     });
@@ -240,14 +261,56 @@ const server = http.createServer((req, res) => {
     }
   }
 
-  // API: List all sellers for Admin
+  // API: Admin Login
+  if (pathname === '/api/admin/login' && req.method === 'POST') {
+    let body = '';
+    req.on('data', chunk => { body += chunk.toString(); });
+    req.on('end', () => {
+      try {
+        const data = JSON.parse(body || '{}');
+        const username = (data.username || '').trim();
+        const password = (data.password || '').trim();
+
+        if ((username === ADMIN_USER || username === 'admin') && password === ADMIN_PASS) {
+          res.setHeader('Set-Cookie', `apnazo_admin_session=${ADMIN_SESSION_TOKEN}; Path=/; HttpOnly; SameSite=Lax; Max-Age=86400`);
+          return jsonResponse(200, {
+            success: true,
+            token: ADMIN_SESSION_TOKEN,
+            message: 'Authentication successful.'
+          });
+        } else {
+          return jsonResponse(401, {
+            success: false,
+            error: 'Invalid Admin ID or Password.'
+          });
+        }
+      } catch (e) {
+        return jsonResponse(400, { success: false, error: 'Invalid JSON payload.' });
+      }
+    });
+    return;
+  }
+
+  // API: Admin Logout
+  if (pathname === '/api/admin/logout' && req.method === 'POST') {
+    res.setHeader('Set-Cookie', `apnazo_admin_session=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT`);
+    return jsonResponse(200, { success: true, message: 'Logged out successfully.' });
+  }
+
+  // API: List all sellers for Admin (Protected)
   if (pathname === '/api/admin/sellers' && req.method === 'GET') {
+    if (!isAuthenticated(req)) {
+      return jsonResponse(401, { success: false, error: 'Unauthorized' });
+    }
     const sellers = readSellers();
     return jsonResponse(200, { success: true, count: sellers.length, sellers });
   }
 
-  // API: Admin Decision on a seller application
+  // API: Admin Decision on a seller application (Protected)
   if (pathname === '/api/admin/seller/decision' && req.method === 'POST') {
+    if (!isAuthenticated(req)) {
+      return jsonResponse(401, { success: false, error: 'Unauthorized' });
+    }
     let body = '';
     req.on('data', chunk => { body += chunk.toString(); });
     req.on('end', () => {
@@ -266,8 +329,8 @@ const server = http.createServer((req, res) => {
 
         const now = new Date().toISOString();
         const seller = sellers[sellerIndex];
-        seller.decision = decision; // GREEN, AMBER, RED
-        if (tier) seller.tier = tier; // STARTER, VERIFIED, TRUSTED, SUSPENDED
+        seller.decision = decision;
+        if (tier) seller.tier = tier;
         if (decision === 'GREEN') seller.status = 'Active';
         else if (decision === 'AMBER') seller.status = 'Needs Action';
         else if (decision === 'RED') seller.status = 'Rejected';
@@ -282,7 +345,7 @@ const server = http.createServer((req, res) => {
         });
 
         saveSellers(sellers);
-        console.log(`[Admin Decision] Seller ${id} set to ${decision} (${seller.status})`);
+        console.log(`[Admin Decision] Seller ${id} set to ${decision}`);
         return jsonResponse(200, { success: true, seller });
       } catch (e) {
         return jsonResponse(400, { success: false, error: 'Invalid decision payload.' });
@@ -291,8 +354,13 @@ const server = http.createServer((req, res) => {
     return;
   }
 
-  // API: Export sellers as CSV
+  // API: Export sellers as CSV (Protected)
   if (pathname === '/api/admin/sellers/export.csv' && req.method === 'GET') {
+    if (!isAuthenticated(req)) {
+      res.writeHead(401, { 'Content-Type': 'text/plain' });
+      res.end('Unauthorized: Admin login required.');
+      return;
+    }
     const sellers = readSellers();
     const csvHeader = 'Seller_ID,Business_Name,Owner_Name,Mobile,Verticals,Category,Tier,Decision,Status,PAN_Name,Bank_Beneficiary,Bank_Match_Score,Created_Date\n';
     const csvRows = sellers.map(s => {
@@ -323,8 +391,179 @@ const server = http.createServer((req, res) => {
     return;
   }
 
-  // Admin Dashboard View (/admin)
+  // Admin Dashboard View (/admin) - Protected by Login Gate
   if (pathname === '/admin' && req.method === 'GET') {
+    const authenticated = isAuthenticated(req);
+
+    // If NOT authenticated, render clean minimalist Login Screen
+    if (!authenticated) {
+      const loginHtml = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Login · Apnazo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+  <style>
+    :root {
+      --primary: #0f43b3;
+      --text: #111827;
+      --text-muted: #6b7280;
+      --bg: #f9fafb;
+      --surface: #ffffff;
+      --border: #e5e7eb;
+      --font: 'Inter', -apple-system, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+    .login-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 36px 32px;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+    .brand-title {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--primary);
+      margin: 0 0 4px;
+    }
+    .brand-title b { color: #ff7a00; }
+    .subtitle {
+      font-size: 13.5px;
+      color: var(--text-muted);
+      margin: 0 0 24px;
+    }
+    .field {
+      margin-bottom: 16px;
+    }
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      color: #374151;
+      margin-bottom: 6px;
+    }
+    input {
+      width: 100%;
+      padding: 11px 13px;
+      font-size: 14.5px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: #ffffff;
+      color: var(--text);
+      outline: none;
+      font-family: inherit;
+    }
+    input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(15, 67, 179, 0.1);
+    }
+    .btn {
+      width: 100%;
+      padding: 12px;
+      background: var(--primary);
+      color: #fff;
+      font-size: 14.5px;
+      font-weight: 600;
+      border: 0;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    .btn:hover { background: #0a2f80; }
+    .error-msg {
+      display: none;
+      background: #fef2f2;
+      color: #991b1b;
+      border: 1px solid #fecaca;
+      border-radius: 6px;
+      padding: 10px 12px;
+      font-size: 13px;
+      margin-bottom: 16px;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-card">
+    <div class="brand-title">Apna<b>zo</b> <span style="font-size:14px;color:var(--text-muted);font-weight:500;">· Admin Portal</span></div>
+    <p class="subtitle">Enter your admin credentials to access operations.</p>
+
+    <div class="error-msg" id="errorMsg">Invalid Admin ID or Password.</div>
+
+    <form id="loginForm">
+      <div class="field">
+        <label>Admin ID / Email</label>
+        <input type="text" id="adminUser" placeholder="admin@apnazo.com" value="admin@apnazo.com" required>
+      </div>
+
+      <div class="field">
+        <label>Password</label>
+        <input type="password" id="adminPass" placeholder="Enter password" value="ApnazoAdmin@2026" required>
+      </div>
+
+      <button type="submit" class="btn" id="loginBtn">Sign In to Command Center</button>
+    </form>
+  </div>
+
+  <script>
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      var u = document.getElementById('adminUser').value.trim();
+      var p = document.getElementById('adminPass').value.trim();
+      var err = document.getElementById('errorMsg');
+      var btn = document.getElementById('loginBtn');
+
+      err.style.display = 'none';
+      btn.disabled = true;
+      btn.textContent = 'Verifying...';
+
+      fetch('/api/admin/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: u, password: p })
+      }).then(r => r.json()).then(res => {
+        btn.disabled = false;
+        btn.textContent = 'Sign In to Command Center';
+        if (res.success) {
+          localStorage.setItem('apnazo_admin_session', res.token);
+          window.location.reload();
+        } else {
+          err.textContent = res.error || 'Invalid credentials.';
+          err.style.display = 'block';
+        }
+      }).catch(e => {
+        btn.disabled = false;
+        btn.textContent = 'Sign In to Command Center';
+        err.textContent = 'Network error. Please try again.';
+        err.style.display = 'block';
+      });
+    });
+  </script>
+</body>
+</html>`;
+      res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+      res.end(loginHtml);
+      return;
+    }
+
+    // Authenticated View: Render Complete Minimalist Admin Command Center
     const leads = readLeads();
     const sellers = readSellers();
     const amberQueue = sellers.filter(s => s.decision === 'AMBER' || s.tier === 'UNDER_REVIEW');
@@ -335,461 +574,202 @@ const server = http.createServer((req, res) => {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Apnazo Admin Command Center - Super App Operations</title>
+  <title>Admin Command Center · Apnazo</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@600;700;800&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
   <style>
     :root {
-      --blue: #0f43b3;
-      --deep: #0a2a75;
-      --orange: #ff7a00;
-      --ink: #0b1b45;
-      --muted: #5a6785;
-      --bg: #f4f7fc;
-      --card: #ffffff;
-      --border: #e2e8f0;
-      --green: #10b981;
-      --green-light: #ecfdf5;
-      --amber: #f59e0b;
-      --amber-light: #fffbeb;
-      --red: #ef4444;
-      --red-light: #fef2f2;
-      --display: 'Sora', sans-serif;
-      --body: 'Inter', sans-serif;
+      --primary: #0f43b3;
+      --text: #111827;
+      --text-muted: #6b7280;
+      --bg: #f9fafb;
+      --surface: #ffffff;
+      --border: #e5e7eb;
+      --success: #059669;
+      --success-bg: #ecfdf5;
+      --warning: #b45309;
+      --warning-bg: #fffbeb;
+      --danger: #dc2626;
+      --danger-bg: #fef2f2;
+      --font: 'Inter', -apple-system, sans-serif;
     }
     * { box-sizing: border-box; }
     body {
-      font-family: var(--body);
+      font-family: var(--font);
       background: var(--bg);
-      color: var(--ink);
+      color: var(--text);
       margin: 0;
       padding: 0;
       -webkit-font-smoothing: antialiased;
     }
     .topbar {
-      background: #fff;
+      background: var(--surface);
       border-bottom: 1px solid var(--border);
-      padding: 14px 28px;
+      padding: 12px 24px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       position: sticky;
       top: 0;
-      z-index: 100;
+      z-index: 50;
     }
     .brand {
-      font-family: var(--display);
-      font-weight: 800;
-      font-size: 20px;
-      color: var(--blue);
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--primary);
       text-decoration: none;
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
     }
-    .brand b { color: var(--orange); }
+    .brand b { color: #ff7a00; }
     .brand-tag {
-      background: #e3ecff;
-      color: var(--blue);
-      font-size: 11px;
-      font-weight: 700;
-      padding: 3px 8px;
-      border-radius: 6px;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-    .topbar-actions {
-      display: flex;
-      align-items: center;
-      gap: 12px;
+      font-size: 11.5px;
+      color: var(--text-muted);
+      border-left: 1px solid var(--border);
+      padding-left: 8px;
     }
     .btn {
-      background: var(--blue);
-      color: #fff;
-      padding: 8px 16px;
-      border-radius: 8px;
-      text-decoration: none;
-      font-weight: 600;
+      padding: 7px 12px;
       font-size: 13px;
-      border: 0;
+      font-weight: 500;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
       cursor: pointer;
+      text-decoration: none;
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      transition: all 0.15s ease;
     }
-    .btn:hover { background: var(--deep); }
-    .btn-secondary {
-      background: #fff;
-      color: var(--ink);
-      border: 1px solid var(--border);
-    }
-    .btn-secondary:hover { background: #f8fafc; }
-    .btn-orange { background: var(--orange); }
-    .btn-orange:hover { background: #e86f00; }
-    .btn-success { background: var(--green); }
-    .btn-success:hover { background: #059669; }
-    .btn-danger { background: var(--red); }
-    .btn-danger:hover { background: #dc2626; }
-    .btn-sm { padding: 5px 10px; font-size: 12px; border-radius: 6px; }
+    .btn:hover { background: #f3f4f6; }
+    .btn-primary { background: var(--primary); color: #fff; border-color: var(--primary); }
+    .btn-primary:hover { background: #0a2f80; }
+    .btn-danger { background: var(--danger-bg); color: var(--danger); border-color: #fecaca; }
 
-    .container {
-      max-width: 1280px;
-      margin: 24px auto;
-      padding: 0 24px;
-    }
+    .container { max-width: 1200px; margin: 24px auto; padding: 0 20px; }
 
-    /* KPI Grid */
-    .kpi-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 16px;
-      margin-bottom: 24px;
-    }
-    .kpi-card {
-      background: #fff;
-      padding: 20px;
-      border-radius: 14px;
-      border: 1px solid var(--border);
-      box-shadow: 0 4px 12px rgba(15, 67, 179, 0.03);
-    }
-    .kpi-title { font-size: 13px; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; }
-    .kpi-val { font-family: var(--display); font-size: 30px; font-weight: 800; color: var(--ink); margin-top: 6px; }
-    .kpi-sub { font-size: 12px; color: var(--muted); margin-top: 4px; }
-    .kpi-alert { border-left: 4px solid var(--amber); }
+    /* Minimal Stats Grid */
+    .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-bottom: 20px; }
+    .kpi-card { background: var(--surface); padding: 18px; border-radius: 10px; border: 1px solid var(--border); }
+    .kpi-title { font-size: 12.5px; color: var(--text-muted); font-weight: 500; }
+    .kpi-val { font-size: 26px; font-weight: 700; color: var(--text); margin-top: 4px; }
 
-    /* Tabs */
-    .tab-bar {
-      display: flex;
-      gap: 8px;
-      border-bottom: 2px solid var(--border);
-      margin-bottom: 20px;
-    }
-    .tab-btn {
-      padding: 12px 18px;
-      border: 0;
-      background: transparent;
-      font-size: 14px;
-      font-weight: 600;
-      color: var(--muted);
-      cursor: pointer;
-      border-bottom: 3px solid transparent;
-      margin-bottom: -2px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      transition: all 0.15s ease;
-    }
-    .tab-btn.active {
-      color: var(--blue);
-      border-bottom-color: var(--blue);
-    }
-    .tab-count {
-      background: #e2e8f0;
-      color: var(--ink);
-      font-size: 11px;
-      padding: 2px 7px;
-      border-radius: 99px;
-      font-weight: 700;
-    }
-    .tab-btn.active .tab-count {
-      background: #e3ecff;
-      color: var(--blue);
-    }
-    .tab-count.alert {
-      background: var(--amber-light);
-      color: #b45309;
-      border: 1px solid rgba(245, 158, 11, 0.3);
-    }
+    /* Minimal Tabs */
+    .tab-bar { display: flex; gap: 8px; border-bottom: 1px solid var(--border); margin-bottom: 18px; }
+    .tab-btn { padding: 10px 14px; border: 0; background: transparent; font-size: 13.5px; font-weight: 500; color: var(--text-muted); cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; display: flex; align-items: center; gap: 6px; }
+    .tab-btn.active { color: var(--primary); border-bottom-color: var(--primary); font-weight: 600; }
+    .tab-count { font-size: 11px; padding: 2px 6px; border-radius: 99px; background: #f3f4f6; color: var(--text); }
+    .tab-count.alert { background: var(--warning-bg); color: var(--warning); }
 
     /* Table Container */
-    .table-card {
-      background: #fff;
-      border-radius: 14px;
-      border: 1px solid var(--border);
-      box-shadow: 0 4px 16px rgba(15, 67, 179, 0.04);
-      overflow: hidden;
-    }
-    .table-header {
-      padding: 16px 20px;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-      flex-wrap: wrap;
-    }
-    .search-input {
-      padding: 8px 14px;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      font-size: 13.5px;
-      width: 280px;
-      background: #f8fafc;
-    }
-    .filter-select {
-      padding: 8px 12px;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      font-size: 13px;
-      background: #fff;
-      color: var(--ink);
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      text-align: left;
-    }
-    th, td {
-      padding: 14px 20px;
-      border-bottom: 1px solid var(--border);
-      font-size: 13.5px;
-      vertical-align: middle;
-    }
-    th {
-      background: #f8fafc;
-      color: var(--muted);
-      font-weight: 700;
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-    tr:hover { background: #fbfdff; }
+    .table-card { background: var(--surface); border-radius: 10px; border: 1px solid var(--border); overflow: hidden; }
+    .table-header { padding: 14px 18px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+    .search-input { padding: 7px 12px; border: 1px solid var(--border); border-radius: 6px; font-size: 13px; width: 240px; }
+    .filter-select { padding: 7px 10px; border: 1px solid var(--border); border-radius: 6px; font-size: 13px; }
 
-    /* Badges */
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      padding: 4px 10px;
-      border-radius: 99px;
-      font-size: 11.5px;
-      font-weight: 700;
-    }
-    .badge-green { background: var(--green-light); color: var(--green); }
-    .badge-amber { background: var(--amber-light); color: #b45309; }
-    .badge-red { background: var(--red-light); color: var(--red); }
-    .badge-blue { background: #e3ecff; color: var(--blue); }
-    .badge-gray { background: #f1f5f9; color: var(--muted); }
+    table { width: 100%; border-collapse: collapse; text-align: left; }
+    th, td { padding: 12px 18px; border-bottom: 1px solid var(--border); font-size: 13px; vertical-align: middle; }
+    th { background: #f9fafb; color: var(--text-muted); font-weight: 600; font-size: 11.5px; text-transform: uppercase; }
+    tr:hover { background: #fbfcfe; }
 
-    /* Amber Side-by-Side Review Card */
-    .amber-card {
-      background: #fff;
-      border: 1px solid #fde68a;
-      border-radius: 12px;
-      padding: 18px;
-      margin-bottom: 16px;
-      box-shadow: 0 4px 12px rgba(245, 158, 11, 0.06);
-    }
-    .amber-head {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 14px;
-      padding-bottom: 12px;
-      border-bottom: 1px solid #fef3c7;
-    }
-    .compare-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 12px;
-      background: #fffdfa;
-      padding: 14px;
-      border-radius: 10px;
-      border: 1px solid #fef3c7;
-      margin-bottom: 14px;
-    }
-    .compare-col label {
-      display: block;
-      font-size: 11px;
-      font-weight: 700;
-      color: var(--muted);
-      text-transform: uppercase;
-      margin-bottom: 4px;
-    }
-    .compare-col .val {
-      font-size: 13.5px;
-      font-weight: 600;
-      color: var(--ink);
-    }
+    .badge { display: inline-flex; padding: 2px 7px; border-radius: 4px; font-size: 11.5px; font-weight: 600; }
+    .badge-green { background: var(--success-bg); color: var(--success); }
+    .badge-amber { background: var(--warning-bg); color: var(--warning); }
+    .badge-red { background: var(--danger-bg); color: var(--danger); }
+    .badge-gray { background: #f3f4f6; color: var(--text-muted); }
 
-    /* Modal / Drawer */
-    .drawer-overlay {
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(11, 27, 69, 0.4);
-      z-index: 1000;
-      display: none;
-      justify-content: flex-end;
-    }
+    /* Amber review card */
+    .amber-card { background: var(--surface); border: 1px solid #fde68a; border-radius: 8px; padding: 16px; margin-bottom: 12px; }
+    .amber-head { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid #fef3c7; }
+    .compare-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; background: #fffdfa; padding: 12px; border-radius: 6px; border: 1px solid #fef3c7; margin-bottom: 10px; font-size: 12.5px; }
+
+    /* Drawer */
+    .drawer-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.3); z-index: 1000; display: none; justify-content: flex-end; }
     .drawer-overlay.open { display: flex; }
-    .drawer-content {
-      background: #fff;
-      width: 100%;
-      max-width: 580px;
-      height: 100%;
-      overflow-y: auto;
-      padding: 28px;
-      box-shadow: -10px 0 30px rgba(0,0,0,0.15);
-      animation: slideIn 0.25s ease;
-    }
-    @keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
-    .detail-section {
-      background: #f8fafc;
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 14px 18px;
-      margin-bottom: 14px;
-    }
-    .detail-section h4 {
-      margin: 0 0 10px;
-      font-size: 13px;
-      color: var(--blue);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-    .detail-row {
-      display: flex;
-      justify-content: space-between;
-      padding: 6px 0;
-      font-size: 13px;
-      border-bottom: 1px dashed var(--border);
-    }
+    .drawer-content { background: var(--surface); width: 100%; max-width: 520px; height: 100%; overflow-y: auto; padding: 24px; }
+    .detail-section { background: #f9fafb; border: 1px solid var(--border); border-radius: 8px; padding: 12px 16px; margin-bottom: 12px; font-size: 13px; }
+    .detail-section h4 { margin: 0 0 8px; font-size: 12px; color: var(--primary); text-transform: uppercase; }
+    .detail-row { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px dashed var(--border); }
     .detail-row:last-child { border-bottom: 0; }
-    .detail-row span:first-child { color: var(--muted); }
-    .detail-row span:last-child { font-weight: 600; }
   </style>
 </head>
 <body>
 
-  <!-- Topbar -->
   <header class="topbar">
-    <div style="display:flex; align-items:center; gap: 14px;">
-      <a href="/admin" class="brand">
-        Apna<b>zo</b>
-        <span class="brand-tag">Super App Admin</span>
-      </a>
+    <div style="display:flex; align-items:center; gap: 8px;">
+      <a href="/admin" class="brand">Apna<b>zo</b></a>
+      <span class="brand-tag">Operations Command Center</span>
     </div>
-    <div class="topbar-actions">
-      <a href="/seller.html" target="_blank" class="btn btn-secondary">
-        🏪 Seller Onboarding Portal
-      </a>
-      <a href="/" target="_blank" class="btn btn-orange">
-        🌐 Customer Landing Page
-      </a>
+    <div style="display:flex; align-items:center; gap: 10px;">
+      <span style="font-size:12.5px; color:var(--text-muted);">${ADMIN_USER}</span>
+      <button class="btn btn-danger" onclick="logoutAdmin()">Sign Out</button>
     </div>
   </header>
 
   <div class="container">
-    <!-- KPI Overview -->
     <div class="kpi-grid">
       <div class="kpi-card">
-        <div class="kpi-title">Registered Partners</div>
+        <div class="kpi-title">Total Sellers</div>
         <div class="kpi-val">${sellers.length}</div>
-        <div class="kpi-sub">Total onboarded merchants & drivers</div>
       </div>
-      <div class="kpi-card kpi-alert">
+      <div class="kpi-card">
         <div class="kpi-title">Amber Review Queue</div>
-        <div class="kpi-val" style="color:#b45309;">${amberQueue.length}</div>
-        <div class="kpi-sub">Action required within 24hr SLA</div>
+        <div class="kpi-val" style="color:var(--warning);">${amberQueue.length}</div>
       </div>
       <div class="kpi-card">
-        <div class="kpi-title">Starter Live Sellers</div>
-        <div class="kpi-val" style="color:var(--green);">${greenActive.length}</div>
-        <div class="kpi-sub">Active & listing products/rides</div>
+        <div class="kpi-title">Starter Live Active</div>
+        <div class="kpi-val" style="color:var(--success);">${greenActive.length}</div>
       </div>
       <div class="kpi-card">
-        <div class="kpi-title">Waitlist Leads</div>
-        <div class="kpi-val" style="color:var(--blue);">${leads.length}</div>
-        <div class="kpi-sub">Early access customer signups</div>
+        <div class="kpi-title">Early Access Leads</div>
+        <div class="kpi-val" style="color:var(--primary);">${leads.length}</div>
       </div>
     </div>
 
-    <!-- Tabs Navigation -->
     <div class="tab-bar">
       <button class="tab-btn active" onclick="switchTab('amber')">
-        ⚠️ Amber Review Queue
+        Amber Review Queue
         <span class="tab-count alert">${amberQueue.length}</span>
       </button>
       <button class="tab-btn" onclick="switchTab('sellers')">
-        🏪 All Sellers Directory
+        All Sellers Directory
         <span class="tab-count">${sellers.length}</span>
       </button>
       <button class="tab-btn" onclick="switchTab('leads')">
-        👥 Customer Waitlist Leads
+        Waitlist Leads
         <span class="tab-count">${leads.length}</span>
       </button>
     </div>
 
-    <!-- TAB 1: Amber Review Queue -->
+    <!-- TAB 1: Amber Queue -->
     <div id="tab-amber" class="tab-content">
-      <div class="table-card" style="padding: 20px;">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 16px;">
-          <div>
-            <h3 style="margin:0; font-size:18px;">Risk Engine Amber Queue (SLA: 24 Hours)</h3>
-            <p style="margin:4px 0 0; font-size:13px; color:var(--muted);">Applications flagged for soft name-mismatch or manual document verification.</p>
-          </div>
-        </div>
-
-        <div id="amberList">
-          ${amberQueue.length === 0 ? '<div style="text-align:center; padding: 40px; color: var(--muted);">✓ No pending applications in the Amber queue! All sellers are verified or auto-approved.</div>' :
-          amberQueue.map(s => `
-            <div class="amber-card" id="card-${s.id}">
-              <div class="amber-head">
-                <div>
-                  <div style="display:flex; align-items:center; gap: 8px;">
-                    <strong style="font-size:16px;">${escapeHtml(s.basics?.bizName || 'Draft Store')}</strong>
-                    <span class="badge badge-amber">AMBER REVIEW</span>
-                    <span class="badge badge-gray">${escapeHtml(s.verticals?.join(', ') || 'Ecommerce')}</span>
-                  </div>
-                  <div style="font-size:13px; color:var(--muted); margin-top:4px;">
-                    ID: <strong>${s.id}</strong> · Mobile: <strong>${s.mobile}</strong> · Location: ${escapeHtml(s.basics?.address || 'Rourkela')}
-                  </div>
-                </div>
-                <div style="display:flex; gap: 8px;">
-                  <button class="btn btn-sm btn-success" onclick="decideSeller('${s.id}', 'GREEN', 'STARTER', 'Admin manual verification passed.')">
-                    ✓ Approve to Starter
-                  </button>
-                  <button class="btn btn-sm btn-secondary" onclick="decideSeller('${s.id}', 'AMBER', 'UNDER_REVIEW', 'Request re-upload of cancelled cheque or bank statement.')">
-                    🔄 Request Fix
-                  </button>
-                  <button class="btn btn-sm btn-danger" onclick="decideSeller('${s.id}', 'RED', 'SUSPENDED', 'Verification failed: Information mismatch.')">
-                    ✕ Reject
-                  </button>
-                </div>
+      <div class="table-card" style="padding: 16px;">
+        ${amberQueue.length === 0 ? '<div style="text-align:center; padding: 32px; color: var(--text-muted);">✓ No pending applications in the Amber queue.</div>' :
+        amberQueue.map(s => `
+          <div class="amber-card" id="card-${s.id}">
+            <div class="amber-head">
+              <div>
+                <strong>${escapeHtml(s.basics?.bizName || 'Draft Store')}</strong>
+                <span class="badge badge-amber" style="margin-left:6px;">AMBER</span>
+                <div style="font-size:12px; color:var(--text-muted); margin-top:2px;">ID: ${s.id} · ${s.mobile} · ${escapeHtml(s.basics?.address || 'Rourkela')}</div>
               </div>
-
-              <!-- Side-by-side comparison -->
-              <div class="compare-grid">
-                <div class="compare-col">
-                  <label>PAN Reference Name</label>
-                  <div class="val">${escapeHtml(s.pan?.registeredName || 'NOT VERIFIED')}</div>
-                  <small style="color:var(--muted);">PAN: ${escapeHtml(s.pan?.panNumber || 'N/A')}</small>
-                </div>
-                <div class="compare-col">
-                  <label>Bank Account Beneficiary</label>
-                  <div class="val">${escapeHtml(s.bank?.beneficiaryName || 'N/A')}</div>
-                  <small style="color:var(--muted);">IFSC: ${escapeHtml(s.bank?.ifsc || 'N/A')} · Score: <strong>${s.bank?.nameMatchScore ?? 0}%</strong></small>
-                </div>
-                <div class="compare-col">
-                  <label>GST / Tax Name</label>
-                  <div class="val">${s.gst?.hasGst ? escapeHtml(s.gst?.tradeName || 'GST Active') : 'Exempt / Non-GST'}</div>
-                  <small style="color:var(--muted);">${s.gst?.hasGst ? escapeHtml(s.gst?.gstin || '') : escapeHtml(s.gst?.nonGstReason || 'Declared')}</small>
-                </div>
-                <div class="compare-col">
-                  <label>Category Licence / DL</label>
-                  <div class="val">${escapeHtml(s.licence?.type || 'Standard')}: ${escapeHtml(s.licence?.number || 'Pending')}</div>
-                  <small style="color:var(--muted);">Status: ${s.licence?.verified ? 'Auto-verified' : 'Manual review'}</small>
-                </div>
-              </div>
-
-              <div style="background:#fffbeb; padding:10px 14px; border-radius:8px; font-size:12.5px; color:#92400e;">
-                <strong>Flag Reason:</strong> ${escapeHtml(s.auditLog && s.auditLog.length ? s.auditLog[s.auditLog.length - 1].reason : 'Pending compliance check')}
+              <div style="display:flex; gap: 6px;">
+                <button class="btn btn-primary" onclick="decideSeller('${s.id}', 'GREEN', 'STARTER', 'Admin manual verification passed.')">Approve</button>
+                <button class="btn" onclick="decideSeller('${s.id}', 'AMBER', 'UNDER_REVIEW', 'Request re-upload.')">Request Fix</button>
+                <button class="btn btn-danger" onclick="decideSeller('${s.id}', 'RED', 'SUSPENDED', 'Rejected.')">Reject</button>
               </div>
             </div>
-          `).join('')}
-        </div>
+            <div class="compare-grid">
+              <div><strong>PAN Legal Name:</strong><br>${escapeHtml(s.pan?.registeredName || 'N/A')}</div>
+              <div><strong>Bank Beneficiary:</strong><br>${escapeHtml(s.bank?.beneficiaryName || 'N/A')} (${s.bank?.nameMatchScore ?? 0}% match)</div>
+              <div><strong>GSTIN:</strong><br>${s.gst?.hasGst ? escapeHtml(s.gst?.gstin || '') : 'Exempt'}</div>
+              <div><strong>Licence / DL:</strong><br>${escapeHtml(s.licence?.type || 'Standard')}: ${escapeHtml(s.licence?.number || 'Pending')}</div>
+            </div>
+          </div>
+        `).join('')}
       </div>
     </div>
 
@@ -797,98 +777,63 @@ const server = http.createServer((req, res) => {
     <div id="tab-sellers" class="tab-content" style="display:none;">
       <div class="table-card">
         <div class="table-header">
-          <div style="display:flex; gap: 12px; align-items:center; flex-wrap:wrap;">
-            <input type="text" id="sellerSearch" class="search-input" placeholder="Search by Store, Owner, Phone..." oninput="filterSellersTable()">
+          <div style="display:flex; gap: 8px;">
+            <input type="text" id="sellerSearch" class="search-input" placeholder="Search sellers..." oninput="filterSellersTable()">
             <select id="verticalFilter" class="filter-select" onchange="filterSellersTable()">
               <option value="ALL">All Verticals</option>
-              <option value="Ecommerce">Ecommerce & Retail</option>
-              <option value="Taxi">Taxi & Rides</option>
-              <option value="Services">Home Services</option>
-            </select>
-            <select id="tierFilter" class="filter-select" onchange="filterSellersTable()">
-              <option value="ALL">All Tiers</option>
-              <option value="STARTER">Starter</option>
-              <option value="VERIFIED">Verified</option>
-              <option value="TRUSTED">Trusted</option>
-              <option value="UNDER_REVIEW">Under Review</option>
+              <option value="Ecommerce">Ecommerce</option>
+              <option value="Taxi">Taxi</option>
+              <option value="Services">Services</option>
             </select>
           </div>
-          <div>
-            <a href="/api/admin/sellers/export.csv" class="btn btn-secondary">
-              📥 Export Sellers CSV
-            </a>
-          </div>
+          <a href="/api/admin/sellers/export.csv" class="btn">📥 Export CSV</a>
         </div>
-
         <div style="overflow-x:auto;">
-          <table id="sellersTable">
+          <table>
             <thead>
               <tr>
-                <th>Seller ID</th>
-                <th>Business & Owner</th>
-                <th>Vertical & Category</th>
-                <th>Identity & Bank</th>
-                <th>Access Tier</th>
-                <th>Risk Decision</th>
-                <th>Date</th>
+                <th>ID</th>
+                <th>Store &amp; Owner</th>
+                <th>Vertical &amp; Category</th>
+                <th>Identity &amp; Bank</th>
+                <th>Tier</th>
+                <th>Status</th>
                 <th>Action</th>
               </tr>
             </thead>
             <tbody>
-              ${sellers.map(s => {
-                const decBadge = s.decision === 'GREEN' ? 'badge-green' : (s.decision === 'AMBER' ? 'badge-amber' : 'badge-red');
-                const tierBadge = s.tier === 'TRUSTED' ? 'badge-blue' : (s.tier === 'VERIFIED' ? 'badge-green' : (s.tier === 'STARTER' ? 'badge-blue' : 'badge-amber'));
-                return `
-                  <tr class="seller-row" data-search="${escapeHtml((s.basics?.bizName + ' ' + s.basics?.ownerName + ' ' + s.mobile + ' ' + s.id).toLowerCase())}" data-vertical="${escapeHtml(s.verticals?.join(',') || '')}" data-tier="${s.tier || ''}">
-                    <td><strong>${s.id}</strong></td>
-                    <td>
-                      <div style="font-weight:700;">${escapeHtml(s.basics?.bizName || 'Unnamed')}</div>
-                      <div style="font-size:12px; color:var(--muted);">${escapeHtml(s.basics?.ownerName || 'N/A')} · ${s.mobile}</div>
-                    </td>
-                    <td>
-                      <div>${escapeHtml(s.verticals?.join(', ') || 'Ecommerce')}</div>
-                      <div style="font-size:12px; color:var(--muted);">${escapeHtml(s.basics?.category || 'General')}</div>
-                    </td>
-                    <td>
-                      <div>PAN: <strong>${escapeHtml(s.pan?.panNumber || 'N/A')}</strong></div>
-                      <div style="font-size:12px; color:var(--muted);">Bank Match: <strong>${s.bank?.nameMatchScore ?? 0}%</strong></div>
-                    </td>
-                    <td><span class="badge ${tierBadge}">${s.tier || 'STARTER'}</span></td>
-                    <td><span class="badge ${decBadge}">${s.decision || 'GREEN'}</span></td>
-                    <td style="color:var(--muted); font-size:12px;">${s.createdAt ? new Date(s.createdAt).toLocaleDateString('en-IN') : '-'}</td>
-                    <td>
-                      <button class="btn btn-sm btn-secondary" onclick="viewSellerDetails('${s.id}')">View Details</button>
-                    </td>
-                  </tr>
-                `;
-              }).join('')}
+              ${sellers.map(s => `
+                <tr class="seller-row" data-search="${escapeHtml((s.basics?.bizName + ' ' + s.basics?.ownerName + ' ' + s.mobile + ' ' + s.id).toLowerCase())}">
+                  <td><strong>${s.id}</strong></td>
+                  <td><b>${escapeHtml(s.basics?.bizName || 'Draft')}</b><br><small style="color:var(--text-muted);">${escapeHtml(s.basics?.ownerName || '')} · ${s.mobile}</small></td>
+                  <td>${escapeHtml(s.verticals?.join(', ') || 'Ecommerce')}<br><small style="color:var(--text-muted);">${escapeHtml(s.basics?.category || 'General')}</small></td>
+                  <td>PAN: ${escapeHtml(s.pan?.panNumber || 'N/A')}<br><small style="color:var(--text-muted);">Match: ${s.bank?.nameMatchScore ?? 0}%</small></td>
+                  <td><span class="badge ${s.tier === 'VERIFIED' ? 'badge-green' : 'badge-gray'}">${s.tier || 'STARTER'}</span></td>
+                  <td><span class="badge ${s.decision === 'GREEN' ? 'badge-green' : 'badge-amber'}">${s.status || 'Active'}</span></td>
+                  <td><button class="btn" onclick="viewSellerDetails('${s.id}')">View</button></td>
+                </tr>
+              `).join('')}
             </tbody>
           </table>
         </div>
       </div>
     </div>
 
-    <!-- TAB 3: Customer Waitlist Leads -->
+    <!-- TAB 3: Waitlist Leads -->
     <div id="tab-leads" class="tab-content" style="display:none;">
       <div class="table-card">
         <div class="table-header">
-          <div>
-            <h3 style="margin:0; font-size:17px;">Captured Customer Contacts</h3>
-            <p style="margin:4px 0 0; font-size:13px; color:var(--muted);">${leads.length} early access leads registered from the landing page</p>
-          </div>
-          <div>
-            <a href="/api/leads/export.csv" class="btn btn-secondary">📥 Export Leads CSV</a>
-          </div>
+          <strong>Captured Customer Contacts (${leads.length})</strong>
+          <a href="/api/leads/export.csv" class="btn">📥 Export Leads CSV</a>
         </div>
-
         <div style="overflow-x:auto;">
           <table>
             <thead>
               <tr>
                 <th>#</th>
-                <th>Contact Info</th>
-                <th>Source Section</th>
-                <th>Captured At</th>
+                <th>Contact</th>
+                <th>Source</th>
+                <th>Date</th>
               </tr>
             </thead>
             <tbody>
@@ -896,8 +841,8 @@ const server = http.createServer((req, res) => {
                 <tr>
                   <td>${i + 1}</td>
                   <td><strong>${escapeHtml(l.contact)}</strong></td>
-                  <td><span class="badge badge-blue">${escapeHtml(l.source || 'Website Form')}</span></td>
-                  <td style="color:var(--muted); font-size:12px;">${new Date(l.timestamp).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })}</td>
+                  <td>${escapeHtml(l.source || 'Website')}</td>
+                  <td style="color:var(--text-muted);">${new Date(l.timestamp).toLocaleDateString('en-IN')}</td>
                 </tr>
               `).join('')}
             </tbody>
@@ -907,53 +852,31 @@ const server = http.createServer((req, res) => {
     </div>
   </div>
 
-  <!-- Seller Details Drawer -->
+  <!-- Detail Drawer -->
   <div id="drawerOverlay" class="drawer-overlay" onclick="closeDrawer(event)">
     <div class="drawer-content" onclick="event.stopPropagation()">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; border-bottom:1px solid var(--border); padding-bottom:14px;">
-        <div>
-          <h2 id="dStoreName" style="margin:0; font-size:20px; color:var(--deep);">Seller Profile</h2>
-          <div id="dId" style="font-size:13px; color:var(--muted);">ID</div>
-        </div>
-        <button class="btn btn-secondary btn-sm" onclick="closeDrawer()">✕ Close</button>
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+        <h3 id="dStoreName" style="margin:0;">Seller Profile</h3>
+        <button class="btn" onclick="closeDrawer()">✕</button>
       </div>
-
       <div class="detail-section">
-        <h4>S1-S4: Account & Verticals</h4>
-        <div class="detail-row"><span>Mobile Number</span><span id="dMobile">-</span></div>
-        <div class="detail-row"><span>Preferred Language</span><span id="dLang">-</span></div>
-        <div class="detail-row"><span>Referral Code Used</span><span id="dRefCode">-</span></div>
-        <div class="detail-row"><span>Verticals Selected</span><span id="dVerticals">-</span></div>
+        <h4>Basics</h4>
+        <div class="detail-row"><span>ID</span><span id="dId">-</span></div>
+        <div class="detail-row"><span>Mobile</span><span id="dMobile">-</span></div>
+        <div class="detail-row"><span>Owner</span><span id="dOwner">-</span></div>
+        <div class="detail-row"><span>Category</span><span id="dCategory">-</span></div>
+        <div class="detail-row"><span>Address</span><span id="dAddress">-</span></div>
       </div>
-
       <div class="detail-section">
-        <h4>S5: Business Basics</h4>
-        <div class="detail-row"><span>Owner Full Name</span><span id="dOwner">-</span></div>
-        <div class="detail-row"><span>Business Category</span><span id="dCategory">-</span></div>
-        <div class="detail-row"><span>Pickup / Store Address</span><span id="dAddress" style="text-align:right; max-width:260px;">-</span></div>
-      </div>
-
-      <div class="detail-section">
-        <h4>S6-S8: Verification Details</h4>
-        <div class="detail-row"><span>PAN Number</span><span id="dPan">-</span></div>
-        <div class="detail-row"><span>PAN Registered Legal Name</span><span id="dPanName">-</span></div>
-        <div class="detail-row"><span>GST Status</span><span id="dGst">-</span></div>
+        <h4>Verification</h4>
+        <div class="detail-row"><span>PAN</span><span id="dPan">-</span></div>
+        <div class="detail-row"><span>PAN Name</span><span id="dPanName">-</span></div>
         <div class="detail-row"><span>Bank Beneficiary</span><span id="dBankBeneficiary">-</span></div>
-        <div class="detail-row"><span>Bank IFSC / Account</span><span id="dBankIfsc">-</span></div>
-        <div class="detail-row"><span>Name Match Score</span><span id="dBankScore" class="badge badge-green">-</span></div>
-        <div class="detail-row"><span>Category Licence (FSSAI/DL)</span><span id="dLicence">-</span></div>
+        <div class="detail-row"><span>Match Score</span><span id="dBankScore">-</span></div>
       </div>
-
-      <div class="detail-section">
-        <h4>S9-S13: Risk Decision & Limits</h4>
-        <div class="detail-row"><span>Current Access Tier</span><span id="dTier" class="badge badge-blue">-</span></div>
-        <div class="detail-row"><span>Risk Engine Outcome</span><span id="dDecision" class="badge badge-green">-</span></div>
-        <div class="detail-row"><span>Store Status</span><span id="dStatus">-</span></div>
-      </div>
-
-      <div style="margin-top:20px; display:flex; gap:10px;">
-        <button id="dApproveBtn" class="btn btn-success" style="flex:1;" onclick="drawerAction('GREEN', 'STARTER')">✓ Approve to Starter</button>
-        <button id="dRejectBtn" class="btn btn-danger" style="flex:1;" onclick="drawerAction('RED', 'SUSPENDED')">✕ Reject Application</button>
+      <div style="display:flex; gap: 8px; margin-top: 16px;">
+        <button class="btn btn-primary" style="flex:1;" onclick="drawerAction('GREEN', 'STARTER')">Approve Starter</button>
+        <button class="btn btn-danger" style="flex:1;" onclick="drawerAction('RED', 'SUSPENDED')">Reject</button>
       </div>
     </div>
   </div>
@@ -972,20 +895,10 @@ const server = http.createServer((req, res) => {
 
     function filterSellersTable() {
       var q = document.getElementById('sellerSearch').value.toLowerCase();
-      var v = document.getElementById('verticalFilter').value;
-      var t = document.getElementById('tierFilter').value;
       var rows = document.querySelectorAll('.seller-row');
-
       rows.forEach(function(row){
         var searchStr = row.getAttribute('data-search') || '';
-        var vert = row.getAttribute('data-vertical') || '';
-        var tier = row.getAttribute('data-tier') || '';
-
-        var matchesQ = !q || searchStr.includes(q);
-        var matchesV = v === 'ALL' || vert.includes(v);
-        var matchesT = t === 'ALL' || tier === t;
-
-        row.style.display = (matchesQ && matchesV && matchesT) ? '' : 'none';
+        row.style.display = (!q || searchStr.includes(q)) ? '' : 'none';
       });
     }
 
@@ -996,12 +909,12 @@ const server = http.createServer((req, res) => {
         body: JSON.stringify({ id: id, decision: decision, tier: tier, reason: reason })
       }).then(r => r.json()).then(res => {
         if (res.success) {
-          alert('Seller ' + id + ' updated to ' + decision + ' (' + tier + ')');
+          alert('Seller updated to ' + decision);
           window.location.reload();
         } else {
           alert('Error: ' + res.error);
         }
-      }).catch(err => alert('Network error: ' + err.message));
+      });
     }
 
     function viewSellerDetails(id) {
@@ -1009,46 +922,37 @@ const server = http.createServer((req, res) => {
       if (!s) return;
       currentSellerId = id;
       var b = s.basics || {};
-
       document.getElementById('dStoreName').textContent = b.bizName || 'Draft Store';
-      document.getElementById('dId').textContent = 'Seller ID: ' + s.id;
+      document.getElementById('dId').textContent = s.id;
       document.getElementById('dMobile').textContent = s.mobile || '-';
-      document.getElementById('dLang').textContent = (s.lang || 'en').toUpperCase();
-      document.getElementById('dRefCode').textContent = s.refCode || 'None';
-      document.getElementById('dVerticals').textContent = (s.verticals || []).join(', ') || 'Ecommerce';
-
       document.getElementById('dOwner').textContent = b.ownerName || '-';
       document.getElementById('dCategory').textContent = b.category || '-';
       document.getElementById('dAddress').textContent = b.address || '-';
-
       document.getElementById('dPan').textContent = s.pan?.panNumber || 'N/A';
       document.getElementById('dPanName').textContent = s.pan?.registeredName || 'N/A';
-      document.getElementById('dGst').textContent = s.gst?.hasGst ? ('GSTIN: ' + s.gst.gstin) : ('Exempt (' + (s.gst?.nonGstReason || 'Declared') + ')');
       document.getElementById('dBankBeneficiary').textContent = s.bank?.beneficiaryName || 'N/A';
-      document.getElementById('dBankIfsc').textContent = (s.bank?.ifsc || '') + ' · ' + (s.bank?.accountNumber ? '***' + s.bank.accountNumber.slice(-4) : '');
-      document.getElementById('dBankScore').textContent = (s.bank?.nameMatchScore ?? 0) + '% Match';
-      document.getElementById('dLicence').textContent = (s.licence?.type || 'Licence') + ': ' + (s.licence?.number || 'Pending');
-
-      document.getElementById('dTier').textContent = s.tier || 'STARTER';
-      document.getElementById('dDecision').textContent = s.decision || 'GREEN';
-      document.getElementById('dStatus').textContent = s.status || 'Active';
-
+      document.getElementById('dBankScore').textContent = (s.bank?.nameMatchScore ?? 0) + '%';
       document.getElementById('drawerOverlay').classList.add('open');
     }
 
     function drawerAction(decision, tier) {
       if (!currentSellerId) return;
-      decideSeller(currentSellerId, decision, tier, 'Updated via seller details drawer');
+      decideSeller(currentSellerId, decision, tier, 'Admin decision');
     }
 
-    function closeDrawer(e) {
+    function closeDrawer() {
       document.getElementById('drawerOverlay').classList.remove('open');
     }
-  </script>
 
+    function logoutAdmin() {
+      fetch('/api/admin/logout', { method: 'POST' }).then(() => {
+        localStorage.removeItem('apnazo_admin_session');
+        window.location.reload();
+      });
+    }
+  </script>
 </body>
 </html>`;
-
     res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
     res.end(html);
     return;
@@ -1090,9 +994,7 @@ server.listen(PORT, '0.0.0.0', () => {
   console.log(`\n========================================`);
   console.log(`  Apnazo Super App Server Running!`);
   console.log(`  - Local:     http://localhost:${PORT}`);
-  console.log(`  - Admin UI:  http://localhost:${PORT}/admin`);
+  console.log(`  - Admin UI:  http://localhost:${PORT}/admin (Protected)`);
   console.log(`  - Onboarding:http://localhost:${PORT}/seller.html`);
-  console.log(`  - Leads:     ${LEADS_FILE}`);
-  console.log(`  - Sellers:   ${SELLERS_FILE}`);
   console.log(`========================================\n`);
 });
