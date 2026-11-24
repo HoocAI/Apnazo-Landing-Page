@@ -447,7 +447,11 @@
         btn.textContent = 'Sign In to Command Center';
         if (res.success) {
           localStorage.setItem('apnazo_admin_session', res.token);
-          checkAuth();
+          if (res.redirectUrl && window.location.port !== '3001') {
+            window.location.href = res.redirectUrl;
+          } else {
+            checkAuth();
+          }
         } else {
           err.textContent = res.error || 'Invalid credentials.';
           err.style.display = 'block';

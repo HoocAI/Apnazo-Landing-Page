@@ -561,7 +561,7 @@
         <label id="s2MobileLabel">Mobile Number</label>
         <div class="input-wrap">
           <span class="input-prefix">+91</span>
-          <input type="tel" id="mobileInput" placeholder="98610 12345" maxlength="10" value="9861234567">
+          <input type="tel" id="mobileInput" placeholder="98610 12345" maxlength="10">
         </div>
       </div>
 
@@ -642,12 +642,12 @@
 
       <div class="field">
         <label id="s5BizNameLabel">Business / Shop Name *</label>
-        <input type="text" id="bizName" placeholder="e.g. Rourkela Steel Grocers" value="Rourkela Steel Grocers">
+        <input type="text" id="bizName" placeholder="e.g. Steel City Grocers">
       </div>
 
       <div class="field">
         <label id="s5OwnerLabel">Owner Full Name * <span class="opt">As on PAN Card</span></label>
-        <input type="text" id="ownerName" placeholder="e.g. Ramesh Chandra Sahu" value="Ramesh Chandra Sahu">
+        <input type="text" id="ownerName" placeholder="e.g. Ramesh Chandra Sahu">
       </div>
 
       <div class="field">
@@ -664,12 +664,12 @@
 
       <div class="field">
         <label id="s5AddressLabel">Store / Pickup Address in Rourkela *</label>
-        <input type="text" id="bizAddress" placeholder="Daily Market, Sector 1" value="Daily Market, Main Road, Sector 1, Rourkela">
+        <input type="text" id="bizAddress" placeholder="e.g. Daily Market, Main Road, Sector 1">
       </div>
 
       <div class="field">
         <label id="s5PinLabel">PIN Code *</label>
-        <input type="number" id="bizPincode" placeholder="769001" value="769001">
+        <input type="number" id="bizPincode" placeholder="e.g. 769001">
       </div>
 
       <button class="btn btn-primary" id="s5SaveBtn" onclick="saveBasics()">Save &amp; Continue &rarr;</button>
@@ -684,7 +684,7 @@
 
       <div class="field">
         <label id="s6PanLabel">PAN Number (10 Digits) *</label>
-        <input type="text" id="panInput" placeholder="ABCPS1234F" maxlength="10" style="text-transform: uppercase; font-weight: 600;" value="ABCPS1234F">
+        <input type="text" id="panInput" placeholder="ABCPS1234F" maxlength="10" style="text-transform: uppercase; font-weight: 600;">
       </div>
 
       <div id="panFeedback"></div>
@@ -708,7 +708,7 @@
       <div id="gstInputSection">
         <div class="field">
           <label id="s7GstinLabel">15-Digit GSTIN *</label>
-          <input type="text" id="gstinInput" placeholder="21ABCPS1234F1Z5" maxlength="15" style="text-transform: uppercase; font-weight: 600;" value="21ABCPS1234F1Z5">
+          <input type="text" id="gstinInput" placeholder="21ABCPS1234F1Z5" maxlength="15" style="text-transform: uppercase; font-weight: 600;">
         </div>
         <button class="btn btn-secondary" id="s7VerifyGstBtn" onclick="verifyGSTIN()">Verify GSTIN</button>
       </div>
@@ -733,12 +733,12 @@
 
       <div class="field">
         <label id="s8AccLabel">Account Number *</label>
-        <input type="text" id="bankAcc" placeholder="50100234567890" value="50100234567890">
+        <input type="text" id="bankAcc" placeholder="e.g. 50100234567890">
       </div>
 
       <div class="field">
         <label id="s8IfscLabel">IFSC Code *</label>
-        <input type="text" id="bankIfsc" placeholder="HDFC0001234" maxlength="11" style="text-transform: uppercase; font-weight: 600;" value="HDFC0001234">
+        <input type="text" id="bankIfsc" placeholder="e.g. HDFC0001234" maxlength="11" style="text-transform: uppercase; font-weight: 600;">
       </div>
 
       <div class="field">
@@ -761,7 +761,7 @@
 
       <div class="field">
         <label id="licenceLabel">Licence Number *</label>
-        <input type="text" id="licenceNum" placeholder="12023001004512" value="12023001004512">
+        <input type="text" id="licenceNum" placeholder="14-Digit FSSAI Registration Number">
       </div>
 
       <div class="alert alert-success" id="licenceFeedback" style="display: none;">
@@ -851,11 +851,11 @@
 
       <div class="field">
         <label>Account Number</label>
-        <input type="text" id="reAcc" value="50100234567890">
+        <input type="text" id="reAcc" placeholder="Account Number">
       </div>
       <div class="field">
         <label>IFSC Code</label>
-        <input type="text" id="reIfsc" value="HDFC0001234">
+        <input type="text" id="reIfsc" placeholder="IFSC Code">
       </div>
 
       <button class="btn btn-primary" onclick="reSubmitBank()">Re-verify Bank</button>
@@ -919,17 +919,17 @@
 
       <div class="field">
         <label>Product Title *</label>
-        <input type="text" id="prodTitle" placeholder="e.g. Fresh Milk 1L" value="Organic Farm Fresh Milk 1L">
+        <input type="text" id="prodTitle" placeholder="e.g. Organic Farm Fresh Milk 1L">
       </div>
 
       <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
         <div class="field">
           <label>Price (₹) *</label>
-          <input type="number" id="prodPrice" value="65">
+          <input type="number" id="prodPrice" placeholder="65">
         </div>
         <div class="field">
           <label>Stock (Units) *</label>
-          <input type="number" id="prodStock" value="50">
+          <input type="number" id="prodStock" placeholder="50">
         </div>
       </div>
 
@@ -1360,48 +1360,52 @@
     var state = {
       currentStep: 1,
       lang: 'en',
-      mobile: '9861234567',
+      mobile: '',
       refCode: '',
       verticals: ['ecommerce'],
       basics: {
-        bizName: 'Rourkela Steel Grocers',
-        ownerName: 'Ramesh Chandra Sahu',
+        bizName: '',
+        ownerName: '',
         category: 'Retail & Grocery',
-        address: 'Daily Market, Main Road, Sector 1, Rourkela',
-        pincode: '769001'
+        address: '',
+        pincode: ''
       },
       pan: {
-        panNumber: 'ABCPS1234F',
-        registeredName: 'RAMESH CHANDRA SAHU',
+        panNumber: '',
+        registeredName: '',
         verified: false
       },
       gst: {
         hasGst: true,
-        gstin: '21ABCPS1234F1Z5',
-        tradeName: 'ROURKELA STEEL GROCERS',
+        gstin: '',
+        tradeName: '',
         verified: false
       },
       bank: {
-        accountNumber: '50100234567890',
-        ifsc: 'HDFC0001234',
-        beneficiaryName: 'RAMESH CHANDRA SAHU',
-        nameMatchScore: 100,
+        accountNumber: '',
+        ifsc: '',
+        beneficiaryName: '',
+        nameMatchScore: 0,
         verified: false
       },
       licence: {
         type: 'FSSAI',
-        number: '12023001004512',
+        number: '',
         verified: false
       },
       tier: 'STARTER',
       decision: 'GREEN'
     };
 
-    // Restore draft
+    // Restore draft if user previously entered any data
     try {
       var saved = localStorage.getItem('apnazo_seller_draft');
       if (saved) {
-        state = Object.assign(state, JSON.parse(saved));
+        var parsed = JSON.parse(saved);
+        // Only restore if user actually filled something
+        if (parsed && (parsed.mobile || parsed.basics?.bizName)) {
+          state = Object.assign(state, parsed);
+        }
       }
     } catch(e){}
 
@@ -1622,12 +1626,12 @@
       if (cat.includes('Taxi') || cat.includes('Rides')) {
         licTitle.textContent = state.lang === 'hi' ? 'कमर्शियल ड्राइविंग लाइसेंस' : (state.lang === 'or' ? 'ବାଣିଜ୍ୟିକ ଡ୍ରାଇଭିଂ ଲାଇସେନ୍ସ' : (state.lang === 'bn' ? 'বাণিজ্যিক ড্রাইভিং লাইসেন্স' : 'Commercial driving licence'));
         licLabel.textContent = 'Driving Licence Number *';
-        document.getElementById('licenceNum').value = 'OD-1420190014521';
+        document.getElementById('licenceNum').placeholder = 'e.g. OD-1420190014521';
         state.licence.type = 'Commercial DL';
       } else {
         licTitle.textContent = state.lang === 'hi' ? 'FSSAI खाद्य लाइसेंस' : (state.lang === 'or' ? 'FSSAI ଖାଦ୍ୟ ଲାଇସେନ୍ସ' : (state.lang === 'bn' ? 'FSSAI খাদ্য লাইসেন্স' : 'FSSAI food licence'));
         licLabel.textContent = '14-Digit FSSAI Registration Number *';
-        document.getElementById('licenceNum').value = '12023001004512';
+        document.getElementById('licenceNum').placeholder = 'e.g. 12023001004512';
         state.licence.type = 'FSSAI';
       }
       autosave();

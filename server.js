@@ -400,18 +400,38 @@ const server = http.createServer((req, res) => {
     return jsonResponse(200, { success: true, agreement });
   }
 
-  // Admin isolation notice if accessed on website port
+  // Admin Redirection & API Compatibility
   if (pathname === '/admin' || pathname === '/admin.html') {
-    res.writeHead(404, { 'Content-Type': 'text/html; charset=utf-8' });
-    res.end(`<!DOCTYPE html>
-<html>
-<head><meta charset="utf-8"><title>Not Found · Apnazo</title></head>
-<body style="font-family:sans-serif; text-align:center; padding:60px 20px; color:#374151;">
-  <h2>404 - Page Not Found</h2>
-  <p>The administrative portal is isolated on a dedicated secure internal port (e.g. port 3001) and is not accessible on the public website.</p>
-  <p><a href="/" style="color:#0f43b3;">Return to Apnazo Home</a></p>
-</body>
-</html>`);
+    res.writeHead(302, { 'Location': 'http://localhost:3001/' });
+    res.end();
+    return;
+  }
+
+  // API: Admin Login (Supports login from port 3000 or redirects)
+  if (pathname === '/api/admin/login' && req.method === 'POST') {
+    let body = '';
+    req.on('data', chunk => { body += chunk.toString(); });
+    req.on('end', () => {
+      try {
+        const data = JSON.parse(body || '{}');
+        const username = (data.username || '').trim();
+        const password = (data.password || '').trim();
+
+        if ((username === 'admin@apnazo.com' || username === 'admin') && password === 'ApnazoAdmin@2026') {
+          res.setHeader('Set-Cookie', 'apnazo_admin_session=apnazo_secure_session_token_2026_x7k; Path=/; HttpOnly; SameSite=Lax; Max-Age=86400');
+          return jsonResponse(200, {
+            success: true,
+            token: 'apnazo_secure_session_token_2026_x7k',
+            redirectUrl: 'http://localhost:3001/',
+            message: 'Authentication successful.'
+          });
+        } else {
+          return jsonResponse(401, { success: false, error: 'Invalid Admin ID or Password.' });
+        }
+      } catch (e) {
+        return jsonResponse(400, { success: false, error: 'Invalid JSON payload.' });
+      }
+    });
     return;
   }
 
