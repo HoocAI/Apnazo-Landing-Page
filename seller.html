@@ -768,27 +768,45 @@
     <!-- S10: Agreement & E-Sign -->
     <div class="card hidden" id="step-10">
       <div class="step-counter">Step 10 of 10 · Partner Agreement</div>
-      <h1>Terms &amp; e-Sign agreement</h1>
-      <p class="desc">Please review commercial policies and confirm with OTP acceptance.</p>
+      <h1 id="agreeTitle">Terms &amp; e-Sign agreement</h1>
+      <p class="desc" id="agreeDesc">Please review commercial policies and confirm with OTP acceptance.</p>
 
       <div class="alert alert-warning" style="background:#f9fafb; border-color:var(--border); color:var(--text);">
-        <strong style="display:block; margin-bottom: 6px;">Key Terms:</strong>
-        <ul style="margin: 0; padding-left: 18px; font-size: 13px; color: var(--text-muted); display: grid; gap: 4px;">
+        <strong style="display:block; margin-bottom: 6px;" id="agreeSummaryHeading">Key Commercial Terms:</strong>
+        <ul id="agreeTermsList" style="margin: 0; padding-left: 18px; font-size: 13px; color: var(--text-muted); display: grid; gap: 4px;">
           <li>Platform Commission: Standard 5% – 10% (0% promo for first 30 days).</li>
           <li>Payout Settlement: T+2 days automated direct to bank account.</li>
           <li>Zero signup or monthly listing fees.</li>
         </ul>
       </div>
 
+      <div style="margin: 10px 0 16px;">
+        <a href="javascript:void(0)" style="font-size:13px; color:var(--primary); text-decoration:underline; font-weight:500;" onclick="openFullAgreement()">📄 Read Full Legal Contract &amp; Clauses</a>
+      </div>
+
       <div class="field" style="margin-top: 16px;">
         <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 13.5px;">
           <input type="checkbox" id="termsCheck" checked style="width: 17px; height: 17px;">
-          <span>I accept the Apnazo Partner Terms and e-Sign this agreement.</span>
+          <span id="agreeConsentLabel">I accept the Apnazo Partner Terms and e-Sign this agreement.</span>
         </label>
       </div>
 
       <button class="btn btn-primary" onclick="submitAgreement()">Accept &amp; Complete &rarr;</button>
       <button class="btn btn-secondary" onclick="goToStep(9)">&larr; Back</button>
+    </div>
+
+    <!-- Full Legal Agreement Modal -->
+    <div id="agreementModal" style="position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.4); z-index:1000; display:none; align-items:center; justify-content:center; padding:20px;">
+      <div style="background:#fff; max-width:600px; width:100%; max-height:85vh; border-radius:12px; padding:24px; display:flex; flex-direction:column; box-shadow:0 10px 25px rgba(0,0,0,0.15);">
+        <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border); padding-bottom:12px; margin-bottom:14px;">
+          <h3 style="margin:0; font-size:17px;" id="modalAgreeTitle">Full Partner Agreement</h3>
+          <button type="button" class="btn btn-secondary" style="margin:0; padding:4px 10px; font-size:13px;" onclick="closeFullAgreement()">✕ Close</button>
+        </div>
+        <div style="flex:1; overflow-y:auto; font-size:13px; line-height:1.6; color:#374151; white-space:pre-wrap; background:#f9fafb; padding:16px; border-radius:8px; border:1px solid var(--border);" id="modalAgreeText">Loading agreement text...</div>
+        <div style="margin-top:16px; text-align:right;">
+          <button type="button" class="btn btn-primary" style="margin:0; width:auto; padding:8px 18px;" onclick="closeFullAgreement()">I Understand &amp; Close</button>
+        </div>
+      </div>
     </div>
 
     <!-- S11: Decision Engine Result -->
@@ -1272,8 +1290,42 @@
       window.open('https://api.whatsapp.com/send?text=' + text, '_blank');
     }
 
+    var currentAgreementData = null;
+    function loadAgreement() {
+      fetch('/api/agreement').then(r => r.json()).then(res => {
+        if (res && res.success && res.agreement) {
+          currentAgreementData = res.agreement;
+          var a = res.agreement;
+          if (a.title) document.getElementById('agreeTitle').textContent = a.title;
+          if (a.summaryHeading) document.getElementById('agreeSummaryHeading').textContent = a.summaryHeading;
+          if (a.consentCheckboxLabel) document.getElementById('agreeConsentLabel').textContent = a.consentCheckboxLabel;
+          if (a.terms && a.terms.length) {
+            document.getElementById('agreeTermsList').innerHTML = a.terms.map(t => '<li>' + escapeHtml(t) + '</li>').join('');
+          }
+          if (a.fullAgreementText) {
+            document.getElementById('modalAgreeText').textContent = a.fullAgreementText;
+          }
+          if (a.title) {
+            document.getElementById('modalAgreeTitle').textContent = a.title + (a.version ? ' (v' + a.version + ')' : '');
+          }
+        }
+      }).catch(function(){});
+    }
+
+    function openFullAgreement() {
+      document.getElementById('agreementModal').style.display = 'flex';
+    }
+    function closeFullAgreement() {
+      document.getElementById('agreementModal').style.display = 'none';
+    }
+
+    function escapeHtml(str) {
+      return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
     // Start
     updateProgress(1);
+    loadAgreement();
   </script>
 
 </body>

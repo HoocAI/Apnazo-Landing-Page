@@ -7,6 +7,7 @@ const DATA_DIR = path.join(__dirname, 'data');
 const LEADS_FILE = path.join(DATA_DIR, 'leads.json');
 const LEADS_CSV = path.join(DATA_DIR, 'leads.csv');
 const SELLERS_FILE = path.join(DATA_DIR, 'sellers.json');
+const AGREEMENT_FILE = path.join(DATA_DIR, 'agreement.json');
 
 // Admin Credentials
 const ADMIN_USER = process.env.ADMIN_USER || 'admin@apnazo.com';
@@ -18,19 +19,32 @@ if (!fs.existsSync(DATA_DIR)) {
   fs.mkdirSync(DATA_DIR, { recursive: true });
 }
 
-// Ensure JSON file exists
+// Ensure JSON files exist
 if (!fs.existsSync(LEADS_FILE)) {
   fs.writeFileSync(LEADS_FILE, JSON.stringify([], null, 2), 'utf8');
 }
-
-// Ensure CSV file exists with header
 if (!fs.existsSync(LEADS_CSV)) {
   fs.writeFileSync(LEADS_CSV, 'ID,Date,Time,Contact,Form_Source,User_Agent\n', 'utf8');
 }
-
-// Ensure sellers file exists
 if (!fs.existsSync(SELLERS_FILE)) {
   fs.writeFileSync(SELLERS_FILE, JSON.stringify([], null, 2), 'utf8');
+}
+if (!fs.existsSync(AGREEMENT_FILE)) {
+  const defaultAgreement = {
+    title: "Terms & e-Sign Agreement",
+    version: "1.2",
+    updatedAt: new Date().toISOString(),
+    summaryHeading: "Key Commercial Terms:",
+    terms: [
+      "Platform Commission: Standard 5% – 10% (0% promotional commission for first 30 days).",
+      "Payout Settlement: T+2 days automated direct credit to verified bank account.",
+      "Customer Returns: Standard 24-hour return & replacement policy for groceries and damaged goods.",
+      "Zero hidden fees: No signup fees, no device rentals, and no monthly maintenance charges."
+    ],
+    fullAgreementText: "APNAZO SUPER APP MERCHANT & PARTNER AGREEMENT\n\n1. SCOPE AND ELIGIBILITY\nThis Partner Agreement governs the onboarding and commercial operations of merchants, drivers, and service professionals on the Apnazo Super App operating in Rourkela, Odisha. By completing OTP e-sign, the Partner agrees to fulfill customer orders with high quality and honest pricing.\n\n2. COMMISSIONS & PAYOUTS\n- Commission rates are capped as specified in your category schedule (5% to 10%).\n- All net earnings after platform commission and applicable statutory deductions (TDS/TCS) are credited on a T+2 business day rolling schedule directly to the verified bank account.\n\n3. CANCELLATION & DISPUTE RESOLUTION\nOrders cancelled by the seller without valid inventory justification may be subject to review. Disputes are handled via Apnazo Partner Helpdesk within 24 hours.\n\n4. COMPLIANCE & SAFETY\nPartners in food/grocery must maintain valid FSSAI licences. Drivers must maintain valid commercial licences and insurance as per Motor Vehicles Act.",
+    consentCheckboxLabel: "I accept the Apnazo Partner Terms and e-Sign this agreement."
+  };
+  fs.writeFileSync(AGREEMENT_FILE, JSON.stringify(defaultAgreement, null, 2), 'utf8');
 }
 
 // MIME types dictionary
@@ -52,7 +66,6 @@ function readLeads() {
     const raw = fs.readFileSync(LEADS_FILE, 'utf8');
     return JSON.parse(raw || '[]');
   } catch (err) {
-    console.error('Error reading leads.json:', err);
     return [];
   }
 }
@@ -78,13 +91,25 @@ function readSellers() {
     const raw = fs.readFileSync(SELLERS_FILE, 'utf8');
     return JSON.parse(raw || '[]');
   } catch (err) {
-    console.error('Error reading sellers.json:', err);
     return [];
   }
 }
 
 function saveSellers(sellers) {
   fs.writeFileSync(SELLERS_FILE, JSON.stringify(sellers, null, 2), 'utf8');
+}
+
+function readAgreement() {
+  try {
+    const raw = fs.readFileSync(AGREEMENT_FILE, 'utf8');
+    return JSON.parse(raw || '{}');
+  } catch (err) {
+    return {};
+  }
+}
+
+function saveAgreement(data) {
+  fs.writeFileSync(AGREEMENT_FILE, JSON.stringify(data, null, 2), 'utf8');
 }
 
 function upsertSeller(sellerData) {
@@ -134,7 +159,6 @@ function upsertSeller(sellerData) {
   }
 }
 
-// Authentication Helper
 function isAuthenticated(req) {
   const cookieHeader = req.headers['cookie'] || '';
   const authHeader = req.headers['authorization'] || '';
@@ -189,7 +213,6 @@ const server = http.createServer((req, res) => {
         };
 
         saveLead(newLead);
-        console.log(`[Apnazo Lead] ${newLead.contact} (${newLead.source})`);
         return jsonResponse(200, {
           success: true,
           message: 'Thank you! Your information has been saved successfully.'
@@ -201,7 +224,7 @@ const server = http.createServer((req, res) => {
     return;
   }
 
-  // API: Get leads JSON (Protected for admin)
+  // API: Get Leads (Protected)
   if (pathname === '/api/leads' && req.method === 'GET') {
     if (!isAuthenticated(req)) {
       return jsonResponse(401, { success: false, error: 'Unauthorized' });
@@ -214,7 +237,7 @@ const server = http.createServer((req, res) => {
   if (pathname === '/api/leads/export.csv' && req.method === 'GET') {
     if (!isAuthenticated(req)) {
       res.writeHead(401, { 'Content-Type': 'text/plain' });
-      res.end('Unauthorized: Admin login required.');
+      res.end('Unauthorized');
       return;
     }
     if (fs.existsSync(LEADS_CSV)) {
@@ -259,6 +282,45 @@ const server = http.createServer((req, res) => {
     } else {
       return jsonResponse(404, { success: false, error: 'Seller profile not found.' });
     }
+  }
+
+  // API: Get Current Agreement (Public for Step 10 in onboarding)
+  if (pathname === '/api/agreement' && req.method === 'GET') {
+    const agreement = readAgreement();
+    return jsonResponse(200, { success: true, agreement });
+  }
+
+  // API: Update Agreement (Protected for Admin)
+  if (pathname === '/api/admin/agreement' && req.method === 'POST') {
+    if (!isAuthenticated(req)) {
+      return jsonResponse(401, { success: false, error: 'Unauthorized: Admin authentication required.' });
+    }
+    let body = '';
+    req.on('data', chunk => { body += chunk.toString(); });
+    req.on('end', () => {
+      try {
+        const data = JSON.parse(body || '{}');
+        const existing = readAgreement();
+
+        const updated = {
+          ...existing,
+          title: (data.title || existing.title || 'Terms & e-Sign Agreement').trim(),
+          version: (data.version || existing.version || '1.0').trim(),
+          summaryHeading: (data.summaryHeading || existing.summaryHeading || 'Key Terms:').trim(),
+          terms: Array.isArray(data.terms) ? data.terms : existing.terms,
+          fullAgreementText: (data.fullAgreementText || existing.fullAgreementText || '').trim(),
+          consentCheckboxLabel: (data.consentCheckboxLabel || existing.consentCheckboxLabel || '').trim(),
+          updatedAt: new Date().toISOString()
+        };
+
+        saveAgreement(updated);
+        console.log(`[Agreement Updated] Version ${updated.version} published by Admin`);
+        return jsonResponse(200, { success: true, agreement: updated });
+      } catch (e) {
+        return jsonResponse(400, { success: false, error: 'Invalid agreement payload.' });
+      }
+    });
+    return;
   }
 
   // API: Admin Login
@@ -450,9 +512,7 @@ const server = http.createServer((req, res) => {
       color: var(--text-muted);
       margin: 0 0 24px;
     }
-    .field {
-      margin-bottom: 16px;
-    }
+    .field { margin-bottom: 16px; }
     label {
       display: block;
       font-size: 13px;
@@ -504,7 +564,6 @@ const server = http.createServer((req, res) => {
   <div class="login-card">
     <div class="brand-title">Apna<b>zo</b> <span style="font-size:14px;color:var(--text-muted);font-weight:500;">· Admin Portal</span></div>
     <p class="subtitle">Enter your admin credentials to access operations.</p>
-
     <div class="error-msg" id="errorMsg">Invalid Admin ID or Password.</div>
 
     <form id="loginForm">
@@ -566,6 +625,7 @@ const server = http.createServer((req, res) => {
     // Authenticated View: Render Complete Minimalist Admin Command Center
     const leads = readLeads();
     const sellers = readSellers();
+    const agreement = readAgreement();
     const amberQueue = sellers.filter(s => s.decision === 'AMBER' || s.tier === 'UNDER_REVIEW');
     const greenActive = sellers.filter(s => s.decision === 'GREEN' || s.status === 'Active');
 
@@ -651,24 +711,20 @@ const server = http.createServer((req, res) => {
 
     .container { max-width: 1200px; margin: 24px auto; padding: 0 20px; }
 
-    /* Minimal Stats Grid */
     .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-bottom: 20px; }
     .kpi-card { background: var(--surface); padding: 18px; border-radius: 10px; border: 1px solid var(--border); }
     .kpi-title { font-size: 12.5px; color: var(--text-muted); font-weight: 500; }
     .kpi-val { font-size: 26px; font-weight: 700; color: var(--text); margin-top: 4px; }
 
-    /* Minimal Tabs */
     .tab-bar { display: flex; gap: 8px; border-bottom: 1px solid var(--border); margin-bottom: 18px; }
     .tab-btn { padding: 10px 14px; border: 0; background: transparent; font-size: 13.5px; font-weight: 500; color: var(--text-muted); cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; display: flex; align-items: center; gap: 6px; }
     .tab-btn.active { color: var(--primary); border-bottom-color: var(--primary); font-weight: 600; }
     .tab-count { font-size: 11px; padding: 2px 6px; border-radius: 99px; background: #f3f4f6; color: var(--text); }
     .tab-count.alert { background: var(--warning-bg); color: var(--warning); }
 
-    /* Table Container */
     .table-card { background: var(--surface); border-radius: 10px; border: 1px solid var(--border); overflow: hidden; }
     .table-header { padding: 14px 18px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
     .search-input { padding: 7px 12px; border: 1px solid var(--border); border-radius: 6px; font-size: 13px; width: 240px; }
-    .filter-select { padding: 7px 10px; border: 1px solid var(--border); border-radius: 6px; font-size: 13px; }
 
     table { width: 100%; border-collapse: collapse; text-align: left; }
     th, td { padding: 12px 18px; border-bottom: 1px solid var(--border); font-size: 13px; vertical-align: middle; }
@@ -681,12 +737,16 @@ const server = http.createServer((req, res) => {
     .badge-red { background: var(--danger-bg); color: var(--danger); }
     .badge-gray { background: #f3f4f6; color: var(--text-muted); }
 
-    /* Amber review card */
     .amber-card { background: var(--surface); border: 1px solid #fde68a; border-radius: 8px; padding: 16px; margin-bottom: 12px; }
     .amber-head { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid #fef3c7; }
     .compare-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; background: #fffdfa; padding: 12px; border-radius: 6px; border: 1px solid #fef3c7; margin-bottom: 10px; font-size: 12.5px; }
 
-    /* Drawer */
+    /* Form Fields in Agreement Editor */
+    .form-group { margin-bottom: 16px; }
+    .form-group label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; }
+    .form-group input, .form-group textarea { width: 100%; padding: 10px 12px; font-family: inherit; font-size: 14px; border: 1px solid var(--border); border-radius: 6px; outline: none; }
+    .form-group input:focus, .form-group textarea:focus { border-color: var(--primary); }
+
     .drawer-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.3); z-index: 1000; display: none; justify-content: flex-end; }
     .drawer-overlay.open { display: flex; }
     .drawer-content { background: var(--surface); width: 100%; max-width: 520px; height: 100%; overflow-y: auto; padding: 24px; }
@@ -742,6 +802,9 @@ const server = http.createServer((req, res) => {
         Waitlist Leads
         <span class="tab-count">${leads.length}</span>
       </button>
+      <button class="tab-btn" onclick="switchTab('agreement')">
+        📝 Agreement &amp; Policy Editor
+      </button>
     </div>
 
     <!-- TAB 1: Amber Queue -->
@@ -779,12 +842,6 @@ const server = http.createServer((req, res) => {
         <div class="table-header">
           <div style="display:flex; gap: 8px;">
             <input type="text" id="sellerSearch" class="search-input" placeholder="Search sellers..." oninput="filterSellersTable()">
-            <select id="verticalFilter" class="filter-select" onchange="filterSellersTable()">
-              <option value="ALL">All Verticals</option>
-              <option value="Ecommerce">Ecommerce</option>
-              <option value="Taxi">Taxi</option>
-              <option value="Services">Services</option>
-            </select>
           </div>
           <a href="/api/admin/sellers/export.csv" class="btn">📥 Export CSV</a>
         </div>
@@ -848,6 +905,60 @@ const server = http.createServer((req, res) => {
             </tbody>
           </table>
         </div>
+      </div>
+    </div>
+
+    <!-- TAB 4: Agreement & Policy Editor -->
+    <div id="tab-agreement" class="tab-content" style="display:none;">
+      <div class="table-card" style="padding: 24px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 12px;">
+          <div>
+            <h3 style="margin:0; font-size:18px;">Partner Agreement &amp; Terms Editor</h3>
+            <p style="margin:4px 0 0; font-size:13px; color:var(--text-muted);">Edit the commercial terms and full legal contract. Changes immediately update Step 10 on the seller onboarding flow.</p>
+          </div>
+          <span class="badge badge-green" id="agreeVersionBadge">v${agreement.version || '1.2'} (Active)</span>
+        </div>
+
+        <form id="agreementEditForm">
+          <div style="display:grid; grid-template-columns: 2fr 1fr; gap: 16px;">
+            <div class="form-group">
+              <label>Agreement Screen Title</label>
+              <input type="text" id="agTitle" value="${escapeHtml(agreement.title || 'Terms & e-Sign Agreement')}">
+            </div>
+            <div class="form-group">
+              <label>Agreement Version</label>
+              <input type="text" id="agVersion" value="${escapeHtml(agreement.version || '1.2')}">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Key Terms Box Heading</label>
+            <input type="text" id="agSummaryHeading" value="${escapeHtml(agreement.summaryHeading || 'Key Commercial Terms:')}">
+          </div>
+
+          <div class="form-group">
+            <label>Key Commercial Terms (One bullet point per line)</label>
+            <textarea id="agTermsBullets" rows="5">${(agreement.terms || []).map(t => escapeHtml(t)).join('\n')}</textarea>
+            <small style="color:var(--text-muted); font-size:12px;">Each line will render as a distinct checklist bullet point on the seller onboarding screen.</small>
+          </div>
+
+          <div class="form-group">
+            <label>Consent Checkbox Label</label>
+            <input type="text" id="agConsentLabel" value="${escapeHtml(agreement.consentCheckboxLabel || 'I accept the Apnazo Partner Terms and e-Sign this agreement.')}">
+          </div>
+
+          <div class="form-group">
+            <label>Full Legal Agreement Text (Modal / Expandable Contract)</label>
+            <textarea id="agFullText" rows="9">${escapeHtml(agreement.fullAgreementText || '')}</textarea>
+          </div>
+
+          <div style="display:flex; gap: 12px; align-items:center;">
+            <button type="button" class="btn btn-primary" style="padding:10px 20px; font-size:14px;" onclick="saveAgreementTerms()">
+              💾 Save &amp; Publish Agreement Live
+            </button>
+            <span id="agSaveStatus" style="font-size:13px; color:var(--success); font-weight:600; display:none;">✓ Published live to Onboarding Portal!</span>
+          </div>
+        </form>
       </div>
     </div>
   </div>
@@ -915,6 +1026,41 @@ const server = http.createServer((req, res) => {
           alert('Error: ' + res.error);
         }
       });
+    }
+
+    function saveAgreementTerms() {
+      var title = document.getElementById('agTitle').value.trim();
+      var version = document.getElementById('agVersion').value.trim();
+      var heading = document.getElementById('agSummaryHeading').value.trim();
+      var rawBullets = document.getElementById('agTermsBullets').value.trim();
+      var consent = document.getElementById('agConsentLabel').value.trim();
+      var fullText = document.getElementById('agFullText').value.trim();
+      var statusSpan = document.getElementById('agSaveStatus');
+
+      var termsArray = rawBullets.split('\\n').map(t => t.trim()).filter(t => t.length > 0);
+
+      var payload = {
+        title: title,
+        version: version,
+        summaryHeading: heading,
+        terms: termsArray,
+        consentCheckboxLabel: consent,
+        fullAgreementText: fullText
+      };
+
+      fetch('/api/admin/agreement', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      }).then(r => r.json()).then(res => {
+        if (res.success) {
+          statusSpan.style.display = 'inline-block';
+          document.getElementById('agreeVersionBadge').textContent = 'v' + res.agreement.version + ' (Active)';
+          setTimeout(function(){ statusSpan.style.display = 'none'; }, 3000);
+        } else {
+          alert('Failed to save agreement: ' + res.error);
+        }
+      }).catch(err => alert('Network error: ' + err.message));
     }
 
     function viewSellerDetails(id) {

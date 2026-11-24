@@ -2,6 +2,8 @@
   "version": 2,
   "rewrites": [
     { "source": "/api/admin/login", "destination": "/api/admin-login" },
+    { "source": "/api/admin/agreement", "destination": "/api/agreement" },
+    { "source": "/api/agreement", "destination": "/api/agreement" },
     { "source": "/api/seller/profile/save", "destination": "/api/seller-save" },
     { "source": "/api/seller/profile", "destination": "/api/seller-profile" },
     { "source": "/api/admin/seller/decision", "destination": "/api/seller-decision" },
