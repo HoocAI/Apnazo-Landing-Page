@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Operations Command Center · Apnazo</title>
+  <title>Admin Operations · Apnazo</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@600;700;800&display=swap">
@@ -205,7 +205,7 @@
       letter-spacing: -0.04em;
     }
     .sidebar-logo b { color: var(--orange); }
-    .badge-ops {
+    .badge-ops { display:none; 
       font-size: 11px;
       font-weight: 700;
       color: var(--primary);
@@ -629,7 +629,170 @@
       .kpi-grid { grid-template-columns: 1fr; }
       .admin-main { padding: 20px 16px; }
     }
-  </style>
+  
+    /* Mobile Header & Backdrop */
+    .mobile-header {
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 18px;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .btn-hamburger {
+      background: none;
+      border: none;
+      padding: 6px;
+      cursor: pointer;
+      color: var(--ink);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+    }
+    .btn-hamburger:hover {
+      background: rgba(15, 67, 179, 0.06);
+    }
+    .mobile-backdrop {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(11, 27, 69, 0.4);
+      backdrop-filter: blur(4px);
+      z-index: 999;
+    }
+    .mobile-backdrop.open {
+      display: block;
+    }
+
+    /* Consolidated Verifications Subnav */
+    .verif-subnav {
+      display: inline-flex;
+      gap: 6px;
+      background: rgba(15, 67, 179, 0.05);
+      border: 1px solid var(--border);
+      padding: 4px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .subtab-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      border-radius: 8px;
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      font: 600 13.5px var(--body);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .subtab-btn:hover {
+      color: var(--ink);
+    }
+    .subtab-btn.active {
+      background: #ffffff;
+      color: var(--primary);
+      box-shadow: 0 2px 8px rgba(15, 67, 179, 0.08);
+    }
+    .subtab-pill {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 1px 7px;
+      border-radius: 10px;
+      background: rgba(15, 67, 179, 0.08);
+      color: var(--primary);
+    }
+    .subtab-pill.alert {
+      background: var(--warning);
+      color: #ffffff;
+    }
+
+    /* Responsive Mobile Rules */
+    @media (max-width: 900px) {
+      .mobile-header {
+        display: flex;
+      }
+      .admin-layout {
+        flex-direction: column;
+      }
+      .admin-sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        width: 280px;
+        z-index: 1000;
+        transform: translateX(-100%);
+        transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        box-shadow: 0 10px 40px rgba(0,0,0,0.25);
+      }
+      .admin-sidebar.mobile-open {
+        transform: translateX(0);
+      }
+      .admin-main {
+        padding: 16px 14px;
+        min-width: 0;
+        width: 100%;
+      }
+      .kpi-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 10px;
+      }
+      .kpi-card {
+        padding: 14px;
+      }
+      .stage-header {
+        margin-bottom: 16px;
+      }
+      .stage-title h1 {
+        font-size: 20px;
+      }
+      .drawer-content {
+        width: 100% !important;
+        max-width: 100% !important;
+        border-radius: 20px 20px 0 0 !important;
+        max-height: 90vh !important;
+        position: absolute;
+        bottom: 0;
+        top: auto;
+      }
+      .amber-head {
+        flex-direction: column;
+        align-items: flex-start !important;
+        gap: 12px;
+      }
+      .amber-head > div:last-child {
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+      }
+      .compare-grid {
+        grid-template-columns: 1fr !important;
+        gap: 10px !important;
+      }
+      .table-header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+      }
+      .search-input {
+        width: 100%;
+      }
+    }
+
+    @media (max-width: 500px) {
+      .kpi-grid {
+        grid-template-columns: 1fr !important;
+      }
+    }
+</style>
 </head>
 <body>
 
@@ -660,61 +823,62 @@
 
   <!-- Authenticated Command Center with Vertical Navigation Sidebar -->
   <div id="dashboardView">
+    <!-- Mobile Navigation Topbar -->
+    <header class="mobile-header">
+      <button type="button" class="btn-hamburger" onclick="toggleMobileSidebar()" aria-label="Toggle navigation">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+      <div class="sidebar-logo" style="font-size:20px;">Apna<b>zo</b></div>
+      <div class="admin-avatar" style="width:32px; height:32px; font-size:12px;">AD</div>
+    </header>
+    <div id="mobileBackdrop" class="mobile-backdrop" onclick="toggleMobileSidebar(false)"></div>
+
     <div class="admin-layout">
 
-      <!-- Left Vertical Sidebar -->
-      <aside class="admin-sidebar">
+      <!-- Left Vertical Sidebar (Consolidated & Streamlined) -->
+      <aside class="admin-sidebar" id="adminSidebar">
         <div class="sidebar-brand">
           <a href="/" class="sidebar-logo">Apna<b>zo</b></a>
-          <span class="badge-ops">Command Center</span>
+          <button type="button" class="btn-hamburger" onclick="toggleMobileSidebar(false)" style="display:none; margin-left:auto;" id="mobileCloseBtn">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
         </div>
 
         <nav class="sidebar-nav">
-          <div class="nav-group-title">Verification &amp; Approvals</div>
+          <div class="nav-group-title">Operations</div>
           
-          <button type="button" class="v-tab-btn active" id="vbtn-amber" onclick="switchTab('amber')">
+          <!-- Consolidated Single Verifications Tab -->
+          <button type="button" class="v-tab-btn active" id="vbtn-verifications" onclick="switchTab('verifications')">
             <span class="tab-left">
-              <span class="tab-icon">⏳</span>
-              <span>Review Queue</span>
+              <span class="tab-icon">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+              </span>
+              <span>Verifications</span>
             </span>
             <span class="tab-count alert" id="cntAmber">0</span>
           </button>
 
-          <button type="button" class="v-tab-btn" id="vbtn-sellers" onclick="switchTab('sellers')">
-            <span class="tab-left">
-              <span class="tab-icon">🏪</span>
-              <span>Sellers Directory</span>
-            </span>
-            <span class="tab-count" id="cntSellers">0</span>
-          </button>
-
           <button type="button" class="v-tab-btn" id="vbtn-leads" onclick="switchTab('leads')">
             <span class="tab-left">
-              <span class="tab-icon">👥</span>
+              <span class="tab-icon">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              </span>
               <span>Waitlist Leads</span>
             </span>
             <span class="tab-count" id="cntLeads">0</span>
           </button>
 
-          <div class="nav-group-title" style="margin-top:14px;">Platform Governance</div>
+          <div class="nav-group-title" style="margin-top:16px;">Platform Governance</div>
 
           <button type="button" class="v-tab-btn" id="vbtn-agreement" onclick="switchTab('agreement')">
             <span class="tab-left">
-              <span class="tab-icon">📝</span>
+              <span class="tab-icon">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+              </span>
               <span>Agreement Editor</span>
             </span>
             <span style="font-size:11px; color:var(--muted);" id="agreeVersionBadge">v1.2</span>
           </button>
-
-          <div class="nav-group-title" style="margin-top:14px;">Live Sites</div>
-          <a href="http://localhost:3000" target="_blank" class="sidebar-link">
-            <span>🌐</span>
-            <span>Customer Website &nearr;</span>
-          </a>
-          <a href="http://localhost:3000/seller.html" target="_blank" class="sidebar-link">
-            <span>🚀</span>
-            <span>Partner Onboarding &nearr;</span>
-          </a>
         </nav>
 
         <div class="sidebar-footer">
@@ -732,32 +896,28 @@
       <!-- Main Stage -->
       <main class="admin-main">
         
-        <!-- Header -->
+        <!-- Header (Clean without badge/pills) -->
         <header class="stage-header">
           <div class="stage-title">
-            <h1 id="stageHeading">Amber Review Queue</h1>
+            <h1 id="stageHeading">Partner Verifications</h1>
             <p id="stageSub">Review incoming partner documents, verify identities, and approve store activations.</p>
-          </div>
-          <div class="system-status">
-            <span class="status-dot"></span>
-            <span>Live System Connected</span>
           </div>
         </header>
 
         <!-- KPI Metrics Grid -->
         <div class="kpi-grid">
-          <div class="kpi-card">
+          <div class="kpi-card" onclick="switchTab('verifications'); switchVerifSubtab('all');" style="cursor:pointer;" title="View all partners">
             <div class="kpi-top">
               <span class="kpi-title">Total Sellers</span>
-              <span class="kpi-icon">🏪</span>
+              <span class="kpi-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span>
             </div>
             <div class="kpi-val" id="kpiSellers">0</div>
           </div>
 
-          <div class="kpi-card" style="border-color: rgba(245, 158, 11, 0.4);">
+          <div class="kpi-card" onclick="switchTab('verifications'); switchVerifSubtab('queue');" style="cursor:pointer; border-color: rgba(245, 158, 11, 0.4);" title="View pending review queue">
             <div class="kpi-top">
-              <span class="kpi-title" style="color:var(--warning);">Review Queue (Action Req)</span>
-              <span class="kpi-icon" style="background:var(--warning-bg); color:var(--warning);">⏳</span>
+              <span class="kpi-title" style="color:var(--warning);">Action Required</span>
+              <span class="kpi-icon" style="background:var(--warning-bg); color:var(--warning);"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span>
             </div>
             <div class="kpi-val" id="kpiAmber" style="color:var(--warning);">0</div>
           </div>
@@ -765,46 +925,57 @@
           <div class="kpi-card" style="border-color: rgba(5, 150, 105, 0.4);">
             <div class="kpi-top">
               <span class="kpi-title" style="color:var(--success);">Starter Live Active</span>
-              <span class="kpi-icon" style="background:var(--success-bg); color:var(--success);">✓</span>
+              <span class="kpi-icon" style="background:var(--success-bg); color:var(--success);"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></span>
             </div>
             <div class="kpi-val" id="kpiGreen" style="color:var(--success);">0</div>
           </div>
 
-          <div class="kpi-card">
+          <div class="kpi-card" onclick="switchTab('leads')" style="cursor:pointer;" title="View waitlist leads">
             <div class="kpi-top">
               <span class="kpi-title" style="color:var(--primary);">Waitlist Leads</span>
-              <span class="kpi-icon" style="background:rgba(15, 67, 179, 0.08); color:var(--primary);">👥</span>
+              <span class="kpi-icon" style="background:rgba(15, 67, 179, 0.08); color:var(--primary);"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
             </div>
             <div class="kpi-val" id="kpiLeads" style="color:var(--primary);">0</div>
           </div>
         </div>
 
-        <!-- TAB 1: Amber Review Queue -->
-        <div id="tab-amber" class="tab-content">
-          <div class="table-card" style="padding: 24px;">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 20px;">
+        <!-- TAB 1: Consolidated Single Verifications Tab -->
+        <div id="tab-verifications" class="tab-content">
+          <!-- Segmented subtab controller -->
+          <div class="verif-subnav">
+            <button type="button" class="subtab-btn active" id="subtab-queue" onclick="switchVerifSubtab('queue')">
+              Pending Review Queue
+              <span class="subtab-pill alert" id="subcntAmber">0</span>
+            </button>
+            <button type="button" class="subtab-btn" id="subtab-all" onclick="switchVerifSubtab('all')">
+              All Sellers Directory
+              <span class="subtab-pill" id="cntSellers">0</span>
+            </button>
+          </div>
+
+          <!-- Subview 1: Action Required Queue -->
+          <div id="subview-queue" class="table-card" style="padding: 24px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 20px; flex-wrap:wrap; gap:10px;">
               <div>
-                <h3 style="margin:0; font-size:18px; font-family:var(--display);">Pending Partner Verification Applications</h3>
-                <p style="margin:4px 0 0; font-size:13.5px; color:var(--muted);">Inspect submitted PAN cards, Bank Accounts, GSTIN, and Licences to grant Starter status.</p>
+                <h3 style="margin:0; font-size:18px; font-family:var(--display);">Partner Review &amp; Document Verification</h3>
+                <p style="margin:4px 0 0; font-size:13.5px; color:var(--muted);">Inspect PAN, Bank Account, GSTIN, and Category Licences submitted by applicants.</p>
               </div>
-              <button class="btn" onclick="loadDashboardData()">↻ Refresh List</button>
+              <button class="btn btn-sm" onclick="loadDashboardData()"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px; margin-right:5px;"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>Refresh</button>
             </div>
             <div id="amberList">
               Loading applications...
             </div>
           </div>
-        </div>
 
-        <!-- TAB 2: Sellers Directory -->
-        <div id="tab-sellers" class="tab-content" style="display:none;">
-          <div class="table-card">
+          <!-- Subview 2: All Sellers Directory -->
+          <div id="subview-all" class="table-card" style="display:none;">
             <div class="table-header">
-              <input type="text" id="sellerSearch" class="search-input" placeholder="🔍 Search by store, owner, phone or ID..." oninput="filterSellersTable()">
+              <input type="text" id="sellerSearch" class="search-input" placeholder="Search by store, owner, phone or ID..." oninput="filterSellersTable()">
               <div style="display:flex; gap:10px;">
-                <a href="/api/admin/sellers/export.csv" class="btn">📥 Export CSV</a>
+                <a href="/api/admin/sellers/export.csv" class="btn"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px; margin-right:5px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Export CSV</a>
               </div>
             </div>
-            <div style="overflow-x:auto;">
+            <div style="overflow-x:auto; -webkit-overflow-scrolling: touch;">
               <table>
                 <thead>
                   <tr>
@@ -823,7 +994,7 @@
           </div>
         </div>
 
-        <!-- TAB 3: Leads -->
+        <!-- TAB 2: Leads -->
         <div id="tab-leads" class="tab-content" style="display:none;">
           <div class="table-card">
             <div class="table-header">
@@ -831,9 +1002,9 @@
                 <h3 style="margin:0; font-size:17px; font-family:var(--display);">Waitlist Leads &amp; Inquiries</h3>
                 <p style="margin:2px 0 0; font-size:13px; color:var(--muted);">Prospective partners and customers who signed up on the landing page.</p>
               </div>
-              <a href="/api/leads/export.csv" class="btn">📥 Export Leads CSV</a>
+              <a href="/api/leads/export.csv" class="btn"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px; margin-right:5px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Export Leads CSV</a>
             </div>
-            <div style="overflow-x:auto;">
+            <div style="overflow-x:auto; -webkit-overflow-scrolling: touch;">
               <table>
                 <thead>
                   <tr>
@@ -849,7 +1020,7 @@
           </div>
         </div>
 
-        <!-- TAB 4: Agreement Editor -->
+        <!-- TAB 3: Agreement Editor -->
         <div id="tab-agreement" class="tab-content" style="display:none;">
           <div class="table-card" style="padding: 28px;">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 24px; border-bottom: 1px solid var(--border-light); padding-bottom: 16px;">
@@ -894,9 +1065,9 @@
 
               <div style="display:flex; gap: 14px; align-items:center;">
                 <button type="button" class="btn" style="background:var(--primary); color:#fff; padding:12px 24px; font-weight:600; border-radius:12px;" onclick="saveAgreementTerms()">
-                  💾 Save &amp; Publish Agreement Live
+                  Save &amp; Publish Agreement Live
                 </button>
-                <span id="agSaveStatus" style="font-size:13.5px; color:var(--success); font-weight:700; display:none;">✓ Published live!</span>
+                <span id="agSaveStatus" style="font-size:13.5px; color:var(--success); font-weight:700; display:none;">Published live!</span>
               </div>
             </form>
           </div>
@@ -914,7 +1085,7 @@
           <h3 id="dStoreName" style="margin:0; font-family:var(--display); font-size:20px;">Seller Profile</h3>
           <span style="font-size:12px; color:var(--muted);">Full Partner Document Verification Details</span>
         </div>
-        <button class="btn" onclick="closeDrawer()">✕ Close</button>
+        <button class="btn" onclick="closeDrawer()">Close</button>
       </div>
 
       <div class="detail-section">
@@ -1088,6 +1259,72 @@
       }).catch(err => alert('Network error: ' + err.message));
     }
 
+        function toggleMobileSidebar(force) {
+      var sb = document.getElementById('adminSidebar');
+      var bd = document.getElementById('mobileBackdrop');
+      var closeBtn = document.getElementById('mobileCloseBtn');
+      var isOpen = sb.classList.contains('mobile-open');
+      var nextState = (force !== undefined) ? force : !isOpen;
+
+      if (nextState) {
+        sb.classList.add('mobile-open');
+        bd.classList.add('open');
+        if (closeBtn) closeBtn.style.display = 'block';
+      } else {
+        sb.classList.remove('mobile-open');
+        bd.classList.remove('open');
+        if (closeBtn) closeBtn.style.display = 'none';
+      }
+    }
+
+    function switchVerifSubtab(sub) {
+      document.querySelectorAll('.subtab-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById('subview-queue').style.display = 'none';
+      document.getElementById('subview-all').style.display = 'none';
+
+      if (sub === 'queue') {
+        document.getElementById('subtab-queue').classList.add('active');
+        document.getElementById('subview-queue').style.display = 'block';
+      } else {
+        document.getElementById('subtab-all').classList.add('active');
+        document.getElementById('subview-all').style.display = 'block';
+      }
+    }
+
+    function switchTab(name) {
+      // Close mobile sidebar if open
+      toggleMobileSidebar(false);
+
+      // Handle legacy tab names seamlessly
+      if (name === 'amber') {
+        name = 'verifications';
+        setTimeout(() => switchVerifSubtab('queue'), 10);
+      } else if (name === 'sellers') {
+        name = 'verifications';
+        setTimeout(() => switchVerifSubtab('all'), 10);
+      }
+
+      document.querySelectorAll('.v-tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(c => c.style.display = 'none');
+      
+      var targetBtn = document.getElementById('vbtn-' + name);
+      if (targetBtn) targetBtn.classList.add('active');
+
+      var el = document.getElementById('tab-' + name);
+      if (el) el.style.display = 'block';
+
+      // Update stage heading
+      var headings = {
+        verifications: { title: "Partner Verifications", desc: "Review incoming partner documents, verify identities, and approve store activations." },
+        leads: { title: "Waitlist Leads", desc: "Customer and merchant early-access signups captured from the marketing landing page." },
+        agreement: { title: "Partner Agreement & Policy Editor", desc: "Manage legal contract clauses, platform commissions, and electronic consent terms." }
+      };
+      if (headings[name]) {
+        document.getElementById('stageHeading').textContent = headings[name].title;
+        document.getElementById('stageSub').textContent = headings[name].desc;
+      }
+    }
+
     function renderSellers() {
       var amberQueue = allSellers.filter(s => s.decision === 'AMBER' || s.tier === 'UNDER_REVIEW' || s.status === 'Pending Admin Review' || s.decision === 'UNDER_REVIEW');
       var greenActive = allSellers.filter(s => s.decision === 'GREEN' || s.status === 'Active');
@@ -1096,11 +1333,13 @@
       document.getElementById('kpiAmber').textContent = amberQueue.length;
       document.getElementById('kpiGreen').textContent = greenActive.length;
       document.getElementById('cntAmber').textContent = amberQueue.length;
+      var subAmber = document.getElementById('subcntAmber');
+      if (subAmber) subAmber.textContent = amberQueue.length;
       document.getElementById('cntSellers').textContent = allSellers.length;
 
       var amberEl = document.getElementById('amberList');
       if (amberQueue.length === 0) {
-        amberEl.innerHTML = '<div style="text-align:center; padding: 48px 24px; color: var(--muted); font-size:14px;"><div style="font-size:32px; margin-bottom:8px;">✓</div>All applications reviewed. No pending verifications in queue.</div>';
+        amberEl.innerHTML = '<div style="text-align:center; padding: 48px 24px; color: var(--muted); font-size:14px;"><div style="margin-bottom:8px; color:var(--success);"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>All applications reviewed. No pending verifications in queue.</div>';
       } else {
         amberEl.innerHTML = amberQueue.map(s => `
           <div class="amber-card" id="card-${s.id}">
@@ -1111,7 +1350,7 @@
                 <div style="font-size:12.5px; color:var(--muted); margin-top:4px;">Application ID: <strong>${s.id}</strong> · Phone: <strong>+91 ${s.mobile}</strong> · Category: <strong>${s.basics?.category || 'Retail'}</strong></div>
               </div>
               <div style="display:flex; gap: 8px;">
-                <button class="btn" style="background:var(--primary); color:#fff; border-color:var(--primary); font-weight:700;" onclick="decideSeller('${s.id}', 'GREEN', 'STARTER', 'Admin verified and approved')">✓ Approve Starter</button>
+                <button class="btn" style="background:var(--primary); color:#fff; border-color:var(--primary); font-weight:700;" onclick="decideSeller('${s.id}', 'GREEN', 'STARTER', 'Admin verified and approved')">Approve Starter</button>
                 <button class="btn" onclick="viewSellerDetails('${s.id}')">Inspect All Details</button>
                 <button class="btn" style="color:var(--danger); border-color:rgba(239,68,68,0.25);" onclick="decideSeller('${s.id}', 'RED', 'SUSPENDED', 'Application rejected')">Reject</button>
               </div>
@@ -1140,43 +1379,6 @@
           <td><button class="btn" onclick="viewSellerDetails('${s.id}')">Inspect</button></td>
         </tr>
       `).join('');
-    }
-
-    function renderLeads() {
-      document.getElementById('kpiLeads').textContent = allLeads.length;
-      document.getElementById('cntLeads').textContent = allLeads.length;
-      var lBody = document.getElementById('leadsTableBody');
-      lBody.innerHTML = allLeads.map((l, i) => `
-        <tr>
-          <td>${i + 1}</td>
-          <td><strong>${l.contact}</strong></td>
-          <td><span class="badge badge-gray">${l.source || 'Website'}</span></td>
-          <td style="color:var(--muted);">${new Date(l.timestamp).toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' })}</td>
-        </tr>
-      `).join('');
-    }
-
-    function switchTab(name) {
-      document.querySelectorAll('.v-tab-btn').forEach(b => b.classList.remove('active'));
-      document.querySelectorAll('.tab-content').forEach(c => c.style.display = 'none');
-      
-      var targetBtn = document.getElementById('vbtn-' + name);
-      if (targetBtn) targetBtn.classList.add('active');
-
-      var el = document.getElementById('tab-' + name);
-      if (el) el.style.display = 'block';
-
-      // Update stage heading
-      var headings = {
-        amber: { title: "Amber Review Queue", desc: "Review incoming partner documents, verify identities, and approve store activations." },
-        sellers: { title: "All Sellers Directory", desc: "Comprehensive registry of all registered stores, drivers, and service partners in Rourkela." },
-        leads: { title: "Waitlist Leads", desc: "Customer and merchant early-access signups captured from the marketing landing page." },
-        agreement: { title: "Partner Agreement & Policy Editor", desc: "Manage legal contract clauses, platform commissions, and electronic consent terms." }
-      };
-      if (headings[name]) {
-        document.getElementById('stageHeading').textContent = headings[name].title;
-        document.getElementById('stageSub').textContent = headings[name].desc;
-      }
     }
 
     function filterSellersTable() {
