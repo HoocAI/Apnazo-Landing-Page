@@ -3,41 +3,44 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Portal · Apnazo</title>
+  <title>Admin Operations Command Center · Apnazo</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@600;700;800&display=swap">
   <style>
     :root {
       --primary: #0f43b3;
-      --deep: #0a2a75;
+      --primary-hover: #0a2f80;
       --orange: #ff7a00;
-      --text: #0b1b45;
-      --text-muted: #5a6785;
-      --bg: #f3f7ff;
+      --orange-hover: #e86f00;
+      --deep: #0a2a75;
+      --ink: #0b1b45;
+      --muted: #5a6785;
+      --bg: #f4f7fc;
+      --sidebar-bg: rgba(255, 255, 255, 0.88);
       --surface: rgba(255, 255, 255, 0.82);
-      --border: rgba(15, 67, 179, 0.09);
+      --border: rgba(15, 67, 179, 0.08);
+      --border-light: rgba(226, 232, 240, 0.9);
       --success: #059669;
-      --success-bg: rgba(5, 150, 105, 0.08);
-      --warning: #b45309;
-      --warning-bg: rgba(245, 158, 11, 0.09);
+      --success-bg: rgba(5, 150, 105, 0.09);
+      --warning: #d97706;
+      --warning-bg: rgba(245, 158, 11, 0.1);
       --danger: #dc2626;
-      --danger-bg: rgba(239, 68, 68, 0.08);
+      --danger-bg: rgba(239, 68, 68, 0.09);
       --display: "Sora", -apple-system, sans-serif;
       --font: 'Inter', -apple-system, sans-serif;
     }
+
     * { box-sizing: border-box; }
-    body {
+    
+    html, body {
       margin: 0;
       padding: 0;
       background: var(--bg);
-      color: var(--text);
+      color: var(--ink);
       font-family: var(--font);
       min-height: 100vh;
-      display: flex;
-      flex-direction: column;
       -webkit-font-smoothing: antialiased;
-      position: relative;
       overflow-x: hidden;
     }
 
@@ -53,7 +56,7 @@
       height: 580px;
       background: var(--primary);
       filter: blur(140px);
-      opacity: 0.15;
+      opacity: 0.14;
       right: -100px;
       top: -100px;
     }
@@ -62,181 +65,583 @@
       height: 480px;
       background: var(--orange);
       filter: blur(140px);
-      opacity: 0.13;
-      left: -120px;
-      bottom: -60px;
+      opacity: 0.12;
+      left: 100px;
+      bottom: -80px;
     }
 
     /* Login Screen Container */
     #loginView {
-      flex: 1;
+      min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 20px;
+      padding: 24px;
+      position: relative;
+      z-index: 10;
     }
     .login-card {
-      background: rgba(255, 255, 255, 0.82);
+      background: rgba(255, 255, 255, 0.85);
       border: 1px solid rgba(255, 255, 255, 0.95);
       backdrop-filter: blur(28px) saturate(1.6);
       -webkit-backdrop-filter: blur(28px) saturate(1.6);
-      border-radius: 22px;
-      padding: 38px 34px;
+      border-radius: 24px;
+      padding: 40px 36px;
       width: 100%;
       max-width: 420px;
-      box-shadow: 0 20px 50px -10px rgba(15, 67, 179, 0.12), 0 2px 6px rgba(0,0,0,0.02);
-      position: relative;
-      z-index: 1;
+      box-shadow: 0 24px 64px -12px rgba(15, 67, 179, 0.14), 0 2px 8px rgba(0, 0, 0, 0.02);
     }
     .brand-title {
-      font-size: 22px;
-      font-weight: 700;
+      font-family: var(--display);
+      font-size: 26px;
+      font-weight: 800;
       color: var(--primary);
-      margin: 0 0 4px;
+      margin: 0 0 6px;
+      letter-spacing: -0.04em;
     }
-    .brand-title b { color: #ff7a00; }
+    .brand-title b { color: var(--orange); }
     .subtitle {
-      font-size: 13.5px;
-      color: var(--text-muted);
-      margin: 0 0 24px;
+      font-size: 14px;
+      color: var(--muted);
+      margin: 0 0 26px;
+      line-height: 1.45;
     }
-    .field { margin-bottom: 16px; }
+    .field { margin-bottom: 18px; }
     label {
       display: block;
-      font-size: 13px;
-      font-weight: 500;
-      color: #374151;
-      margin-bottom: 6px;
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--ink);
+      margin-bottom: 7px;
     }
     input {
       width: 100%;
-      padding: 11px 13px;
+      padding: 12px 14px;
       font-size: 14.5px;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      background: #ffffff;
-      color: var(--text);
+      border: 1.5px solid #e2e8f0;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.9);
+      color: var(--ink);
       outline: none;
       font-family: inherit;
+      transition: all 0.18s ease;
     }
     input:focus {
       border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(15, 67, 179, 0.1);
+      box-shadow: 0 0 0 3px rgba(15, 67, 179, 0.12);
+      background: #ffffff;
     }
-    .btn {
-      padding: 8px 14px;
+    .btn-submit {
+      width: 100%;
+      padding: 13px;
+      background: var(--orange);
+      color: #fff;
+      font-size: 15px;
+      font-weight: 600;
+      border: 0;
+      border-radius: 14px;
+      cursor: pointer;
+      margin-top: 10px;
+      box-shadow: 0 8px 22px -3px rgba(255, 122, 0, 0.36);
+      transition: all 0.18s ease;
+    }
+    .btn-submit:hover {
+      background: var(--orange-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 28px -3px rgba(255, 122, 0, 0.46);
+    }
+    .error-msg {
+      display: none;
+      background: var(--danger-bg);
+      color: var(--danger);
+      border: 1px solid rgba(239, 68, 68, 0.25);
+      border-radius: 10px;
+      padding: 11px 14px;
+      font-size: 13.5px;
+      margin-bottom: 18px;
+    }
+
+    /* Modern Dashboard Layout: Sidebar + Main Stage */
+    #dashboardView {
+      display: none;
+      min-height: 100vh;
+      position: relative;
+      z-index: 10;
+    }
+    .admin-layout {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* Left Sidebar with Vertical Tabs */
+    .admin-sidebar {
+      width: 270px;
+      min-width: 270px;
+      background: var(--sidebar-bg);
+      border-right: 1px solid var(--border-light);
+      backdrop-filter: blur(24px) saturate(1.6);
+      -webkit-backdrop-filter: blur(24px) saturate(1.6);
+      display: flex;
+      flex-direction: column;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      padding: 24px 16px;
+      box-shadow: 4px 0 24px rgba(15, 67, 179, 0.03);
+    }
+    .sidebar-brand {
+      padding: 0 10px 24px;
+      border-bottom: 1px solid var(--border-light);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .sidebar-logo {
+      font-family: var(--display);
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--primary);
+      text-decoration: none;
+      letter-spacing: -0.04em;
+    }
+    .sidebar-logo b { color: var(--orange); }
+    .badge-ops {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--primary);
+      background: rgba(15, 67, 179, 0.08);
+      padding: 3px 8px;
+      border-radius: 999px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    /* Vertical Navigation */
+    .sidebar-nav {
+      flex: 1;
+      padding: 20px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      overflow-y: auto;
+    }
+    .nav-group-title {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      padding: 10px 12px 6px;
+    }
+    .v-tab-btn {
+      width: 100%;
+      text-align: left;
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+      font-family: inherit;
+    }
+    .v-tab-btn:hover {
+      background: rgba(15, 67, 179, 0.05);
+      color: var(--ink);
+      transform: translateX(2px);
+    }
+    .v-tab-btn.active {
+      background: rgba(15, 67, 179, 0.09);
+      color: var(--primary);
+      border-color: rgba(15, 67, 179, 0.15);
+      font-weight: 700;
+      box-shadow: 0 2px 8px rgba(15, 67, 179, 0.06);
+    }
+    .v-tab-btn .tab-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .v-tab-btn .tab-icon {
+      font-size: 17px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+    }
+    .v-tab-btn .tab-count {
+      font-size: 11.5px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: rgba(15, 67, 179, 0.08);
+      color: var(--primary);
+    }
+    .v-tab-btn .tab-count.alert {
+      background: rgba(245, 158, 11, 0.16);
+      color: #b45309;
+    }
+
+    .sidebar-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
       font-size: 13.5px;
       font-weight: 500;
-      border-radius: 6px;
-      border: 1px solid var(--border);
-      background: var(--surface);
-      color: var(--text);
+      color: var(--muted);
+      text-decoration: none;
+      border-radius: 10px;
+      transition: all 0.18s ease;
+    }
+    .sidebar-link:hover {
+      color: var(--primary);
+      background: rgba(15, 67, 179, 0.04);
+    }
+
+    /* Sidebar Footer / Admin Profile */
+    .sidebar-footer {
+      border-top: 1px solid var(--border-light);
+      padding-top: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .admin-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .admin-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), var(--orange));
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 13px;
+    }
+    .admin-name {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--ink);
+    }
+    .admin-email {
+      font-size: 11.5px;
+      color: var(--muted);
+    }
+    .btn-signout {
+      padding: 6px 10px;
+      border-radius: 8px;
+      border: 1px solid rgba(239, 68, 68, 0.2);
+      background: rgba(239, 68, 68, 0.05);
+      color: var(--danger);
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.18s ease;
+    }
+    .btn-signout:hover {
+      background: var(--danger);
+      color: #fff;
+    }
+
+    /* Main Content Stage */
+    .admin-main {
+      flex: 1;
+      padding: 30px 36px;
+      overflow-y: auto;
+    }
+
+    /* Top Stage Bar */
+    .stage-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+    }
+    .stage-title h1 {
+      font-family: var(--display);
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      margin: 0 0 4px;
+      color: var(--ink);
+    }
+    .stage-title p {
+      font-size: 14px;
+      color: var(--muted);
+      margin: 0;
+    }
+    .system-status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--success);
+      background: rgba(5, 150, 105, 0.08);
+      border: 1px solid rgba(5, 150, 105, 0.2);
+      padding: 6px 14px;
+      border-radius: 999px;
+    }
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--success);
+      box-shadow: 0 0 8px var(--success);
+    }
+
+    /* Modern Glass KPI Cards */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+    .kpi-card {
+      background: rgba(255, 255, 255, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-radius: 18px;
+      padding: 20px 22px;
+      box-shadow: 0 10px 28px -4px rgba(15, 67, 179, 0.06), 0 1px 3px rgba(0, 0, 0, 0.02);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .kpi-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 16px 36px -4px rgba(15, 67, 179, 0.1);
+    }
+    .kpi-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+    .kpi-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--muted);
+    }
+    .kpi-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      background: rgba(15, 67, 179, 0.06);
+    }
+    .kpi-val {
+      font-family: var(--display);
+      font-size: 32px;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      color: var(--ink);
+    }
+
+    /* Glass Content Panels */
+    .table-card {
+      background: rgba(255, 255, 255, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(24px) saturate(1.6);
+      -webkit-backdrop-filter: blur(24px) saturate(1.6);
+      border-radius: 20px;
+      box-shadow: 0 16px 40px -8px rgba(15, 67, 179, 0.08), 0 2px 6px rgba(0, 0, 0, 0.02);
+      overflow: hidden;
+    }
+    .table-header {
+      padding: 18px 24px;
+      border-bottom: 1px solid var(--border-light);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .search-input {
+      padding: 10px 16px;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 12px;
+      font-size: 13.5px;
+      width: 280px;
+      background: #ffffff;
+      outline: none;
+      font-family: inherit;
+      transition: all 0.18s ease;
+    }
+    .search-input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(15, 67, 179, 0.1);
+    }
+
+    .btn {
+      padding: 9px 16px;
+      font-size: 13.5px;
+      font-weight: 600;
+      border-radius: 10px;
+      border: 1px solid rgba(226, 232, 240, 0.9);
+      background: #ffffff;
+      color: var(--ink);
       cursor: pointer;
       text-decoration: none;
       display: inline-flex;
       align-items: center;
       gap: 6px;
+      transition: all 0.18s ease;
     }
-    .btn-submit {
-      width: 100%;
-      padding: 12px;
-      background: var(--primary);
-      color: #fff;
-      font-size: 14.5px;
-      font-weight: 600;
-      border: 0;
-      border-radius: 8px;
-      cursor: pointer;
-      margin-top: 10px;
-    }
-    .btn-submit:hover { background: #0a2f80; }
-    .error-msg {
-      display: none;
-      background: #fef2f2;
-      color: #991b1b;
-      border: 1px solid #fecaca;
-      border-radius: 6px;
-      padding: 10px 12px;
-      font-size: 13px;
-      margin-bottom: 16px;
+    .btn:hover {
+      background: #f8fafc;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(15, 67, 179, 0.06);
     }
 
-    /* Dashboard View */
-    #dashboardView { display: none; }
-    .topbar {
-      background: var(--surface);
-      border-bottom: 1px solid var(--border);
-      padding: 12px 24px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      position: sticky;
-      top: 0;
-      z-index: 50;
-    }
-    .brand {
-      font-size: 18px;
-      font-weight: 700;
-      color: var(--primary);
-      text-decoration: none;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .brand b { color: #ff7a00; }
-    .brand-tag {
-      font-size: 11.5px;
-      color: var(--text-muted);
-      border-left: 1px solid var(--border);
-      padding-left: 8px;
-    }
-    .container { max-width: 1200px; margin: 24px auto; padding: 0 20px; }
-
-    .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-bottom: 20px; }
-    .kpi-card { background: var(--surface); padding: 18px; border-radius: 10px; border: 1px solid var(--border); }
-    .kpi-title { font-size: 12.5px; color: var(--text-muted); font-weight: 500; }
-    .kpi-val { font-size: 26px; font-weight: 700; color: var(--text); margin-top: 4px; }
-
-    .tab-bar { display: flex; gap: 8px; border-bottom: 1px solid var(--border); margin-bottom: 18px; }
-    .tab-btn { padding: 10px 14px; border: 0; background: transparent; font-size: 13.5px; font-weight: 500; color: var(--text-muted); cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; display: flex; align-items: center; gap: 6px; }
-    .tab-btn.active { color: var(--primary); border-bottom-color: var(--primary); font-weight: 600; }
-    .tab-count { font-size: 11px; padding: 2px 6px; border-radius: 99px; background: #f3f4f6; color: var(--text); }
-    .tab-count.alert { background: var(--warning-bg); color: var(--warning); }
-
-    .table-card { background: var(--surface); border-radius: 10px; border: 1px solid var(--border); overflow: hidden; }
-    .table-header { padding: 14px 18px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
-    .search-input { padding: 7px 12px; border: 1px solid var(--border); border-radius: 6px; font-size: 13px; width: 240px; }
+    /* Tables */
     table { width: 100%; border-collapse: collapse; text-align: left; }
-    th, td { padding: 12px 18px; border-bottom: 1px solid var(--border); font-size: 13px; vertical-align: middle; }
-    th { background: #f9fafb; color: var(--text-muted); font-weight: 600; font-size: 11.5px; text-transform: uppercase; }
-    tr:hover { background: #fbfcfe; }
+    th, td { padding: 14px 22px; border-bottom: 1px solid var(--border-light); font-size: 13.5px; vertical-align: middle; }
+    th {
+      background: rgba(248, 250, 252, 0.85);
+      color: var(--muted);
+      font-weight: 700;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    tr:hover { background: rgba(241, 245, 249, 0.6); }
 
-    .badge { display: inline-flex; padding: 2px 7px; border-radius: 4px; font-size: 11.5px; font-weight: 600; }
-    .badge-green { background: var(--success-bg); color: var(--success); }
-    .badge-amber { background: var(--warning-bg); color: var(--warning); }
-    .badge-red { background: var(--danger-bg); color: var(--danger); }
-    .badge-gray { background: #f3f4f6; color: var(--text-muted); }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .badge-green { background: #dcfce7; color: #166534; }
+    .badge-amber { background: #fef3c7; color: #92400e; }
+    .badge-red { background: #fee2e2; color: #991b1b; }
+    .badge-gray { background: #f1f5f9; color: var(--muted); }
 
-    .amber-card { background: var(--surface); border: 1px solid #fde68a; border-radius: 8px; padding: 16px; margin-bottom: 12px; }
-    .amber-head { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid #fef3c7; }
-    .compare-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; background: #fffdfa; padding: 12px; border-radius: 6px; border: 1px solid #fef3c7; margin-bottom: 10px; font-size: 12.5px; }
+    /* Amber Review Queue Cards */
+    .amber-card {
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      border-radius: 16px;
+      padding: 22px;
+      margin-bottom: 16px;
+      box-shadow: 0 8px 24px -4px rgba(245, 158, 11, 0.08);
+      transition: transform 0.18s ease;
+    }
+    .amber-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 30px -4px rgba(245, 158, 11, 0.14);
+    }
+    .amber-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 16px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid rgba(245, 158, 11, 0.18);
+    }
+    .compare-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 14px;
+      background: rgba(254, 252, 232, 0.5);
+      padding: 16px;
+      border-radius: 12px;
+      border: 1px solid rgba(254, 240, 138, 0.6);
+      margin-bottom: 8px;
+      font-size: 13px;
+      line-height: 1.5;
+    }
 
-    .drawer-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.3); z-index: 1000; display: none; justify-content: flex-end; }
+    /* Detail Drawer */
+    .drawer-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(11, 27, 69, 0.45);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      z-index: 1000;
+      display: none;
+      justify-content: flex-end;
+    }
     .drawer-overlay.open { display: flex; }
-    .drawer-content { background: var(--surface); width: 100%; max-width: 520px; height: 100%; overflow-y: auto; padding: 24px; }
-    .detail-section { background: #f9fafb; border: 1px solid var(--border); border-radius: 8px; padding: 12px 16px; margin-bottom: 12px; font-size: 13px; }
-    .detail-section h4 { margin: 0 0 8px; font-size: 12px; color: var(--primary); text-transform: uppercase; }
-    .detail-row { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px dashed var(--border); }
+    .drawer-content {
+      background: rgba(255, 255, 255, 0.94);
+      backdrop-filter: blur(28px) saturate(1.6);
+      width: 100%;
+      max-width: 560px;
+      height: 100%;
+      overflow-y: auto;
+      padding: 32px 28px;
+      box-shadow: -10px 0 40px rgba(15, 67, 179, 0.15);
+      display: flex;
+      flex-direction: column;
+    }
+    .detail-section {
+      background: rgba(248, 250, 252, 0.85);
+      border: 1px solid var(--border-light);
+      border-radius: 14px;
+      padding: 16px 18px;
+      margin-bottom: 16px;
+      font-size: 13.5px;
+    }
+    .detail-section h4 {
+      margin: 0 0 10px;
+      font-family: var(--display);
+      font-size: 12.5px;
+      color: var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .detail-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px dashed var(--border-light);
+    }
     .detail-row:last-child { border-bottom: 0; }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 768px) {
+      .admin-layout { flex-direction: column; }
+      .admin-sidebar { width: 100%; height: auto; position: static; }
+      .kpi-grid { grid-template-columns: 1fr; }
+      .admin-main { padding: 20px 16px; }
+    }
   </style>
 </head>
 <body>
 
+  <!-- Ambient Glowing Background Orbs -->
+  <div class="ambient-orb orb-1"></div>
+  <div class="ambient-orb orb-2"></div>
+
   <!-- Separate Admin Login Screen -->
   <div id="loginView">
     <div class="login-card">
-      <div class="brand-title">Apna<b>zo</b> <span style="font-size:14px;color:var(--text-muted);font-weight:500;">· Admin Portal</span></div>
-      <p class="subtitle">Enter your admin credentials to access operations.</p>
+      <div class="brand-title">Apna<b>zo</b> <span style="font-size:14px; color:var(--muted); font-weight:600; font-family:var(--font);">· Operations</span></div>
+      <p class="subtitle">Enter your admin credentials to access the operations command center.</p>
       <div class="error-msg" id="errorMsg">Invalid Admin ID or Password.</div>
 
       <form id="loginForm">
@@ -248,210 +653,297 @@
           <label>Password</label>
           <input type="password" id="adminPass" placeholder="Enter password" value="ApnazoAdmin@2026" required>
         </div>
-        <button type="submit" class="btn-submit" id="loginBtn">Sign In to Command Center</button>
+        <button type="submit" class="btn-submit" id="loginBtn">Sign In to Command Center &rarr;</button>
       </form>
     </div>
   </div>
 
-  <!-- Authenticated Command Center -->
+  <!-- Authenticated Command Center with Vertical Navigation Sidebar -->
   <div id="dashboardView">
-    <header class="topbar">
-      <div style="display:flex; align-items:center; gap: 8px;">
-        <span class="brand">Apna<b>zo</b></span>
-        <span class="brand-tag">Operations Command Center</span>
-      </div>
-      <div style="display:flex; align-items:center; gap: 10px;">
-        <span style="font-size:12.5px; color:var(--text-muted);">admin@apnazo.com</span>
-        <button class="btn" style="color:var(--danger); border-color:#fecaca;" onclick="logoutAdmin()">Sign Out</button>
-      </div>
-    </header>
+    <div class="admin-layout">
 
-    <div class="container">
-      <div class="kpi-grid">
-        <div class="kpi-card">
-          <div class="kpi-title">Total Sellers</div>
-          <div class="kpi-val" id="kpiSellers">0</div>
+      <!-- Left Vertical Sidebar -->
+      <aside class="admin-sidebar">
+        <div class="sidebar-brand">
+          <a href="/" class="sidebar-logo">Apna<b>zo</b></a>
+          <span class="badge-ops">Command Center</span>
         </div>
-        <div class="kpi-card">
-          <div class="kpi-title">Amber Review Queue</div>
-          <div class="kpi-val" id="kpiAmber" style="color:var(--warning);">0</div>
-        </div>
-        <div class="kpi-card">
-          <div class="kpi-title">Starter Live Active</div>
-          <div class="kpi-val" id="kpiGreen" style="color:var(--success);">0</div>
-        </div>
-        <div class="kpi-card">
-          <div class="kpi-title">Early Access Leads</div>
-          <div class="kpi-val" id="kpiLeads" style="color:var(--primary);">0</div>
-        </div>
-      </div>
 
-      <div class="tab-bar">
-        <button class="tab-btn active" onclick="switchTab('amber')">
-          Amber Review Queue
-          <span class="tab-count alert" id="cntAmber">0</span>
-        </button>
-        <button class="tab-btn" onclick="switchTab('sellers')">
-          All Sellers Directory
-          <span class="tab-count" id="cntSellers">0</span>
-        </button>
-        <button class="tab-btn" onclick="switchTab('leads')">
-          Waitlist Leads
-          <span class="tab-count" id="cntLeads">0</span>
-        </button>
-        <button class="tab-btn" onclick="switchTab('agreement')">
-          📝 Agreement &amp; Policy Editor
-        </button>
-      </div>
+        <nav class="sidebar-nav">
+          <div class="nav-group-title">Verification &amp; Approvals</div>
+          
+          <button type="button" class="v-tab-btn active" id="vbtn-amber" onclick="switchTab('amber')">
+            <span class="tab-left">
+              <span class="tab-icon">⏳</span>
+              <span>Review Queue</span>
+            </span>
+            <span class="tab-count alert" id="cntAmber">0</span>
+          </button>
 
-      <!-- TAB 1: Amber Queue -->
-      <div id="tab-amber" class="tab-content">
-        <div class="table-card" style="padding: 16px;" id="amberList">
-          Loading applications...
-        </div>
-      </div>
+          <button type="button" class="v-tab-btn" id="vbtn-sellers" onclick="switchTab('sellers')">
+            <span class="tab-left">
+              <span class="tab-icon">🏪</span>
+              <span>Sellers Directory</span>
+            </span>
+            <span class="tab-count" id="cntSellers">0</span>
+          </button>
 
-      <!-- TAB 2: Sellers Directory -->
-      <div id="tab-sellers" class="tab-content" style="display:none;">
-        <div class="table-card">
-          <div class="table-header">
-            <input type="text" id="sellerSearch" class="search-input" placeholder="Search sellers..." oninput="filterSellersTable()">
-            <a href="/api/admin/sellers/export.csv" class="btn">📥 Export CSV</a>
-          </div>
-          <div style="overflow-x:auto;">
-            <table>
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Store &amp; Owner</th>
-                  <th>Vertical &amp; Category</th>
-                  <th>Identity &amp; Bank</th>
-                  <th>Tier</th>
-                  <th>Status</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody id="sellersTableBody"></tbody>
-            </table>
-          </div>
-        </div>
-      </div>
+          <button type="button" class="v-tab-btn" id="vbtn-leads" onclick="switchTab('leads')">
+            <span class="tab-left">
+              <span class="tab-icon">👥</span>
+              <span>Waitlist Leads</span>
+            </span>
+            <span class="tab-count" id="cntLeads">0</span>
+          </button>
 
-      <!-- TAB 3: Leads -->
-      <div id="tab-leads" class="tab-content" style="display:none;">
-        <div class="table-card">
-          <div class="table-header">
-            <strong>Waitlist Contacts</strong>
-            <a href="/api/leads/export.csv" class="btn">📥 Export Leads CSV</a>
-          </div>
-          <div style="overflow-x:auto;">
-            <table>
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>Contact</th>
-                  <th>Source</th>
-                  <th>Date</th>
-                </tr>
-              </thead>
-              <tbody id="leadsTableBody"></tbody>
-            </table>
-          </div>
-        </div>
-      </div>
+          <div class="nav-group-title" style="margin-top:14px;">Platform Governance</div>
 
-      <!-- TAB 4: Agreement Editor -->
-      <div id="tab-agreement" class="tab-content" style="display:none;">
-        <div class="table-card" style="padding: 24px;">
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 12px;">
+          <button type="button" class="v-tab-btn" id="vbtn-agreement" onclick="switchTab('agreement')">
+            <span class="tab-left">
+              <span class="tab-icon">📝</span>
+              <span>Agreement Editor</span>
+            </span>
+            <span style="font-size:11px; color:var(--muted);" id="agreeVersionBadge">v1.2</span>
+          </button>
+
+          <div class="nav-group-title" style="margin-top:14px;">Live Sites</div>
+          <a href="http://localhost:3000" target="_blank" class="sidebar-link">
+            <span>🌐</span>
+            <span>Customer Website &nearr;</span>
+          </a>
+          <a href="http://localhost:3000/seller.html" target="_blank" class="sidebar-link">
+            <span>🚀</span>
+            <span>Partner Onboarding &nearr;</span>
+          </a>
+        </nav>
+
+        <div class="sidebar-footer">
+          <div class="admin-info">
+            <div class="admin-avatar">AD</div>
             <div>
-              <h3 style="margin:0; font-size:18px;">Partner Agreement &amp; Terms Editor</h3>
-              <p style="margin:4px 0 0; font-size:13px; color:var(--text-muted);">Edit the commercial terms and legal agreement. Changes immediately update Step 10 on the seller onboarding flow.</p>
+              <div class="admin-name">Operations Admin</div>
+              <div class="admin-email">admin@apnazo.com</div>
             </div>
-            <span class="badge badge-green" id="agreeVersionBadge">v1.2 (Active)</span>
+          </div>
+          <button type="button" class="btn-signout" onclick="logoutAdmin()" title="Sign Out">Sign Out</button>
+        </div>
+      </aside>
+
+      <!-- Main Stage -->
+      <main class="admin-main">
+        
+        <!-- Header -->
+        <header class="stage-header">
+          <div class="stage-title">
+            <h1 id="stageHeading">Amber Review Queue</h1>
+            <p id="stageSub">Review incoming partner documents, verify identities, and approve store activations.</p>
+          </div>
+          <div class="system-status">
+            <span class="status-dot"></span>
+            <span>Live System Connected</span>
+          </div>
+        </header>
+
+        <!-- KPI Metrics Grid -->
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-top">
+              <span class="kpi-title">Total Sellers</span>
+              <span class="kpi-icon">🏪</span>
+            </div>
+            <div class="kpi-val" id="kpiSellers">0</div>
           </div>
 
-          <form id="agreementEditForm">
-            <div style="display:grid; grid-template-columns: 2fr 1fr; gap: 16px; margin-bottom: 16px;">
-              <div>
-                <label style="display:block; font-size:13px; font-weight:600; margin-bottom:6px;">Agreement Screen Title</label>
-                <input type="text" id="agTitle" value="Terms &amp; e-Sign Agreement" style="width:100%; padding:10px; border:1px solid var(--border); border-radius:6px;">
-              </div>
-              <div>
-                <label style="display:block; font-size:13px; font-weight:600; margin-bottom:6px;">Agreement Version</label>
-                <input type="text" id="agVersion" value="1.2" style="width:100%; padding:10px; border:1px solid var(--border); border-radius:6px;">
-              </div>
+          <div class="kpi-card" style="border-color: rgba(245, 158, 11, 0.4);">
+            <div class="kpi-top">
+              <span class="kpi-title" style="color:var(--warning);">Review Queue (Action Req)</span>
+              <span class="kpi-icon" style="background:var(--warning-bg); color:var(--warning);">⏳</span>
             </div>
+            <div class="kpi-val" id="kpiAmber" style="color:var(--warning);">0</div>
+          </div>
 
-            <div style="margin-bottom: 16px;">
-              <label style="display:block; font-size:13px; font-weight:600; margin-bottom:6px;">Key Terms Box Heading</label>
-              <input type="text" id="agSummaryHeading" value="Key Commercial Terms:" style="width:100%; padding:10px; border:1px solid var(--border); border-radius:6px;">
+          <div class="kpi-card" style="border-color: rgba(5, 150, 105, 0.4);">
+            <div class="kpi-top">
+              <span class="kpi-title" style="color:var(--success);">Starter Live Active</span>
+              <span class="kpi-icon" style="background:var(--success-bg); color:var(--success);">✓</span>
             </div>
+            <div class="kpi-val" id="kpiGreen" style="color:var(--success);">0</div>
+          </div>
 
-            <div style="margin-bottom: 16px;">
-              <label style="display:block; font-size:13px; font-weight:600; margin-bottom:6px;">Key Terms Bullet Points (One per line)</label>
-              <textarea id="agTermsBullets" rows="5" style="width:100%; padding:10px; border:1px solid var(--border); border-radius:6px; font-family:inherit;"></textarea>
-              <small style="color:var(--text-muted); font-size:12px;">Each line becomes a distinct checklist bullet point on the seller onboarding screen.</small>
+          <div class="kpi-card">
+            <div class="kpi-top">
+              <span class="kpi-title" style="color:var(--primary);">Waitlist Leads</span>
+              <span class="kpi-icon" style="background:rgba(15, 67, 179, 0.08); color:var(--primary);">👥</span>
             </div>
-
-            <div style="margin-bottom: 16px;">
-              <label style="display:block; font-size:13px; font-weight:600; margin-bottom:6px;">Consent Checkbox Label</label>
-              <input type="text" id="agConsentLabel" value="I accept the Apnazo Partner Terms and e-Sign this agreement." style="width:100%; padding:10px; border:1px solid var(--border); border-radius:6px;">
-            </div>
-
-            <div style="margin-bottom: 16px;">
-              <label style="display:block; font-size:13px; font-weight:600; margin-bottom:6px;">Full Legal Agreement Text</label>
-              <textarea id="agFullText" rows="8" style="width:100%; padding:10px; border:1px solid var(--border); border-radius:6px; font-family:inherit;"></textarea>
-            </div>
-
-            <div style="display:flex; gap: 12px; align-items:center;">
-              <button type="button" class="btn" style="background:var(--primary); color:#fff; padding:10px 18px;" onclick="saveAgreementTerms()">
-                💾 Save &amp; Publish Agreement Live
-              </button>
-              <span id="agSaveStatus" style="font-size:13px; color:var(--success); font-weight:600; display:none;">✓ Published live!</span>
-            </div>
-          </form>
+            <div class="kpi-val" id="kpiLeads" style="color:var(--primary);">0</div>
+          </div>
         </div>
-      </div>
+
+        <!-- TAB 1: Amber Review Queue -->
+        <div id="tab-amber" class="tab-content">
+          <div class="table-card" style="padding: 24px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 20px;">
+              <div>
+                <h3 style="margin:0; font-size:18px; font-family:var(--display);">Pending Partner Verification Applications</h3>
+                <p style="margin:4px 0 0; font-size:13.5px; color:var(--muted);">Inspect submitted PAN cards, Bank Accounts, GSTIN, and Licences to grant Starter status.</p>
+              </div>
+              <button class="btn" onclick="loadDashboardData()">↻ Refresh List</button>
+            </div>
+            <div id="amberList">
+              Loading applications...
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 2: Sellers Directory -->
+        <div id="tab-sellers" class="tab-content" style="display:none;">
+          <div class="table-card">
+            <div class="table-header">
+              <input type="text" id="sellerSearch" class="search-input" placeholder="🔍 Search by store, owner, phone or ID..." oninput="filterSellersTable()">
+              <div style="display:flex; gap:10px;">
+                <a href="/api/admin/sellers/export.csv" class="btn">📥 Export CSV</a>
+              </div>
+            </div>
+            <div style="overflow-x:auto;">
+              <table>
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Store &amp; Owner</th>
+                    <th>Category &amp; Verticals</th>
+                    <th>Identity &amp; Bank</th>
+                    <th>Tier</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="sellersTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 3: Leads -->
+        <div id="tab-leads" class="tab-content" style="display:none;">
+          <div class="table-card">
+            <div class="table-header">
+              <div>
+                <h3 style="margin:0; font-size:17px; font-family:var(--display);">Waitlist Leads &amp; Inquiries</h3>
+                <p style="margin:2px 0 0; font-size:13px; color:var(--muted);">Prospective partners and customers who signed up on the landing page.</p>
+              </div>
+              <a href="/api/leads/export.csv" class="btn">📥 Export Leads CSV</a>
+            </div>
+            <div style="overflow-x:auto;">
+              <table>
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Contact Phone / Email</th>
+                    <th>Lead Source</th>
+                    <th>Registered Date</th>
+                  </tr>
+                </thead>
+                <tbody id="leadsTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 4: Agreement Editor -->
+        <div id="tab-agreement" class="tab-content" style="display:none;">
+          <div class="table-card" style="padding: 28px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 24px; border-bottom: 1px solid var(--border-light); padding-bottom: 16px;">
+              <div>
+                <h3 style="margin:0; font-size:19px; font-family:var(--display);">Partner Agreement &amp; Terms Governance</h3>
+                <p style="margin:4px 0 0; font-size:13.5px; color:var(--muted);">Edit the commercial terms and legal agreement clauses. Updates automatically sync to Step 10 of partner onboarding.</p>
+              </div>
+            </div>
+
+            <form id="agreementEditForm">
+              <div style="display:grid; grid-template-columns: 2fr 1fr; gap: 18px; margin-bottom: 18px;">
+                <div>
+                  <label>Agreement Screen Title</label>
+                  <input type="text" id="agTitle" value="Terms &amp; e-Sign Agreement">
+                </div>
+                <div>
+                  <label>Agreement Version Tag</label>
+                  <input type="text" id="agVersion" value="1.2">
+                </div>
+              </div>
+
+              <div style="margin-bottom: 18px;">
+                <label>Key Terms Box Heading</label>
+                <input type="text" id="agSummaryHeading" value="Key Commercial Terms:">
+              </div>
+
+              <div style="margin-bottom: 18px;">
+                <label>Key Terms Bullet Points (One per line)</label>
+                <textarea id="agTermsBullets" rows="5" style="width:100%; padding:12px; border:1.5px solid #e2e8f0; border-radius:12px; font-family:inherit; font-size:14px; outline:none; background:rgba(255,255,255,0.9);"></textarea>
+                <small style="color:var(--muted); font-size:12px; display:block; margin-top:4px;">Each line becomes a distinct checklist bullet point on the partner onboarding screen.</small>
+              </div>
+
+              <div style="margin-bottom: 18px;">
+                <label>Consent Checkbox Label</label>
+                <input type="text" id="agConsentLabel" value="I accept the Apnazo Partner Terms and e-Sign this agreement.">
+              </div>
+
+              <div style="margin-bottom: 22px;">
+                <label>Full Legal Agreement Text</label>
+                <textarea id="agFullText" rows="9" style="width:100%; padding:12px; border:1.5px solid #e2e8f0; border-radius:12px; font-family:inherit; font-size:13.5px; line-height:1.6; outline:none; background:rgba(255,255,255,0.9);"></textarea>
+              </div>
+
+              <div style="display:flex; gap: 14px; align-items:center;">
+                <button type="button" class="btn" style="background:var(--primary); color:#fff; padding:12px 24px; font-weight:600; border-radius:12px;" onclick="saveAgreementTerms()">
+                  💾 Save &amp; Publish Agreement Live
+                </button>
+                <span id="agSaveStatus" style="font-size:13.5px; color:var(--success); font-weight:700; display:none;">✓ Published live!</span>
+              </div>
+            </form>
+          </div>
+        </div>
+
+      </main>
     </div>
   </div>
 
-  <!-- Detail Drawer -->
+  <!-- Detail Slide-over Drawer -->
   <div id="drawerOverlay" class="drawer-overlay" onclick="closeDrawer(event)">
     <div class="drawer-content" onclick="event.stopPropagation()">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
-        <h3 id="dStoreName" style="margin:0;">Seller Profile</h3>
-        <button class="btn" onclick="closeDrawer()">✕</button>
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; border-bottom:1px solid var(--border-light); padding-bottom:14px;">
+        <div>
+          <h3 id="dStoreName" style="margin:0; font-family:var(--display); font-size:20px;">Seller Profile</h3>
+          <span style="font-size:12px; color:var(--muted);">Full Partner Document Verification Details</span>
+        </div>
+        <button class="btn" onclick="closeDrawer()">✕ Close</button>
       </div>
+
       <div class="detail-section">
-        <h4>Business &amp; Contact Details</h4>
-        <div class="detail-row"><span>Application ID</span><span id="dId" style="font-family:monospace; font-weight:600;">-</span></div>
-        <div class="detail-row"><span>Application Status</span><span id="dStatus" style="font-weight:600; color:var(--primary);">-</span></div>
-        <div class="detail-row"><span>Mobile (+91)</span><span id="dMobile" style="font-weight:600;">-</span></div>
-        <div class="detail-row"><span>Owner Full Name</span><span id="dOwner">-</span></div>
-        <div class="detail-row"><span>Category</span><span id="dCategory">-</span></div>
+        <h4>Business &amp; Store Information</h4>
+        <div class="detail-row"><span>Application ID</span><span id="dId" style="font-family:monospace; font-weight:700;">-</span></div>
+        <div class="detail-row"><span>Status</span><span id="dStatus" style="font-weight:700; color:var(--primary);">-</span></div>
+        <div class="detail-row"><span>Contact Phone (+91)</span><span id="dMobile" style="font-weight:700;">-</span></div>
+        <div class="detail-row"><span>Owner Full Name</span><span id="dOwner" style="font-weight:600;">-</span></div>
+        <div class="detail-row"><span>Store Category</span><span id="dCategory">-</span></div>
         <div class="detail-row"><span>Store Address</span><span id="dAddress">-</span></div>
         <div class="detail-row"><span>PIN Code</span><span id="dPin">-</span></div>
-        <div class="detail-row"><span>Active Verticals</span><span id="dVerticals">-</span></div>
+        <div class="detail-row"><span>Verticals</span><span id="dVerticals">-</span></div>
       </div>
+
       <div class="detail-section">
-        <h4>Documents &amp; Verification</h4>
-        <div class="detail-row"><span>PAN Number</span><span id="dPan" style="font-family:monospace; font-weight:600;">-</span></div>
-        <div class="detail-row"><span>PAN Registered Name</span><span id="dPanName">-</span></div>
+        <h4>Identity &amp; Payout Verification</h4>
+        <div class="detail-row"><span>PAN Number</span><span id="dPan" style="font-family:monospace; font-weight:700;">-</span></div>
+        <div class="detail-row"><span>PAN Legal Name</span><span id="dPanName">-</span></div>
         <div class="detail-row"><span>Bank Account</span><span id="dBankAcc" style="font-family:monospace;">-</span></div>
-        <div class="detail-row"><span>IFSC Code</span><span id="dBankIfsc" style="font-family:monospace; font-weight:600;">-</span></div>
+        <div class="detail-row"><span>IFSC Code</span><span id="dBankIfsc" style="font-family:monospace; font-weight:700;">-</span></div>
         <div class="detail-row"><span>UPI ID</span><span id="dUpi">-</span></div>
-        <div class="detail-row"><span>Bank Beneficiary</span><span id="dBankBeneficiary">-</span></div>
-        <div class="detail-row"><span>GSTIN</span><span id="dGstin" style="font-family:monospace;">-</span></div>
-        <div class="detail-row"><span>Category Licence</span><span id="dLicence">-</span></div>
-        <div class="detail-row"><span>Bank Account</span><span id="dBankAcc">-</span></div>
-        <div class="detail-row"><span>IFSC Code</span><span id="dBankIfsc">-</span></div>
-        <div class="detail-row"><span>GSTIN</span><span id="dGstin">-</span></div>
+        <div class="detail-row"><span>Beneficiary Name</span><span id="dBankBeneficiary">-</span></div>
+        <div class="detail-row"><span>GSTIN Details</span><span id="dGstin" style="font-family:monospace;">-</span></div>
         <div class="detail-row"><span>Category Licence</span><span id="dLicence">-</span></div>
       </div>
-      <div style="display:flex; gap: 8px; margin-top: 16px;">
-        <button class="btn" style="flex:1; background:var(--primary); color:#fff;" onclick="drawerAction('GREEN', 'STARTER')">Approve Starter</button>
-        <button class="btn" style="flex:1; background:var(--danger-bg); color:var(--danger);" onclick="drawerAction('RED', 'SUSPENDED')">Reject</button>
+
+      <div style="display:flex; gap: 12px; margin-top: auto; padding-top: 20px;">
+        <button class="btn" style="flex:1; background:var(--primary); color:#fff; padding:12px; font-weight:700; border-radius:12px;" onclick="drawerAction('GREEN', 'STARTER')">Approve Starter</button>
+        <button class="btn" style="flex:1; background:var(--danger-bg); color:var(--danger); padding:12px; font-weight:700; border-radius:12px; border-color:rgba(239,68,68,0.2);" onclick="drawerAction('RED', 'SUSPENDED')">Reject</button>
       </div>
     </div>
   </div>
@@ -490,7 +982,7 @@
         body: JSON.stringify({ username: u, password: p })
       }).then(r => r.json()).then(res => {
         btn.disabled = false;
-        btn.textContent = 'Sign In to Command Center';
+        btn.textContent = 'Sign In to Command Center →';
         if (res.success) {
           localStorage.setItem('apnazo_admin_session', res.token);
           if (res.redirectUrl && window.location.port !== '3001') {
@@ -504,7 +996,7 @@
         }
       }).catch(e => {
         btn.disabled = false;
-        btn.textContent = 'Sign In to Command Center';
+        btn.textContent = 'Sign In to Command Center →';
         err.textContent = 'Network error. Please try again.';
         err.style.display = 'block';
       });
@@ -548,7 +1040,7 @@
           if (a.title) document.getElementById('agTitle').value = a.title;
           if (a.version) {
             document.getElementById('agVersion').value = a.version;
-            document.getElementById('agreeVersionBadge').textContent = 'v' + a.version + ' (Active)';
+            document.getElementById('agreeVersionBadge').textContent = 'v' + a.version;
           }
           if (a.summaryHeading) document.getElementById('agSummaryHeading').value = a.summaryHeading;
           if (a.terms && a.terms.length) {
@@ -588,7 +1080,7 @@
       }).then(r => r.json()).then(res => {
         if (res.success) {
           statusSpan.style.display = 'inline-block';
-          document.getElementById('agreeVersionBadge').textContent = 'v' + res.agreement.version + ' (Active)';
+          document.getElementById('agreeVersionBadge').textContent = 'v' + res.agreement.version;
           setTimeout(function(){ statusSpan.style.display = 'none'; }, 3000);
         } else {
           alert('Failed to save agreement: ' + res.error);
@@ -608,27 +1100,27 @@
 
       var amberEl = document.getElementById('amberList');
       if (amberQueue.length === 0) {
-        amberEl.innerHTML = '<div style="text-align:center; padding: 32px; color: var(--text-muted);">✓ No pending applications in the review queue.</div>';
+        amberEl.innerHTML = '<div style="text-align:center; padding: 48px 24px; color: var(--muted); font-size:14px;"><div style="font-size:32px; margin-bottom:8px;">✓</div>All applications reviewed. No pending verifications in queue.</div>';
       } else {
         amberEl.innerHTML = amberQueue.map(s => `
           <div class="amber-card" id="card-${s.id}">
             <div class="amber-head">
               <div>
-                <strong>${s.basics?.bizName || 'Draft Store'}</strong>
-                <span class="badge badge-amber" style="margin-left:6px;">${s.status || 'Pending Review'}</span>
-                <div style="font-size:12px; color:var(--text-muted); margin-top:2px;">ID: ${s.id} · Phone: ${s.mobile} · Category: ${s.basics?.category || 'Retail'}</div>
+                <strong style="font-size:16px; font-family:var(--display);">${s.basics?.bizName || 'Draft Store'}</strong>
+                <span class="badge badge-amber" style="margin-left:8px;">${s.status || 'Pending Review'}</span>
+                <div style="font-size:12.5px; color:var(--muted); margin-top:4px;">Application ID: <strong>${s.id}</strong> · Phone: <strong>+91 ${s.mobile}</strong> · Category: <strong>${s.basics?.category || 'Retail'}</strong></div>
               </div>
-              <div style="display:flex; gap: 6px;">
-                <button class="btn" style="background:var(--primary); color:#fff;" onclick="decideSeller('${s.id}', 'GREEN', 'STARTER', 'Admin verified and approved')">Approve Starter</button>
+              <div style="display:flex; gap: 8px;">
+                <button class="btn" style="background:var(--primary); color:#fff; border-color:var(--primary); font-weight:700;" onclick="decideSeller('${s.id}', 'GREEN', 'STARTER', 'Admin verified and approved')">✓ Approve Starter</button>
                 <button class="btn" onclick="viewSellerDetails('${s.id}')">Inspect All Details</button>
-                <button class="btn" style="color:var(--danger);" onclick="decideSeller('${s.id}', 'RED', 'SUSPENDED', 'Application rejected')">Reject</button>
+                <button class="btn" style="color:var(--danger); border-color:rgba(239,68,68,0.25);" onclick="decideSeller('${s.id}', 'RED', 'SUSPENDED', 'Application rejected')">Reject</button>
               </div>
             </div>
             <div class="compare-grid">
               <div><strong>Owner / Legal Name:</strong><br>${s.basics?.ownerName || s.pan?.registeredName || 'N/A'}</div>
-              <div><strong>PAN Number:</strong><br>${s.pan?.panNumber || 'Not Provided'}</div>
-              <div><strong>Bank Account &amp; IFSC:</strong><br>${s.bank?.accountNumber || 'N/A'} · ${s.bank?.ifsc || 'N/A'}</div>
-              <div><strong>GSTIN:</strong><br>${s.gst?.hasGst ? (s.gst?.gstin || 'Pending') : 'Exempt / No GST (< 20L)'}</div>
+              <div><strong>PAN Number:</strong><br><span style="font-family:monospace; font-weight:600;">${s.pan?.panNumber || 'Not Provided'}</span></div>
+              <div><strong>Bank Account &amp; IFSC:</strong><br><span style="font-family:monospace;">${s.bank?.accountNumber || 'N/A'}</span> · <span style="font-family:monospace; font-weight:600;">${s.bank?.ifsc || 'N/A'}</span></div>
+              <div><strong>GSTIN:</strong><br><span style="font-family:monospace;">${s.gst?.hasGst ? (s.gst?.gstin || 'Pending') : 'Exempt / No GST (< 20L)'}</span></div>
               <div><strong>Licence / Registration:</strong><br>${s.licence?.type || 'Licence'}: ${s.licence?.number || 'N/A'}</div>
               <div><strong>Store Address:</strong><br>${s.basics?.address || 'Rourkela'} (${s.basics?.pincode || '769001'})</div>
             </div>
@@ -639,13 +1131,13 @@
       var sBody = document.getElementById('sellersTableBody');
       sBody.innerHTML = allSellers.map(s => `
         <tr class="seller-row" data-search="${(s.basics?.bizName + ' ' + s.basics?.ownerName + ' ' + s.mobile + ' ' + s.id).toLowerCase()}">
-          <td><strong>${s.id}</strong></td>
-          <td><b>${s.basics?.bizName || 'Draft'}</b><br><small style="color:var(--text-muted);">${s.basics?.ownerName || ''} · ${s.mobile}</small></td>
-          <td>${s.verticals?.join(', ') || 'Ecommerce'}<br><small style="color:var(--text-muted);">${s.basics?.category || 'General'}</small></td>
-          <td>PAN: ${s.pan?.panNumber || 'N/A'}<br><small style="color:var(--text-muted);">Match: ${s.bank?.nameMatchScore ?? 0}%</small></td>
-          <td><span class="badge ${s.tier === 'VERIFIED' ? 'badge-green' : 'badge-gray'}">${s.tier || 'STARTER'}</span></td>
+          <td><strong style="font-family:monospace;">${s.id}</strong></td>
+          <td><b>${s.basics?.bizName || 'Draft'}</b><br><small style="color:var(--muted);">${s.basics?.ownerName || ''} · +91 ${s.mobile}</small></td>
+          <td>${s.verticals?.join(', ') || 'Retail'}<br><small style="color:var(--muted);">${s.basics?.category || 'General'}</small></td>
+          <td>PAN: <span style="font-family:monospace;">${s.pan?.panNumber || 'N/A'}</span><br><small style="color:var(--muted);">A/C: ${s.bank?.accountNumber ? '••••' + s.bank.accountNumber.slice(-4) : 'N/A'}</small></td>
+          <td><span class="badge ${s.tier === 'STARTER' ? 'badge-green' : 'badge-gray'}">${s.tier || 'STARTER'}</span></td>
           <td><span class="badge ${s.decision === 'GREEN' ? 'badge-green' : 'badge-amber'}">${s.status || 'Active'}</span></td>
-          <td><button class="btn" onclick="viewSellerDetails('${s.id}')">View</button></td>
+          <td><button class="btn" onclick="viewSellerDetails('${s.id}')">Inspect</button></td>
         </tr>
       `).join('');
     }
@@ -658,18 +1150,33 @@
         <tr>
           <td>${i + 1}</td>
           <td><strong>${l.contact}</strong></td>
-          <td>${l.source || 'Website'}</td>
-          <td style="color:var(--text-muted);">${new Date(l.timestamp).toLocaleDateString('en-IN')}</td>
+          <td><span class="badge badge-gray">${l.source || 'Website'}</span></td>
+          <td style="color:var(--muted);">${new Date(l.timestamp).toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' })}</td>
         </tr>
       `).join('');
     }
 
     function switchTab(name) {
-      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.v-tab-btn').forEach(b => b.classList.remove('active'));
       document.querySelectorAll('.tab-content').forEach(c => c.style.display = 'none');
-      if (event && event.currentTarget) event.currentTarget.classList.add('active');
+      
+      var targetBtn = document.getElementById('vbtn-' + name);
+      if (targetBtn) targetBtn.classList.add('active');
+
       var el = document.getElementById('tab-' + name);
       if (el) el.style.display = 'block';
+
+      // Update stage heading
+      var headings = {
+        amber: { title: "Amber Review Queue", desc: "Review incoming partner documents, verify identities, and approve store activations." },
+        sellers: { title: "All Sellers Directory", desc: "Comprehensive registry of all registered stores, drivers, and service partners in Rourkela." },
+        leads: { title: "Waitlist Leads", desc: "Customer and merchant early-access signups captured from the marketing landing page." },
+        agreement: { title: "Partner Agreement & Policy Editor", desc: "Manage legal contract clauses, platform commissions, and electronic consent terms." }
+      };
+      if (headings[name]) {
+        document.getElementById('stageHeading').textContent = headings[name].title;
+        document.getElementById('stageSub').textContent = headings[name].desc;
+      }
     }
 
     function filterSellersTable() {
@@ -689,7 +1196,7 @@
         body: JSON.stringify({ id: id, decision: decision, tier: tier, reason: reason })
       }).then(r => r.json()).then(res => {
         if (res.success) {
-          alert('Seller status updated.');
+          alert('Seller status successfully updated: ' + (decision === 'GREEN' ? 'Approved (Active)' : decision));
           loadDashboardData();
           closeDrawer();
         } else {
@@ -706,7 +1213,7 @@
       document.getElementById('dStoreName').textContent = b.bizName || 'Draft Store';
       document.getElementById('dId').textContent = s.id;
       document.getElementById('dStatus').textContent = s.status || 'Pending Admin Review';
-      document.getElementById('dMobile').textContent = s.mobile || '-';
+      document.getElementById('dMobile').textContent = s.mobile ? ('+91 ' + s.mobile) : '-';
       document.getElementById('dOwner').textContent = b.ownerName || '-';
       document.getElementById('dCategory').textContent = b.category || '-';
       document.getElementById('dAddress').textContent = b.address || '-';
@@ -720,10 +1227,6 @@
       document.getElementById('dBankBeneficiary').textContent = s.bank?.beneficiaryName || b.ownerName || 'N/A';
       document.getElementById('dGstin').textContent = s.gst?.hasGst ? (s.gst?.gstin || 'GST Declared (Pending)') : 'Exempt / No GST (< 20L)';
       document.getElementById('dLicence').textContent = (s.licence?.type || 'Licence') + ': ' + (s.licence?.number || 'N/A');
-      document.getElementById('dBankAcc').textContent = s.bank?.accountNumber || 'N/A';
-      document.getElementById('dBankIfsc').textContent = s.bank?.ifsc || 'N/A';
-      document.getElementById('dGstin').textContent = s.gst?.hasGst ? (s.gst?.gstin || 'Pending') : 'Exempt / No GST';
-      document.getElementById('dLicence').textContent = (s.licence?.type || 'Standard') + ': ' + (s.licence?.number || 'Pending');
       document.getElementById('drawerOverlay').classList.add('open');
     }
 

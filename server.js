@@ -180,14 +180,22 @@ const APIHOME_URL = process.env.APIHOME_URL || 'https://apisol.in/panel/api/bulk
 function dispatchSms(mobile, otp) {
   const cleanMobile = String(mobile).replace(/\D/g, '').slice(-10);
   const msg = `Your Apnazo partner verification code is ${otp}. Valid for 10 minutes.`;
-  console.log(`\n[SMS GATEWAY] >>> Sending real OTP via APIHome/apisol to +91-${cleanMobile} <<<`);
+  console.log(`\n[SMS GATEWAY] >>> Sending real OTP to +91-${cleanMobile} | OTP: ${otp} <<<`);
 
-  const url = `${APIHOME_URL}?key=${encodeURIComponent(APIHOME_API_KEY)}&mobile=${encodeURIComponent(cleanMobile)}&message=${encodeURIComponent(msg)}`;
+  const queryParams = new URLSearchParams({
+    key: APIHOME_API_KEY,
+    mobile: cleanMobile,
+    message: msg,
+    msg: msg,
+    text: msg
+  });
+
+  const url = `${APIHOME_URL}?${queryParams.toString()}`;
   https.get(url, (res) => {
     let body = '';
     res.on('data', c => body += c);
     res.on('end', () => {
-      console.log(`[APIHome SMS Gateway] Response: ${body}`);
+      console.log(`[APIHome SMS Gateway] Response for +91-${cleanMobile}: ${body}`);
     });
   }).on('error', (e) => console.error('[APIHome SMS Error]', e.message));
 }

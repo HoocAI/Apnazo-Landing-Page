@@ -1,10 +1,121 @@
 [
   {
+    "id": "SEL-202611-006",
+    "mobile": "9861999888",
+    "basics": {
+      "bizName": "Rourkela Steel Mart",
+      "ownerName": "Sanjay Kumar Mohanty",
+      "category": "Retail & Grocery",
+      "address": "Main Road, Sector 2",
+      "pincode": "769002"
+    },
+    "verticals": [
+      "ecommerce"
+    ],
+    "pan": {
+      "panNumber": "ABCPS9999Z",
+      "registeredName": "SANJAY KUMAR MOHANTY",
+      "status": "Submitted for Admin Review"
+    },
+    "gst": {
+      "hasGst": true,
+      "gstin": "21ABCPS9999Z1Z5",
+      "status": "Submitted for Admin Review"
+    },
+    "bank": {
+      "accountNumber": "50100999999999",
+      "ifsc": "HDFC0001234",
+      "upi": "sanjay@upi",
+      "beneficiaryName": "SANJAY KUMAR MOHANTY",
+      "nameMatchScore": 100,
+      "status": "Submitted for Admin Review"
+    },
+    "licence": {
+      "type": "FSSAI",
+      "number": "12023001009999",
+      "status": "Submitted for Admin Review"
+    },
+    "submitted": true,
+    "status": "Active",
+    "decision": "GREEN",
+    "tier": "STARTER",
+    "createdAt": "2026-11-24T15:59:44.244Z",
+    "updatedAt": "2026-11-24T15:59:50.314Z",
+    "auditLog": [
+      {
+        "timestamp": "2026-11-24T15:59:44.244Z",
+        "actor": "Partner Application Form",
+        "decision": "AMBER",
+        "reason": "Application submitted by partner. Queued for admin verification."
+      },
+      {
+        "timestamp": "2026-11-24T15:59:50.314Z",
+        "actor": "Admin Reviewer",
+        "decision": "GREEN",
+        "reason": "Documents verified by Apnazo Admin Team"
+      }
+    ]
+  },
+  {
+    "id": "SEL-202611-005",
+    "mobile": "9861012345",
+    "basics": {
+      "bizName": "Steel City Grocers",
+      "ownerName": "Ramesh Chandra Sahu",
+      "category": "Retail & Grocery",
+      "address": "Daily Market, Sector 1, Rourkela",
+      "pincode": "769001"
+    },
+    "pan": {
+      "panNumber": "ABCPS1234F",
+      "registeredName": "RAMESH CHANDRA SAHU",
+      "verified": true
+    },
+    "gst": {
+      "hasGst": true,
+      "gstin": "21ABCPS1234F1Z5",
+      "tradeName": "STEEL CITY GROCERS",
+      "verified": true
+    },
+    "bank": {
+      "accountNumber": "50100234567890",
+      "ifsc": "HDFC0001234",
+      "beneficiaryName": "RAMESH CHANDRA SAHU",
+      "nameMatchScore": 100,
+      "verified": true
+    },
+    "licence": {
+      "type": "FSSAI",
+      "number": "12023001004512",
+      "verified": true
+    },
+    "verticals": [
+      "ecommerce"
+    ],
+    "status": "Active",
+    "tier": "STARTER",
+    "decision": "GREEN",
+    "submitted": true,
+    "submittedAt": "2026-11-24T14:38:28.786Z",
+    "createdAt": "2026-11-24T14:38:28.788Z",
+    "updatedAt": "2026-11-24T14:38:28.788Z",
+    "auditLog": [
+      {
+        "timestamp": "2026-11-24T14:38:28.788Z",
+        "actor": "System Risk Engine",
+        "decision": "GREEN",
+        "reason": "Automated checks passed."
+      }
+    ]
+  },
+  {
     "id": "SEL-202611-001",
     "mobile": "9861234567",
     "lang": "en",
     "refCode": "RKLSTEEL50",
-    "verticals": ["Ecommerce"],
+    "verticals": [
+      "Ecommerce"
+    ],
     "basics": {
       "bizName": "Rourkela Steel Grocers",
       "ownerName": "Ramesh Chandra Sahu",
@@ -55,7 +166,9 @@
     "mobile": "9437123890",
     "lang": "or",
     "refCode": "RKLSELLER",
-    "verticals": ["Taxi"],
+    "verticals": [
+      "Taxi"
+    ],
     "basics": {
       "bizName": "Maa Tarini City Cabs",
       "ownerName": "Bikash Kumar Mohapatra",
@@ -86,17 +199,23 @@
       "number": "OD-1420190014521",
       "verified": true
     },
-    "tier": "UNDER_REVIEW",
-    "decision": "AMBER",
-    "status": "Pending Admin Review",
+    "tier": "SUSPENDED",
+    "decision": "RED",
+    "status": "Rejected",
     "createdAt": "2026-11-23T14:20:00.000Z",
-    "updatedAt": "2026-11-23T14:45:00.000Z",
+    "updatedAt": "2026-11-24T16:08:35.883Z",
     "auditLog": [
       {
         "timestamp": "2026-11-23T14:45:00.000Z",
         "actor": "System Risk Engine",
         "decision": "AMBER",
         "reason": "Bank beneficiary 'BIKASH MOHAPATRA' scored 75% match against PAN name 'BIKASH KUMAR MOHAPATRA'. Queued for manual admin review."
+      },
+      {
+        "timestamp": "2026-11-24T16:08:35.883Z",
+        "actor": "Admin Reviewer",
+        "decision": "RED",
+        "reason": "Application rejected"
       }
     ]
   },
@@ -105,7 +224,9 @@
     "mobile": "9937012345",
     "lang": "hi",
     "refCode": "",
-    "verticals": ["Services"],
+    "verticals": [
+      "Services"
+    ],
     "basics": {
       "bizName": "Bisra Electricals & AC Care",
       "ownerName": "Ananya Dash",

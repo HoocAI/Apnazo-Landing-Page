@@ -6,7 +6,8 @@
   <title>Partner Registration · Apnazo</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@  <style>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@600;700;800&display=swap">
+  <style>
     :root {
       --blue: #0f43b3;
       --deep: #0a2a75;
@@ -638,8 +639,6 @@
       h1 { font-size: 22px; }
       .lang-grid { grid-template-columns: 1fr; }
     }
-  </style>umns: 1fr; }
-    }
   </style>
 </head>
 <body>
@@ -739,11 +738,11 @@
         <div id="otpFeedback"></div>
         <p style="font-size: 13px; color: var(--text-muted); margin: 0 0 14px; display: flex; align-items: center; justify-content: space-between;">
           <span><span id="s2ResendText">Resend OTP in</span> <strong id="resendTimer">30</strong>s</span>
-          <button type="button" id="resendOtpBtn" class="btn btn-secondary" style="display:none; width:auto; padding:4px 12px; font-size:12px; margin:0;" onclick="handleSendOtp()">Resend OTP</button>
+          <button type="button" id="resendOtpBtn" class="btn btn-secondary" style="display:none; width:auto; padding:4px 12px; font-size:12px; margin:0;" onclick="handleResendOtp()">Resend OTP</button>
         </p>
       </div>
 
-      <button class="btn btn-primary" id="sendOtpBtn" onclick="handleSendOtp()">Send OTP</button>
+      <button class="btn btn-primary" id="sendOtpBtn" onclick="handleResendOtp()">Send OTP</button>
       <button class="btn btn-primary hidden" id="verifyOtpBtn" onclick="handleVerifyOtp()">Verify &amp; Continue &rarr;</button>
       <button class="btn btn-secondary" id="s2BackBtn" onclick="goToStep(1)">&larr; Back</button>
     </div>
@@ -1024,7 +1023,7 @@
     <div class="card hidden" id="step-12">
       <div class="step-counter">Action Required</div>
       <h1>Update bank details</h1>
-      <p class="desc">Bank beneficiary name must match registered PAN name: <strong id="panRefName">RAMESH CHANDRA SAHU</strong>.</p>
+      <p class="desc">Bank beneficiary name must match registered PAN name: <strong id="panRefName">Registered Owner Name</strong>.</p>
 
       <div class="field">
         <label>Account Number</label>
@@ -1679,6 +1678,17 @@
         .catch(() => {
           sendOtpRequest(m, sendBtn, fb);
         });
+    }
+
+    function handleResendOtp() {
+      var m = state.mobile || document.getElementById('mobileInput').value.trim().replace(/\D/g, '').slice(-10);
+      var fb = document.getElementById('otpFeedback');
+      var sendBtn = document.getElementById('sendOtpBtn');
+      if (!m || !/^[6-9]\d{9}$/.test(m)) {
+        alert('Please enter a valid 10-digit mobile number.');
+        return;
+      }
+      sendOtpRequest(m, sendBtn, fb);
     }
 
     function sendOtpRequest(m, sendBtn, fb) {
