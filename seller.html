@@ -676,11 +676,11 @@
       <button class="btn btn-secondary" id="s5BackBtn" onclick="goToStep(4)">&larr; Back</button>
     </div>
 
-    <!-- S6: PAN Verification -->
+    <!-- S6: PAN Details -->
     <div class="card hidden" id="step-6">
       <div class="step-counter" id="s6Counter">Step 6 of 10 · Identity &amp; Tax</div>
-      <h1 id="s6Title">PAN card verification</h1>
-      <p class="desc" id="s6Desc">Verified via real-time API. The registered name will lock as the legal identity for your bank account.</p>
+      <h1 id="s6Title">PAN card details</h1>
+      <p class="desc" id="s6Desc">Enter your 10-digit PAN number. This legal identity will be verified by the Apnazo Admin team.</p>
 
       <div class="field">
         <label id="s6PanLabel">PAN Number (10 Digits) *</label>
@@ -689,8 +689,7 @@
 
       <div id="panFeedback"></div>
 
-      <button class="btn btn-primary" id="panVerifyBtn" onclick="verifyPAN()">Verify PAN</button>
-      <button class="btn btn-primary hidden" id="panNextBtn" onclick="goToStep(7)">Continue to GST &rarr;</button>
+      <button class="btn btn-primary" id="panNextBtn" onclick="savePanAndContinue()">Continue to GST &rarr;</button>
       <button class="btn btn-secondary" id="s6BackBtn" onclick="goToStep(5)">&larr; Back</button>
     </div>
 
@@ -710,7 +709,6 @@
           <label id="s7GstinLabel">15-Digit GSTIN *</label>
           <input type="text" id="gstinInput" placeholder="21ABCPS1234F1Z5" maxlength="15" style="text-transform: uppercase; font-weight: 600;">
         </div>
-        <button class="btn btn-secondary" id="s7VerifyGstBtn" onclick="verifyGSTIN()">Verify GSTIN</button>
       </div>
 
       <div id="nonGstSection" class="hidden">
@@ -721,7 +719,7 @@
 
       <div id="gstFeedback"></div>
 
-      <button class="btn btn-primary" id="gstNextBtn" onclick="goToStep(8)" style="margin-top: 16px;">Continue to Bank Account &rarr;</button>
+      <button class="btn btn-primary" id="gstNextBtn" onclick="saveGstAndContinue()" style="margin-top: 16px;">Continue to Bank Account &rarr;</button>
       <button class="btn btn-secondary" id="s7BackBtn" onclick="goToStep(6)">&larr; Back</button>
     </div>
 
@@ -729,7 +727,7 @@
     <div class="card hidden" id="step-8">
       <div class="step-counter" id="s8Counter">Step 8 of 10 · Payout Account</div>
       <h1 id="s8Title">Bank account for payouts</h1>
-      <p class="desc" id="s8Desc">Sales earnings and ride fares will be deposited directly to this account via penny-drop verification.</p>
+      <p class="desc" id="s8Desc">Sales earnings and ride fares will be deposited directly to this account after admin verification.</p>
 
       <div class="field">
         <label id="s8AccLabel">Account Number *</label>
@@ -748,28 +746,24 @@
 
       <div id="bankFeedback"></div>
 
-      <button class="btn btn-primary" id="bankVerifyBtn" onclick="verifyBank()">Verify Bank via Penny Drop</button>
-      <button class="btn btn-primary hidden" id="bankNextBtn" onclick="checkNextAfterBank()">Continue &rarr;</button>
+      <button class="btn btn-primary" id="bankNextBtn" onclick="saveBankAndContinue()">Continue &rarr;</button>
       <button class="btn btn-secondary" id="s8BackBtn" onclick="goToStep(7)">&larr; Back</button>
     </div>
 
     <!-- S9: Category Licence (Conditional) -->
     <div class="card hidden" id="step-9">
       <div class="step-counter" id="s9Counter">Step 9 of 10 · Licence</div>
-      <h1 id="licenceTitle">FSSAI food licence</h1>
-      <p class="desc" id="licenceSub">Food &amp; grocery categories require an active licence to publish listings.</p>
+      <h1 id="licenceTitle">Category licence</h1>
+      <p class="desc" id="licenceSub">Food, grocery, or transport categories require an active licence or registration number.</p>
 
       <div class="field">
-        <label id="licenceLabel">Licence Number *</label>
-        <input type="text" id="licenceNum" placeholder="14-Digit FSSAI Registration Number">
+        <label id="licenceLabel">Licence / Registration Number *</label>
+        <input type="text" id="licenceNum" placeholder="e.g. 14-Digit FSSAI or Trade Licence">
       </div>
 
-      <div class="alert alert-success" id="licenceFeedback" style="display: none;">
-        ✓ Licence verified and active on portal records.
-      </div>
+      <div id="licenceFeedback"></div>
 
-      <button class="btn btn-secondary" id="s9VerifyLicBtn" onclick="verifyLicence()">Verify Licence</button>
-      <button class="btn btn-primary" id="s9ProceedBtn" onclick="goToStep(10)">Proceed to Agreement &rarr;</button>
+      <button class="btn btn-primary" id="s9ProceedBtn" onclick="saveLicenceAndContinue()">Proceed to Agreement &rarr;</button>
       <button class="btn btn-secondary" id="s9BackBtn" onclick="goToStep(8)">&larr; Back</button>
     </div>
 
@@ -839,30 +833,25 @@
       </div>
     </div>
 
-    <!-- S11: Decision Engine Result -->
+    <!-- S11: Application Submitted for Admin Verification -->
     <div class="card hidden" id="step-11">
-      <div id="decisionGreen" class="hidden">
-        <div style="font-size: 32px; color: var(--success); margin-bottom: 8px;">✓</div>
-        <h1 id="s11GreenTitle">Starter tier approved</h1>
-        <p class="desc" id="s11GreenDesc">All identity and bank checks passed with a <strong>100% name match</strong>. You are live on the Starter Tier.</p>
+      <div style="font-size: 34px; margin-bottom: 8px;">⏳</div>
+      <h1 id="s11PendingTitle">Application Submitted for Review</h1>
+      <p class="desc" id="s11PendingDesc">Your business details and documents have been submitted to the Apnazo Admin Command Center. Our team in Rourkela is verifying your details.</p>
 
-        <ul class="checklist">
-          <li><span>Mobile OTP</span> <span class="badge badge-success">Verified</span></li>
-          <li><span>PAN Identity</span> <span class="badge badge-success">Matched</span></li>
-          <li><span>Bank Penny Drop</span> <span class="badge badge-success">100% Match</span></li>
-          <li><span>Category Licence</span> <span class="badge badge-success">Active</span></li>
-        </ul>
+      <ul class="checklist">
+        <li><span>Mobile Phone (+91)</span> <span class="badge badge-success">✓ Verified</span></li>
+        <li><span>Business Profile</span> <span class="badge badge-success">✓ Submitted</span></li>
+        <li><span>PAN Details</span> <span class="badge badge-amber" id="s11PanBadge">Pending Admin Verification</span></li>
+        <li><span>Bank Payout Account</span> <span class="badge badge-amber" id="s11BankBadge">Pending Admin Verification</span></li>
+        <li id="s11LicenceRow"><span>Category Licence</span> <span class="badge badge-amber" id="s11LicenceBadge">Pending Admin Verification</span></li>
+      </ul>
 
-        <button class="btn btn-primary" id="s11GreenBtn" onclick="goToDashboard()">Open Seller Dashboard &rarr;</button>
+      <div class="alert alert-warning" style="margin-top: 16px; font-size: 13.5px;" id="s11Notice">
+        <strong>Admin Verification in Progress:</strong> Your registration is currently under review by our operations team in Rourkela. Once approved in the Admin Command Center, your listings will go live.
       </div>
 
-      <div id="decisionAmber" class="hidden">
-        <div style="font-size: 32px; color: var(--warning); margin-bottom: 8px;">⚠️</div>
-        <h1 id="s11AmberTitle">Under review (Amber)</h1>
-        <p class="desc" id="s11AmberDesc">Minor discrepancy between Bank Beneficiary Name and PAN Legal Name. Queued for manual review.</p>
-        <button class="btn btn-primary" onclick="goToStep(12)">Update Details Now</button>
-        <button class="btn btn-secondary" onclick="goToDashboard()">Continue in Preview Mode</button>
-      </div>
+      <button class="btn btn-primary" id="s11DashboardBtn" onclick="goToDashboard()" style="margin-top: 16px;">Open Partner Dashboard &rarr;</button>
     </div>
 
     <!-- S12: Correction / Needs Action -->
@@ -887,16 +876,20 @@
     <div class="card hidden" id="step-13">
       <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px;">
         <div>
-          <h1 style="font-size: 19px; margin-bottom: 2px;" id="dashStoreName">Rourkela Steel Grocers</h1>
-          <span style="font-size: 13px; color: var(--text-muted);" id="dashCat">Retail &amp; Grocery · Sector 1</span>
+          <h1 style="font-size: 19px; margin-bottom: 2px;" id="dashStoreName">My Store</h1>
+          <span style="font-size: 13px; color: var(--text-muted);" id="dashCat">Retail &amp; Grocery · Rourkela</span>
         </div>
-        <span class="badge badge-success">Starter Live</span>
+        <span class="badge badge-amber" id="dashStatusBadge">Under Admin Review</span>
+      </div>
+
+      <div class="alert alert-warning" id="dashPendingNotice" style="margin-bottom: 16px;">
+        <strong>Application Under Review:</strong> Your documents are being verified by Apnazo Admin. Once approved, your store will be activated across Rourkela.
       </div>
 
       <div class="tier-box">
         <div class="tier-box-header">
           <h3 id="dashTierTitle">Starter Access Tier</h3>
-          <span style="font-size: 12px; color: var(--text-muted);">Active</span>
+          <span style="font-size: 12px; color: var(--text-muted);" id="dashTierState">Under Review</span>
         </div>
         <div class="tier-meta">
           <div>
@@ -1034,10 +1027,9 @@
         s5SaveBtn: "Save & Continue →",
         s5BackBtn: "← Back",
         s6Counter: "Step 6 of 10 · Identity & Tax",
-        s6Title: "PAN card verification",
-        s6Desc: "Verified via real-time API. The registered name will lock as the legal identity for your bank account.",
+        s6Title: "PAN card details",
+        s6Desc: "Enter your 10-digit PAN number. This legal identity will be verified by the Apnazo Admin team.",
         s6PanLabel: "PAN Number (10 Digits) *",
-        panVerifyBtn: "Verify PAN",
         panNextBtn: "Continue to GST →",
         s6BackBtn: "← Back",
         s7Counter: "Step 7 of 10 · GSTIN",
@@ -1046,23 +1038,20 @@
         hasGstYesBtn: "Yes, I have GST",
         hasGstNoBtn: "No GST (Turnover < 20L)",
         s7GstinLabel: "15-Digit GSTIN *",
-        s7VerifyGstBtn: "Verify GSTIN",
         gstNextBtn: "Continue to Bank Account →",
         s7BackBtn: "← Back",
         s8Counter: "Step 8 of 10 · Payout Account",
         s8Title: "Bank account for payouts",
-        s8Desc: "Sales earnings and ride fares will be deposited directly to this account via penny-drop verification.",
+        s8Desc: "Sales earnings and ride fares will be deposited directly to this account after admin verification.",
         s8AccLabel: "Account Number *",
         s8IfscLabel: "IFSC Code *",
-        s8UpiLabel: "UPI ID",
-        bankVerifyBtn: "Verify Bank via Penny Drop",
+        s8UpiLabel: "UPI ID (Optional)",
         bankNextBtn: "Continue →",
         s8BackBtn: "← Back",
         s9Counter: "Step 9 of 10 · Licence",
-        licenceTitle: "FSSAI food licence",
-        licenceSub: "Food & grocery categories require an active licence to publish listings.",
-        licenceLabel: "Licence Number *",
-        s9VerifyLicBtn: "Verify Licence",
+        licenceTitle: "Category licence",
+        licenceSub: "Food, grocery, or transport categories require an active licence or registration number.",
+        licenceLabel: "Licence / Registration Number *",
         s9ProceedBtn: "Proceed to Agreement →",
         s9BackBtn: "← Back",
         s10Counter: "Step 10 of 10 · Partner Agreement",
@@ -1073,9 +1062,9 @@
         agreeConsentLabel: "I accept the Apnazo Partner Terms and e-Sign this agreement.",
         s10SubmitBtn: "Accept & Complete →",
         s10BackBtn: "← Back",
-        s11GreenTitle: "Starter tier approved",
-        s11GreenDesc: "All identity and bank checks passed with a 100% name match. You are live on the Starter Tier.",
-        s11GreenBtn: "Open Seller Dashboard →",
+        s11PendingTitle: "Application Submitted for Review",
+        s11PendingDesc: "Your business details and documents have been submitted to the Apnazo Admin Command Center. Our team in Rourkela is verifying your details.",
+        s11DashboardBtn: "Open Partner Dashboard →",
         dashTierTitle: "Starter Access Tier",
         dashCapLabel: "Daily Order Cap",
         dashPayoutLabel: "Payout Schedule",
@@ -1131,10 +1120,9 @@
         s5SaveBtn: "सहेजें और आगे बढ़ें →",
         s5BackBtn: "← वापस",
         s6Counter: "चरण 6 / 10 · पहचान और कर",
-        s6Title: "पैन कार्ड सत्यापन",
-        s6Desc: "रीयल-टाइम API द्वारा सत्यापित। पंजीकृत नाम बैंक खाते के लिए कानूनी पहचान के रूप में लॉक होगा।",
+        s6Title: "पैन कार्ड विवरण",
+        s6Desc: "अपना 10-अंकीय पैन नंबर दर्ज करें। यह कानूनी पहचान अपनाज़ो एडमिन टीम द्वारा सत्यापित की जाएगी।",
         s6PanLabel: "पैन नंबर (10 अंक) *",
-        panVerifyBtn: "पैन सत्यापित करें",
         panNextBtn: "जीएसटी पर आगे बढ़ें →",
         s6BackBtn: "← वापस",
         s7Counter: "चरण 7 / 10 · जीएसटी",
@@ -1143,23 +1131,20 @@
         hasGstYesBtn: "हाँ, मेरे पास GST है",
         hasGstNoBtn: "GST नहीं है (टर्नओवर < 20 लाख)",
         s7GstinLabel: "15-अंकीय GSTIN *",
-        s7VerifyGstBtn: "GSTIN सत्यापित करें",
         gstNextBtn: "बैंक खाते पर आगे बढ़ें →",
         s7BackBtn: "← वापस",
         s8Counter: "चरण 8 / 10 · भुगतान खाता",
         s8Title: "भुगतान के लिए बैंक खाता",
-        s8Desc: "बिक्री की कमाई और किराए सीधे पेनी-ड्रॉप सत्यापन के माध्यम से इस खाते में जमा की जाएगी।",
+        s8Desc: "बिक्री की कमाई और किराए एडमिन सत्यापन के बाद सीधे इस खाते में जमा की जाएगी।",
         s8AccLabel: "खाता संख्या *",
         s8IfscLabel: "IFSC कोड *",
         s8UpiLabel: "UPI आईडी (वैकल्पिक)",
-        bankVerifyBtn: "पेनी ड्रॉप से बैंक सत्यापित करें",
         bankNextBtn: "आगे बढ़ें →",
         s8BackBtn: "← वापस",
         s9Counter: "चरण 9 / 10 · लाइसेंस",
-        licenceTitle: "FSSAI खाद्य लाइसेंस",
-        licenceSub: "खाद्य और किराना श्रेणियों को लिस्टिंग शुरू करने के लिए वैध लाइसेंस आवश्यक है।",
-        licenceLabel: "लाइसेंस संख्या *",
-        s9VerifyLicBtn: "लाइसेंस सत्यापित करें",
+        licenceTitle: "श्रेणी लाइसेंस",
+        licenceSub: "खाद्य, किराना या परिवहन श्रेणियों के लिए वैध लाइसेंस अथवा पंजीकरण आवश्यक है।",
+        licenceLabel: "लाइसेंस / पंजीकरण संख्या *",
         s9ProceedBtn: "अनुबंध पर आगे बढ़ें →",
         s9BackBtn: "← वापस",
         s10Counter: "चरण 10 / 10 · पार्टनर अनुबंध",
@@ -1170,9 +1155,9 @@
         agreeConsentLabel: "मैं अपनाज़ो पार्टनर की शर्तों को स्वीकार करता हूँ और इस अनुबंध पर ई-हस्ताक्षर करता हूँ।",
         s10SubmitBtn: "स्वीकार करें और पूरा करें →",
         s10BackBtn: "← वापस",
-        s11GreenTitle: "स्टार्टर स्तर स्वीकृत",
-        s11GreenDesc: "सभी पहचान और बैंक सत्यापन 100% नाम मिलान के साथ पूरे हुए। आपका स्टोर सक्रिय है।",
-        s11GreenBtn: "विक्रेता डैशबोर्ड खोलें →",
+        s11PendingTitle: "आवेदन समीक्षा के लिए जमा किया गया",
+        s11PendingDesc: "आपके व्यावसायिक विवरण और दस्तावेज़ अपनाज़ो एडमिन कमांड सेंटर को भेज दिए गए हैं। राउरकेला में हमारी टीम सत्यापन कर रही है।",
+        s11DashboardBtn: "पार्टनर डैशबोर्ड खोलें →",
         dashTierTitle: "स्टार्टर एक्सेस टीयर",
         dashCapLabel: "दैनिक ऑर्डर सीमा",
         dashPayoutLabel: "भुगतान अनुसूची",
@@ -1228,10 +1213,9 @@
         s5SaveBtn: "ସାଇତନ୍ତୁ ଏବଂ ଆଗକୁ ବଢ଼ନ୍ତୁ →",
         s5BackBtn: "← ପଛକୁ",
         s6Counter: "ପଦକ୍ଷେପ ୬ / ୧୦ · ପରିଚୟ ଓ ଟ୍ୟାକ୍ସ",
-        s6Title: "ପ୍ୟାନ୍ କାର୍ଡ ଯାଞ୍ଚ",
-        s6Desc: "ରିଅଲ୍-ଟାଇମ୍ API ଦ୍ୱାରା ଯାଞ୍ଚ ହୋଇଛି। ପଞ୍ଜୀକୃତ ନାମ ବ୍ୟାଙ୍କ ଖାତା ପାଇଁ ଆଇନଗତ ପରିଚୟ ଭାବରେ ଲକ୍ ହେବ।",
+        s6Title: "ପ୍ୟାନ୍ କାର୍ଡ ବିବରଣୀ",
+        s6Desc: "ଆପଣଙ୍କର ୧୦-ଅଙ୍କ ବିଶିଷ୍ଟ PAN ନମ୍ବର ପ୍ରବେଶ କରନ୍ତୁ। ଏହା ଆପନାଜୋ ଆଡମିନ୍ ଟିମ୍ ଦ୍ୱାରା ଯାଞ୍ଚ କରାଯିବ।",
         s6PanLabel: "ପ୍ୟାନ୍ ନମ୍ବର (୧୦ ଅଙ୍କ) *",
-        panVerifyBtn: "ପ୍ୟାନ୍ ଯାଞ୍ଚ କରନ୍ତୁ",
         panNextBtn: "ଜିଏସଟିକୁ ଆଗକୁ ବଢ଼ନ୍ତୁ →",
         s6BackBtn: "← ପଛକୁ",
         s7Counter: "ପଦକ୍ଷେପ ୭ / ୧୦ · ଜିଏସଟି",
@@ -1240,23 +1224,20 @@
         hasGstYesBtn: "ହଁ, ମୋର GST ଅଛି",
         hasGstNoBtn: "GST ନାହିଁ (ଟର୍ନଓଭର < ୨୦ ଲକ୍ଷ)",
         s7GstinLabel: "୧୫-ଅଙ୍କ ବିଶିଷ୍ଟ GSTIN *",
-        s7VerifyGstBtn: "GSTIN ଯାଞ୍ଚ କରନ୍ତୁ",
         gstNextBtn: "ବ୍ୟାଙ୍କ ଖାତାକୁ ଆଗକୁ ବଢ଼ନ୍ତୁ →",
         s7BackBtn: "← ପଛକୁ",
         s8Counter: "ପଦକ୍ଷେପ ୮ / ୧୦ · ପେଆଉଟ୍ ଖାତା",
         s8Title: "ପେଆଉଟ୍ ପାଇଁ ବ୍ୟାଙ୍କ ଖାତା",
-        s8Desc: "ବିକ୍ରି ଆୟ ଏବଂ ରାଇଡ୍ ଭଡ଼ା ସିଧାସଳଖ ପେନି-ଡ୍ରପ୍ ଯାଞ୍ଚ ମାଧ୍ୟମରେ ଏହି ଖାତାରେ ଜମା ହେବ।",
+        s8Desc: "ବିକ୍ରି ଆୟ ଏବଂ ରାଇଡ୍ ଭଡ଼ା ଆଡମିନ୍ ଯାଞ୍ଚ ପରେ ସିଧାସଳଖ ଏହି ଖାତାରେ ଜମା ହେବ।",
         s8AccLabel: "ଖାତା ନମ୍ବର *",
         s8IfscLabel: "IFSC କୋଡ୍ *",
         s8UpiLabel: "UPI ଆଇଡି (ଇଚ୍ଛାଧୀନ)",
-        bankVerifyBtn: "ପେନି ଡ୍ରପ୍ ଦ୍ୱାରା ବ୍ୟାଙ୍କ ଯାଞ୍ଚ କରନ୍ତୁ",
         bankNextBtn: "ଆଗକୁ ବଢ଼ନ୍ତୁ →",
         s8BackBtn: "← ପଛକୁ",
         s9Counter: "ପଦକ୍ଷେପ ୯ / ୧୦ · ଲାଇସେନ୍ସ",
-        licenceTitle: "FSSAI ଖାଦ୍ୟ ଲାଇସେନ୍ସ",
-        licenceSub: "ଖାଦ୍ୟ ଏବଂ ଗ୍ରୋସରୀ ବିଭାଗ ପାଇଁ ସକ୍ରିୟ ଲାଇସେନ୍ସ ଆବଶ୍ୟକ।",
-        licenceLabel: "ଲାଇସେନ୍ସ ନମ୍ବର *",
-        s9VerifyLicBtn: "ଲାଇସେନ୍ସ ଯାଞ୍ଚ କରନ୍ତୁ",
+        licenceTitle: "ବର୍ଗ ଲାଇସେନ୍ସ",
+        licenceSub: "ଖାଦ୍ୟ, ଗ୍ରୋସରୀ କିମ୍ବା ପରିବହନ ବର୍ଗ ପାଇଁ ସକ୍ରିୟ ଲାଇସେନ୍ସ କିମ୍ବା ପଞ୍ଜୀକରଣ ଆବଶ୍ୟକ।",
+        licenceLabel: "ଲାଇସେନ୍ସ / ପଞ୍ଜୀକରଣ ନମ୍ବର *",
         s9ProceedBtn: "ଚୁକ୍ତିନାମାକୁ ଆଗକୁ ବଢ଼ନ୍ତୁ →",
         s9BackBtn: "← ପଛକୁ",
         s10Counter: "ପଦକ୍ଷେପ ୧୦ / ୧୦ · ସହଭାଗୀ ଚୁକ୍ତିନାମା",
@@ -1267,9 +1248,9 @@
         agreeConsentLabel: "ମୁଁ ଆପନାଜୋ ସହଭାଗୀ ସର୍ତ୍ତାବଳୀ ଗ୍ରହଣ କରୁଛି ଏବଂ ଏହି ଚୁକ୍ତିରେ ଇ-ସାଇନ୍ କରୁଛି।",
         s10SubmitBtn: "ଗ୍ରହଣ କରନ୍ତୁ ଏବଂ ସମ୍ପୂର୍ଣ୍ଣ କରନ୍ତୁ →",
         s10BackBtn: "← ପଛକୁ",
-        s11GreenTitle: "ଷ୍ଟାର୍ଟର୍ ସ୍ତର ଅନୁମୋଦିତ",
-        s11GreenDesc: "ସମସ୍ତ ପରିଚୟ ଏବଂ ବ୍ୟାଙ୍କ ଯାଞ୍ଚ ୧୦୦% ନାମ ମେଳ ସହିତ ଉତ୍ତୀର୍ଣ୍ଣ ହୋଇଛି। ଆପଣ ସକ୍ରିୟ ଅଛନ୍ତି।",
-        s11GreenBtn: "ବିକ୍ରେତା ଡ୍ୟାସବୋର୍ଡ ଖୋଲନ୍ତୁ →",
+        s11PendingTitle: "ଆବେଦନ ସମୀକ୍ଷା ପାଇଁ ଦାଖଲ ହୋଇଛି",
+        s11PendingDesc: "ଆପଣଙ୍କର ବ୍ୟବସାୟିକ ବିବରଣୀ ଏବଂ ଦସ୍ତାବିଜ୍ ଆପନାଜୋ ଆଡମିନ୍ କମାଣ୍ଡ ସେଣ୍ଟରକୁ ଦାଖଲ କରାଯାଇଛି। ରାଉରକେଲାରେ ଆମ ଟିମ୍ ଯାଞ୍ଚ କରୁଛନ୍ତି।",
+        s11DashboardBtn: "ପାର୍ଟନର ଡ୍ୟାସବୋର୍ଡ ଖୋଲନ୍ତୁ →",
         dashTierTitle: "ଷ୍ଟାର୍ଟର୍ ଆକ୍ସେସ୍ ସ୍ତର",
         dashCapLabel: "ଦୈନିକ ଅର୍ଡର ସୀମା",
         dashPayoutLabel: "ପେଆଉଟ୍ କାର୍ଯ୍ୟସୂଚୀ",
@@ -1325,10 +1306,9 @@
         s5SaveBtn: "সংরক্ষণ করুন এবং এগিয়ে যান →",
         s5BackBtn: "← পিছনে",
         s6Counter: "ধাপ ৬ / ১০ · পরিচয় এবং কর",
-        s6Title: "প্যান কার্ড যাচাইকরণ",
-        s6Desc: "রিয়েল-টাইম API দ্বারা যাচাই করা হয়েছে। নিবন্ধিত নামটি ব্যাঙ্ক অ্যাকাউন্টের আইনি পরিচয় হিসাবে লক হবে।",
+        s6Title: "প্যান কার্ড বিবরণ",
+        s6Desc: "আপনার ১০-সংখ্যার প্যান নম্বর লিখুন। এই আইনি পরিচয় আপনাকাজো অ্যাডমিন দল দ্বারা যাচাই করা হবে।",
         s6PanLabel: "প্যান নম্বর (১০ সংখ্যা) *",
-        panVerifyBtn: "প্যান যাচাই করুন",
         panNextBtn: "জিএসটিতে এগিয়ে যান →",
         s6BackBtn: "← পিছনে",
         s7Counter: "ধাপ ৭ / ১০ · জিএসটি",
@@ -1337,23 +1317,20 @@
         hasGstYesBtn: "হ্যাঁ, আমার জিএসটি আছে",
         hasGstNoBtn: "জিএসটি নেই (টার্নওভার < ২০ লাখ)",
         s7GstinLabel: "১৫-সংখ্যার GSTIN *",
-        s7VerifyGstBtn: "GSTIN যাচাই করুন",
         gstNextBtn: "ব্যাঙ্ক অ্যাকাউন্টে এগিয়ে যান →",
         s7BackBtn: "← পিছনে",
         s8Counter: "ধাপ ৮ / ১০ · পেআউট অ্যাকাউন্ট",
         s8Title: "পেআউটের জন্য ব্যাঙ্ক অ্যাকাউন্ট",
-        s8Desc: "বিক্রি আয় এবং রাইডের ভাড়া পেনি-ড্রপ যাচাইকরণের মাধ্যমে সরাসরি এই অ্যাকাউন্টে জমা হবে।",
+        s8Desc: "বিক্রি আয় এবং রাইডের ভাড়া অ্যাডমিন যাচাইয়ের পরে সরাসরি এই অ্যাকাউন্টে জমা হবে।",
         s8AccLabel: "অ্যাকাউন্ট নম্বর *",
         s8IfscLabel: "IFSC কোড *",
         s8UpiLabel: "UPI আইডি (ঐচ্ছিক)",
-        bankVerifyBtn: "পেনি ড্রপ দিয়ে ব্যাঙ্ক যাচাই করুন",
         bankNextBtn: "এগিয়ে যান →",
         s8BackBtn: "← পিছনে",
         s9Counter: "ধাপ ৯ / ১০ · লাইসেন্স",
-        licenceTitle: "FSSAI খাদ্য লাইসেন্স",
-        licenceSub: "খাদ্য এবং মুদি বিভাগের জন্য সক্রিয় লাইসেন্স প্রয়োজন।",
-        licenceLabel: "লাইসেন্স নম্বর *",
-        s9VerifyLicBtn: "লাইসেন্স যাচাই করুন",
+        licenceTitle: "বিভাগ লাইসেন্স",
+        licenceSub: "খাদ্য, মুদি বা পরিবহন বিভাগের জন্য সক্রিয় লাইসেন্স বা নিবন্ধন প্রয়োজন।",
+        licenceLabel: "লাইসেন্স / নিবন্ধন নম্বর *",
         s9ProceedBtn: "চুক্তিতে এগিয়ে যান →",
         s9BackBtn: "← পিছনে",
         s10Counter: "ধাপ ১০ / ১০ · অংশীদার চুক্তি",
@@ -1364,9 +1341,9 @@
         agreeConsentLabel: "আমি আপনাকাজো অংশীদারের শর্তাবলী স্বীকার করছি এবং এই চুক্তিতে ই-স্বাক্ষর করছি।",
         s10SubmitBtn: "স্বীকার করুন এবং সম্পূর্ণ করুন →",
         s10BackBtn: "← পিছনে",
-        s11GreenTitle: "স্টার্টার স্তর অনুমোদিত",
-        s11GreenDesc: "সমস্ত পরিচয় এবং ব্যাঙ্ক যাচাইকরণ ১০০% নামের মিল সহ উত্তীর্ণ হয়েছে। আপনি সক্রিয় আছেন।",
-        s11GreenBtn: "বিক্রেতা ড্যাশবোর্ড খুলুন →",
+        s11PendingTitle: "আবেদন পর্যালোচনার জন্য জমা দেওয়া হয়েছে",
+        s11PendingDesc: "আপনার ব্যবসায়িক বিবরণ এবং নথি আপনাকাজো অ্যাডমিন কমান্ড সেন্টারে জমা দেওয়া হয়েছে। রাউরকেল্লায় আমাদের দল যাচাই করছে।",
+        s11DashboardBtn: "পার্টনার ড্যাশবোর্ড খুলুন →",
         dashTierTitle: "স্টার্টার অ্যাক্সেস স্তর",
         dashCapLabel: "দৈনিক অর্ডার সীমা",
         dashPayoutLabel: "পেআউট সময়সূচী",
@@ -1732,23 +1709,19 @@
       goToStep(6);
     }
 
-    function verifyPAN() {
+    function savePanAndContinue() {
       var pan = document.getElementById('panInput').value.trim().toUpperCase();
       var feedback = document.getElementById('panFeedback');
       if (pan.length !== 10) {
         feedback.innerHTML = '<div class="alert alert-danger">Please enter a valid 10-digit PAN (e.g. ABCPS1234F).</div>';
         return;
       }
-      feedback.innerHTML = '<div class="alert alert-warning">Verifying with NSDL records...</div>';
-      setTimeout(function(){
-        state.pan.panNumber = pan;
-        state.pan.registeredName = state.basics.ownerName.toUpperCase();
-        state.pan.verified = true;
-        feedback.innerHTML = '<div class="alert alert-success">✓ PAN Verified: <strong>' + state.pan.registeredName + '</strong> (Identity locked for Bank check).</div>';
-        document.getElementById('panVerifyBtn').classList.add('hidden');
-        document.getElementById('panNextBtn').classList.remove('hidden');
-        autosave();
-      }, 500);
+      feedback.innerHTML = '';
+      state.pan.panNumber = pan;
+      state.pan.registeredName = (state.basics.ownerName || '').toUpperCase();
+      state.pan.status = 'Submitted for Admin Review';
+      autosave();
+      goToStep(7);
     }
 
     function toggleGstOption(hasGst) {
@@ -1772,43 +1745,44 @@
       autosave();
     }
 
-    function verifyGSTIN() {
-      var gstin = document.getElementById('gstinInput').value.trim().toUpperCase();
+    function saveGstAndContinue() {
       var feedback = document.getElementById('gstFeedback');
-      if (gstin.length !== 15) {
-        feedback.innerHTML = '<div class="alert alert-danger">Enter a valid 15-character GSTIN.</div>';
-        return;
-      }
-      feedback.innerHTML = '<div class="alert alert-warning">Connecting to GST portal...</div>';
-      setTimeout(function(){
+      if (feedback) feedback.innerHTML = '';
+      if (state.gst.hasGst) {
+        var gstin = document.getElementById('gstinInput').value.trim().toUpperCase();
+        if (gstin && gstin.length !== 15) {
+          feedback.innerHTML = '<div class="alert alert-danger">Please enter a valid 15-character GSTIN or select "No GST".</div>';
+          return;
+        }
         state.gst.gstin = gstin;
-        state.gst.verified = true;
-        feedback.innerHTML = '<div class="alert alert-success">✓ Active GSTIN: Trade Name <strong>' + state.basics.bizName.toUpperCase() + '</strong></div>';
-        autosave();
-      }, 600);
+        state.gst.status = 'Submitted for Admin Review';
+      } else {
+        state.gst.gstin = '';
+        state.gst.status = 'Exempt (Turnover < 20L)';
+      }
+      autosave();
+      goToStep(8);
     }
 
-    function verifyBank() {
+    function saveBankAndContinue() {
       var acc = document.getElementById('bankAcc').value.trim();
       var ifsc = document.getElementById('bankIfsc').value.trim().toUpperCase();
+      var upi = document.getElementById('bankUpi').value.trim();
       var feedback = document.getElementById('bankFeedback');
 
       if (!acc || ifsc.length < 8) {
-        feedback.innerHTML = '<div class="alert alert-danger">Please enter valid account number and IFSC.</div>';
+        feedback.innerHTML = '<div class="alert alert-danger">Please enter valid account number and IFSC code.</div>';
         return;
       }
-
-      feedback.innerHTML = '<div class="alert alert-warning">Verifying via ₹1 Penny Drop...</div>';
-      setTimeout(function(){
-        state.bank.accountNumber = acc;
-        state.bank.ifsc = ifsc;
-        state.bank.verified = true;
-        state.bank.nameMatchScore = 100;
-        feedback.innerHTML = '<div class="alert alert-success">✓ Penny drop verified: Beneficiary <strong>' + state.pan.registeredName + '</strong> (100% Name match against PAN).</div>';
-        document.getElementById('bankVerifyBtn').classList.add('hidden');
-        document.getElementById('bankNextBtn').classList.remove('hidden');
-        autosave();
-      }, 700);
+      feedback.innerHTML = '';
+      state.bank.accountNumber = acc;
+      state.bank.ifsc = ifsc;
+      state.bank.upi = upi;
+      state.bank.beneficiaryName = state.basics.ownerName || '';
+      state.bank.nameMatchScore = 100;
+      state.bank.status = 'Submitted for Admin Review';
+      autosave();
+      checkNextAfterBank();
     }
 
     function checkNextAfterBank() {
@@ -1820,14 +1794,12 @@
       }
     }
 
-    function verifyLicence() {
+    function saveLicenceAndContinue() {
       var num = document.getElementById('licenceNum').value.trim();
-      var fb = document.getElementById('licenceFeedback');
-      if (!num) return;
       state.licence.number = num;
-      state.licence.verified = true;
-      fb.style.display = 'block';
+      state.licence.status = 'Submitted for Admin Review';
       autosave();
+      goToStep(10);
     }
 
     function submitAgreement() {
@@ -1838,18 +1810,11 @@
 
       state.submitted = true;
       state.submittedAt = new Date().toISOString();
+      state.status = 'Pending Admin Review';
+      state.decision = 'AMBER';
+      state.tier = 'UNDER_REVIEW';
 
-      if (state.bank.nameMatchScore >= 80) {
-        state.decision = 'GREEN';
-        state.tier = 'STARTER';
-        state.status = 'Active';
-      } else {
-        state.decision = 'AMBER';
-        state.tier = 'UNDER_REVIEW';
-        state.status = 'Pending Admin Review';
-      }
-
-      // Explicitly push entire seller application payload to backend for immediate admin panel visibility
+      // Push full partner application to backend for immediate admin panel review
       fetch('/api/seller/profile/save', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -1862,28 +1827,29 @@
       }).catch(function(){});
 
       goToStep(11);
-      var greenDiv = document.getElementById('decisionGreen');
-      var amberDiv = document.getElementById('decisionAmber');
-
-      if (state.decision === 'GREEN') {
-        greenDiv.classList.remove('hidden');
-        amberDiv.classList.add('hidden');
-      } else {
-        amberDiv.classList.remove('hidden');
-        greenDiv.classList.add('hidden');
-      }
-    }
-
-    function reSubmitBank() {
-      state.bank.nameMatchScore = 100;
-      state.decision = 'GREEN';
-      state.tier = 'STARTER';
-      goToDashboard();
     }
 
     function goToDashboard() {
       document.getElementById('dashStoreName').textContent = state.basics.bizName || 'My Store';
       document.getElementById('dashCat').textContent = (state.basics.category || 'Retail') + ' · ' + (state.basics.address || 'Rourkela');
+      var badge = document.getElementById('dashStatusBadge');
+      var banner = document.getElementById('dashPendingNotice');
+      var tierState = document.getElementById('dashTierState');
+      if (state.status === 'Active' || state.decision === 'GREEN') {
+        if (badge) {
+          badge.className = 'badge badge-success';
+          badge.textContent = 'Active / Starter Live';
+        }
+        if (banner) banner.style.display = 'none';
+        if (tierState) tierState.textContent = 'Active';
+      } else {
+        if (badge) {
+          badge.className = 'badge badge-amber';
+          badge.textContent = 'Under Admin Review';
+        }
+        if (banner) banner.style.display = 'block';
+        if (tierState) tierState.textContent = 'Under Review';
+      }
       goToStep(13);
     }
 

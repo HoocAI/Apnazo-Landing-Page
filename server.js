@@ -132,9 +132,20 @@ function upsertSeller(sellerData) {
       ...existing,
       ...sellerData,
       id: existing.id,
+      status: sellerData.status || (sellerData.submitted ? 'Pending Admin Review' : existing.status || 'Pending Admin Review'),
+      decision: sellerData.decision || (sellerData.submitted ? 'AMBER' : existing.decision || 'AMBER'),
+      tier: sellerData.tier || (sellerData.submitted ? 'UNDER_REVIEW' : existing.tier || 'UNDER_REVIEW'),
       updatedAt: now,
       auditLog: existing.auditLog || []
     };
+    if (sellerData.submitted) {
+      sellers[existingIndex].auditLog.push({
+        timestamp: now,
+        actor: 'Partner Application Form',
+        decision: 'AMBER',
+        reason: 'Partner completed onboarding agreement. Queued for admin verification.'
+      });
+    }
     saveSellers(sellers);
     return sellers[existingIndex];
   } else {
@@ -142,16 +153,17 @@ function upsertSeller(sellerData) {
     const newSeller = {
       id: newId,
       ...sellerData,
-      status: sellerData.decision === 'AMBER' ? 'Pending Admin Review' : 'Active',
-      tier: sellerData.tier || (sellerData.decision === 'AMBER' ? 'UNDER_REVIEW' : 'STARTER'),
+      status: sellerData.status || 'Pending Admin Review',
+      decision: sellerData.decision || 'AMBER',
+      tier: sellerData.tier || 'UNDER_REVIEW',
       createdAt: now,
       updatedAt: now,
       auditLog: [
         {
           timestamp: now,
-          actor: 'System Risk Engine',
-          decision: sellerData.decision || 'GREEN',
-          reason: sellerData.decision === 'AMBER' ? 'Soft mismatch or manual review flag triggered.' : 'Automated checks passed.'
+          actor: 'Partner Application Form',
+          decision: sellerData.decision || 'AMBER',
+          reason: 'Application submitted by partner. Queued for admin verification.'
         }
       ]
     };

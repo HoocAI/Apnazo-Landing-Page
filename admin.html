@@ -389,22 +389,25 @@
         <button class="btn" onclick="closeDrawer()">✕</button>
       </div>
       <div class="detail-section">
-        <h4>Basics</h4>
-        <div class="detail-row"><span>ID</span><span id="dId">-</span></div>
-        <div class="detail-row"><span>Mobile</span><span id="dMobile">-</span></div>
-        <div class="detail-row"><span>Owner</span><span id="dOwner">-</span></div>
+        <h4>Business &amp; Contact Details</h4>
+        <div class="detail-row"><span>Application ID</span><span id="dId" style="font-family:monospace; font-weight:600;">-</span></div>
+        <div class="detail-row"><span>Application Status</span><span id="dStatus" style="font-weight:600; color:var(--primary);">-</span></div>
+        <div class="detail-row"><span>Mobile (+91)</span><span id="dMobile" style="font-weight:600;">-</span></div>
+        <div class="detail-row"><span>Owner Full Name</span><span id="dOwner">-</span></div>
         <div class="detail-row"><span>Category</span><span id="dCategory">-</span></div>
-        <div class="detail-row"><span>Address</span><span id="dAddress">-</span></div>
+        <div class="detail-row"><span>Store Address</span><span id="dAddress">-</span></div>
+        <div class="detail-row"><span>PIN Code</span><span id="dPin">-</span></div>
+        <div class="detail-row"><span>Active Verticals</span><span id="dVerticals">-</span></div>
       </div>
       <div class="detail-section">
-        <h4>Verification</h4>
-        <div class="detail-row"><span>PAN</span><span id="dPan">-</span></div>
-        <div class="detail-row"><span>PAN Name</span><span id="dPanName">-</span></div>
+        <h4>Documents &amp; Verification</h4>
+        <div class="detail-row"><span>PAN Number</span><span id="dPan" style="font-family:monospace; font-weight:600;">-</span></div>
+        <div class="detail-row"><span>PAN Registered Name</span><span id="dPanName">-</span></div>
+        <div class="detail-row"><span>Bank Account</span><span id="dBankAcc" style="font-family:monospace;">-</span></div>
+        <div class="detail-row"><span>IFSC Code</span><span id="dBankIfsc" style="font-family:monospace; font-weight:600;">-</span></div>
+        <div class="detail-row"><span>UPI ID</span><span id="dUpi">-</span></div>
         <div class="detail-row"><span>Bank Beneficiary</span><span id="dBankBeneficiary">-</span></div>
-        <div class="detail-row"><span>Match Score</span><span id="dBankScore">-</span></div>
-        <div class="detail-row"><span>Bank Account</span><span id="dBankAcc">-</span></div>
-        <div class="detail-row"><span>IFSC Code</span><span id="dBankIfsc">-</span></div>
-        <div class="detail-row"><span>GSTIN</span><span id="dGstin">-</span></div>
+        <div class="detail-row"><span>GSTIN</span><span id="dGstin" style="font-family:monospace;">-</span></div>
         <div class="detail-row"><span>Category Licence</span><span id="dLicence">-</span></div>
       </div>
       <div style="display:flex; gap: 8px; margin-top: 16px;">
@@ -555,7 +558,7 @@
     }
 
     function renderSellers() {
-      var amberQueue = allSellers.filter(s => s.decision === 'AMBER' || s.tier === 'UNDER_REVIEW');
+      var amberQueue = allSellers.filter(s => s.decision === 'AMBER' || s.tier === 'UNDER_REVIEW' || s.status === 'Pending Admin Review' || s.decision === 'UNDER_REVIEW');
       var greenActive = allSellers.filter(s => s.decision === 'GREEN' || s.status === 'Active');
 
       document.getElementById('kpiSellers').textContent = allSellers.length;
@@ -566,27 +569,29 @@
 
       var amberEl = document.getElementById('amberList');
       if (amberQueue.length === 0) {
-        amberEl.innerHTML = '<div style="text-align:center; padding: 32px; color: var(--text-muted);">✓ No pending applications in the Amber queue.</div>';
+        amberEl.innerHTML = '<div style="text-align:center; padding: 32px; color: var(--text-muted);">✓ No pending applications in the review queue.</div>';
       } else {
         amberEl.innerHTML = amberQueue.map(s => `
           <div class="amber-card" id="card-${s.id}">
             <div class="amber-head">
               <div>
                 <strong>${s.basics?.bizName || 'Draft Store'}</strong>
-                <span class="badge badge-amber" style="margin-left:6px;">AMBER</span>
-                <div style="font-size:12px; color:var(--text-muted); margin-top:2px;">ID: ${s.id} · ${s.mobile} · ${s.basics?.address || 'Rourkela'}</div>
+                <span class="badge badge-amber" style="margin-left:6px;">${s.status || 'Pending Review'}</span>
+                <div style="font-size:12px; color:var(--text-muted); margin-top:2px;">ID: ${s.id} · Phone: ${s.mobile} · Category: ${s.basics?.category || 'Retail'}</div>
               </div>
               <div style="display:flex; gap: 6px;">
-                <button class="btn" style="background:var(--primary); color:#fff;" onclick="decideSeller('${s.id}', 'GREEN', 'STARTER', 'Admin approval')">Approve</button>
-                <button class="btn" onclick="decideSeller('${s.id}', 'AMBER', 'UNDER_REVIEW', 'Request fix')">Request Fix</button>
-                <button class="btn" style="color:var(--danger);" onclick="decideSeller('${s.id}', 'RED', 'SUSPENDED', 'Rejected')">Reject</button>
+                <button class="btn" style="background:var(--primary); color:#fff;" onclick="decideSeller('${s.id}', 'GREEN', 'STARTER', 'Admin verified and approved')">Approve Starter</button>
+                <button class="btn" onclick="viewSellerDetails('${s.id}')">Inspect All Details</button>
+                <button class="btn" style="color:var(--danger);" onclick="decideSeller('${s.id}', 'RED', 'SUSPENDED', 'Application rejected')">Reject</button>
               </div>
             </div>
             <div class="compare-grid">
-              <div><strong>PAN Legal Name:</strong><br>${s.pan?.registeredName || 'N/A'}</div>
-              <div><strong>Bank Beneficiary:</strong><br>${s.bank?.beneficiaryName || 'N/A'} (${s.bank?.nameMatchScore ?? 0}% match)</div>
-              <div><strong>GSTIN:</strong><br>${s.gst?.hasGst ? (s.gst?.gstin || '') : 'Exempt'}</div>
-              <div><strong>Licence / DL:</strong><br>${s.licence?.type || 'Standard'}: ${s.licence?.number || 'Pending'}</div>
+              <div><strong>Owner / Legal Name:</strong><br>${s.basics?.ownerName || s.pan?.registeredName || 'N/A'}</div>
+              <div><strong>PAN Number:</strong><br>${s.pan?.panNumber || 'Not Provided'}</div>
+              <div><strong>Bank Account &amp; IFSC:</strong><br>${s.bank?.accountNumber || 'N/A'} · ${s.bank?.ifsc || 'N/A'}</div>
+              <div><strong>GSTIN:</strong><br>${s.gst?.hasGst ? (s.gst?.gstin || 'Pending') : 'Exempt / No GST (< 20L)'}</div>
+              <div><strong>Licence / Registration:</strong><br>${s.licence?.type || 'Licence'}: ${s.licence?.number || 'N/A'}</div>
+              <div><strong>Store Address:</strong><br>${s.basics?.address || 'Rourkela'} (${s.basics?.pincode || '769001'})</div>
             </div>
           </div>
         `).join('');
@@ -661,18 +666,21 @@
       var b = s.basics || {};
       document.getElementById('dStoreName').textContent = b.bizName || 'Draft Store';
       document.getElementById('dId').textContent = s.id;
+      document.getElementById('dStatus').textContent = s.status || 'Pending Admin Review';
       document.getElementById('dMobile').textContent = s.mobile || '-';
       document.getElementById('dOwner').textContent = b.ownerName || '-';
       document.getElementById('dCategory').textContent = b.category || '-';
       document.getElementById('dAddress').textContent = b.address || '-';
-      document.getElementById('dPan').textContent = s.pan?.panNumber || 'N/A';
-      document.getElementById('dPanName').textContent = s.pan?.registeredName || 'N/A';
-      document.getElementById('dBankBeneficiary').textContent = s.bank?.beneficiaryName || 'N/A';
-      document.getElementById('dBankScore').textContent = (s.bank?.nameMatchScore ?? 0) + '%';
-      document.getElementById('dBankAcc').textContent = s.bank?.accountNumber || 'N/A';
-      document.getElementById('dBankIfsc').textContent = s.bank?.ifsc || 'N/A';
-      document.getElementById('dGstin').textContent = s.gst?.hasGst ? (s.gst?.gstin || 'Pending') : 'Exempt / No GST';
-      document.getElementById('dLicence').textContent = (s.licence?.type || 'Standard') + ': ' + (s.licence?.number || 'Pending');
+      document.getElementById('dPin').textContent = b.pincode || '-';
+      document.getElementById('dVerticals').textContent = (s.verticals && s.verticals.length) ? s.verticals.join(', ') : 'Retail & Grocery';
+      document.getElementById('dPan').textContent = s.pan?.panNumber || 'Not Provided';
+      document.getElementById('dPanName').textContent = s.pan?.registeredName || b.ownerName || 'N/A';
+      document.getElementById('dBankAcc').textContent = s.bank?.accountNumber || 'Not Provided';
+      document.getElementById('dBankIfsc').textContent = s.bank?.ifsc || 'Not Provided';
+      document.getElementById('dUpi').textContent = s.bank?.upi || 'N/A';
+      document.getElementById('dBankBeneficiary').textContent = s.bank?.beneficiaryName || b.ownerName || 'N/A';
+      document.getElementById('dGstin').textContent = s.gst?.hasGst ? (s.gst?.gstin || 'GST Declared (Pending)') : 'Exempt / No GST (< 20L)';
+      document.getElementById('dLicence').textContent = (s.licence?.type || 'Licence') + ': ' + (s.licence?.number || 'N/A');
       document.getElementById('drawerOverlay').classList.add('open');
     }
 
