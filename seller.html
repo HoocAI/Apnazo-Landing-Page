@@ -55,7 +55,7 @@
     .nav-container {
       max-width: 680px;
       margin: 0 auto;
-      padding: 14px 20px;
+      padding: 12px 20px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -83,7 +83,7 @@
     .nav-links {
       display: flex;
       align-items: center;
-      gap: 16px;
+      gap: 12px;
     }
     .nav-link {
       font-size: 13px;
@@ -93,6 +93,24 @@
       transition: color 0.15s ease;
     }
     .nav-link:hover { color: var(--text); }
+
+    /* Minimal Language Selector in Navbar */
+    .nav-lang-select {
+      padding: 6px 10px;
+      font-size: 13px;
+      font-weight: 500;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: #ffffff;
+      color: var(--text);
+      cursor: pointer;
+      outline: none;
+      font-family: inherit;
+      transition: border-color 0.15s ease;
+    }
+    .nav-lang-select:focus {
+      border-color: var(--primary);
+    }
 
     /* Minimal Progress Line */
     .progress-track {
@@ -112,7 +130,7 @@
       flex: 1;
       max-width: 560px;
       width: 100%;
-      margin: 36px auto 60px;
+      margin: 32px auto 60px;
       padding: 0 20px;
     }
 
@@ -160,8 +178,7 @@
       margin-bottom: 18px;
     }
     label {
-      display: flex;
-      justify-content: space-between;
+      display: block;
       font-size: 13px;
       font-weight: 500;
       color: #374151;
@@ -171,212 +188,192 @@
       color: var(--text-muted);
       font-weight: 400;
       font-size: 12px;
+      margin-left: 4px;
     }
-
-    .input-wrap {
-      position: relative;
-      display: flex;
-      align-items: center;
-    }
-    input[type="text"],
-    input[type="tel"],
-    input[type="number"],
-    select {
+    input, select {
       width: 100%;
-      padding: 11px 14px;
-      font-family: var(--font);
-      font-size: 14.5px;
-      color: var(--text);
-      background: var(--surface);
+      padding: 10px 12px;
+      font-size: 14px;
       border: 1px solid var(--border);
       border-radius: 8px;
+      background: #ffffff;
+      color: var(--text);
       outline: none;
+      font-family: inherit;
       transition: border-color 0.15s ease, box-shadow 0.15s ease;
     }
     input:focus, select:focus {
       border-color: var(--border-focus);
       box-shadow: 0 0 0 3px rgba(15, 67, 179, 0.1);
     }
+    input[disabled] {
+      background: #f9fafb;
+      color: var(--text-muted);
+      cursor: not-allowed;
+    }
 
-    .with-prefix input {
-      padding-left: 54px;
+    .input-wrap {
+      display: flex;
+      align-items: center;
+      position: relative;
     }
     .input-prefix {
       position: absolute;
-      left: 14px;
+      left: 12px;
       font-size: 14px;
       font-weight: 500;
       color: var(--text-muted);
       pointer-events: none;
     }
+    .with-prefix input {
+      padding-left: 44px;
+    }
 
-    /* Minimal Language Grid */
+    /* Minimal Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      padding: 11px 16px;
+      font-size: 14px;
+      font-weight: 500;
+      border-radius: 8px;
+      cursor: pointer;
+      border: 1px solid transparent;
+      text-decoration: none;
+      transition: background 0.15s ease, border-color 0.15s ease;
+      font-family: inherit;
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: #ffffff;
+    }
+    .btn-primary:hover {
+      background: var(--accent-hover);
+    }
+    .btn-secondary {
+      background: #ffffff;
+      color: var(--text);
+      border-color: var(--border);
+      margin-top: 8px;
+    }
+    .btn-secondary:hover {
+      background: #f9fafb;
+      border-color: #d1d5db;
+    }
+
+    /* Language Selection Grid (Step 1) */
     .lang-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-bottom: 22px;
+      gap: 12px;
+      margin-bottom: 24px;
     }
     .lang-card {
       border: 1px solid var(--border);
       border-radius: 10px;
       padding: 14px 16px;
-      cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      background: var(--surface);
-      transition: all 0.15s ease;
+      cursor: pointer;
+      background: #ffffff;
+      transition: border-color 0.15s ease, background 0.15s ease;
     }
     .lang-card:hover {
       border-color: #cbd5e1;
-      background: #fbfcfe;
+      background: #f8fafc;
     }
     .lang-card.selected {
       border-color: var(--primary);
-      background: #f5f8ff;
+      background: #eff6ff;
     }
     .lang-text b {
       display: block;
-      font-size: 14.5px;
+      font-size: 14px;
       color: var(--text);
-      font-weight: 600;
     }
     .lang-text span {
-      display: block;
       font-size: 12px;
       color: var(--text-muted);
-      margin-top: 2px;
     }
     .lang-radio {
       width: 18px;
       height: 18px;
       border-radius: 50%;
-      border: 1.5px solid #cbd5e1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      border: 2px solid #d1d5db;
+      position: relative;
     }
     .lang-card.selected .lang-radio {
       border-color: var(--primary);
+      background: var(--primary);
     }
     .lang-card.selected .lang-radio::after {
       content: "";
-      width: 10px;
-      height: 10px;
+      width: 6px;
+      height: 6px;
+      background: #ffffff;
       border-radius: 50%;
-      background: var(--primary);
+      position: absolute;
+      top: 4px;
+      left: 4px;
     }
 
-    /* Minimal Vertical Selection */
+    /* Vertical Select (Step 4) */
     .vertical-list {
       display: flex;
       flex-direction: column;
       gap: 10px;
-      margin-bottom: 22px;
+      margin-bottom: 24px;
     }
     .vertical-item {
       border: 1px solid var(--border);
       border-radius: 10px;
-      padding: 16px;
-      cursor: pointer;
+      padding: 14px 16px;
       display: flex;
       align-items: flex-start;
       gap: 12px;
-      transition: all 0.15s ease;
-      background: var(--surface);
+      cursor: pointer;
+      background: #ffffff;
+      transition: border-color 0.15s ease, background 0.15s ease;
     }
     .vertical-item:hover {
       border-color: #cbd5e1;
-      background: #fbfcfe;
     }
     .vertical-item.selected {
       border-color: var(--primary);
-      background: #f5f8ff;
+      background: #eff6ff;
     }
-    .v-radio {
+    .vertical-item .v-radio {
       width: 18px;
       height: 18px;
       border-radius: 50%;
-      border: 1.5px solid #cbd5e1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      border: 2px solid #d1d5db;
       margin-top: 2px;
       flex-shrink: 0;
     }
     .vertical-item.selected .v-radio {
       border-color: var(--primary);
-    }
-    .vertical-item.selected .v-radio::after {
-      content: "";
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
       background: var(--primary);
     }
-    .v-body b {
+    .vertical-item .v-body b {
       display: block;
-      font-size: 15px;
+      font-size: 14.5px;
       color: var(--text);
-      font-weight: 600;
-      margin-bottom: 3px;
+      margin-bottom: 2px;
     }
-    .v-body span {
-      display: block;
-      font-size: 13px;
+    .vertical-item .v-body span {
+      font-size: 12.5px;
       color: var(--text-muted);
       line-height: 1.4;
     }
 
-    /* Buttons */
-    .btn {
-      width: 100%;
-      padding: 12px 18px;
-      border-radius: 8px;
-      font-family: var(--font);
-      font-size: 14.5px;
-      font-weight: 600;
-      border: 0;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      text-decoration: none;
-      transition: background 0.15s ease, opacity 0.15s ease;
-      margin-top: 10px;
-    }
-    .btn-primary {
-      background: var(--primary);
-      color: #ffffff;
-    }
-    .btn-primary:hover {
-      background: var(--primary-hover);
-    }
-    .btn-accent {
-      background: var(--accent);
-      color: #ffffff;
-    }
-    .btn-accent:hover {
-      background: var(--accent-hover);
-    }
-    .btn-secondary {
-      background: #ffffff;
-      color: #374151;
-      border: 1px solid var(--border);
-      margin-top: 8px;
-    }
-    .btn-secondary:hover {
-      background: #f9fafb;
-      border-color: #cbd5e1;
-    }
-
-    /* Minimal Status Alerts */
+    /* Alerts */
     .alert {
+      padding: 11px 14px;
       border-radius: 8px;
-      padding: 12px 14px;
-      font-size: 13.5px;
+      font-size: 13px;
       line-height: 1.45;
       margin: 12px 0 16px;
       border: 1px solid transparent;
@@ -491,10 +488,16 @@
     <div class="nav-container">
       <div class="brand-wrap">
         <a href="/" class="brand-logo" style="text-decoration:none;">Apna<b>zo</b></a>
-        <span class="nav-tag">Partner Onboarding</span>
+        <span class="nav-tag" id="navTag">Partner Onboarding</span>
       </div>
       <div class="nav-links">
-        <a href="/" class="nav-link">Save &amp; Exit</a>
+        <select id="navLangSelect" onchange="changeLanguage(this.value)" class="nav-lang-select" aria-label="Select Language">
+          <option value="en">🌐 English</option>
+          <option value="hi">🇮🇳 हिन्दी (Hindi)</option>
+          <option value="or">🏛️ ଓଡ଼ିଆ (Odia)</option>
+          <option value="bn">🪷 বাংলা (Bengali)</option>
+        </select>
+        <a href="/" class="nav-link" id="navExit">Save &amp; Exit</a>
       </div>
     </div>
     <div class="progress-track">
@@ -506,12 +509,13 @@
 
     <!-- S1: Language Selector & Welcome -->
     <div class="card" id="step-1">
-      <div class="step-counter">Step 1 of 10 · Welcome</div>
-      <h1>Choose your language</h1>
-      <p class="desc">Select your preferred language to proceed with partner registration for Rourkela.</p>
+      <div class="step-counter" id="s1Counter">Step 1 of 10 · Welcome</div>
+      <h1 id="s1Title">Grow your business in Rourkela</h1>
+      <p class="desc" id="s1Desc">Sell products, offer taxi rides, or book home services on Rourkela's Super App. Setup takes under 15 minutes.</p>
 
+      <label style="margin-bottom:10px;" id="s1ChooseLabel">Choose your preferred language</label>
       <div class="lang-grid">
-        <div class="lang-card selected" onclick="selectLang('en', this)">
+        <div class="lang-card selected" id="cardLangEn" onclick="selectLang('en', this)">
           <div class="lang-text">
             <b>English</b>
             <span>Default</span>
@@ -519,7 +523,7 @@
           <div class="lang-radio"></div>
         </div>
 
-        <div class="lang-card" onclick="selectLang('hi', this)">
+        <div class="lang-card" id="cardLangHi" onclick="selectLang('hi', this)">
           <div class="lang-text">
             <b>हिन्दी</b>
             <span>Hindi</span>
@@ -527,7 +531,7 @@
           <div class="lang-radio"></div>
         </div>
 
-        <div class="lang-card" onclick="selectLang('or', this)">
+        <div class="lang-card" id="cardLangOr" onclick="selectLang('or', this)">
           <div class="lang-text">
             <b>ଓଡ଼ିଆ</b>
             <span>Odia</span>
@@ -535,7 +539,7 @@
           <div class="lang-radio"></div>
         </div>
 
-        <div class="lang-card" onclick="selectLang('bn', this)">
+        <div class="lang-card" id="cardLangBn" onclick="selectLang('bn', this)">
           <div class="lang-text">
             <b>বাংলা</b>
             <span>Bengali</span>
@@ -544,17 +548,17 @@
         </div>
       </div>
 
-      <button class="btn btn-primary" onclick="goToStep(2)">Continue &rarr;</button>
+      <button class="btn btn-primary" id="s1Btn" onclick="goToStep(2)">Get Started &rarr;</button>
     </div>
 
     <!-- S2: Mobile & OTP -->
     <div class="card hidden" id="step-2">
-      <div class="step-counter">Step 2 of 10 · Phone Verification</div>
-      <h1>Enter your mobile number</h1>
-      <p class="desc">We will send a 6-digit OTP to verify your account and autosave your progress.</p>
+      <div class="step-counter" id="s2Counter">Step 2 of 10 · Phone Verification</div>
+      <h1 id="s2Title">Enter your mobile number</h1>
+      <p class="desc" id="s2Desc">We will send a 6-digit OTP to verify your account and autosave your progress.</p>
 
       <div class="field with-prefix">
-        <label>Mobile Number</label>
+        <label id="s2MobileLabel">Mobile Number</label>
         <div class="input-wrap">
           <span class="input-prefix">+91</span>
           <input type="tel" id="mobileInput" placeholder="98610 12345" maxlength="10" value="9861234567">
@@ -563,87 +567,87 @@
 
       <div id="otpSection" class="hidden">
         <div class="field">
-          <label>Enter 6-Digit OTP <span class="opt">Demo: 123456</span></label>
+          <label id="s2OtpLabel">Enter 6-Digit OTP <span class="opt">Demo: 123456</span></label>
           <input type="number" id="otpInput" placeholder="123456" maxlength="6" value="123456" style="letter-spacing: 4px; font-weight: 600; text-align: center;">
         </div>
-        <p style="font-size: 13px; color: var(--text-muted); margin: 0 0 14px;">Resend OTP in <strong id="resendTimer">30</strong>s</p>
+        <p style="font-size: 13px; color: var(--text-muted); margin: 0 0 14px;"><span id="s2ResendText">Resend OTP in</span> <strong id="resendTimer">30</strong>s</p>
       </div>
 
       <button class="btn btn-primary" id="sendOtpBtn" onclick="handleSendOtp()">Send OTP</button>
       <button class="btn btn-primary hidden" id="verifyOtpBtn" onclick="handleVerifyOtp()">Verify &amp; Continue &rarr;</button>
-      <button class="btn btn-secondary" onclick="goToStep(1)">&larr; Back</button>
+      <button class="btn btn-secondary" id="s2BackBtn" onclick="goToStep(1)">&larr; Back</button>
     </div>
 
     <!-- S3: Referral Code -->
     <div class="card hidden" id="step-3">
-      <div class="step-counter">Step 3 of 10 · Referral Code</div>
-      <h1>Have a referral code?</h1>
-      <p class="desc">Enter a code from an existing partner to unlock 50% discount on commission for your first 30 days.</p>
+      <div class="step-counter" id="s3Counter">Step 3 of 10 · Referral Code</div>
+      <h1 id="s3Title">Have a referral code?</h1>
+      <p class="desc" id="s3Desc">Enter a code from an existing partner to unlock 50% discount on commission for your first 30 days.</p>
 
       <div class="field">
-        <label>Referral Code <span class="opt">Optional</span></label>
+        <label id="s3CodeLabel">Referral Code <span class="opt">Optional</span></label>
         <input type="text" id="refCodeInput" placeholder="e.g. RKLSTEEL50" style="text-transform: uppercase;">
       </div>
       <div id="refResult"></div>
 
-      <button class="btn btn-primary" onclick="applyReferral()">Apply Code</button>
-      <button class="btn btn-secondary" onclick="goToStep(4)">Skip &rarr;</button>
+      <button class="btn btn-primary" id="s3ApplyBtn" onclick="applyReferral()">Apply Code</button>
+      <button class="btn btn-secondary" id="s3SkipBtn" onclick="goToStep(4)">Skip &rarr;</button>
     </div>
 
     <!-- S4: Choose Vertical -->
     <div class="card hidden" id="step-4">
-      <div class="step-counter">Step 4 of 10 · What will you offer?</div>
-      <h1>Select your business role</h1>
-      <p class="desc">Choose what you want to offer on Apnazo. You can add extra services later from settings.</p>
+      <div class="step-counter" id="s4Counter">Step 4 of 10 · What will you offer?</div>
+      <h1 id="s4Title">Select your business role</h1>
+      <p class="desc" id="s4Desc">Choose what you want to offer on Apnazo. You can add extra services later from settings.</p>
 
       <div class="vertical-list">
         <div class="vertical-item selected" onclick="toggleVertical('ecommerce', this)">
           <div class="v-radio"></div>
           <div class="v-body">
-            <b>Sell Products (Retail, Grocery &amp; Food)</b>
-            <span>Shops, supermarkets, restaurants, clothing, electronics and rentals.</span>
+            <b id="s4V1Title">Sell Products (Retail, Grocery &amp; Food)</b>
+            <span id="s4V1Desc">Shops, supermarkets, restaurants, clothing, electronics and rentals.</span>
           </div>
         </div>
 
         <div class="vertical-item" onclick="toggleVertical('rides', this)">
           <div class="v-radio"></div>
           <div class="v-body">
-            <b>Offer Rides (Taxi, Auto &amp; Delivery)</b>
-            <span>Commercial driver, auto-rickshaw, city cab or parcel transport.</span>
+            <b id="s4V2Title">Offer Rides (Taxi, Auto &amp; Delivery)</b>
+            <span id="s4V2Desc">Commercial driver, auto-rickshaw, city cab or parcel transport.</span>
           </div>
         </div>
 
         <div class="vertical-item" onclick="toggleVertical('services', this)">
           <div class="v-radio"></div>
           <div class="v-body">
-            <b>Home Services &amp; Repairs</b>
-            <span>Electrician, plumbing, AC maintenance, cleaning, beauty or tuition.</span>
+            <b id="s4V3Title">Home Services &amp; Repairs</b>
+            <span id="s4V3Desc">Electrician, plumbing, AC maintenance, cleaning, beauty or tuition.</span>
           </div>
         </div>
       </div>
 
-      <button class="btn btn-primary" onclick="goToStep(5)">Continue &rarr;</button>
-      <button class="btn btn-secondary" onclick="goToStep(3)">&larr; Back</button>
+      <button class="btn btn-primary" id="s4ContinueBtn" onclick="goToStep(5)">Continue &rarr;</button>
+      <button class="btn btn-secondary" id="s4BackBtn" onclick="goToStep(3)">&larr; Back</button>
     </div>
 
     <!-- S5: Business Basics -->
     <div class="card hidden" id="step-5">
-      <div class="step-counter">Step 5 of 10 · Business Details</div>
-      <h1>Business profile</h1>
-      <p class="desc">Basic details visible to customers across Rourkela.</p>
+      <div class="step-counter" id="s5Counter">Step 5 of 10 · Business Details</div>
+      <h1 id="s5Title">Business profile</h1>
+      <p class="desc" id="s5Desc">Basic details visible to customers across Rourkela.</p>
 
       <div class="field">
-        <label>Business / Shop Name *</label>
+        <label id="s5BizNameLabel">Business / Shop Name *</label>
         <input type="text" id="bizName" placeholder="e.g. Rourkela Steel Grocers" value="Rourkela Steel Grocers">
       </div>
 
       <div class="field">
-        <label>Owner Full Name * <span class="opt">As on PAN Card</span></label>
+        <label id="s5OwnerLabel">Owner Full Name * <span class="opt">As on PAN Card</span></label>
         <input type="text" id="ownerName" placeholder="e.g. Ramesh Chandra Sahu" value="Ramesh Chandra Sahu">
       </div>
 
       <div class="field">
-        <label>Category *</label>
+        <label id="s5CategoryLabel">Category *</label>
         <select id="bizCategory" onchange="checkCategoryRequirements()">
           <option value="Retail & Grocery">Grocery &amp; Supermarket</option>
           <option value="Restaurant & Food">Restaurant &amp; Food</option>
@@ -655,27 +659,27 @@
       </div>
 
       <div class="field">
-        <label>Store / Pickup Address in Rourkela *</label>
+        <label id="s5AddressLabel">Store / Pickup Address in Rourkela *</label>
         <input type="text" id="bizAddress" placeholder="Daily Market, Sector 1" value="Daily Market, Main Road, Sector 1, Rourkela">
       </div>
 
       <div class="field">
-        <label>PIN Code *</label>
+        <label id="s5PinLabel">PIN Code *</label>
         <input type="number" id="bizPincode" placeholder="769001" value="769001">
       </div>
 
-      <button class="btn btn-primary" onclick="saveBasics()">Save &amp; Continue &rarr;</button>
-      <button class="btn btn-secondary" onclick="goToStep(4)">&larr; Back</button>
+      <button class="btn btn-primary" id="s5SaveBtn" onclick="saveBasics()">Save &amp; Continue &rarr;</button>
+      <button class="btn btn-secondary" id="s5BackBtn" onclick="goToStep(4)">&larr; Back</button>
     </div>
 
     <!-- S6: PAN Verification -->
     <div class="card hidden" id="step-6">
-      <div class="step-counter">Step 6 of 10 · Identity &amp; Tax</div>
-      <h1>PAN card verification</h1>
-      <p class="desc">Verified via real-time API. The registered name will lock as the legal identity for your bank account.</p>
+      <div class="step-counter" id="s6Counter">Step 6 of 10 · Identity &amp; Tax</div>
+      <h1 id="s6Title">PAN card verification</h1>
+      <p class="desc" id="s6Desc">Verified via real-time API. The registered name will lock as the legal identity for your bank account.</p>
 
       <div class="field">
-        <label>PAN Number (10 Digits) *</label>
+        <label id="s6PanLabel">PAN Number (10 Digits) *</label>
         <input type="text" id="panInput" placeholder="ABCPS1234F" maxlength="10" style="text-transform: uppercase; font-weight: 600;" value="ABCPS1234F">
       </div>
 
@@ -683,14 +687,14 @@
 
       <button class="btn btn-primary" id="panVerifyBtn" onclick="verifyPAN()">Verify PAN</button>
       <button class="btn btn-primary hidden" id="panNextBtn" onclick="goToStep(7)">Continue to GST &rarr;</button>
-      <button class="btn btn-secondary" onclick="goToStep(5)">&larr; Back</button>
+      <button class="btn btn-secondary" id="s6BackBtn" onclick="goToStep(5)">&larr; Back</button>
     </div>
 
     <!-- S7: GST Details -->
     <div class="card hidden" id="step-7">
-      <div class="step-counter">Step 7 of 10 · GSTIN</div>
-      <h1>Tax &amp; GST status</h1>
-      <p class="desc">Do you have a registered GSTIN for this business?</p>
+      <div class="step-counter" id="s7Counter">Step 7 of 10 · GSTIN</div>
+      <h1 id="s7Title">Tax &amp; GST status</h1>
+      <p class="desc" id="s7Desc">Do you have a registered GSTIN for this business?</p>
 
       <div style="display: flex; gap: 10px; margin-bottom: 16px;">
         <button type="button" class="btn btn-primary" id="hasGstYesBtn" style="margin:0;" onclick="toggleGstOption(true)">Yes, I have GST</button>
@@ -699,14 +703,14 @@
 
       <div id="gstInputSection">
         <div class="field">
-          <label>15-Digit GSTIN *</label>
+          <label id="s7GstinLabel">15-Digit GSTIN *</label>
           <input type="text" id="gstinInput" placeholder="21ABCPS1234F1Z5" maxlength="15" style="text-transform: uppercase; font-weight: 600;" value="21ABCPS1234F1Z5">
         </div>
-        <button class="btn btn-secondary" onclick="verifyGSTIN()">Verify GSTIN</button>
+        <button class="btn btn-secondary" id="s7VerifyGstBtn" onclick="verifyGSTIN()">Verify GSTIN</button>
       </div>
 
       <div id="nonGstSection" class="hidden">
-        <div class="alert alert-warning">
+        <div class="alert alert-warning" id="s7NonGstNotice">
           <strong>Non-GST route:</strong> You are allowed to sell within standard threshold limits. You will start on Starter Tier limits.
         </div>
       </div>
@@ -714,27 +718,27 @@
       <div id="gstFeedback"></div>
 
       <button class="btn btn-primary" id="gstNextBtn" onclick="goToStep(8)" style="margin-top: 16px;">Continue to Bank Account &rarr;</button>
-      <button class="btn btn-secondary" onclick="goToStep(6)">&larr; Back</button>
+      <button class="btn btn-secondary" id="s7BackBtn" onclick="goToStep(6)">&larr; Back</button>
     </div>
 
     <!-- S8: Bank Account -->
     <div class="card hidden" id="step-8">
-      <div class="step-counter">Step 8 of 10 · Payout Account</div>
-      <h1>Bank account for payouts</h1>
-      <p class="desc">Sales earnings and ride fares will be deposited directly to this account via penny-drop verification.</p>
+      <div class="step-counter" id="s8Counter">Step 8 of 10 · Payout Account</div>
+      <h1 id="s8Title">Bank account for payouts</h1>
+      <p class="desc" id="s8Desc">Sales earnings and ride fares will be deposited directly to this account via penny-drop verification.</p>
 
       <div class="field">
-        <label>Account Number *</label>
+        <label id="s8AccLabel">Account Number *</label>
         <input type="text" id="bankAcc" placeholder="50100234567890" value="50100234567890">
       </div>
 
       <div class="field">
-        <label>IFSC Code *</label>
+        <label id="s8IfscLabel">IFSC Code *</label>
         <input type="text" id="bankIfsc" placeholder="HDFC0001234" maxlength="11" style="text-transform: uppercase; font-weight: 600;" value="HDFC0001234">
       </div>
 
       <div class="field">
-        <label>UPI ID <span class="opt">Optional</span></label>
+        <label id="s8UpiLabel">UPI ID <span class="opt">Optional</span></label>
         <input type="text" id="bankUpi" placeholder="ramesh@okhdfcbank">
       </div>
 
@@ -742,12 +746,12 @@
 
       <button class="btn btn-primary" id="bankVerifyBtn" onclick="verifyBank()">Verify Bank via Penny Drop</button>
       <button class="btn btn-primary hidden" id="bankNextBtn" onclick="checkNextAfterBank()">Continue &rarr;</button>
-      <button class="btn btn-secondary" onclick="goToStep(7)">&larr; Back</button>
+      <button class="btn btn-secondary" id="s8BackBtn" onclick="goToStep(7)">&larr; Back</button>
     </div>
 
     <!-- S9: Category Licence (Conditional) -->
     <div class="card hidden" id="step-9">
-      <div class="step-counter">Step 9 of 10 · Licence</div>
+      <div class="step-counter" id="s9Counter">Step 9 of 10 · Licence</div>
       <h1 id="licenceTitle">FSSAI food licence</h1>
       <p class="desc" id="licenceSub">Food &amp; grocery categories require an active licence to publish listings.</p>
 
@@ -760,14 +764,14 @@
         ✓ Licence verified and active on portal records.
       </div>
 
-      <button class="btn btn-secondary" onclick="verifyLicence()">Verify Licence</button>
-      <button class="btn btn-primary" onclick="goToStep(10)">Proceed to Agreement &rarr;</button>
-      <button class="btn btn-secondary" onclick="goToStep(8)">&larr; Back</button>
+      <button class="btn btn-secondary" id="s9VerifyLicBtn" onclick="verifyLicence()">Verify Licence</button>
+      <button class="btn btn-primary" id="s9ProceedBtn" onclick="goToStep(10)">Proceed to Agreement &rarr;</button>
+      <button class="btn btn-secondary" id="s9BackBtn" onclick="goToStep(8)">&larr; Back</button>
     </div>
 
     <!-- S10: Agreement & E-Sign -->
     <div class="card hidden" id="step-10">
-      <div class="step-counter">Step 10 of 10 · Partner Agreement</div>
+      <div class="step-counter" id="s10Counter">Step 10 of 10 · Partner Agreement</div>
       <h1 id="agreeTitle">Terms &amp; e-Sign agreement</h1>
       <p class="desc" id="agreeDesc">Please review commercial policies and confirm with OTP acceptance.</p>
 
@@ -781,7 +785,7 @@
       </div>
 
       <div style="margin: 10px 0 16px;">
-        <a href="javascript:void(0)" style="font-size:13px; color:var(--primary); text-decoration:underline; font-weight:500;" onclick="openFullAgreement()">📄 Read Full Legal Contract &amp; Clauses</a>
+        <a href="javascript:void(0)" style="font-size:13px; color:var(--primary); text-decoration:underline; font-weight:500;" id="readFullAgreeLink" onclick="openFullAgreement()">📄 Read Full Legal Contract &amp; Clauses</a>
       </div>
 
       <div class="field" style="margin-top: 16px;">
@@ -791,8 +795,8 @@
         </label>
       </div>
 
-      <button class="btn btn-primary" onclick="submitAgreement()">Accept &amp; Complete &rarr;</button>
-      <button class="btn btn-secondary" onclick="goToStep(9)">&larr; Back</button>
+      <button class="btn btn-primary" id="s10SubmitBtn" onclick="submitAgreement()">Accept &amp; Complete &rarr;</button>
+      <button class="btn btn-secondary" id="s10BackBtn" onclick="goToStep(9)">&larr; Back</button>
     </div>
 
     <!-- Full Legal Agreement Modal -->
@@ -800,11 +804,11 @@
       <div style="background:#fff; max-width:600px; width:100%; max-height:85vh; border-radius:12px; padding:24px; display:flex; flex-direction:column; box-shadow:0 10px 25px rgba(0,0,0,0.15);">
         <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border); padding-bottom:12px; margin-bottom:14px;">
           <h3 style="margin:0; font-size:17px;" id="modalAgreeTitle">Full Partner Agreement</h3>
-          <button type="button" class="btn btn-secondary" style="margin:0; padding:4px 10px; font-size:13px;" onclick="closeFullAgreement()">✕ Close</button>
+          <button type="button" class="btn btn-secondary" style="margin:0; width:auto; padding:4px 10px; font-size:13px;" onclick="closeFullAgreement()">✕ Close</button>
         </div>
         <div style="flex:1; overflow-y:auto; font-size:13px; line-height:1.6; color:#374151; white-space:pre-wrap; background:#f9fafb; padding:16px; border-radius:8px; border:1px solid var(--border);" id="modalAgreeText">Loading agreement text...</div>
         <div style="margin-top:16px; text-align:right;">
-          <button type="button" class="btn btn-primary" style="margin:0; width:auto; padding:8px 18px;" onclick="closeFullAgreement()">I Understand &amp; Close</button>
+          <button type="button" class="btn btn-primary" id="modalCloseBtn" style="margin:0; width:auto; padding:8px 18px;" onclick="closeFullAgreement()">I Understand &amp; Close</button>
         </div>
       </div>
     </div>
@@ -813,8 +817,8 @@
     <div class="card hidden" id="step-11">
       <div id="decisionGreen" class="hidden">
         <div style="font-size: 32px; color: var(--success); margin-bottom: 8px;">✓</div>
-        <h1>Starter tier approved</h1>
-        <p class="desc">All identity and bank checks passed with a <strong>100% name match</strong>. You are live on the Starter Tier.</p>
+        <h1 id="s11GreenTitle">Starter tier approved</h1>
+        <p class="desc" id="s11GreenDesc">All identity and bank checks passed with a <strong>100% name match</strong>. You are live on the Starter Tier.</p>
 
         <ul class="checklist">
           <li><span>Mobile OTP</span> <span class="badge badge-success">Verified</span></li>
@@ -823,13 +827,13 @@
           <li><span>Category Licence</span> <span class="badge badge-success">Active</span></li>
         </ul>
 
-        <button class="btn btn-primary" onclick="goToDashboard()">Open Seller Dashboard &rarr;</button>
+        <button class="btn btn-primary" id="s11GreenBtn" onclick="goToDashboard()">Open Seller Dashboard &rarr;</button>
       </div>
 
       <div id="decisionAmber" class="hidden">
         <div style="font-size: 32px; color: var(--warning); margin-bottom: 8px;">⚠️</div>
-        <h1>Under review (Amber)</h1>
-        <p class="desc">Minor discrepancy between Bank Beneficiary Name and PAN Legal Name. Queued for 24-hr manual review.</p>
+        <h1 id="s11AmberTitle">Under review (Amber)</h1>
+        <p class="desc" id="s11AmberDesc">Minor discrepancy between Bank Beneficiary Name and PAN Legal Name. Queued for manual review.</p>
         <button class="btn btn-primary" onclick="goToStep(12)">Update Details Now</button>
         <button class="btn btn-secondary" onclick="goToDashboard()">Continue in Preview Mode</button>
       </div>
@@ -865,42 +869,42 @@
 
       <div class="tier-box">
         <div class="tier-box-header">
-          <h3>Starter Access Tier</h3>
+          <h3 id="dashTierTitle">Starter Access Tier</h3>
           <span style="font-size: 12px; color: var(--text-muted);">Active</span>
         </div>
         <div class="tier-meta">
           <div>
-            <small>Daily Order Cap</small>
+            <small id="dashCapLabel">Daily Order Cap</small>
             <b>₹15,000 / day</b>
           </div>
           <div>
-            <small>Payout Schedule</small>
+            <small id="dashPayoutLabel">Payout Schedule</small>
             <b>T+2 Days Cycle</b>
           </div>
         </div>
       </div>
 
       <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px;">
-        <button class="btn btn-primary" style="margin:0;" onclick="goToStep(14)">+ Add Product</button>
-        <button class="btn btn-secondary" style="margin:0;" onclick="goToStep(15)">Refer &amp; Earn</button>
+        <button class="btn btn-primary" style="margin:0;" id="dashAddProdBtn" onclick="goToStep(14)">+ Add Product</button>
+        <button class="btn btn-secondary" style="margin:0;" id="dashReferBtn" onclick="goToStep(15)">Refer &amp; Earn</button>
       </div>
 
       <div class="stats-row">
         <div class="stat-card">
-          <small>Orders Today</small>
+          <small id="dashStatOrders">Orders Today</small>
           <b>0</b>
         </div>
         <div class="stat-card">
-          <small>Sales</small>
+          <small id="dashStatSales">Sales</small>
           <b>₹0</b>
         </div>
         <div class="stat-card">
-          <small>Next Payout</small>
+          <small id="dashStatPayout">Next Payout</small>
           <b>₹0</b>
         </div>
       </div>
 
-      <button class="btn btn-secondary" style="margin-top: 20px;" onclick="window.location.href='/'">&larr; Return to Website</button>
+      <button class="btn btn-secondary" style="margin-top: 20px;" id="dashHomeBtn" onclick="window.location.href='/'">&larr; Return to Website</button>
     </div>
 
     <!-- S14: Product Listing Hand-off -->
@@ -957,6 +961,398 @@
   </main>
 
   <script>
+    // Comprehensive translations dictionary for English, Hindi, Odia, Bengali
+    var TRANSLATIONS = {
+      en: {
+        navTag: "Partner Onboarding",
+        navExit: "Save & Exit",
+        s1Counter: "Step 1 of 10 · Welcome",
+        s1Title: "Grow your business in Rourkela",
+        s1Desc: "Sell products, offer taxi rides, or book home services on Rourkela's Super App. Setup takes under 15 minutes.",
+        s1ChooseLabel: "Choose your preferred language",
+        s1Btn: "Get Started →",
+        s2Counter: "Step 2 of 10 · Phone Verification",
+        s2Title: "Enter your mobile number",
+        s2Desc: "We will send a 6-digit OTP to verify your account and autosave your progress.",
+        s2MobileLabel: "Mobile Number",
+        s2OtpLabel: "Enter 6-Digit OTP",
+        s2ResendText: "Resend OTP in",
+        sendOtpBtn: "Send OTP",
+        verifyOtpBtn: "Verify & Continue →",
+        s2BackBtn: "← Back",
+        s3Counter: "Step 3 of 10 · Referral Code",
+        s3Title: "Have a referral code?",
+        s3Desc: "Enter a code from an existing partner to unlock 50% discount on commission for your first 30 days.",
+        s3CodeLabel: "Referral Code",
+        s3ApplyBtn: "Apply Code",
+        s3SkipBtn: "Skip →",
+        s4Counter: "Step 4 of 10 · What will you offer?",
+        s4Title: "Select your business role",
+        s4Desc: "Choose what you want to offer on Apnazo. You can add extra services later from settings.",
+        s4V1Title: "Sell Products (Retail, Grocery & Food)",
+        s4V1Desc: "Shops, supermarkets, restaurants, clothing, electronics and rentals.",
+        s4V2Title: "Offer Rides (Taxi, Auto & Delivery)",
+        s4V2Desc: "Commercial driver, auto-rickshaw, city cab or parcel transport.",
+        s4V3Title: "Home Services & Repairs",
+        s4V3Desc: "Electrician, plumbing, AC maintenance, cleaning, beauty or tuition.",
+        s4ContinueBtn: "Continue →",
+        s4BackBtn: "← Back",
+        s5Counter: "Step 5 of 10 · Business Details",
+        s5Title: "Business profile",
+        s5Desc: "Basic details visible to customers across Rourkela.",
+        s5BizNameLabel: "Business / Shop Name *",
+        s5OwnerLabel: "Owner Full Name *",
+        s5CategoryLabel: "Category *",
+        s5AddressLabel: "Store / Pickup Address in Rourkela *",
+        s5PinLabel: "PIN Code *",
+        s5SaveBtn: "Save & Continue →",
+        s5BackBtn: "← Back",
+        s6Counter: "Step 6 of 10 · Identity & Tax",
+        s6Title: "PAN card verification",
+        s6Desc: "Verified via real-time API. The registered name will lock as the legal identity for your bank account.",
+        s6PanLabel: "PAN Number (10 Digits) *",
+        panVerifyBtn: "Verify PAN",
+        panNextBtn: "Continue to GST →",
+        s6BackBtn: "← Back",
+        s7Counter: "Step 7 of 10 · GSTIN",
+        s7Title: "Tax & GST status",
+        s7Desc: "Do you have a registered GSTIN for this business?",
+        hasGstYesBtn: "Yes, I have GST",
+        hasGstNoBtn: "No GST (Turnover < 20L)",
+        s7GstinLabel: "15-Digit GSTIN *",
+        s7VerifyGstBtn: "Verify GSTIN",
+        gstNextBtn: "Continue to Bank Account →",
+        s7BackBtn: "← Back",
+        s8Counter: "Step 8 of 10 · Payout Account",
+        s8Title: "Bank account for payouts",
+        s8Desc: "Sales earnings and ride fares will be deposited directly to this account via penny-drop verification.",
+        s8AccLabel: "Account Number *",
+        s8IfscLabel: "IFSC Code *",
+        s8UpiLabel: "UPI ID",
+        bankVerifyBtn: "Verify Bank via Penny Drop",
+        bankNextBtn: "Continue →",
+        s8BackBtn: "← Back",
+        s9Counter: "Step 9 of 10 · Licence",
+        licenceTitle: "FSSAI food licence",
+        licenceSub: "Food & grocery categories require an active licence to publish listings.",
+        licenceLabel: "Licence Number *",
+        s9VerifyLicBtn: "Verify Licence",
+        s9ProceedBtn: "Proceed to Agreement →",
+        s9BackBtn: "← Back",
+        s10Counter: "Step 10 of 10 · Partner Agreement",
+        agreeTitle: "Terms & e-Sign agreement",
+        agreeDesc: "Please review commercial policies and confirm with OTP acceptance.",
+        agreeSummaryHeading: "Key Commercial Terms:",
+        readFullAgreeLink: "📄 Read Full Legal Contract & Clauses",
+        agreeConsentLabel: "I accept the Apnazo Partner Terms and e-Sign this agreement.",
+        s10SubmitBtn: "Accept & Complete →",
+        s10BackBtn: "← Back",
+        s11GreenTitle: "Starter tier approved",
+        s11GreenDesc: "All identity and bank checks passed with a 100% name match. You are live on the Starter Tier.",
+        s11GreenBtn: "Open Seller Dashboard →",
+        dashTierTitle: "Starter Access Tier",
+        dashCapLabel: "Daily Order Cap",
+        dashPayoutLabel: "Payout Schedule",
+        dashAddProdBtn: "+ Add Product",
+        dashReferBtn: "Refer & Earn",
+        dashStatOrders: "Orders Today",
+        dashStatSales: "Sales",
+        dashStatPayout: "Next Payout",
+        dashHomeBtn: "← Return to Website"
+      },
+      hi: {
+        navTag: "पार्टनर ऑनबोर्डिंग",
+        navExit: "सहेजें और बाहर निकलें",
+        s1Counter: "चरण 1 / 10 · स्वागत",
+        s1Title: "राउरकेला में अपना व्यापार बढ़ाएं",
+        s1Desc: "राउरकेला के सुपर ऐप पर उत्पाद बेचें, टैक्सी राइड दें या होम सेवाएं बुक करें। सेटअप 15 मिनट से भी कम समय में।",
+        s1ChooseLabel: "अपनी पसंदीदा भाषा चुनें",
+        s1Btn: "शुरू करें →",
+        s2Counter: "चरण 2 / 10 · फ़ोन सत्यापन",
+        s2Title: "अपना मोबाइल नंबर दर्ज करें",
+        s2Desc: "हम आपके खाते को सत्यापित करने और प्रगति को सुरक्षित रखने के लिए 6 अंकों का OTP भेजेंगे।",
+        s2MobileLabel: "मोबाइल नंबर",
+        s2OtpLabel: "6 अंकों का OTP दर्ज करें",
+        s2ResendText: "OTP पुनः भेजें:",
+        sendOtpBtn: "OTP भेजें",
+        verifyOtpBtn: "सत्यापित करें और आगे बढ़ें →",
+        s2BackBtn: "← वापस",
+        s3Counter: "चरण 3 / 10 · रेफरल कोड",
+        s3Title: "क्या आपके पास रेफरल कोड है?",
+        s3Desc: "पहले 30 दिनों के लिए कमीशन पर 50% छूट पाने के लिए किसी पार्टनर का कोड दर्ज करें।",
+        s3CodeLabel: "रेफरल कोड",
+        s3ApplyBtn: "कोड लागू करें",
+        s3SkipBtn: "छोड़ें →",
+        s4Counter: "चरण 4 / 10 · आप क्या प्रदान करेंगे?",
+        s4Title: "अपनी व्यावसायिक भूमिका चुनें",
+        s4Desc: "चुनें कि आप अपनाज़ो पर क्या पेश करना चाहते हैं। आप बाद में अतिरिक्त सेवाएं जोड़ सकते हैं।",
+        s4V1Title: "उत्पाद बेचें (खुदरा, किराना और भोजन)",
+        s4V1Desc: "दुकानें, सुपरमार्केट, रेस्तरां, कपड़े, इलेक्ट्रॉनिक्स और किराना।",
+        s4V2Title: "सवारी सेवाएं दें (टैक्सी, ऑटो और डिलीवरी)",
+        s4V2Desc: "कमर्शियल ड्राइवर, ऑटो-रिक्शा, सिटी कैब या पार्सल परिवहन।",
+        s4V3Title: "घरेलू सेवाएं और मरम्मत",
+        s4V3Desc: "इलेक्ट्रीशियन, प्लंबिंग, एसी मरम्मत, सफाई, ब्यूटी या ट्यूशन।",
+        s4ContinueBtn: "आगे बढ़ें →",
+        s4BackBtn: "← वापस",
+        s5Counter: "चरण 5 / 10 · व्यावसायिक विवरण",
+        s5Title: "व्यावसायिक प्रोफ़ाइल",
+        s5Desc: "राउरकेला के ग्राहकों को दिखने वाले बुनियादी विवरण।",
+        s5BizNameLabel: "व्यवसाय / दुकान का नाम *",
+        s5OwnerLabel: "मालिक का पूरा नाम (पैन कार्ड अनुसार) *",
+        s5CategoryLabel: "व्यावसायिक श्रेणी *",
+        s5AddressLabel: "राउरकेला में स्टोर / पिकअप का पता *",
+        s5PinLabel: "पिन कोड *",
+        s5SaveBtn: "सहेजें और आगे बढ़ें →",
+        s5BackBtn: "← वापस",
+        s6Counter: "चरण 6 / 10 · पहचान और कर",
+        s6Title: "पैन कार्ड सत्यापन",
+        s6Desc: "रीयल-टाइम API द्वारा सत्यापित। पंजीकृत नाम बैंक खाते के लिए कानूनी पहचान के रूप में लॉक होगा।",
+        s6PanLabel: "पैन नंबर (10 अंक) *",
+        panVerifyBtn: "पैन सत्यापित करें",
+        panNextBtn: "जीएसटी पर आगे बढ़ें →",
+        s6BackBtn: "← वापस",
+        s7Counter: "चरण 7 / 10 · जीएसटी",
+        s7Title: "कर एवं जीएसटी स्थिति",
+        s7Desc: "क्या आपके पास इस व्यवसाय के लिए जीएसटी नंबर है?",
+        hasGstYesBtn: "हाँ, मेरे पास GST है",
+        hasGstNoBtn: "GST नहीं है (टर्नओवर < 20 लाख)",
+        s7GstinLabel: "15-अंकीय GSTIN *",
+        s7VerifyGstBtn: "GSTIN सत्यापित करें",
+        gstNextBtn: "बैंक खाते पर आगे बढ़ें →",
+        s7BackBtn: "← वापस",
+        s8Counter: "चरण 8 / 10 · भुगतान खाता",
+        s8Title: "भुगतान के लिए बैंक खाता",
+        s8Desc: "बिक्री की कमाई और किराए सीधे पेनी-ड्रॉप सत्यापन के माध्यम से इस खाते में जमा की जाएगी।",
+        s8AccLabel: "खाता संख्या *",
+        s8IfscLabel: "IFSC कोड *",
+        s8UpiLabel: "UPI आईडी (वैकल्पिक)",
+        bankVerifyBtn: "पेनी ड्रॉप से बैंक सत्यापित करें",
+        bankNextBtn: "आगे बढ़ें →",
+        s8BackBtn: "← वापस",
+        s9Counter: "चरण 9 / 10 · लाइसेंस",
+        licenceTitle: "FSSAI खाद्य लाइसेंस",
+        licenceSub: "खाद्य और किराना श्रेणियों को लिस्टिंग शुरू करने के लिए वैध लाइसेंस आवश्यक है।",
+        licenceLabel: "लाइसेंस संख्या *",
+        s9VerifyLicBtn: "लाइसेंस सत्यापित करें",
+        s9ProceedBtn: "अनुबंध पर आगे बढ़ें →",
+        s9BackBtn: "← वापस",
+        s10Counter: "चरण 10 / 10 · पार्टनर अनुबंध",
+        agreeTitle: "नियम और ई-हस्ताक्षर अनुबंध",
+        agreeDesc: "कृपया वाणिज्यिक नीतियों की समीक्षा करें और OTP स्वीकृति के साथ पुष्टि करें।",
+        agreeSummaryHeading: "प्रमुख वाणिज्यिक शर्तें:",
+        readFullAgreeLink: "📄 पूर्ण कानूनी अनुबंध और धाराएं पढ़ें",
+        agreeConsentLabel: "मैं अपनाज़ो पार्टनर की शर्तों को स्वीकार करता हूँ और इस अनुबंध पर ई-हस्ताक्षर करता हूँ।",
+        s10SubmitBtn: "स्वीकार करें और पूरा करें →",
+        s10BackBtn: "← वापस",
+        s11GreenTitle: "स्टार्टर स्तर स्वीकृत",
+        s11GreenDesc: "सभी पहचान और बैंक सत्यापन 100% नाम मिलान के साथ पूरे हुए। आपका स्टोर सक्रिय है।",
+        s11GreenBtn: "विक्रेता डैशबोर्ड खोलें →",
+        dashTierTitle: "स्टार्टर एक्सेस टीयर",
+        dashCapLabel: "दैनिक ऑर्डर सीमा",
+        dashPayoutLabel: "भुगतान अनुसूची",
+        dashAddProdBtn: "+ उत्पाद जोड़ें",
+        dashReferBtn: "रेफर करें और कमाएं",
+        dashStatOrders: "आज के ऑर्डर",
+        dashStatSales: "बिक्री",
+        dashStatPayout: "अगला भुगतान",
+        dashHomeBtn: "← वेबसाइट पर वापस लौटें"
+      },
+      or: {
+        navTag: "ସହଭାଗୀ ଅନ୍‌ବୋର୍ଡିଂ",
+        navExit: "ସାଇତନ୍ତୁ ଏବଂ ବାହାରନ୍ତୁ",
+        s1Counter: "ପଦକ୍ଷେପ ୧ / ୧୦ · ସ୍ୱାଗତ",
+        s1Title: "ରାଉରକେଲାରେ ଆପଣଙ୍କ ବ୍ୟବସାୟ ବୃଦ୍ଧି କରନ୍ତୁ",
+        s1Desc: "ରାଉରକେଲାର ସୁପର ଆପ୍‌ରେ ଉତ୍ପାଦ ବିକ୍ରି କରନ୍ତୁ, ଟ୍ୟାକ୍ସି ରାଇଡ୍ ପ୍ରଦାନ କରନ୍ତୁ କିମ୍ବା ହୋମ୍ ସେବା ବୁକ୍ କରନ୍ତୁ। ସେଟଅପ୍ ୧୫ ମିନିଟରୁ କମ୍ ସମୟ ନିଏ।",
+        s1ChooseLabel: "ଆପଣଙ୍କ ପସନ୍ଦର ଭାଷା ବାଛନ୍ତୁ",
+        s1Btn: "ଆରମ୍ଭ କରନ୍ତୁ →",
+        s2Counter: "ପଦକ୍ଷେପ ୨ / ୧୦ · ଫୋନ୍ ଯାଞ୍ଚ",
+        s2Title: "ଆପଣଙ୍କ ମୋବାଇଲ୍ ନମ୍ବର ପ୍ରବେଶ କରନ୍ତୁ",
+        s2Desc: "ଆପଣଙ୍କ ଆକାଉଣ୍ଟ ଯାଞ୍ଚ କରିବା ଏବଂ ପ୍ରଗତି ସଂରକ୍ଷଣ କରିବାକୁ ଆମେ ୬-ଅଙ୍କ ବିଶିଷ୍ଟ OTP ପଠାଇବୁ।",
+        s2MobileLabel: "ମୋବାଇଲ୍ ନମ୍ବର",
+        s2OtpLabel: "୬-ଅଙ୍କ ବିଶିଷ୍ଟ OTP ପ୍ରବେଶ କରନ୍ତୁ",
+        s2ResendText: "OTP ପୁନଃ ପଠାନ୍ତୁ:",
+        sendOtpBtn: "OTP ପଠାନ୍ତୁ",
+        verifyOtpBtn: "ଯାଞ୍ଚ କରନ୍ତୁ ଏବଂ ଆଗକୁ ବଢ଼ନ୍ତୁ →",
+        s2BackBtn: "← ପଛକୁ",
+        s3Counter: "ପଦକ୍ଷେପ ୩ / ୧୦ · ରେଫରାଲ୍ କୋଡ୍",
+        s3Title: "ଆପଣଙ୍କ ପାଖରେ ରେଫରାଲ୍ କୋଡ୍ ଅଛି କି?",
+        s3Desc: "ପ୍ରଥମ ୩୦ ଦିନ ପାଇଁ କମିଶନରେ ୫୦% ରିହାତି ପାଇବାକୁ ଜଣେ ସହଭାଗୀଙ୍କ କୋଡ୍ ପ୍ରବେଶ କରନ୍ତୁ।",
+        s3CodeLabel: "ରେଫରାଲ୍ କୋଡ୍",
+        s3ApplyBtn: "କୋଡ୍ ପ୍ରୟୋଗ କରନ୍ତୁ",
+        s3SkipBtn: "ବାଦ୍ ଦିଅନ୍ତୁ →",
+        s4Counter: "ପଦକ୍ଷେପ ୪ / ୧୦ · ଆପଣ କ’ଣ ପ୍ରଦାନ କରିବେ?",
+        s4Title: "ଆପଣଙ୍କ ବ୍ୟବସାୟିକ ଭୂମିକା ବାଛନ୍ତୁ",
+        s4Desc: "ଆପଣ ଆପନାଜୋରେ କ’ଣ ପ୍ରଦାନ କରିବାକୁ ଚାହାଁନ୍ତି ବାଛନ୍ତୁ। ଆପଣ ପରେ ଅତିରିକ୍ତ ସେବା ଯୋଡିପାରିବେ।",
+        s4V1Title: "ଉତ୍ପାଦ ବିକ୍ରି କରନ୍ତୁ (ଖୁଚୁରା, ଗ୍ରୋସରୀ ଓ ଖାଦ୍ୟ)",
+        s4V1Desc: "ଦୋକାନ, ସୁପରମାର୍କେଟ୍, ରେଷ୍ଟୁରାଣ୍ଟ, ପୋଷାକ, ଇଲେକ୍ଟ୍ରୋନିକ୍ସ ଏବଂ ଭଡ଼ା।",
+        s4V2Title: "ରାଇଡ୍ ପ୍ରଦାନ କରନ୍ତୁ (ଟ୍ୟାକ୍ସି, ଅଟୋ ଓ ଡେଲିଭରୀ)",
+        s4V2Desc: "ବାଣିଜ୍ୟିକ ଡ୍ରାଇଭର, ଅଟୋ-ରିକ୍ସା, ସିଟି କ୍ୟାବ୍ କିମ୍ବା ପାର୍ସଲ ପରିବହନ।",
+        s4V3Title: "ଘରୋଇ ସେବା ଓ ମରାମତି",
+        s4V3Desc: "ଇଲେକ୍ଟ୍ରିସିଆନ୍, ପ୍ଲମ୍ବିଂ, ଏସି ମରାମତି, ସଫେଇ, ବିୟୁଟି ବା ଟିଉସନ୍।",
+        s4ContinueBtn: "ଆଗକୁ ବଢ଼ନ୍ତୁ →",
+        s4BackBtn: "← ପଛକୁ",
+        s5Counter: "ପଦକ୍ଷେପ ୫ / ୧୦ · ବ୍ୟବସାୟିକ ବିବରଣୀ",
+        s5Title: "ବ୍ୟବସାୟିକ ପ୍ରୋଫାଇଲ୍",
+        s5Desc: "ରାଉରକେଲାର ଗ୍ରାହକମାନଙ୍କୁ ଦୃଶ୍ୟମାନ ହେଉଥିବା ମୌଳିକ ବିବରଣୀ।",
+        s5BizNameLabel: "ବ୍ୟବସାୟ / ଦୋକାନର ନାମ *",
+        s5OwnerLabel: "ମାଲିକଙ୍କ ପୂରା ନାମ (PAN କାର୍ଡ ଅନୁଯାୟୀ) *",
+        s5CategoryLabel: "ବର୍ଗ *",
+        s5AddressLabel: "ରାଉରକେଲାରେ ଷ୍ଟୋର୍ / ପିକଅପ୍ ଠିକଣା *",
+        s5PinLabel: "ପିନ୍ କୋଡ୍ *",
+        s5SaveBtn: "ସାଇତନ୍ତୁ ଏବଂ ଆଗକୁ ବଢ଼ନ୍ତୁ →",
+        s5BackBtn: "← ପଛକୁ",
+        s6Counter: "ପଦକ୍ଷେପ ୬ / ୧୦ · ପରିଚୟ ଓ ଟ୍ୟାକ୍ସ",
+        s6Title: "ପ୍ୟାନ୍ କାର୍ଡ ଯାଞ୍ଚ",
+        s6Desc: "ରିଅଲ୍-ଟାଇମ୍ API ଦ୍ୱାରା ଯାଞ୍ଚ ହୋଇଛି। ପଞ୍ଜୀକୃତ ନାମ ବ୍ୟାଙ୍କ ଖାତା ପାଇଁ ଆଇନଗତ ପରିଚୟ ଭାବରେ ଲକ୍ ହେବ।",
+        s6PanLabel: "ପ୍ୟାନ୍ ନମ୍ବର (୧୦ ଅଙ୍କ) *",
+        panVerifyBtn: "ପ୍ୟାନ୍ ଯାଞ୍ଚ କରନ୍ତୁ",
+        panNextBtn: "ଜିଏସଟିକୁ ଆଗକୁ ବଢ଼ନ୍ତୁ →",
+        s6BackBtn: "← ପଛକୁ",
+        s7Counter: "ପଦକ୍ଷେପ ୭ / ୧୦ · ଜିଏସଟି",
+        s7Title: "ଟ୍ୟାକ୍ସ ଏବଂ ଜିଏସଟି ସ୍ଥିତି",
+        s7Desc: "ଏହି ବ୍ୟବସାୟ ପାଇଁ ଆପଣଙ୍କ ପାଖରେ ପଞ୍ଜୀକୃତ GSTIN ଅଛି କି?",
+        hasGstYesBtn: "ହଁ, ମୋର GST ଅଛି",
+        hasGstNoBtn: "GST ନାହିଁ (ଟର୍ନଓଭର < ୨୦ ଲକ୍ଷ)",
+        s7GstinLabel: "୧୫-ଅଙ୍କ ବିଶିଷ୍ଟ GSTIN *",
+        s7VerifyGstBtn: "GSTIN ଯାଞ୍ଚ କରନ୍ତୁ",
+        gstNextBtn: "ବ୍ୟାଙ୍କ ଖାତାକୁ ଆଗକୁ ବଢ଼ନ୍ତୁ →",
+        s7BackBtn: "← ପଛକୁ",
+        s8Counter: "ପଦକ୍ଷେପ ୮ / ୧୦ · ପେଆଉଟ୍ ଖାତା",
+        s8Title: "ପେଆଉଟ୍ ପାଇଁ ବ୍ୟାଙ୍କ ଖାତା",
+        s8Desc: "ବିକ୍ରି ଆୟ ଏବଂ ରାଇଡ୍ ଭଡ଼ା ସିଧାସଳଖ ପେନି-ଡ୍ରପ୍ ଯାଞ୍ଚ ମାଧ୍ୟମରେ ଏହି ଖାତାରେ ଜମା ହେବ।",
+        s8AccLabel: "ଖାତା ନମ୍ବର *",
+        s8IfscLabel: "IFSC କୋଡ୍ *",
+        s8UpiLabel: "UPI ଆଇଡି (ଇଚ୍ଛାଧୀନ)",
+        bankVerifyBtn: "ପେନି ଡ୍ରପ୍ ଦ୍ୱାରା ବ୍ୟାଙ୍କ ଯାଞ୍ଚ କରନ୍ତୁ",
+        bankNextBtn: "ଆଗକୁ ବଢ଼ନ୍ତୁ →",
+        s8BackBtn: "← ପଛକୁ",
+        s9Counter: "ପଦକ୍ଷେପ ୯ / ୧୦ · ଲାଇସେନ୍ସ",
+        licenceTitle: "FSSAI ଖାଦ୍ୟ ଲାଇସେନ୍ସ",
+        licenceSub: "ଖାଦ୍ୟ ଏବଂ ଗ୍ରୋସରୀ ବିଭାଗ ପାଇଁ ସକ୍ରିୟ ଲାଇସେନ୍ସ ଆବଶ୍ୟକ।",
+        licenceLabel: "ଲାଇସେନ୍ସ ନମ୍ବର *",
+        s9VerifyLicBtn: "ଲାଇସେନ୍ସ ଯାଞ୍ଚ କରନ୍ତୁ",
+        s9ProceedBtn: "ଚୁକ୍ତିନାମାକୁ ଆଗକୁ ବଢ଼ନ୍ତୁ →",
+        s9BackBtn: "← ପଛକୁ",
+        s10Counter: "ପଦକ୍ଷେପ ୧୦ / ୧୦ · ସହଭାଗୀ ଚୁକ୍ତିନାମା",
+        agreeTitle: "ନିୟମାବଳୀ ଏବଂ ଇ-ସାଇନ୍ ଚୁକ୍ତି",
+        agreeDesc: "ଦୟାକରି ବାଣିଜ୍ୟିକ ନୀତିଗୁଡ଼ିକର ସମୀକ୍ଷା କରନ୍ତୁ ଏବଂ OTP ସ୍ୱୀକୃତି ସହିତ ନିଶ୍ଚିତ କରନ୍ତୁ।",
+        agreeSummaryHeading: "ମୁଖ୍ୟ ବାଣିଜ୍ୟିକ ସର୍ତ୍ତାବଳୀ:",
+        readFullAgreeLink: "📄 ସମ୍ପୂର୍ଣ୍ଣ ଆଇନଗତ ଚୁକ୍ତିନାମା ଏବଂ ଧାରା ପଢ଼ନ୍ତୁ",
+        agreeConsentLabel: "ମୁଁ ଆପନାଜୋ ସହଭାଗୀ ସର୍ତ୍ତାବଳୀ ଗ୍ରହଣ କରୁଛି ଏବଂ ଏହି ଚୁକ୍ତିରେ ଇ-ସାଇନ୍ କରୁଛି।",
+        s10SubmitBtn: "ଗ୍ରହଣ କରନ୍ତୁ ଏବଂ ସମ୍ପୂର୍ଣ୍ଣ କରନ୍ତୁ →",
+        s10BackBtn: "← ପଛକୁ",
+        s11GreenTitle: "ଷ୍ଟାର୍ଟର୍ ସ୍ତର ଅନୁମୋଦିତ",
+        s11GreenDesc: "ସମସ୍ତ ପରିଚୟ ଏବଂ ବ୍ୟାଙ୍କ ଯାଞ୍ଚ ୧୦୦% ନାମ ମେଳ ସହିତ ଉତ୍ତୀର୍ଣ୍ଣ ହୋଇଛି। ଆପଣ ସକ୍ରିୟ ଅଛନ୍ତି।",
+        s11GreenBtn: "ବିକ୍ରେତା ଡ୍ୟାସବୋର୍ଡ ଖୋଲନ୍ତୁ →",
+        dashTierTitle: "ଷ୍ଟାର୍ଟର୍ ଆକ୍ସେସ୍ ସ୍ତର",
+        dashCapLabel: "ଦୈନିକ ଅର୍ଡର ସୀମା",
+        dashPayoutLabel: "ପେଆଉଟ୍ କାର୍ଯ୍ୟସୂଚୀ",
+        dashAddProdBtn: "+ ଉତ୍ପାଦ ଯୋଡନ୍ତୁ",
+        dashReferBtn: "ରେଫର୍ କରନ୍ତୁ ଏବଂ ରୋଜଗାର କରନ୍ତୁ",
+        dashStatOrders: "ଆଜିର ଅର୍ଡର",
+        dashStatSales: "ବିକ୍ରୟ",
+        dashStatPayout: "ପରବର୍ତ୍ତୀ ପେଆଉଟ୍",
+        dashHomeBtn: "← ମୁଖ୍ୟ ୱେବସାଇଟ୍‌କୁ ଫେରନ୍ତୁ"
+      },
+      bn: {
+        navTag: "পার্টনার অনবোর্ডিং",
+        navExit: "সংরক্ষণ ও প্রস্থান",
+        s1Counter: "ধাপ ১ / ১০ · স্বাগতম",
+        s1Title: "রাউরকেল্লায় আপনার ব্যবসা বৃদ্ধি করুন",
+        s1Desc: "রাউরকেল্লার সুপার অ্যাপে পণ্য বিক্রি করুন, ট্যাক্সি রাইড দিন বা হোম সার্ভিস বুক করুন। সেটআপ ১৫ মিনিটেরও কম সময়ে হয়।",
+        s1ChooseLabel: "আপনার পছন্দের ভাষা নির্বাচন করুন",
+        s1Btn: "শুরু করুন →",
+        s2Counter: "ধাপ ২ / ১০ · ফোন যাচাইকরণ",
+        s2Title: "আপনার মোবাইল নম্বর লিখুন",
+        s2Desc: "আপনার অ্যাকাউন্ট যাচাই করতে এবং অগ্রগতি সংরক্ষণ করতে আমরা একটি ৬-সংখ্যার ওটিপি পাঠাব।",
+        s2MobileLabel: "মোবাইল নম্বর",
+        s2OtpLabel: "৬-সংখ্যার OTP লিখুন",
+        s2ResendText: "OTP পুনরায় পাঠান:",
+        sendOtpBtn: "OTP পাঠান",
+        verifyOtpBtn: "যাচাই করুন এবং এগিয়ে যান →",
+        s2BackBtn: "← পিছনে",
+        s3Counter: "ধাপ ৩ / ১০ · রেফারেল কোড",
+        s3Title: "আপনার কাছে কি রেফারেল কোড আছে?",
+        s3Desc: "প্রথম ৩০ দিনের জন্য কমিশনে ৫০% ছাড় পেতে একজন অংশীদারের কোড লিখুন।",
+        s3CodeLabel: "রেফারেল কোড",
+        s3ApplyBtn: "কোড প্রয়োগ করুন",
+        s3SkipBtn: "এড়িয়ে যান →",
+        s4Counter: "ধাপ ৪ / ১০ · আপনি কি অফার করবেন?",
+        s4Title: "আপনার ব্যবসায়িক ভূমিকা নির্বাচন করুন",
+        s4Desc: "আপনি আপনাকাজোতে কী অফার করতে চান তা বেছে নিন। আপনি পরবর্তীতে অতিরিক্ত পরিষেবা যোগ করতে পারেন।",
+        s4V1Title: "পণ্য বিক্রি করুন (খুচরা, মুদি ও খাবার)",
+        s4V1Desc: "দোকান, সুপারমার্কেট, রেস্তোরাঁ, পোশাক, ইলেকট্রনিক্স এবং ভাড়া।",
+        s4V2Title: "রাইড অফার করুন (ট্যাক্সি, অটো ও ডেলিভারি)",
+        s4V2Desc: "বাণিজ্যিক ড্রাইভার, অটো-রিকশা, সিটি ক্যাব বা পার্সেল পরিবহন।",
+        s4V3Title: "হোম সার্ভিস ও মেরামত",
+        s4V3Desc: "ইলেকট্রিশিয়ান, প্লাম্বিং, এসি রক্ষণাবেক্ষণ, পরিষ্কার, সৌন্দর্য বা টিউশন।",
+        s4ContinueBtn: "এগিয়ে যান →",
+        s4BackBtn: "← পিছনে",
+        s5Counter: "ধাপ ৫ / ১০ · ব্যবসায়িক বিবরণ",
+        s5Title: "ব্যবসায়িক প্রোফাইল",
+        s5Desc: "রাউরকেল্লার গ্রাহকদের দৃশ্যমান মৌলিক বিবরণ।",
+        s5BizNameLabel: "ব্যবসা / দোকানের নাম *",
+        s5OwnerLabel: "মালিকের পুরো নাম (প্যান কার্ড অনুযায়ী) *",
+        s5CategoryLabel: "বিভাগ *",
+        s5AddressLabel: "রাউরকেল্লায় স্টোর / পিকআপ ঠিকানা *",
+        s5PinLabel: "পিন কোড *",
+        s5SaveBtn: "সংরক্ষণ করুন এবং এগিয়ে যান →",
+        s5BackBtn: "← পিছনে",
+        s6Counter: "ধাপ ৬ / ১০ · পরিচয় এবং কর",
+        s6Title: "প্যান কার্ড যাচাইকরণ",
+        s6Desc: "রিয়েল-টাইম API দ্বারা যাচাই করা হয়েছে। নিবন্ধিত নামটি ব্যাঙ্ক অ্যাকাউন্টের আইনি পরিচয় হিসাবে লক হবে।",
+        s6PanLabel: "প্যান নম্বর (১০ সংখ্যা) *",
+        panVerifyBtn: "প্যান যাচাই করুন",
+        panNextBtn: "জিএসটিতে এগিয়ে যান →",
+        s6BackBtn: "← পিছনে",
+        s7Counter: "ধাপ ৭ / ১০ · জিএসটি",
+        s7Title: "কর এবং জিএসটি স্থিতি",
+        s7Desc: "আপনার কি এই ব্যবসার জন্য নিবন্ধিত জিএসটিআইএন আছে?",
+        hasGstYesBtn: "হ্যাঁ, আমার জিএসটি আছে",
+        hasGstNoBtn: "জিএসটি নেই (টার্নওভার < ২০ লাখ)",
+        s7GstinLabel: "১৫-সংখ্যার GSTIN *",
+        s7VerifyGstBtn: "GSTIN যাচাই করুন",
+        gstNextBtn: "ব্যাঙ্ক অ্যাকাউন্টে এগিয়ে যান →",
+        s7BackBtn: "← পিছনে",
+        s8Counter: "ধাপ ৮ / ১০ · পেআউট অ্যাকাউন্ট",
+        s8Title: "পেআউটের জন্য ব্যাঙ্ক অ্যাকাউন্ট",
+        s8Desc: "বিক্রি আয় এবং রাইডের ভাড়া পেনি-ড্রপ যাচাইকরণের মাধ্যমে সরাসরি এই অ্যাকাউন্টে জমা হবে।",
+        s8AccLabel: "অ্যাকাউন্ট নম্বর *",
+        s8IfscLabel: "IFSC কোড *",
+        s8UpiLabel: "UPI আইডি (ঐচ্ছিক)",
+        bankVerifyBtn: "পেনি ড্রপ দিয়ে ব্যাঙ্ক যাচাই করুন",
+        bankNextBtn: "এগিয়ে যান →",
+        s8BackBtn: "← পিছনে",
+        s9Counter: "ধাপ ৯ / ১০ · লাইসেন্স",
+        licenceTitle: "FSSAI খাদ্য লাইসেন্স",
+        licenceSub: "খাদ্য এবং মুদি বিভাগের জন্য সক্রিয় লাইসেন্স প্রয়োজন।",
+        licenceLabel: "লাইসেন্স নম্বর *",
+        s9VerifyLicBtn: "লাইসেন্স যাচাই করুন",
+        s9ProceedBtn: "চুক্তিতে এগিয়ে যান →",
+        s9BackBtn: "← পিছনে",
+        s10Counter: "ধাপ ১০ / ১০ · অংশীদার চুক্তি",
+        agreeTitle: "শর্তাবলী এবং ই-স্বাক্ষর চুক্তি",
+        agreeDesc: "অনুগ্রহ করে বাণিজ্যিক নীতিগুলি পর্যালোচনা করুন এবং ওটিপি গ্রহণযোগ্যতার সাথে নিশ্চিত করুন।",
+        agreeSummaryHeading: "মূল বাণিজ্যিক শর্তাবলী:",
+        readFullAgreeLink: "📄 সম্পূর্ণ আইনি চুক্তি এবং ধারা পড়ুন",
+        agreeConsentLabel: "আমি আপনাকাজো অংশীদারের শর্তাবলী স্বীকার করছি এবং এই চুক্তিতে ই-স্বাক্ষর করছি।",
+        s10SubmitBtn: "স্বীকার করুন এবং সম্পূর্ণ করুন →",
+        s10BackBtn: "← পিছনে",
+        s11GreenTitle: "স্টার্টার স্তর অনুমোদিত",
+        s11GreenDesc: "সমস্ত পরিচয় এবং ব্যাঙ্ক যাচাইকরণ ১০০% নামের মিল সহ উত্তীর্ণ হয়েছে। আপনি সক্রিয় আছেন।",
+        s11GreenBtn: "বিক্রেতা ড্যাশবোর্ড খুলুন →",
+        dashTierTitle: "স্টার্টার অ্যাক্সেস স্তর",
+        dashCapLabel: "দৈনিক অর্ডার সীমা",
+        dashPayoutLabel: "পেআউট সময়সূচী",
+        dashAddProdBtn: "+ পণ্য যোগ করুন",
+        dashReferBtn: "রেফার করুন এবং উপার্জন করুন",
+        dashStatOrders: "আজকের অর্ডার",
+        dashStatSales: "বিক্রয়",
+        dashStatPayout: "পরবর্তী পেআউট",
+        dashHomeBtn: "← ওয়েবসাইটে ফিরে যান"
+      }
+    };
+
     var state = {
       currentStep: 1,
       lang: 'en',
@@ -1020,6 +1416,47 @@
       } catch(e){}
     }
 
+    function applyLanguage(lang) {
+      if (!TRANSLATIONS[lang]) lang = 'en';
+      state.lang = lang;
+      document.documentElement.lang = lang;
+
+      // Sync Navbar Dropdown
+      var navSelect = document.getElementById('navLangSelect');
+      if (navSelect && navSelect.value !== lang) {
+        navSelect.value = lang;
+      }
+
+      // Sync Step 1 Cards
+      document.querySelectorAll('.lang-card').forEach(function(c){ c.classList.remove('selected'); });
+      var cardMap = { en: 'cardLangEn', hi: 'cardLangHi', or: 'cardLangOr', bn: 'cardLangBn' };
+      var activeCard = document.getElementById(cardMap[lang]);
+      if (activeCard) activeCard.classList.add('selected');
+
+      // Update text in DOM
+      var dict = TRANSLATIONS[lang];
+      for (var key in dict) {
+        var el = document.getElementById(key);
+        if (el) {
+          el.textContent = dict[key];
+        }
+      }
+
+      // Save preference
+      try {
+        localStorage.setItem('apnazo_seller_lang', lang);
+      } catch(e){}
+    }
+
+    function changeLanguage(lang) {
+      applyLanguage(lang);
+      autosave();
+    }
+
+    function selectLang(code, el) {
+      changeLanguage(code);
+    }
+
     function updateProgress(stepNum) {
       var pct = Math.min(100, Math.round((stepNum / 10) * 100));
       var bar = document.getElementById('progBar');
@@ -1039,13 +1476,6 @@
         window.scrollTo({ top: 0, behavior: 'smooth' });
         autosave();
       }
-    }
-
-    function selectLang(code, el) {
-      state.lang = code;
-      document.querySelectorAll('.lang-card').forEach(function(c){ c.classList.remove('selected'); });
-      el.classList.add('selected');
-      autosave();
     }
 
     function handleSendOtp() {
@@ -1102,12 +1532,12 @@
       var licTitle = document.getElementById('licenceTitle');
       var licLabel = document.getElementById('licenceLabel');
       if (cat.includes('Taxi') || cat.includes('Rides')) {
-        licTitle.textContent = 'Commercial driving licence';
+        licTitle.textContent = state.lang === 'hi' ? 'कमर्शियल ड्राइविंग लाइसेंस' : (state.lang === 'or' ? 'ବାଣିଜ୍ୟିକ ଡ୍ରାଇଭିଂ ଲାଇସେନ୍ସ' : (state.lang === 'bn' ? 'বাণিজ্যিক ড্রাইভিং লাইসেন্স' : 'Commercial driving licence'));
         licLabel.textContent = 'Driving Licence Number *';
         document.getElementById('licenceNum').value = 'OD-1420190014521';
         state.licence.type = 'Commercial DL';
       } else {
-        licTitle.textContent = 'FSSAI food licence';
+        licTitle.textContent = state.lang === 'hi' ? 'FSSAI खाद्य लाइसेंस' : (state.lang === 'or' ? 'FSSAI ଖାଦ୍ୟ ଲାଇସେନ୍ସ' : (state.lang === 'bn' ? 'FSSAI খাদ্য লাইসেন্স' : 'FSSAI food licence'));
         licLabel.textContent = '14-Digit FSSAI Registration Number *';
         document.getElementById('licenceNum').value = '12023001004512';
         state.licence.type = 'FSSAI';
@@ -1296,9 +1726,9 @@
         if (res && res.success && res.agreement) {
           currentAgreementData = res.agreement;
           var a = res.agreement;
-          if (a.title) document.getElementById('agreeTitle').textContent = a.title;
-          if (a.summaryHeading) document.getElementById('agreeSummaryHeading').textContent = a.summaryHeading;
-          if (a.consentCheckboxLabel) document.getElementById('agreeConsentLabel').textContent = a.consentCheckboxLabel;
+          if (a.title && state.lang === 'en') document.getElementById('agreeTitle').textContent = a.title;
+          if (a.summaryHeading && state.lang === 'en') document.getElementById('agreeSummaryHeading').textContent = a.summaryHeading;
+          if (a.consentCheckboxLabel && state.lang === 'en') document.getElementById('agreeConsentLabel').textContent = a.consentCheckboxLabel;
           if (a.terms && a.terms.length) {
             document.getElementById('agreeTermsList').innerHTML = a.terms.map(t => '<li>' + escapeHtml(t) + '</li>').join('');
           }
@@ -1323,7 +1753,18 @@
       return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
     }
 
-    // Start
+    // Initialize Language & Progress
+    var initLang = 'en';
+    try {
+      var storedLang = localStorage.getItem('apnazo_seller_lang');
+      if (storedLang && TRANSLATIONS[storedLang]) {
+        initLang = storedLang;
+      } else if (state.lang && TRANSLATIONS[state.lang]) {
+        initLang = state.lang;
+      }
+    } catch(e){}
+
+    applyLanguage(initLang);
     updateProgress(1);
     loadAgreement();
   </script>
