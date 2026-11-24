@@ -1,0 +1,154 @@
+[
+  {
+    "id": "SEL-202611-001",
+    "mobile": "9861234567",
+    "lang": "en",
+    "refCode": "RKLSTEEL50",
+    "verticals": ["Ecommerce"],
+    "basics": {
+      "bizName": "Rourkela Steel Grocers",
+      "ownerName": "Ramesh Chandra Sahu",
+      "category": "Retail & Grocery",
+      "address": "Daily Market, Main Road, Sector 1, Rourkela, Odisha 769001",
+      "lat": 22.2575,
+      "lng": 84.8647
+    },
+    "pan": {
+      "panNumber": "ABCPS1234F",
+      "registeredName": "RAMESH CHANDRA SAHU",
+      "verified": true
+    },
+    "gst": {
+      "hasGst": true,
+      "gstin": "21ABCPS1234F1Z5",
+      "tradeName": "ROURKELA STEEL GROCERS",
+      "verified": true
+    },
+    "bank": {
+      "accountNumber": "50100234567890",
+      "ifsc": "HDFC0001234",
+      "beneficiaryName": "RAMESH CHANDRA SAHU",
+      "nameMatchScore": 100,
+      "verified": true
+    },
+    "licence": {
+      "type": "FSSAI",
+      "number": "12023001004512",
+      "verified": true
+    },
+    "tier": "STARTER",
+    "decision": "GREEN",
+    "status": "Active",
+    "createdAt": "2026-11-20T10:15:00.000Z",
+    "updatedAt": "2026-11-20T10:30:00.000Z",
+    "auditLog": [
+      {
+        "timestamp": "2026-11-20T10:30:00.000Z",
+        "actor": "System Risk Engine",
+        "decision": "GREEN",
+        "reason": "100% name match across PAN, GST, and Bank account. Auto-approved to Starter tier."
+      }
+    ]
+  },
+  {
+    "id": "SEL-202611-002",
+    "mobile": "9437123890",
+    "lang": "or",
+    "refCode": "RKLSELLER",
+    "verticals": ["Taxi"],
+    "basics": {
+      "bizName": "Maa Tarini City Cabs",
+      "ownerName": "Bikash Kumar Mohapatra",
+      "category": "Taxi & City Rides",
+      "address": "Near Rourkela Railway Station, Uditnagar, Rourkela 769012",
+      "lat": 22.2312,
+      "lng": 84.8519
+    },
+    "pan": {
+      "panNumber": "BKMPM4567K",
+      "registeredName": "BIKASH KUMAR MOHAPATRA",
+      "verified": true
+    },
+    "gst": {
+      "hasGst": false,
+      "nonGstReason": "Threshold Exemption (< 20 Lakhs)",
+      "verified": true
+    },
+    "bank": {
+      "accountNumber": "30458821901",
+      "ifsc": "SBIN0000171",
+      "beneficiaryName": "BIKASH MOHAPATRA",
+      "nameMatchScore": 75,
+      "verified": true
+    },
+    "licence": {
+      "type": "Commercial DL",
+      "number": "OD-1420190014521",
+      "verified": true
+    },
+    "tier": "UNDER_REVIEW",
+    "decision": "AMBER",
+    "status": "Pending Admin Review",
+    "createdAt": "2026-11-23T14:20:00.000Z",
+    "updatedAt": "2026-11-23T14:45:00.000Z",
+    "auditLog": [
+      {
+        "timestamp": "2026-11-23T14:45:00.000Z",
+        "actor": "System Risk Engine",
+        "decision": "AMBER",
+        "reason": "Bank beneficiary 'BIKASH MOHAPATRA' scored 75% match against PAN name 'BIKASH KUMAR MOHAPATRA'. Queued for manual admin review."
+      }
+    ]
+  },
+  {
+    "id": "SEL-202611-003",
+    "mobile": "9937012345",
+    "lang": "hi",
+    "refCode": "",
+    "verticals": ["Services"],
+    "basics": {
+      "bizName": "Bisra Electricals & AC Care",
+      "ownerName": "Ananya Dash",
+      "category": "Home Services & Repairs",
+      "address": "Koel Nagar, C Block, Rourkela, Odisha 769014",
+      "lat": 22.2612,
+      "lng": 84.9011
+    },
+    "pan": {
+      "panNumber": "AGYPD9876K",
+      "registeredName": "ANANYA DASH",
+      "verified": true
+    },
+    "gst": {
+      "hasGst": true,
+      "gstin": "21AGYPD9876K1Z9",
+      "tradeName": "BISRA ELECTRICALS & AC CARE",
+      "verified": true
+    },
+    "bank": {
+      "accountNumber": "91201004561234",
+      "ifsc": "UTIB0000456",
+      "beneficiaryName": "ANANYA DASH",
+      "nameMatchScore": 100,
+      "verified": true
+    },
+    "licence": {
+      "type": "Govt Skill Certificate",
+      "number": "ITI-EE-2018-882",
+      "verified": true
+    },
+    "tier": "VERIFIED",
+    "decision": "GREEN",
+    "status": "Active",
+    "createdAt": "2026-11-18T09:00:00.000Z",
+    "updatedAt": "2026-11-19T11:20:00.000Z",
+    "auditLog": [
+      {
+        "timestamp": "2026-11-19T11:20:00.000Z",
+        "actor": "Admin (Prakash)",
+        "decision": "GREEN",
+        "reason": "Verified skill certificate & GST status. Upgraded to Verified tier."
+      }
+    ]
+  }
+]

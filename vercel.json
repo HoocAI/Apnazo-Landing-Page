@@ -1,6 +1,12 @@
 {
   "version": 2,
   "rewrites": [
-    { "source": "/api/(.*)", "destination": "/api/$1" }
+    { "source": "/api/seller/profile/save", "destination": "/api/seller-save" },
+    { "source": "/api/seller/profile", "destination": "/api/seller-profile" },
+    { "source": "/api/admin/seller/decision", "destination": "/api/seller-decision" },
+    { "source": "/api/admin/sellers", "destination": "/api/admin-sellers" },
+    { "source": "/api/(.*)", "destination": "/api/$1" },
+    { "source": "/seller", "destination": "/seller.html" },
+    { "source": "/admin", "destination": "/admin.html" }
   ]
 }

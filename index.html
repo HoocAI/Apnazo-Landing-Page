@@ -1426,6 +1426,7 @@
         display: none !important;
       }
       .hero {
+        padding-bottom: 48px;
         min-height: 100vh;
         min-height: 100dvh;
         display: flex;
@@ -1444,6 +1445,7 @@
       .body {
         flex: 1;
         grid-template-columns: 1fr;
+        padding-top: 28px;
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -1505,11 +1507,13 @@
         padding-right: max(16px, env(safe-area-inset-right, 0px));
       }
       .hero {
+        padding-bottom: 24px;
         min-height: 100vh;
         min-height: 100dvh;
         padding-bottom: max(16px, env(safe-area-inset-bottom, 0px));
       }
       .body {
+        padding-top: 10px;
         padding-top: 6px;
         padding-bottom: 12px;
         gap: 0;
@@ -1651,6 +1655,10 @@
       .card-back .back-footer {
         font-size: 11px;
       }
+      .sv {
+        padding: 20px 0 44px;
+      }
+      .why, .band, .city, .faq {
       .sv, .why, .band, .city, .faq {
         padding: 48px 0;
       }
@@ -1910,6 +1918,7 @@
         <a href="#why">Why Apnazo</a>
         <a href="#rewards">Rewards</a>
         <a href="#business">For Business</a>
+        <a href="/seller.html" style="color:var(--orange); font-weight:700;">Partner with us</a>
         <a class="btn menu-btn" href="#join">Get notified</a>
       </div>
       <div class="nav-actions">
@@ -2350,8 +2359,8 @@
       <div class="a">
         <p class="eyebrow" style="color:var(--orange)">For local businesses</p>
         <h2>Run a shop or service in Rourkela?</h2>
-        <p>Apnazo is built to bring local businesses and their neighbours closer. Tell us you are interested and we will be in touch.</p>
-        <a class="btn o" href="#join">Partner with us</a>
+        <p>Apnazo is built to bring local businesses and their neighbours closer. Start selling, driving or offering services in 15 minutes.</p>
+        <a class="btn o" href="/seller.html">Partner with us (Start Onboarding) &rarr;</a>
       </div>
       <div class="glass">
         <h3>Made for</h3>
@@ -2432,7 +2441,11 @@
 
 <footer>
   <div class="in">
-    <a href="#" class="wm">Apna<b>zo</b></a>
+    <div style="display:flex; align-items:center; gap:24px; flex-wrap:wrap;">
+      <a href="#" class="wm">Apna<b>zo</b></a>
+      <a href="/seller.html" style="color:var(--orange); font-weight:600; text-decoration:none; font-size:14px;">Become a Partner / Seller</a>
+      <a href="/admin" style="color:var(--muted); text-decoration:none; font-size:13px;">Admin Portal</a>
+    </div>
     <div class="r">Apnazo.com &middot; Rourkela, The Steel City</div>
   </div>
 </footer>
