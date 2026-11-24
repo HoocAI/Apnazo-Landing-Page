@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>Apnazo Partner Onboarding - Sell, Drive or Provide Services</title>
+  <title>Apnazo Partner Onboarding — Sell, Drive & Offer Services in Rourkela</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@600;700;800&display=swap">
@@ -11,20 +11,24 @@
     :root {
       --blue: #0f43b3;
       --deep: #0a2a75;
+      --navy: #071946;
       --orange: #ff7a00;
+      --orange-grad: linear-gradient(135deg, #ff7a00, #ff5500);
       --ink: #0b1b45;
       --muted: #5a6785;
-      --bg: #f3f7ff;
+      --bg: #f4f8ff;
       --white: #ffffff;
-      --green: #17935b;
-      --green-light: #e8f8f0;
-      --amber: #d97706;
+      --green: #10b981;
+      --green-light: #ecfdf5;
+      --amber: #f59e0b;
       --amber-light: #fffbeb;
-      --red: #dc2626;
+      --red: #ef4444;
       --red-light: #fef2f2;
       --border: #e2e8f0;
+      --border-focus: #0f43b3;
       --display: "Sora", -apple-system, sans-serif;
       --body: "Inter", -apple-system, sans-serif;
+      --shadow-card: 0 24px 60px -12px rgba(15, 67, 179, 0.12), 0 4px 16px rgba(11, 27, 69, 0.04);
     }
 
     * { box-sizing: border-box; }
@@ -35,175 +39,415 @@
       color: var(--ink);
       font-family: var(--body);
       -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+      min-height: 100dvh;
+      overflow-x: hidden;
+    }
+
+    /* Ambient background glows for high-end depth */
+    .ambient-glow-1 {
+      position: fixed;
+      width: 600px;
+      height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(15, 67, 179, 0.09) 0%, rgba(15, 67, 179, 0) 70%);
+      top: -150px;
+      right: -100px;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .ambient-glow-2 {
+      position: fixed;
+      width: 500px;
+      height: 500px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 122, 0, 0.07) 0%, rgba(255, 122, 0, 0) 70%);
+      bottom: -100px;
+      left: 30%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Outer 2-Column Split Onboarding Layout */
+    .app-shell {
+      position: relative;
+      z-index: 1;
       display: flex;
-      flex-direction: column;
       min-height: 100vh;
       min-height: 100dvh;
     }
 
-    /* Top Bar & Progress */
-    header {
-      background: rgba(255, 255, 255, 0.92);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
+    /* Left Brand Showcase Sidebar (Desktop >= 960px) */
+    .brand-sidebar {
+      width: 420px;
+      background: linear-gradient(160deg, #071946 0%, #0a2a75 55%, #0f43b3 100%);
+      color: #fff;
+      padding: 40px 36px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
       position: sticky;
       top: 0;
-      z-index: 100;
-      border-bottom: 1px solid rgba(15, 67, 179, 0.08);
+      height: 100vh;
+      flex-shrink: 0;
+      box-shadow: 10px 0 35px rgba(7, 25, 70, 0.15);
+      border-right: 1px solid rgba(255, 255, 255, 0.1);
     }
-    .nav-inner {
-      max-width: 600px;
-      margin: 0 auto;
-      padding: 12px 16px;
+
+    .brand-top {
       display: flex;
-      align-items: center;
-      justify-content: space-between;
+      flex-direction: column;
+      gap: 24px;
     }
-    .brand {
-      font-family: var(--display);
-      font-weight: 800;
-      font-size: 22px;
-      color: var(--blue);
-      text-decoration: none;
-    }
-    .brand b { color: var(--orange); }
-    .nav-tools {
+
+    .brand-header {
       display: flex;
       align-items: center;
       gap: 12px;
     }
-    .lang-pill {
-      font-size: 13px;
-      font-weight: 600;
-      background: #e3ecff;
-      color: var(--blue);
-      border: 0;
-      border-radius: 99px;
-      padding: 6px 12px;
-      cursor: pointer;
-    }
-    .help-link {
-      font-size: 13px;
-      color: var(--muted);
+
+    .brand-logo {
+      font-family: var(--display);
+      font-weight: 800;
+      font-size: 26px;
+      color: #fff;
       text-decoration: none;
-      font-weight: 500;
+      letter-spacing: -0.04em;
+    }
+    .brand-logo b { color: var(--orange); }
+
+    .partner-pill {
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #ffd4a8;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 99px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
     }
 
-    /* Progress bar */
-    .prog-track {
-      width: 100%;
-      height: 4px;
-      background: #e2e8f0;
-      overflow: hidden;
+    .sidebar-intro h2 {
+      font-family: var(--display);
+      font-size: 24px;
+      font-weight: 700;
+      line-height: 1.25;
+      margin: 0 0 10px;
+      color: #ffffff;
     }
-    .prog-bar {
-      height: 100%;
-      background: linear-gradient(90deg, var(--blue), var(--orange));
-      width: 10%;
-      transition: width 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    .sidebar-intro p {
+      margin: 0;
+      font-size: 14px;
+      line-height: 1.5;
+      color: #c0d1fc;
     }
 
-    /* Container for form screens */
-    main {
-      flex: 1;
-      max-width: 520px;
-      width: 100%;
-      margin: 0 auto;
-      padding: 20px 16px 40px;
+    /* Stepper on left */
+    .stepper-nav {
+      list-style: none;
+      padding: 0;
+      margin: 28px 0;
       display: flex;
       flex-direction: column;
+      gap: 16px;
     }
 
-    /* Step Card */
-    .card {
-      background: var(--white);
-      border-radius: 24px;
-      padding: 24px 20px;
-      box-shadow: 0 12px 32px -4px rgba(15, 67, 179, 0.08);
-      border: 1px solid rgba(15, 67, 179, 0.06);
+    .step-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      opacity: 0.55;
+      transition: all 0.25s ease;
+    }
+    .step-item.active {
+      opacity: 1;
+    }
+    .step-item.done {
+      opacity: 0.85;
+    }
+
+    .step-circle {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.12);
+      border: 1.5px solid rgba(255, 255, 255, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 700;
+      color: #fff;
+      flex-shrink: 0;
+      transition: all 0.25s ease;
+    }
+
+    .step-item.active .step-circle {
+      background: var(--orange);
+      border-color: #ff9d42;
+      box-shadow: 0 0 16px rgba(255, 122, 0, 0.6);
+      transform: scale(1.1);
+    }
+    .step-item.done .step-circle {
+      background: var(--green);
+      border-color: #34d399;
+      color: #fff;
+    }
+
+    .step-label {
+      font-size: 13.5px;
+      font-weight: 600;
+      color: #fff;
+    }
+    .step-item.active .step-label {
+      color: #ffffff;
+      font-weight: 700;
+    }
+
+    /* Bottom Trust Card */
+    .sidebar-trust {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 16px;
+      padding: 16px;
+      backdrop-filter: blur(10px);
+    }
+    .trust-quote {
+      font-size: 12.5px;
+      color: #dbe7ff;
+      line-height: 1.45;
+      margin: 0 0 10px;
+      font-style: italic;
+    }
+    .trust-author {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #ffb066;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .stat-pills {
+      display: flex;
+      gap: 6px;
+      margin-top: 12px;
+      flex-wrap: wrap;
+    }
+    .stat-pill {
+      font-size: 11px;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 3px 8px;
+      border-radius: 6px;
+      color: #fff;
+    }
+
+    /* Right Main Content Stage */
+    .main-stage {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
       position: relative;
+      min-width: 0;
     }
 
-    .step-badge {
+    /* Top Navigation Bar on Main Stage */
+    .stage-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 36px;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(15, 67, 179, 0.08);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+    .mobile-brand {
+      display: none;
+      align-items: center;
+      gap: 8px;
+    }
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-left: auto;
+    }
+
+    .top-pill-btn {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      background: #ffebd6;
-      color: var(--orange);
+      background: #edf3ff;
+      color: var(--blue);
+      border: 1px solid rgba(15, 67, 179, 0.15);
+      padding: 7px 14px;
+      border-radius: 99px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.18s ease;
+    }
+    .top-pill-btn:hover {
+      background: #e1ebff;
+      transform: translateY(-1px);
+    }
+
+    /* Smooth Progress Track on Topbar */
+    .mobile-progress-wrap {
+      display: none;
+      height: 3px;
+      background: #e2e8f0;
+      width: 100%;
+    }
+    .mobile-progress-bar {
+      height: 100%;
+      background: var(--orange-grad);
+      width: 12%;
+      transition: width 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* Form Container */
+    .form-container {
+      flex: 1;
+      max-width: 640px;
+      width: 100%;
+      margin: 40px auto 60px;
+      padding: 0 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    /* The Main Card */
+    .card {
+      background: #ffffff;
+      border-radius: 28px;
+      padding: 38px 36px;
+      box-shadow: var(--shadow-card);
+      border: 1px solid rgba(255, 255, 255, 0.9);
+      position: relative;
+      animation: cardAppear 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    @keyframes cardAppear {
+      from { opacity: 0; transform: translateY(12px) scale(0.99); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    /* Step Header Meta */
+    .card-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+
+    .badge-step {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #fff4ea;
+      color: #ea580c;
+      border: 1px solid rgba(255, 122, 0, 0.22);
       font-size: 12px;
       font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
-      padding: 4px 10px;
+      letter-spacing: 0.06em;
+      padding: 5px 12px;
       border-radius: 99px;
-      margin-bottom: 12px;
     }
 
-    h1, h2 {
-      font-family: var(--display);
-      margin: 0 0 8px;
-      color: var(--deep);
-      font-size: 24px;
-      letter-spacing: -0.03em;
+    .step-time-hint {
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 500;
     }
+
+    h1 {
+      font-family: var(--display);
+      margin: 0 0 10px;
+      color: var(--deep);
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -0.035em;
+      line-height: 1.2;
+    }
+
     p.sub {
       color: var(--muted);
-      font-size: 14.5px;
-      margin: 0 0 20px;
-      line-height: 1.45;
+      font-size: 15px;
+      line-height: 1.5;
+      margin: 0 0 28px;
     }
 
-    /* Form Inputs */
+    /* Clean, Modern Form Controls */
     .field {
-      margin-bottom: 16px;
+      margin-bottom: 20px;
     }
     label {
-      display: block;
+      display: flex;
+      justify-content: space-between;
       font-size: 13.5px;
       font-weight: 600;
       color: var(--ink);
-      margin-bottom: 6px;
+      margin-bottom: 8px;
     }
+    label span.opt {
+      color: var(--muted);
+      font-weight: 400;
+      font-size: 12.5px;
+    }
+
     .input-wrap {
       position: relative;
       display: flex;
       align-items: center;
     }
+
     input[type="text"],
     input[type="tel"],
     input[type="number"],
     select {
       width: 100%;
-      padding: 13px 14px;
+      padding: 14px 16px;
       border-radius: 14px;
       border: 1.5px solid var(--border);
-      background: #f8faff;
+      background: #f8fbff;
       font-family: var(--body);
-      font-size: 15px;
+      font-size: 15.5px;
       color: var(--ink);
       outline: none;
-      transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     }
     input:focus, select:focus {
       border-color: var(--blue);
       background: #ffffff;
-      box-shadow: 0 0 0 3.5px rgba(15, 67, 179, 0.12);
+      box-shadow: 0 0 0 4px rgba(15, 67, 179, 0.12);
+    }
+
+    .with-prefix input {
+      padding-left: 60px;
     }
     .input-prefix {
       position: absolute;
-      left: 14px;
+      left: 16px;
       font-size: 15px;
-      font-weight: 600;
-      color: var(--muted);
-    }
-    .with-prefix input {
-      padding-left: 52px;
+      font-weight: 700;
+      color: var(--blue);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      pointer-events: none;
     }
 
     /* Buttons */
     .btn {
       width: 100%;
-      padding: 14px 20px;
+      padding: 15px 24px;
       border-radius: 14px;
       background: var(--blue);
       color: #fff;
@@ -212,155 +456,259 @@
       font-weight: 700;
       border: 0;
       cursor: pointer;
-      display: flex;
+      display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
-      transition: transform 0.18s, background 0.18s, box-shadow 0.18s;
-      margin-top: 10px;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      margin-top: 12px;
       text-decoration: none;
+      box-shadow: 0 8px 20px -2px rgba(15, 67, 179, 0.25);
     }
     .btn:hover {
       background: var(--deep);
-      transform: translateY(-1px);
-      box-shadow: 0 8px 20px -2px rgba(15, 67, 179, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 26px -2px rgba(15, 67, 179, 0.35);
     }
     .btn:active {
       transform: translateY(0);
     }
+
     .btn-orange {
-      background: linear-gradient(135deg, #ff7a00, #ff5500);
-      box-shadow: 0 8px 20px -2px rgba(255, 122, 0, 0.35);
+      background: var(--orange-grad);
+      box-shadow: 0 8px 24px -2px rgba(255, 122, 0, 0.38);
     }
     .btn-orange:hover {
-      background: linear-gradient(135deg, #e66e00, #e64d00);
+      background: linear-gradient(135deg, #f07000, #ea4a00);
+      box-shadow: 0 12px 28px -2px rgba(255, 122, 0, 0.45);
     }
+
     .btn-outline {
       background: transparent;
       color: var(--muted);
       border: 1.5px solid var(--border);
       box-shadow: none;
-      margin-top: 8px;
+      margin-top: 10px;
     }
     .btn-outline:hover {
-      background: #f8faff;
+      background: #f1f5fc;
       color: var(--ink);
+      border-color: #cbd5e1;
+      transform: none;
+      box-shadow: none;
     }
 
-    /* Option Cards & Tiles */
-    .option-grid {
+    /* Typographic Language Selector Cards (S1) */
+    .lang-grid {
       display: grid;
-      gap: 12px;
-      margin-bottom: 20px;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 24px;
     }
-    .option-card {
-      padding: 16px;
-      border-radius: 16px;
+    .lang-card {
+      padding: 16px 18px;
+      border-radius: 18px;
       border: 2px solid var(--border);
       background: #fbfdff;
       cursor: pointer;
       display: flex;
       align-items: center;
       gap: 14px;
-      transition: all 0.2s ease;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
       user-select: none;
+      position: relative;
     }
-    .option-card:hover {
+    .lang-card:hover {
       border-color: #cbd5e1;
-      background: #f1f5ff;
+      background: #f4f8ff;
+      transform: translateY(-1px);
     }
-    .option-card.selected {
+    .lang-card.selected {
       border-color: var(--blue);
       background: #eef4ff;
+      box-shadow: 0 8px 20px -4px rgba(15, 67, 179, 0.12);
     }
-    .opt-icon {
+
+    .lang-icon-badge {
       width: 44px;
       height: 44px;
-      border-radius: 12px;
-      display: grid;
-      place-items: center;
-      font-size: 20px;
-      background: #fff;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.04);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--display);
+      font-size: 17px;
+      font-weight: 800;
       flex-shrink: 0;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
     }
-    .opt-info b {
+    .badge-en { background: #e0e7ff; color: #3730a3; }
+    .badge-hi { background: #ffedd5; color: #c2410c; }
+    .badge-or { background: #dcfce7; color: #15803d; }
+    .badge-bn { background: #ffe4e6; color: #be123c; }
+
+    .lang-details b {
       display: block;
-      font-size: 15px;
+      font-size: 16px;
+      color: var(--ink);
+      margin-bottom: 2px;
+    }
+    .lang-details span {
+      font-size: 12.5px;
+      color: var(--muted);
+      display: block;
+    }
+    .lang-check {
+      position: absolute;
+      right: 14px;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--blue);
+      color: #fff;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: bold;
+    }
+    .lang-card.selected .lang-check {
+      display: flex;
+    }
+
+    /* Vertical Selector Cards (S4) */
+    .vertical-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+    .vertical-card {
+      padding: 18px 20px;
+      border-radius: 18px;
+      border: 2px solid var(--border);
+      background: #fbfdff;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .vertical-card:hover {
+      border-color: #cbd5e1;
+      background: #f5f8ff;
+    }
+    .vertical-card.selected {
+      border-color: var(--blue);
+      background: #eef4ff;
+      box-shadow: 0 8px 20px -4px rgba(15, 67, 179, 0.12);
+    }
+
+    .vert-icon-wrap {
+      width: 52px;
+      height: 52px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      flex-shrink: 0;
+      background: #fff;
+      box-shadow: 0 4px 12px rgba(15, 67, 179, 0.08);
+    }
+    .vert-content {
+      flex: 1;
+    }
+    .vert-content b {
+      display: block;
+      font-size: 16px;
       color: var(--ink);
       margin-bottom: 3px;
     }
-    .opt-info span {
+    .vert-content span {
       font-size: 13px;
       color: var(--muted);
-      line-height: 1.35;
       display: block;
+      line-height: 1.4;
+    }
+    .vert-tag {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      background: #e0f2fe;
+      color: #0369a1;
+      padding: 2px 8px;
+      border-radius: 6px;
+      margin-top: 6px;
     }
 
-    /* Verification Box */
+    /* Verification Box Messages */
     .verif-box {
-      border-radius: 14px;
-      padding: 14px 16px;
-      margin: 12px 0 18px;
+      border-radius: 16px;
+      padding: 16px 18px;
+      margin: 14px 0 20px;
       display: flex;
       align-items: flex-start;
-      gap: 12px;
-      font-size: 13.5px;
-      line-height: 1.45;
+      gap: 14px;
+      font-size: 14px;
+      line-height: 1.5;
     }
+    .verif-box strong { font-weight: 700; }
     .verif-success {
       background: var(--green-light);
-      color: #0d5f3a;
-      border: 1px solid rgba(23, 147, 91, 0.25);
+      color: #065f46;
+      border: 1.5px solid rgba(16, 185, 129, 0.3);
     }
     .verif-amber {
       background: var(--amber-light);
       color: #92400e;
-      border: 1px solid rgba(217, 119, 6, 0.25);
+      border: 1.5px solid rgba(245, 158, 11, 0.35);
     }
     .verif-error {
       background: var(--red-light);
       color: #991b1b;
-      border: 1px solid rgba(220, 38, 38, 0.25);
+      border: 1.5px solid rgba(239, 68, 68, 0.35);
     }
 
-    /* Live Checklist */
+    /* Live Status Checklist */
     .checklist {
       list-style: none;
       padding: 0;
-      margin: 16px 0;
+      margin: 20px 0;
       display: grid;
-      gap: 10px;
+      gap: 12px;
     }
     .checklist li {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 12px 14px;
-      border-radius: 12px;
-      background: #f8faff;
+      padding: 14px 18px;
+      border-radius: 14px;
+      background: #f8fbff;
       border: 1px solid var(--border);
-      font-size: 14px;
-      font-weight: 500;
+      font-size: 14.5px;
+      font-weight: 600;
     }
     .status-pill {
-      font-size: 11px;
+      font-size: 11.5px;
       font-weight: 700;
-      padding: 3px 8px;
+      padding: 4px 10px;
       border-radius: 99px;
       text-transform: uppercase;
+      letter-spacing: 0.04em;
     }
     .status-green { background: #dcfce7; color: #166534; }
     .status-amber { background: #fef3c7; color: #92400e; }
     .status-blue { background: #e0e7ff; color: #3730a3; }
 
-    /* Tier & Dashboards */
+    /* Tier Card on Starter Dashboard */
     .tier-badge-card {
-      background: linear-gradient(135deg, var(--deep), var(--blue));
+      background: linear-gradient(135deg, #071946 0%, #0f43b3 100%);
       color: #fff;
-      border-radius: 20px;
-      padding: 22px 20px;
-      margin-bottom: 20px;
+      border-radius: 22px;
+      padding: 24px;
+      margin-bottom: 22px;
+      box-shadow: 0 12px 28px rgba(15, 67, 179, 0.2);
     }
     .tier-badge-card h2 {
       color: #fff;
@@ -370,809 +718,1032 @@
     .tier-caps {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-top: 14px;
-      padding-top: 14px;
-      border-top: 1px solid rgba(255,255,255,0.18);
+      gap: 16px;
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid rgba(255, 255, 255, 0.18);
     }
     .cap-item small {
       display: block;
       color: #cbd5e1;
-      font-size: 11.5px;
+      font-size: 12px;
     }
     .cap-item b {
-      font-size: 16px;
+      font-size: 18px;
       color: #fff;
+      margin-top: 2px;
+      display: block;
     }
 
-    /* Hidden utility */
     .hidden { display: none !important; }
-    .fade-in { animation: fadeIn 0.25s ease-out; }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(6px); }
-      to { opacity: 1; transform: translateY(0); }
+
+    /* Responsive Breakpoints */
+    @media (max-width: 960px) {
+      .app-shell {
+        flex-direction: column;
+      }
+      .brand-sidebar {
+        display: none;
+      }
+      .mobile-brand {
+        display: flex;
+      }
+      .mobile-progress-wrap {
+        display: block;
+      }
+      .stage-topbar {
+        padding: 12px 18px;
+      }
+      .form-container {
+        margin: 20px auto 40px;
+        padding: 0 16px;
+      }
+      .card {
+        padding: 28px 20px;
+        border-radius: 24px;
+      }
+      h1 {
+        font-size: 24px;
+      }
+      .lang-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
     }
   </style>
 </head>
 <body>
 
-<header>
-  <div class="nav-inner">
-    <a href="/" class="brand">Apna<b>zo</b> <span style="font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-left:4px;">Partner</span></a>
-    <div class="nav-tools">
-      <button class="lang-pill" id="langBtn" onclick="toggleLang()">🌐 <span id="currentLangLabel">English</span></button>
-      <a href="/admin" class="help-link">Admin</a>
-    </div>
-  </div>
-  <div class="prog-track">
-    <div class="prog-bar" id="progBar"></div>
-  </div>
-</header>
+  <!-- Ambient background glow elements -->
+  <div class="ambient-glow-1"></div>
+  <div class="ambient-glow-2"></div>
 
-<main>
-  <!-- S1: Language Selector & Welcome -->
-  <div class="card fade-in" id="step-1">
-    <div class="step-badge">1 of 10 &middot; Welcome</div>
-    <h1>Grow your business in Rourkela</h1>
-    <p class="sub">Sell products, offer taxi rides, or book home services on Rourkela's Super App. Setup takes under 15 minutes.</p>
+  <div class="app-shell">
 
-    <div class="field">
-      <label>Choose your preferred language</label>
-      <div class="option-grid" style="grid-template-columns: 1fr 1fr;">
-        <div class="option-card selected" onclick="selectLang('en', this)">
-          <div class="opt-icon">🇬🇧</div>
-          <div class="opt-info"><b>English</b><span>Default</span></div>
+    <!-- Left Brand Sidebar (Desktop >= 960px) -->
+    <aside class="brand-sidebar">
+      <div class="brand-top">
+        <div class="brand-header">
+          <a href="/" class="brand-logo">Apna<b>zo</b></a>
+          <span class="partner-pill">Partner</span>
         </div>
-        <div class="option-card" onclick="selectLang('hi', this)">
-          <div class="opt-icon">🇮🇳</div>
-          <div class="opt-info"><b>हिन्दी</b><span>Hindi</span></div>
+
+        <div class="sidebar-intro">
+          <h2>Rourkela's Super App Partner Network</h2>
+          <p>Onboard your store, auto/taxi, or repair service in under 15 minutes. Automatic real-time API checks unlock your Starter Tier immediately.</p>
         </div>
-        <div class="option-card" onclick="selectLang('or', this)">
-          <div class="opt-icon">🏛️</div>
-          <div class="opt-info"><b>ଓଡ଼ିଆ</b><span>Odia</span></div>
-        </div>
-        <div class="option-card" onclick="selectLang('bn', this)">
-          <div class="opt-icon">🪷</div>
-          <div class="opt-info"><b>বাংলা</b><span>Bengali</span></div>
-        </div>
+
+        <!-- Dynamic Stepper -->
+        <ul class="stepper-nav" id="sidebarStepper">
+          <li class="step-item active" id="side-step-1">
+            <div class="step-circle">1</div>
+            <div class="step-label">Language &amp; Welcome</div>
+          </li>
+          <li class="step-item" id="side-step-2">
+            <div class="step-circle">2</div>
+            <div class="step-label">Mobile OTP Verification</div>
+          </li>
+          <li class="step-item" id="side-step-3">
+            <div class="step-circle">3</div>
+            <div class="step-label">Referral Code &amp; Perk</div>
+          </li>
+          <li class="step-item" id="side-step-4">
+            <div class="step-circle">4</div>
+            <div class="step-label">Select Verticals</div>
+          </li>
+          <li class="step-item" id="side-step-5">
+            <div class="step-circle">5</div>
+            <div class="step-label">Business Details &amp; Address</div>
+          </li>
+          <li class="step-item" id="side-step-6">
+            <div class="step-circle">6</div>
+            <div class="step-label">Real-time PAN Verification</div>
+          </li>
+          <li class="step-item" id="side-step-7">
+            <div class="step-circle">7</div>
+            <div class="step-label">GSTIN / Exemption</div>
+          </li>
+          <li class="step-item" id="side-step-8">
+            <div class="step-circle">8</div>
+            <div class="step-label">Bank Payout (Penny Drop)</div>
+          </li>
+          <li class="step-item" id="side-step-9">
+            <div class="step-circle">9</div>
+            <div class="step-label">Category Licence &amp; Agreement</div>
+          </li>
+          <li class="step-item" id="side-step-11">
+            <div class="step-circle">10</div>
+            <div class="step-label">Instant Risk Go-Live</div>
+          </li>
+        </ul>
       </div>
-    </div>
 
-    <button class="btn btn-orange" onclick="goToStep(2)">Get Started &rarr;</button>
-  </div>
-
-  <!-- S2: Mobile & OTP -->
-  <div class="card hidden fade-in" id="step-2">
-    <div class="step-badge">2 of 10 &middot; Phone Verification</div>
-    <h1>Enter your phone number</h1>
-    <p class="sub">We will send a 6-digit OTP to verify your account and autosave your progress.</p>
-
-    <div class="field with-prefix">
-      <label>Mobile Number</label>
-      <div class="input-wrap">
-        <span class="input-prefix">+91</span>
-        <input type="tel" id="mobileInput" placeholder="98765 43210" maxlength="10" value="9876543210">
-      </div>
-    </div>
-
-    <div id="otpSection" class="hidden">
-      <div class="field">
-        <label>Enter 6-Digit OTP <small style="color:var(--orange)">(Demo: 123456)</small></label>
-        <input type="number" id="otpInput" placeholder="123456" maxlength="6" value="123456" style="letter-spacing:4px;font-size:18px;text-align:center;">
-      </div>
-      <p style="font-size:12.5px;color:var(--muted);margin-bottom:12px;">Resend OTP in <span id="resendTimer">28</span>s</p>
-    </div>
-
-    <button class="btn" id="sendOtpBtn" onclick="handleSendOtp()">Send OTP</button>
-    <button class="btn btn-orange hidden" id="verifyOtpBtn" onclick="handleVerifyOtp()">Verify &amp; Continue &rarr;</button>
-    <button class="btn btn-outline" onclick="goToStep(1)">&larr; Back</button>
-  </div>
-
-  <!-- S3: Referral Code -->
-  <div class="card hidden fade-in" id="step-3">
-    <div class="step-badge">3 of 10 &middot; Referral Perk</div>
-    <h1>Have a referral code?</h1>
-    <p class="sub">Enter your friend or partner's code to unlock reduced platform commissions and welcome credits.</p>
-
-    <div class="field">
-      <label>Referral Code (Optional)</label>
-      <input type="text" id="refCodeInput" placeholder="e.g. RKLSELLER" style="text-transform:uppercase;">
-    </div>
-    <div id="refResult"></div>
-
-    <button class="btn" onclick="applyReferral()">Apply Code</button>
-    <button class="btn btn-outline" onclick="goToStep(4)">Skip for now &rarr;</button>
-  </div>
-
-  <!-- S4: Choose Vertical -->
-  <div class="card hidden fade-in" id="step-4">
-    <div class="step-badge">4 of 10 &middot; Select Vertical</div>
-    <h1>What will you offer on Apnazo?</h1>
-    <p class="sub">Choose your primary role. You can always add more verticals later from your dashboard.</p>
-
-    <div class="option-grid">
-      <div class="option-card selected" onclick="toggleVertical('ecommerce', this)">
-        <div class="opt-icon">🛍️</div>
-        <div class="opt-info">
-          <b>Sell Products (Shop &amp; Food)</b>
-          <span>Groceries, restaurants, fashion, electronics, rentals</span>
+      <!-- Trust Social Proof -->
+      <div class="sidebar-trust">
+        <p class="trust-quote">"Joining Apnazo gives local shops in Rourkela the digital scale of big national apps, with fair 0% promo commissions and instant payouts."</p>
+        <div class="trust-author">
+          <span>✓ Ramesh Chandra Sahu</span>
+          <span style="opacity:0.75;font-weight:400;">· Steel City Grocers, Sector 1</span>
+        </div>
+        <div class="stat-pills">
+          <span class="stat-pill">⚡ 0% Signup Fee</span>
+          <span class="stat-pill">🏦 Instant Bank Payouts</span>
+          <span class="stat-pill">📍 Rourkela Wide</span>
         </div>
       </div>
-      <div class="option-card" onclick="toggleVertical('rides', this)">
-        <div class="opt-icon">🚖</div>
-        <div class="opt-info">
-          <b>Offer Rides (Auto, Cab, Delivery)</b>
-          <span>City rides, delivery driver, commercial transport</span>
+    </aside>
+
+    <!-- Right Main Form Stage -->
+    <main class="main-stage">
+      <header class="stage-topbar">
+        <div class="mobile-brand">
+          <a href="/" class="brand-logo" style="color:var(--blue);font-size:22px;">Apna<b>zo</b></a>
+          <span class="partner-pill" style="background:#eef4ff;color:var(--blue);border-color:#d0e1fd;">Partner</span>
         </div>
-      </div>
-      <div class="option-card" onclick="toggleVertical('services', this)">
-        <div class="opt-icon">🛠️</div>
-        <div class="opt-info">
-          <b>Home Services &amp; Repairs</b>
-          <span>Plumbing, electricians, beauty, cleaning, tuition</span>
+        <div class="topbar-right">
+          <button class="top-pill-btn" id="langSwitchBtn" onclick="toggleLang()">
+            <span>🌐</span>
+            <span id="currentLangLabel">English</span>
+          </button>
+          <a href="/admin" class="top-pill-btn" style="background:#fff;border-color:var(--border);">
+            <span>🛡️</span>
+            <span>Admin Portal</span>
+          </a>
+          <a href="/" class="top-pill-btn" style="background:#fff;border-color:var(--border);">
+            <span>✕</span>
+            <span>Exit</span>
+          </a>
         </div>
-      </div>
-    </div>
-
-    <button class="btn btn-orange" onclick="goToStep(5)">Confirm &amp; Continue &rarr;</button>
-    <button class="btn btn-outline" onclick="goToStep(3)">&larr; Back</button>
-  </div>
-
-  <!-- S5: Business Basics -->
-  <div class="card hidden fade-in" id="step-5">
-    <div class="step-badge">5 of 10 &middot; Business Profile</div>
-    <h1>Tell us about your business</h1>
-    <p class="sub">This information is shown to customers across Rourkela on the Apnazo app.</p>
-
-    <div class="field">
-      <label>Business / Shop Name *</label>
-      <input type="text" id="bizName" placeholder="e.g. Steel City Organics" value="Steel City Organics">
-    </div>
-
-    <div class="field">
-      <label>Owner / Legal Full Name *</label>
-      <input type="text" id="ownerName" placeholder="Full name as on PAN card" value="Pragyan Dash">
-    </div>
-
-    <div class="field">
-      <label>Primary Business Category *</label>
-      <select id="bizCategory" onchange="checkCategoryRequirements()">
-        <option value="Grocery & Daily Needs">Grocery &amp; Supermarket (FSSAI required)</option>
-        <option value="Restaurant & Bakery">Restaurant &amp; Bakery (FSSAI required)</option>
-        <option value="Fashion & Lifestyle">Fashion &amp; Clothing Store</option>
-        <option value="Electronics & Mobiles">Electronics &amp; Appliances</option>
-        <option value="Tools & Equipment Rentals">Rentals &amp; Equipment</option>
-        <option value="Rides & Taxi">Rides &amp; Auto Driver (Driving Licence)</option>
-        <option value="Home Services & Repairs">Home Maintenance &amp; Repair</option>
-      </select>
-    </div>
-
-    <div class="field">
-      <label>Store / Service Address *</label>
-      <input type="text" id="bizAddress" placeholder="Shop #12, Main Road, Panposh" value="Shop #14, Sector 5, Rourkela">
-    </div>
-
-    <div class="field">
-      <label>PIN Code *</label>
-      <input type="number" id="bizPincode" placeholder="769001" value="769002">
-    </div>
-
-    <button class="btn btn-orange" onclick="saveBasics()">Save &amp; Verify Identity &rarr;</button>
-    <button class="btn btn-outline" onclick="goToStep(4)">&larr; Back</button>
-  </div>
-
-  <!-- S6: PAN Verification -->
-  <div class="card hidden fade-in" id="step-6">
-    <div class="step-badge">6 of 10 &middot; Identity &amp; PAN</div>
-    <h1>Verify PAN Number</h1>
-    <p class="sub">Real-time instant API check. The registered PAN name is used to match your Bank and GST accounts.</p>
-
-    <div class="field">
-      <label>PAN Number (10 Digits) *</label>
-      <input type="text" id="panInput" placeholder="ABCDE1234F" maxlength="10" style="text-transform:uppercase;letter-spacing:2px;font-weight:600;" value="ABCDE1234F">
-    </div>
-
-    <div id="panFeedback"></div>
-
-    <button class="btn" id="panVerifyBtn" onclick="verifyPAN()">Verify PAN via API</button>
-    <button class="btn btn-orange hidden" id="panNextBtn" onclick="goToStep(7)">Continue to Tax &rarr;</button>
-    <button class="btn btn-outline" onclick="goToStep(5)">&larr; Back</button>
-  </div>
-
-  <!-- S7: GST Details -->
-  <div class="card hidden fade-in" id="step-7">
-    <div class="step-badge">7 of 10 &middot; GST Details</div>
-    <h1>Tax &amp; GST Details</h1>
-    <p class="sub">Do you have a GSTIN for your registered business?</p>
-
-    <div style="display:flex;gap:12px;margin-bottom:16px;">
-      <button type="button" class="btn" id="hasGstYesBtn" style="background:#eef4ff;color:var(--blue);border:1.5px solid var(--blue);" onclick="toggleGstOption(true)">Yes, I have GST</button>
-      <button type="button" class="btn btn-outline" id="hasGstNoBtn" onclick="toggleGstOption(false)">No GST (Eligible turnover)</button>
-    </div>
-
-    <div id="gstInputSection">
-      <div class="field">
-        <label>15-Digit GSTIN *</label>
-        <input type="text" id="gstinInput" placeholder="21AAAAA0000A1Z5" maxlength="15" style="text-transform:uppercase;letter-spacing:2px;font-weight:600;" value="21ABCDE1234F1Z5">
-      </div>
-      <button class="btn" onclick="verifyGSTIN()">Verify GSTIN</button>
-    </div>
-
-    <div id="nonGstSection" class="hidden">
-      <div class="verif-box verif-amber">
-        <div>ℹ️ Non-GST path selected. You can sell within compliance turnover thresholds. You will start on Starter Tier.</div>
-      </div>
-    </div>
-
-    <div id="gstFeedback"></div>
-
-    <button class="btn btn-orange" id="gstNextBtn" onclick="goToStep(8)" style="margin-top:16px;">Continue to Bank Account &rarr;</button>
-    <button class="btn btn-outline" onclick="goToStep(6)">&larr; Back</button>
-  </div>
-
-  <!-- S8: Bank Account -->
-  <div class="card hidden fade-in" id="step-8">
-    <div class="step-badge">8 of 10 &middot; Payout Account</div>
-    <h1>Bank account for payouts</h1>
-    <p class="sub">We verify your account instantly via a penny-drop lookup. Your sales earnings will be deposited here.</p>
-
-    <div class="field">
-      <label>Account Number *</label>
-      <input type="text" id="bankAcc" placeholder="123456789012" value="919876543210">
-    </div>
-
-    <div class="field">
-      <label>IFSC Code *</label>
-      <input type="text" id="bankIfsc" placeholder="SBIN0001234" maxlength="11" style="text-transform:uppercase;" value="SBIN0003042">
-    </div>
-
-    <div class="field">
-      <label>Or UPI ID (Alternative Instant Payout)</label>
-      <input type="text" id="bankUpi" placeholder="yourbusiness@upi">
-    </div>
-
-    <div id="bankFeedback"></div>
-
-    <button class="btn" id="bankVerifyBtn" onclick="verifyBank()">Verify Bank via Penny Drop</button>
-    <button class="btn btn-orange hidden" id="bankNextBtn" onclick="checkNextAfterBank()">Next: Licence / Agreement &rarr;</button>
-    <button class="btn btn-outline" onclick="goToStep(7)">&larr; Back</button>
-  </div>
-
-  <!-- S9: Category Licence (FSSAI / DL) -->
-  <div class="card hidden fade-in" id="step-9">
-    <div class="step-badge">9 of 10 &middot; Regulatory Licence</div>
-    <h1 id="licenceTitle">FSSAI Food Licence</h1>
-    <p class="sub" id="licenceSub">Food safety regulations require an active FSSAI registration to publish food or grocery items.</p>
-
-    <div class="field">
-      <label id="licenceLabel">14-Digit FSSAI Registration Number *</label>
-      <input type="text" id="licenceNum" placeholder="12345678901234" value="12023005001234">
-    </div>
-
-    <div class="verif-box verif-success" id="licenceFeedback" style="display:none;">
-      <div>✓ FSSAI Licence verified. Valid until Dec 2028.</div>
-    </div>
-
-    <button class="btn" onclick="verifyLicence()">Verify Licence</button>
-    <button class="btn btn-orange" onclick="goToStep(10)">Proceed to Agreement &rarr;</button>
-    <button class="btn btn-outline" onclick="goToStep(8)">&larr; Back</button>
-  </div>
-
-  <!-- S10: Agreement & E-Sign -->
-  <div class="card hidden fade-in" id="step-10">
-    <div class="step-badge">10 of 10 &middot; Partner Agreement</div>
-    <h1>Review &amp; e-Sign Agreement</h1>
-    <p class="sub">Summary of commission terms, payout cycle, and policies for Rourkela super app partners.</p>
-
-    <div class="verif-box" style="background:#f8faff;border:1px solid var(--border);display:block;">
-      <b style="color:var(--deep);display:block;margin-bottom:6px;">Summary of Terms:</b>
-      <ul style="margin:0;padding-left:18px;font-size:13px;color:var(--muted);display:grid;gap:6px;">
-        <li>Platform Commission: <strong>5% – 10%</strong> depending on category.</li>
-        <li>Payout settlement: <strong>T+2 days</strong> directly to verified bank account.</li>
-        <li>Customer returns policy: Standard 24h replacement for groceries/damaged goods.</li>
-        <li>Zero signup or listing fee for early Rourkela partners.</li>
-      </ul>
-    </div>
-
-    <div class="field">
-      <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-weight:500;">
-        <input type="checkbox" id="termsCheck" checked style="width:18px;height:18px;">
-        <span>I agree to Apnazo Super App Partner Terms &amp; Policies</span>
-      </label>
-    </div>
-
-    <button class="btn btn-orange" onclick="submitAgreement()">Accept &amp; Run Instant Risk Decision &rarr;</button>
-    <button class="btn btn-outline" onclick="goToStep(9)">&larr; Back</button>
-  </div>
-
-  <!-- S11: Decision Engine Result (Green / Amber / Red) -->
-  <div class="card hidden fade-in" id="step-11">
-    <div id="decisionGreen" class="hidden">
-      <div style="width:60px;height:60px;border-radius:50%;background:var(--green-light);color:var(--green);display:grid;place-items:center;font-size:28px;margin:0 auto 16px;">✓</div>
-      <h1 style="text-align:center;">Instant Approval: Green</h1>
-      <p class="sub" style="text-align:center;">All verification checks passed with 100% name match. You are now live on the <strong>Starter Tier</strong>!</p>
-
-      <div class="checklist">
-        <li><span>Mobile OTP</span> <span class="status-pill status-green">Verified</span></li>
-        <li><span>PAN &amp; Identity</span> <span class="status-pill status-green">Matched</span></li>
-        <li><span>GST / Non-GST Path</span> <span class="status-pill status-green">Approved</span></li>
-        <li><span>Bank Penny Drop</span> <span class="status-pill status-green">Verified</span></li>
-        <li><span>Category Licence</span> <span class="status-pill status-green">Active</span></li>
+      </header>
+      <div class="mobile-progress-wrap">
+        <div class="mobile-progress-bar" id="mobileProgBar"></div>
       </div>
 
-      <button class="btn btn-orange" onclick="goToDashboard()">Open Seller Dashboard &rarr;</button>
-    </div>
+      <div class="form-container">
 
-    <div id="decisionAmber" class="hidden">
-      <div style="width:60px;height:60px;border-radius:50%;background:var(--amber-light);color:var(--amber);display:grid;place-items:center;font-size:28px;margin:0 auto 16px;">⚠️</div>
-      <h1 style="text-align:center;">Under Review: Amber</h1>
-      <p class="sub" style="text-align:center;">Minor mismatch detected between Trade Name and Bank Account. Sent to 24-hr manual review queue.</p>
-      <button class="btn" onclick="goToStep(12)">Fix Details Now &rarr;</button>
-      <button class="btn btn-outline" onclick="goToDashboard()">Continue to Dashboard in Preview</button>
-    </div>
-  </div>
+        <!-- S1: Language Selector & Welcome -->
+        <div class="card" id="step-1">
+          <div class="card-meta">
+            <span class="badge-step">Step 1 of 10 · Welcome</span>
+            <span class="step-time-hint">⏱ 2 min setup</span>
+          </div>
+          <h1>Grow your business in Rourkela</h1>
+          <p class="sub">Sell retail goods, deliver restaurant food, offer taxi rides, or book home services on Rourkela's Super App.</p>
 
-  <!-- S12: Needs Action (Correction) -->
-  <div class="card hidden fade-in" id="step-12">
-    <div class="step-badge">Action Required</div>
-    <h1>Update Bank Account</h1>
-    <p class="sub">The bank account name must closely match the PAN card name: <strong id="panRefName">PRAGYAN DASH</strong>.</p>
+          <div class="field">
+            <label>Choose your preferred language</label>
+            <div class="lang-grid">
+              <div class="lang-card selected" onclick="selectLang('en', this)">
+                <div class="lang-icon-badge badge-en">En</div>
+                <div class="lang-details">
+                  <b>English</b>
+                  <span>Default Language</span>
+                </div>
+                <div class="lang-check">✓</div>
+              </div>
 
-    <div class="field">
-      <label>Re-enter Correct Account Number</label>
-      <input type="text" id="reAcc" placeholder="Account Number" value="919876543210">
-    </div>
-    <div class="field">
-      <label>Confirm IFSC Code</label>
-      <input type="text" id="reIfsc" placeholder="SBIN0001234" value="SBIN0003042">
-    </div>
+              <div class="lang-card" onclick="selectLang('hi', this)">
+                <div class="lang-icon-badge badge-hi">हि</div>
+                <div class="lang-details">
+                  <b>हिन्दी</b>
+                  <span>Hindi</span>
+                </div>
+                <div class="lang-check">✓</div>
+              </div>
 
-    <button class="btn btn-orange" onclick="reSubmitBank()">Re-Verify &amp; Activate Starter Tier</button>
-  </div>
+              <div class="lang-card" onclick="selectLang('or', this)">
+                <div class="lang-icon-badge badge-or">ଓ</div>
+                <div class="lang-details">
+                  <b>ଓଡ଼ିଆ</b>
+                  <span>Odia / Local</span>
+                </div>
+                <div class="lang-check">✓</div>
+              </div>
 
-  <!-- S13: Seller Home (Starter State Dashboard) -->
-  <div class="card hidden fade-in" id="step-13">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
-      <div>
-        <h2 style="margin:0;" id="dashStoreName">Steel City Organics</h2>
-        <span style="font-size:12.5px;color:var(--muted);" id="dashCat">Grocery &amp; Daily Needs &middot; Sector 5, Rourkela</span>
-      </div>
-      <span class="status-pill status-green" id="dashTierBadge">Starter Tier</span>
-    </div>
+              <div class="lang-card" onclick="selectLang('bn', this)">
+                <div class="lang-icon-badge badge-bn">বা</div>
+                <div class="lang-details">
+                  <b>বাংলা</b>
+                  <span>Bengali</span>
+                </div>
+                <div class="lang-check">✓</div>
+              </div>
+            </div>
+          </div>
 
-    <div class="tier-badge-card">
-      <div style="display:flex;justify-content:space-between;align-items:center;">
-        <div>
-          <h2>Starter Access Active</h2>
-          <span style="font-size:12.5px;opacity:0.85;">You can now accept customer orders in Rourkela</span>
+          <button class="btn btn-orange" onclick="goToStep(2)">Get Started &rarr;</button>
         </div>
-        <div style="font-size:26px;">🚀</div>
-      </div>
-      <div class="tier-caps">
-        <div class="cap-item">
-          <small>Daily Order Limit</small>
-          <b>₹15,000 / day</b>
+
+        <!-- S2: Mobile & OTP -->
+        <div class="card hidden" id="step-2">
+          <div class="card-meta">
+            <span class="badge-step">Step 2 of 10 · Phone Verification</span>
+            <span class="step-time-hint">Instant OTP</span>
+          </div>
+          <h1>Enter your mobile number</h1>
+          <p class="sub">We will send a 6-digit verification code. Your progress will be securely autosaved.</p>
+
+          <div class="field with-prefix">
+            <label>Mobile Number</label>
+            <div class="input-wrap">
+              <span class="input-prefix">🇮🇳 +91</span>
+              <input type="tel" id="mobileInput" placeholder="98610 12345" maxlength="10" value="9861234567">
+            </div>
+          </div>
+
+          <div id="otpSection" class="hidden">
+            <div class="field">
+              <label>Enter 6-Digit OTP <span class="opt" style="color:var(--orange);font-weight:700;">Demo: 123456</span></label>
+              <input type="number" id="otpInput" placeholder="123456" maxlength="6" value="123456" style="letter-spacing:6px;font-size:20px;text-align:center;font-weight:700;">
+            </div>
+            <p style="font-size:13px;color:var(--muted);margin-bottom:14px;">Resend code in <strong id="resendTimer" style="color:var(--blue)">30</strong>s</p>
+          </div>
+
+          <button class="btn btn-orange" id="sendOtpBtn" onclick="handleSendOtp()">Send Verification OTP &rarr;</button>
+          <button class="btn btn-orange hidden" id="verifyOtpBtn" onclick="handleVerifyOtp()">Verify &amp; Continue &rarr;</button>
+          <button class="btn btn-outline" onclick="goToStep(1)">&larr; Back to Language</button>
         </div>
-        <div class="cap-item">
-          <small>Payout Settlement</small>
-          <b>T+2 Days Cycle</b>
+
+        <!-- S3: Referral Code -->
+        <div class="card hidden" id="step-3">
+          <div class="card-meta">
+            <span class="badge-step">Step 3 of 10 · Referral Perk</span>
+            <span class="step-time-hint">Optional</span>
+          </div>
+          <h1>Have a referral code?</h1>
+          <p class="sub">Enter your friend or partner's code to unlock reduced 50% commission for your first 30 days.</p>
+
+          <div class="field">
+            <label>Referral Code <span class="opt">Optional</span></label>
+            <input type="text" id="refCodeInput" placeholder="e.g. RKLSTEEL50" style="text-transform:uppercase;letter-spacing:1.5px;font-weight:600;">
+          </div>
+          <div id="refResult"></div>
+
+          <button class="btn btn-orange" onclick="applyReferral()">Apply Referral Code</button>
+          <button class="btn btn-outline" onclick="goToStep(4)">Skip &amp; Continue &rarr;</button>
         </div>
-      </div>
-    </div>
 
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">
-      <button class="btn btn-orange" style="margin:0;" onclick="goToStep(14)">+ Add Product</button>
-      <button class="btn" style="margin:0;background:#e3ecff;color:var(--blue);" onclick="goToStep(15)">🎁 Refer &amp; Earn</button>
-    </div>
+        <!-- S4: Choose Vertical -->
+        <div class="card hidden" id="step-4">
+          <div class="card-meta">
+            <span class="badge-step">Step 4 of 10 · Select Verticals</span>
+            <span class="step-time-hint">Multi-select available</span>
+          </div>
+          <h1>What will you offer on Apnazo?</h1>
+          <p class="sub">Choose what you want to do on Rourkela's Super App. You can add more verticals later in your dashboard.</p>
 
-    <h3 style="font-size:16px;margin:20px 0 10px;font-family:var(--display);">Today's Overview</h3>
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;text-align:center;">
-      <div style="background:#f8faff;padding:12px;border-radius:14px;border:1px solid var(--border);">
-        <small style="color:var(--muted);font-size:11px;">Orders</small>
-        <b style="display:block;font-size:18px;margin-top:2px;">0</b>
-      </div>
-      <div style="background:#f8faff;padding:12px;border-radius:14px;border:1px solid var(--border);">
-        <small style="color:var(--muted);font-size:11px;">Earnings</small>
-        <b style="display:block;font-size:18px;margin-top:2px;">₹0</b>
-      </div>
-      <div style="background:#f8faff;padding:12px;border-radius:14px;border:1px solid var(--border);">
-        <small style="color:var(--muted);font-size:11px;">Next Payout</small>
-        <b style="display:block;font-size:18px;margin-top:2px;">₹0</b>
-      </div>
-    </div>
+          <div class="vertical-grid">
+            <div class="vertical-card selected" onclick="toggleVertical('ecommerce', this)">
+              <div class="vert-icon-wrap" style="background:#eef4ff;color:var(--blue);">🛍️</div>
+              <div class="vert-content">
+                <b>Sell Products (Shop &amp; Food)</b>
+                <span>Groceries, restaurants, bakeries, fashion, electronics, and rental gear.</span>
+                <span class="vert-tag">0% Commission 30 Days</span>
+              </div>
+            </div>
 
-    <button class="btn btn-outline" style="margin-top:24px;" onclick="window.location.href='/'">&larr; Return to Apnazo Home</button>
+            <div class="vertical-card" onclick="toggleVertical('rides', this)">
+              <div class="vert-icon-wrap" style="background:#fff4ea;color:var(--orange);">🚖</div>
+              <div class="vert-content">
+                <b>Offer Taxi &amp; Auto Rides</b>
+                <span>Auto-rickshaw, city cab, parcel pickup, or commercial transport.</span>
+                <span class="vert-tag" style="background:#fef3c7;color:#92400e;">Daily Instant Cashout</span>
+              </div>
+            </div>
+
+            <div class="vertical-card" onclick="toggleVertical('services', this)">
+              <div class="vert-icon-wrap" style="background:#ecfdf5;color:var(--green);">🛠️</div>
+              <div class="vert-content">
+                <b>Home Services &amp; Repairs</b>
+                <span>Plumbing, electricians, AC repair, cleaning, salon, or home tuition.</span>
+                <span class="vert-tag" style="background:#dcfce7;color:#15803d;">Verified Professional</span>
+              </div>
+            </div>
+          </div>
+
+          <button class="btn btn-orange" onclick="goToStep(5)">Confirm &amp; Proceed &rarr;</button>
+          <button class="btn btn-outline" onclick="goToStep(3)">&larr; Back</button>
+        </div>
+
+        <!-- S5: Business Basics -->
+        <div class="card hidden" id="step-5">
+          <div class="card-meta">
+            <span class="badge-step">Step 5 of 10 · Business Profile</span>
+            <span class="step-time-hint">Autosaved</span>
+          </div>
+          <h1>Tell us about your business</h1>
+          <p class="sub">This information is shown to customers across Rourkela when searching on the Apnazo app.</p>
+
+          <div class="field">
+            <label>Business / Shop Display Name *</label>
+            <input type="text" id="bizName" placeholder="e.g. Steel City Grocers" value="Rourkela Steel Grocers">
+          </div>
+
+          <div class="field">
+            <label>Owner / Legal Full Name *</label>
+            <input type="text" id="ownerName" placeholder="Full name as on PAN card" value="Ramesh Chandra Sahu">
+          </div>
+
+          <div class="field">
+            <label>Primary Business Category *</label>
+            <select id="bizCategory" onchange="checkCategoryRequirements()">
+              <option value="Retail & Grocery">Grocery &amp; Supermarket (FSSAI required)</option>
+              <option value="Restaurant & Food">Restaurant &amp; Bakery (FSSAI required)</option>
+              <option value="Fashion & Lifestyle">Fashion &amp; Clothing Store</option>
+              <option value="Electronics & Mobiles">Electronics &amp; Appliances</option>
+              <option value="Rentals & Equipment">Rentals &amp; Equipment</option>
+              <option value="Taxi & City Rides">Taxi &amp; Auto Driver (Commercial DL)</option>
+              <option value="Home Services & Repairs">Home Maintenance &amp; Repair</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label>Pickup / Store Address in Rourkela *</label>
+            <input type="text" id="bizAddress" placeholder="Shop #12, Daily Market, Sector 1" value="Daily Market, Main Road, Sector 1, Rourkela">
+          </div>
+
+          <div class="field">
+            <label>PIN Code *</label>
+            <input type="number" id="bizPincode" placeholder="769001" value="769001">
+          </div>
+
+          <button class="btn btn-orange" onclick="saveBasics()">Save &amp; Continue to PAN &rarr;</button>
+          <button class="btn btn-outline" onclick="goToStep(4)">&larr; Back</button>
+        </div>
+
+        <!-- S6: PAN Verification -->
+        <div class="card hidden" id="step-6">
+          <div class="card-meta">
+            <span class="badge-step">Step 6 of 10 · Identity &amp; Tax</span>
+            <span class="step-time-hint">Instant API</span>
+          </div>
+          <h1>Real-Time PAN Verification</h1>
+          <p class="sub">We verify your PAN instantly via Govt NSDL API. The legal registered name locks your identity for Bank &amp; GST checks.</p>
+
+          <div class="field">
+            <label>PAN Number (10 Alphanumeric Digits) *</label>
+            <input type="text" id="panInput" placeholder="ABCPS1234F" maxlength="10" style="text-transform:uppercase;letter-spacing:2px;font-weight:700;" value="ABCPS1234F">
+          </div>
+
+          <div id="panFeedback"></div>
+
+          <button class="btn btn-orange" id="panVerifyBtn" onclick="verifyPAN()">Verify PAN via API</button>
+          <button class="btn btn-orange hidden" id="panNextBtn" onclick="goToStep(7)">Continue to GST &rarr;</button>
+          <button class="btn btn-outline" onclick="goToStep(5)">&larr; Back</button>
+        </div>
+
+        <!-- S7: GST Details -->
+        <div class="card hidden" id="step-7">
+          <div class="card-meta">
+            <span class="badge-step">Step 7 of 10 · GST Details</span>
+            <span class="step-time-hint">Exemption supported</span>
+          </div>
+          <h1>Goods &amp; Services Tax (GST)</h1>
+          <p class="sub">Do you have a registered GSTIN for your business?</p>
+
+          <div style="display:flex;gap:12px;margin-bottom:18px;">
+            <button type="button" class="btn" id="hasGstYesBtn" style="background:#eef4ff;color:var(--blue);border:1.5px solid var(--blue);margin:0;" onclick="toggleGstOption(true)">Yes, I have GST</button>
+            <button type="button" class="btn btn-outline" id="hasGstNoBtn" style="margin:0;" onclick="toggleGstOption(false)">No GST (Eligible Exemption)</button>
+          </div>
+
+          <div id="gstInputSection">
+            <div class="field">
+              <label>15-Digit GSTIN *</label>
+              <input type="text" id="gstinInput" placeholder="21ABCPS1234F1Z5" maxlength="15" style="text-transform:uppercase;letter-spacing:2px;font-weight:700;" value="21ABCPS1234F1Z5">
+            </div>
+            <button class="btn" onclick="verifyGSTIN()">Verify GSTIN</button>
+          </div>
+
+          <div id="nonGstSection" class="hidden">
+            <div class="verif-box verif-amber">
+              <div>ℹ️ <strong>Non-GST Route Selected:</strong> You are allowed to sell within standard compliance turnover thresholds (< ₹20 Lakhs). You will start on Starter Tier limits.</div>
+            </div>
+          </div>
+
+          <div id="gstFeedback"></div>
+
+          <button class="btn btn-orange" id="gstNextBtn" onclick="goToStep(8)" style="margin-top:16px;">Continue to Bank Account &rarr;</button>
+          <button class="btn btn-outline" onclick="goToStep(6)">&larr; Back</button>
+        </div>
+
+        <!-- S8: Bank Account -->
+        <div class="card hidden" id="step-8">
+          <div class="card-meta">
+            <span class="badge-step">Step 8 of 10 · Bank Payout Account</span>
+            <span class="step-time-hint">Instant ₹1 Penny Drop</span>
+          </div>
+          <h1>Payout Bank Account</h1>
+          <p class="sub">We verify your account instantly via a penny-drop lookup. Your sales earnings and customer payouts will be deposited directly here.</p>
+
+          <div class="field">
+            <label>Bank Account Number *</label>
+            <input type="text" id="bankAcc" placeholder="50100234567890" value="50100234567890">
+          </div>
+
+          <div class="field">
+            <label>IFSC Code *</label>
+            <input type="text" id="bankIfsc" placeholder="HDFC0001234" maxlength="11" style="text-transform:uppercase;font-weight:700;" value="HDFC0001234">
+          </div>
+
+          <div class="field">
+            <label>Or UPI ID <span class="opt">Alternative Payout</span></label>
+            <input type="text" id="bankUpi" placeholder="ramesh@okhdfcbank">
+          </div>
+
+          <div id="bankFeedback"></div>
+
+          <button class="btn btn-orange" id="bankVerifyBtn" onclick="verifyBank()">Verify Bank via Penny Drop</button>
+          <button class="btn btn-orange hidden" id="bankNextBtn" onclick="checkNextAfterBank()">Next: Licence &amp; Agreement &rarr;</button>
+          <button class="btn btn-outline" onclick="goToStep(7)">&larr; Back</button>
+        </div>
+
+        <!-- S9: Category Licence (FSSAI / DL) -->
+        <div class="card hidden" id="step-9">
+          <div class="card-meta">
+            <span class="badge-step">Step 9 of 10 · Regulatory Licence</span>
+            <span class="step-time-hint">Category specific</span>
+          </div>
+          <h1 id="licenceTitle">FSSAI Food Licence</h1>
+          <p class="sub" id="licenceSub">Food safety regulations require an active FSSAI registration to publish food or grocery items.</p>
+
+          <div class="field">
+            <label id="licenceLabel">14-Digit FSSAI Registration Number *</label>
+            <input type="text" id="licenceNum" placeholder="12023001004512" value="12023001004512">
+          </div>
+
+          <div class="verif-box verif-success" id="licenceFeedback" style="display:none;">
+            <div>✓ <strong>Licence Verified:</strong> Valid registration on file. Active for Rourkela municipal zone.</div>
+          </div>
+
+          <button class="btn" onclick="verifyLicence()">Verify Licence</button>
+          <button class="btn btn-orange" onclick="goToStep(10)">Proceed to Agreement &rarr;</button>
+          <button class="btn btn-outline" onclick="goToStep(8)">&larr; Back</button>
+        </div>
+
+        <!-- S10: Agreement & E-Sign -->
+        <div class="card hidden" id="step-10">
+          <div class="card-meta">
+            <span class="badge-step">Step 10 of 10 · Partner Agreement</span>
+            <span class="step-time-hint">Instant E-Sign</span>
+          </div>
+          <h1>Review &amp; e-Sign Agreement</h1>
+          <p class="sub">Transparent commission structure, payout cycles, and return policies for Rourkela super app partners.</p>
+
+          <div class="verif-box" style="background:#f8fbff;border:1px solid var(--border);display:block;">
+            <b style="color:var(--deep);display:block;margin-bottom:8px;font-size:15px;">Summary of Commercial Terms:</b>
+            <ul style="margin:0;padding-left:20px;font-size:13.5px;color:var(--muted);display:grid;gap:8px;">
+              <li>Platform Commission: <strong>5% – 10%</strong> depending on category (0% for first 30 days).</li>
+              <li>Payout Settlement: <strong>T+2 days</strong> automated NEFT/UPI cycle directly to your verified bank.</li>
+              <li>Customer Returns: Standard 24h replacement for groceries or damaged goods.</li>
+              <li>Zero upfront fees: Free to list, free to sign up, no hidden listing charges.</li>
+            </ul>
+          </div>
+
+          <div class="field" style="margin-top:20px;">
+            <label style="display:flex;align-items:center;gap:10px;cursor:pointer;font-weight:600;font-size:14px;">
+              <input type="checkbox" id="termsCheck" checked style="width:20px;height:20px;accent-color:var(--orange);">
+              <span>I accept the Apnazo Super App Partner Terms, Policies &amp; e-Sign agreement.</span>
+            </label>
+          </div>
+
+          <button class="btn btn-orange" onclick="submitAgreement()">Accept &amp; Run Risk Decision &rarr;</button>
+          <button class="btn btn-outline" onclick="goToStep(9)">&larr; Back</button>
+        </div>
+
+        <!-- S11: Decision Engine Result (Green / Amber / Red) -->
+        <div class="card hidden" id="step-11">
+          <div id="decisionGreen" class="hidden">
+            <div style="width:68px;height:68px;border-radius:50%;background:var(--green-light);color:var(--green);display:grid;place-items:center;font-size:32px;margin:0 auto 20px;box-shadow:0 8px 24px rgba(16,185,129,0.25);">✓</div>
+            <h1 style="text-align:center;">Starter Tier Unlocked!</h1>
+            <p class="sub" style="text-align:center;">All automated identity and bank checks passed with a <strong>100% name match</strong>. You are now live to accept orders in Rourkela!</p>
+
+            <ul class="checklist">
+              <li><span>Mobile OTP</span> <span class="status-pill status-green">✓ Verified</span></li>
+              <li><span>PAN &amp; Identity</span> <span class="status-pill status-green">✓ Matched</span></li>
+              <li><span>GSTIN Status</span> <span class="status-pill status-green">✓ Active</span></li>
+              <li><span>Bank Penny Drop</span> <span class="status-pill status-green">✓ 100% Match</span></li>
+              <li><span>Category Licence</span> <span class="status-pill status-green">✓ Active</span></li>
+            </ul>
+
+            <button class="btn btn-orange" onclick="goToDashboard()">Open Seller Dashboard &rarr;</button>
+          </div>
+
+          <div id="decisionAmber" class="hidden">
+            <div style="width:68px;height:68px;border-radius:50%;background:var(--amber-light);color:var(--amber);display:grid;place-items:center;font-size:32px;margin:0 auto 20px;">⚠️</div>
+            <h1 style="text-align:center;">Under Review: Amber</h1>
+            <p class="sub" style="text-align:center;">A slight mismatch was detected between your Bank Beneficiary Name and PAN Name. Queued for 24-hr manual review by our team.</p>
+            <button class="btn btn-orange" onclick="goToStep(12)">Fix Bank Details Now &rarr;</button>
+            <button class="btn btn-outline" onclick="goToDashboard()">Continue in Preview Mode</button>
+          </div>
+        </div>
+
+        <!-- S12: Needs Action (Correction) -->
+        <div class="card hidden" id="step-12">
+          <div class="card-meta">
+            <span class="badge-step" style="background:#fee2e2;color:#b91c1c;border-color:#fca5a5;">Action Required</span>
+          </div>
+          <h1>Update Bank Account</h1>
+          <p class="sub">The bank account beneficiary must closely match your registered PAN name: <strong id="panRefName">RAMESH CHANDRA SAHU</strong>.</p>
+
+          <div class="field">
+            <label>Correct Account Number</label>
+            <input type="text" id="reAcc" placeholder="Account Number" value="50100234567890">
+          </div>
+          <div class="field">
+            <label>Confirm IFSC Code</label>
+            <input type="text" id="reIfsc" placeholder="HDFC0001234" value="HDFC0001234">
+          </div>
+
+          <button class="btn btn-orange" onclick="reSubmitBank()">Re-Verify &amp; Activate Starter Tier</button>
+        </div>
+
+        <!-- S13: Seller Home (Starter State Dashboard) -->
+        <div class="card hidden" id="step-13">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;">
+            <div>
+              <h2 style="margin:0;font-size:22px;" id="dashStoreName">Rourkela Steel Grocers</h2>
+              <span style="font-size:13px;color:var(--muted);" id="dashCat">Retail &amp; Grocery · Sector 1, Rourkela</span>
+            </div>
+            <span class="status-pill status-green" id="dashTierBadge">Starter Live</span>
+          </div>
+
+          <div class="tier-badge-card">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <div>
+                <h2>Starter Access Active</h2>
+                <span style="font-size:13px;opacity:0.9;">Accept customer orders across Rourkela</span>
+              </div>
+              <div style="font-size:32px;">🚀</div>
+            </div>
+            <div class="tier-caps">
+              <div class="cap-item">
+                <small>Daily Order Cap</small>
+                <b>₹15,000 / day</b>
+              </div>
+              <div class="cap-item">
+                <small>Payout Cycle</small>
+                <b>T+2 Days Direct Bank</b>
+              </div>
+            </div>
+          </div>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px;">
+            <button class="btn btn-orange" style="margin:0;" onclick="goToStep(14)">+ Add First Product</button>
+            <button class="btn" style="margin:0;background:#eef4ff;color:var(--blue);border:1px solid #d0e1fd;" onclick="goToStep(15)">🎁 Refer &amp; Earn</button>
+          </div>
+
+          <h3 style="font-size:16px;margin:24px 0 12px;font-family:var(--display);">Today's Live Store Metrics</h3>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;text-align:center;">
+            <div style="background:#f8fbff;padding:16px 12px;border-radius:16px;border:1px solid var(--border);">
+              <small style="color:var(--muted);font-size:11.5px;font-weight:600;text-transform:uppercase;">Orders</small>
+              <b style="display:block;font-size:22px;margin-top:4px;color:var(--ink);">0</b>
+            </div>
+            <div style="background:#f8fbff;padding:16px 12px;border-radius:16px;border:1px solid var(--border);">
+              <small style="color:var(--muted);font-size:11.5px;font-weight:600;text-transform:uppercase;">Gross Sales</small>
+              <b style="display:block;font-size:22px;margin-top:4px;color:var(--green);">₹0</b>
+            </div>
+            <div style="background:#f8fbff;padding:16px 12px;border-radius:16px;border:1px solid var(--border);">
+              <small style="color:var(--muted);font-size:11.5px;font-weight:600;text-transform:uppercase;">Next Payout</small>
+              <b style="display:block;font-size:22px;margin-top:4px;color:var(--blue);">₹0</b>
+            </div>
+          </div>
+
+          <button class="btn btn-outline" style="margin-top:28px;" onclick="window.location.href='/'">&larr; Return to Apnazo Home</button>
+        </div>
+
+        <!-- S14: First Product Listing Hand-off -->
+        <div class="card hidden" id="step-14">
+          <div class="card-meta">
+            <span class="badge-step">Catalog Hand-off</span>
+          </div>
+          <h1>Add your first product</h1>
+          <p class="sub">List your first item so customers can immediately start ordering once you go live.</p>
+
+          <div class="field">
+            <label>Product / Item Title *</label>
+            <input type="text" id="prodTitle" placeholder="e.g. Fresh Dairy Milk 1L" value="Organic Farm Fresh Milk 1L">
+          </div>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+            <div class="field">
+              <label>Price (₹) *</label>
+              <input type="number" id="prodPrice" placeholder="65" value="65">
+            </div>
+            <div class="field">
+              <label>Initial Stock (Units) *</label>
+              <input type="number" id="prodStock" placeholder="50" value="50">
+            </div>
+          </div>
+
+          <div class="field">
+            <label>Product Category</label>
+            <input type="text" value="Dairy & Farm Fresh" readonly style="background:#f1f5f9;color:var(--muted);">
+          </div>
+
+          <div class="verif-box verif-success" id="prodSuccess" style="display:none;">
+            <div>✓ <strong>Product Published!</strong> Item added to your store catalog.</div>
+          </div>
+
+          <button class="btn btn-orange" onclick="saveFirstProduct()">Publish Product &rarr;</button>
+          <button class="btn btn-outline" onclick="goToStep(13)">&larr; Back to Dashboard</button>
+        </div>
+
+        <!-- S15: Refer & Earn Tab -->
+        <div class="card hidden" id="step-15">
+          <div class="card-meta">
+            <span class="badge-step">Partner Referral</span>
+          </div>
+          <h1>Refer fellow partners &amp; earn ₹500</h1>
+          <p class="sub">Invite other shops, drivers, or service professionals in Rourkela. Receive cash credits when they complete their first order.</p>
+
+          <div style="background:#f8fbff;padding:24px;border-radius:20px;border:2px dashed var(--blue);text-align:center;margin:20px 0;">
+            <small style="color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:0.05em;">Your Partner Referral Code</small>
+            <div style="font-size:28px;font-family:var(--display);font-weight:800;color:var(--blue);letter-spacing:3px;margin:8px 0;" id="userRefCode">RKL-7892</div>
+            <button class="btn btn-orange" style="margin:12px auto 0;width:auto;padding:12px 24px;" onclick="shareWhatsapp()">📲 Share on WhatsApp</button>
+          </div>
+
+          <ul class="checklist">
+            <li><span>Partners Registered</span> <b>0</b></li>
+            <li><span>Verified on Starter Tier</span> <b>0</b></li>
+            <li><span>Total Referral Earnings</span> <b style="color:var(--green)">₹0</b></li>
+          </ul>
+
+          <button class="btn btn-outline" onclick="goToStep(13)">&larr; Back to Dashboard</button>
+        </div>
+
+      </div>
+    </main>
   </div>
 
-  <!-- S14: First Product Listing Hand-off -->
-  <div class="card hidden fade-in" id="step-14">
-    <div class="step-badge">Quick Listing</div>
-    <h1>Add your first product</h1>
-    <p class="sub">Publish your first inventory item to start receiving orders immediately.</p>
+  <script>
+    // State machine
+    var state = {
+      currentStep: 1,
+      lang: 'en',
+      mobile: '9861234567',
+      refCode: '',
+      verticals: ['ecommerce'],
+      basics: {
+        bizName: 'Rourkela Steel Grocers',
+        ownerName: 'Ramesh Chandra Sahu',
+        category: 'Retail & Grocery',
+        address: 'Daily Market, Main Road, Sector 1, Rourkela',
+        pincode: '769001'
+      },
+      pan: {
+        panNumber: 'ABCPS1234F',
+        registeredName: 'RAMESH CHANDRA SAHU',
+        verified: false
+      },
+      gst: {
+        hasGst: true,
+        gstin: '21ABCPS1234F1Z5',
+        tradeName: 'ROURKELA STEEL GROCERS',
+        verified: false
+      },
+      bank: {
+        accountNumber: '50100234567890',
+        ifsc: 'HDFC0001234',
+        beneficiaryName: 'RAMESH CHANDRA SAHU',
+        nameMatchScore: 100,
+        verified: false
+      },
+      licence: {
+        type: 'FSSAI',
+        number: '12023001004512',
+        verified: false
+      },
+      tier: 'STARTER',
+      decision: 'GREEN'
+    };
 
-    <div class="field">
-      <label>Product Title *</label>
-      <input type="text" id="prodTitle" placeholder="e.g. Fresh Rourkela Farm Milk 1L" value="Organic Farm Fresh Milk 1L">
-    </div>
-
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-      <div class="field">
-        <label>Selling Price (₹) *</label>
-        <input type="number" id="prodPrice" placeholder="60" value="65">
-      </div>
-      <div class="field">
-        <label>Initial Stock (Units) *</label>
-        <input type="number" id="prodStock" placeholder="20" value="50">
-      </div>
-    </div>
-
-    <div class="field">
-      <label>Product Category</label>
-      <input type="text" value="Dairy & Farm Essentials" readonly style="background:#f1f5f9;">
-    </div>
-
-    <div class="verif-box verif-success" id="prodSuccess" style="display:none;">
-      <div>✓ Product published successfully to Apnazo catalog!</div>
-    </div>
-
-    <button class="btn btn-orange" onclick="saveFirstProduct()">Publish Product &rarr;</button>
-    <button class="btn btn-outline" onclick="goToStep(13)">&larr; Back to Dashboard</button>
-  </div>
-
-  <!-- S15: Refer & Earn Tab -->
-  <div class="card hidden fade-in" id="step-15">
-    <div class="step-badge">Referral Program</div>
-    <h1>Refer &amp; Earn ₹500</h1>
-    <p class="sub">Invite fellow shop owners, drivers, or service professionals in Rourkela. Earn cash credits on their first completed order.</p>
-
-    <div style="background:#f8faff;padding:16px;border-radius:16px;border:1.5px dashed var(--blue);text-align:center;margin:16px 0;">
-      <small style="color:var(--muted);font-weight:600;text-transform:uppercase;">Your Partner Code</small>
-      <div style="font-size:24px;font-family:var(--display);font-weight:800;color:var(--blue);letter-spacing:2px;margin:6px 0;" id="userRefCode">RKL-7892</div>
-      <button class="btn btn-orange" style="margin:10px auto 0;width:auto;padding:10px 20px;font-size:14px;" onclick="shareWhatsapp()">📲 Share on WhatsApp</button>
-    </div>
-
-    <div class="checklist">
-      <li><span>Friends Registered</span> <b>0</b></li>
-      <li><span>Verified on Starter Tier</span> <b>0</b></li>
-      <li><span>Earned Credits</span> <b style="color:var(--green)">₹0</b></li>
-    </div>
-
-    <button class="btn btn-outline" onclick="goToStep(13)">&larr; Back to Dashboard</button>
-  </div>
-</main>
-
-<script>
-// Application State Machine
-var state = {
-  currentStep: 1,
-  lang: 'en',
-  mobile: '9876543210',
-  refCode: '',
-  verticals: ['ecommerce'],
-  basics: {
-    bizName: 'Steel City Organics',
-    ownerName: 'Pragyan Dash',
-    category: 'Grocery & Daily Needs',
-    address: 'Shop #14, Sector 5, Rourkela',
-    pincode: '769002'
-  },
-  pan: {
-    number: 'ABCDE1234F',
-    registeredName: 'PRAGYAN DASH',
-    verified: false
-  },
-  gst: {
-    hasGst: true,
-    gstin: '21ABCDE1234F1Z5',
-    tradeName: 'STEEL CITY ORGANICS',
-    verified: false
-  },
-  bank: {
-    accountNumber: '919876543210',
-    ifsc: 'SBIN0003042',
-    nameMatchScore: 100,
-    verified: false
-  },
-  licence: {
-    number: '12023005001234',
-    verified: false
-  },
-  tier: 'STARTER',
-  decision: 'GREEN'
-};
-
-// Check local storage for resume
-try {
-  var saved = localStorage.getItem('apnazo_seller_draft');
-  if (saved) {
-    var parsed = JSON.parse(saved);
-    state = Object.assign(state, parsed);
-  }
-} catch(e){}
-
-function autosave() {
-  try {
-    localStorage.setItem('apnazo_seller_draft', JSON.stringify(state));
-    // Asynchronous backend push
-    fetch('/api/seller/profile/save', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(state)
-    }).then(function(r){ return r.json(); }).then(function(data){
-      if (data && data.seller && data.seller.id) {
-        state.id = data.seller.id;
+    // Restore draft
+    try {
+      var saved = localStorage.getItem('apnazo_seller_draft');
+      if (saved) {
+        state = Object.assign(state, JSON.parse(saved));
       }
-    }).catch(function(){});
-  } catch(e){}
-}
+    } catch(e){}
 
-function updateProgress(step) {
-  var pct = Math.min(100, Math.round((step / 10) * 100));
-  var bar = document.getElementById('progBar');
-  if (bar) bar.style.width = pct + '%';
-}
+    function autosave() {
+      try {
+        localStorage.setItem('apnazo_seller_draft', JSON.stringify(state));
+        fetch('/api/seller/profile/save', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(state)
+        }).then(r => r.json()).then(data => {
+          if (data && data.seller && data.seller.id) {
+            state.id = data.seller.id;
+          }
+        }).catch(function(){});
+      } catch(e){}
+    }
 
-function goToStep(stepNum) {
-  for (var i = 1; i <= 15; i++) {
-    var el = document.getElementById('step-' + i);
-    if (el) el.classList.add('hidden');
-  }
-  var target = document.getElementById('step-' + stepNum);
-  if (target) {
-    target.classList.remove('hidden');
-    state.currentStep = stepNum;
-    updateProgress(stepNum);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-    autosave();
-  }
-}
+    function updateProgress(stepNum) {
+      // Progress percentage
+      var pct = Math.min(100, Math.round((stepNum / 10) * 100));
+      var bar = document.getElementById('mobileProgBar');
+      if (bar) bar.style.width = pct + '%';
 
-function selectLang(code, el) {
-  state.lang = code;
-  document.querySelectorAll('#step-1 .option-card').forEach(function(c){ c.classList.remove('selected'); });
-  el.classList.add('selected');
-  var labels = { en: 'English', hi: 'हिन्दी', or: 'ଓଡ଼ିଆ', bn: 'বাংলা' };
-  document.getElementById('currentLangLabel').textContent = labels[code] || 'English';
-}
+      // Update sidebar stepper
+      document.querySelectorAll('.step-item').forEach(function(el, idx){
+        var stepId = el.id.replace('side-step-', '');
+        var num = parseInt(stepId, 10);
+        el.classList.remove('active', 'done');
+        if (num < stepNum) {
+          el.classList.add('done');
+          el.querySelector('.step-circle').textContent = '✓';
+        } else if (num === stepNum) {
+          el.classList.add('active');
+          el.querySelector('.step-circle').textContent = num;
+        } else {
+          el.querySelector('.step-circle').textContent = num;
+        }
+      });
+    }
 
-function toggleLang() {
-  goToStep(1);
-}
+    function goToStep(stepNum) {
+      for (var i = 1; i <= 15; i++) {
+        var el = document.getElementById('step-' + i);
+        if (el) el.classList.add('hidden');
+      }
+      var target = document.getElementById('step-' + stepNum);
+      if (target) {
+        target.classList.remove('hidden');
+        state.currentStep = stepNum;
+        updateProgress(stepNum);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        autosave();
+      }
+    }
 
-function handleSendOtp() {
-  var m = document.getElementById('mobileInput').value.trim();
-  if (m.length < 10) {
-    alert('Please enter a valid 10-digit mobile number.');
-    return;
-  }
-  state.mobile = m;
-  document.getElementById('otpSection').classList.remove('hidden');
-  document.getElementById('sendOtpBtn').classList.add('hidden');
-  document.getElementById('verifyOtpBtn').classList.remove('hidden');
+    function selectLang(code, el) {
+      state.lang = code;
+      document.querySelectorAll('.lang-card').forEach(function(c){ c.classList.remove('selected'); });
+      el.classList.add('selected');
+      var labels = { en: 'English', hi: 'हिन्दी', or: 'ଓଡ଼ିଆ', bn: 'বাংলা' };
+      document.getElementById('currentLangLabel').textContent = labels[code] || 'English';
+      autosave();
+    }
 
-  var sec = 30;
-  var timer = setInterval(function(){
-    sec--;
-    document.getElementById('resendTimer').textContent = sec;
-    if (sec <= 0) clearInterval(timer);
-  }, 1000);
-}
+    function toggleLang() {
+      goToStep(1);
+    }
 
-function handleVerifyOtp() {
-  var otp = document.getElementById('otpInput').value.trim();
-  if (otp !== '123456' && otp.length !== 6) {
-    alert('Invalid OTP. Please enter 123456 for demo.');
-    return;
-  }
-  goToStep(3);
-}
+    function handleSendOtp() {
+      var m = document.getElementById('mobileInput').value.trim();
+      if (m.length < 10) {
+        alert('Please enter a valid 10-digit mobile number.');
+        return;
+      }
+      state.mobile = m;
+      document.getElementById('otpSection').classList.remove('hidden');
+      document.getElementById('sendOtpBtn').classList.add('hidden');
+      document.getElementById('verifyOtpBtn').classList.remove('hidden');
 
-function applyReferral() {
-  var code = document.getElementById('refCodeInput').value.trim().toUpperCase();
-  var res = document.getElementById('refResult');
-  if (!code) {
-    goToStep(4);
-    return;
-  }
-  state.refCode = code;
-  res.innerHTML = '<div class="verif-box verif-success">✓ Code <strong>' + code + '</strong> applied! You get <strong>50% off commission</strong> for your first 30 days.</div>';
-  setTimeout(function(){ goToStep(4); }, 1200);
-}
+      var sec = 30;
+      var timer = setInterval(function(){
+        sec--;
+        document.getElementById('resendTimer').textContent = sec;
+        if (sec <= 0) clearInterval(timer);
+      }, 1000);
+      autosave();
+    }
 
-function toggleVertical(v, el) {
-  state.verticals = [v];
-  document.querySelectorAll('#step-4 .option-card').forEach(function(c){ c.classList.remove('selected'); });
-  el.classList.add('selected');
-}
+    function handleVerifyOtp() {
+      var otp = document.getElementById('otpInput').value.trim();
+      if (otp !== '123456' && otp.length !== 6) {
+        alert('Invalid OTP. Please enter 123456 for demo.');
+        return;
+      }
+      goToStep(3);
+    }
 
-function checkCategoryRequirements() {
-  var cat = document.getElementById('bizCategory').value;
-  var licTitle = document.getElementById('licenceTitle');
-  var licLabel = document.getElementById('licenceLabel');
-  if (cat.includes('Rides')) {
-    licTitle.textContent = 'Commercial Driving Licence';
-    licLabel.textContent = 'Driving Licence Number *';
-  } else {
-    licTitle.textContent = 'FSSAI Food Licence';
-    licLabel.textContent = '14-Digit FSSAI Registration Number *';
-  }
-}
+    function applyReferral() {
+      var code = document.getElementById('refCodeInput').value.trim().toUpperCase();
+      var res = document.getElementById('refResult');
+      if (!code) {
+        goToStep(4);
+        return;
+      }
+      state.refCode = code;
+      res.innerHTML = '<div class="verif-box verif-success">✓ Code <strong>' + code + '</strong> applied! You get <strong>50% off commission</strong> for your first 30 days.</div>';
+      setTimeout(function(){ goToStep(4); }, 1000);
+      autosave();
+    }
 
-function saveBasics() {
-  state.basics.bizName = document.getElementById('bizName').value;
-  state.basics.ownerName = document.getElementById('ownerName').value;
-  state.basics.category = document.getElementById('bizCategory').value;
-  state.basics.address = document.getElementById('bizAddress').value;
-  state.basics.pincode = document.getElementById('bizPincode').value;
-  goToStep(6);
-}
+    function toggleVertical(v, el) {
+      state.verticals = [v];
+      document.querySelectorAll('.vertical-card').forEach(function(c){ c.classList.remove('selected'); });
+      el.classList.add('selected');
+      autosave();
+    }
 
-function verifyPAN() {
-  var pan = document.getElementById('panInput').value.trim().toUpperCase();
-  var feedback = document.getElementById('panFeedback');
-  if (pan.length !== 10) {
-    feedback.innerHTML = '<div class="verif-box verif-error">Please enter a valid 10-character PAN number.</div>';
-    return;
-  }
-  feedback.innerHTML = '<div class="verif-box" style="background:#eef4ff;color:var(--blue);">Checking NSDL database...</div>';
-  setTimeout(function(){
-    state.pan.number = pan;
-    state.pan.registeredName = state.basics.ownerName.toUpperCase() || 'PRAGYAN DASH';
-    state.pan.verified = true;
-    feedback.innerHTML = '<div class="verif-box verif-success">✓ <strong>Verified Legal Name:</strong> ' + state.pan.registeredName + '<br><small>Locked as reference name for Bank & GST matching.</small></div>';
-    document.getElementById('panVerifyBtn').classList.add('hidden');
-    document.getElementById('panNextBtn').classList.remove('hidden');
-    document.getElementById('panRefName').textContent = state.pan.registeredName;
-    autosave();
-  }, 700);
-}
+    function checkCategoryRequirements() {
+      var cat = document.getElementById('bizCategory').value;
+      var licTitle = document.getElementById('licenceTitle');
+      var licLabel = document.getElementById('licenceLabel');
+      if (cat.includes('Taxi') || cat.includes('Rides')) {
+        licTitle.textContent = 'Commercial Driving Licence';
+        licLabel.textContent = 'Driving Licence Number *';
+        document.getElementById('licenceNum').value = 'OD-1420190014521';
+        state.licence.type = 'Commercial DL';
+      } else {
+        licTitle.textContent = 'FSSAI Food Licence';
+        licLabel.textContent = '14-Digit FSSAI Registration Number *';
+        document.getElementById('licenceNum').value = '12023001004512';
+        state.licence.type = 'FSSAI';
+      }
+      autosave();
+    }
 
-function toggleGstOption(hasGst) {
-  state.gst.hasGst = hasGst;
-  var yesBtn = document.getElementById('hasGstYesBtn');
-  var noBtn = document.getElementById('hasGstNoBtn');
-  var inputSec = document.getElementById('gstInputSection');
-  var nonSec = document.getElementById('nonGstSection');
+    function saveBasics() {
+      var bName = document.getElementById('bizName').value.trim();
+      var oName = document.getElementById('ownerName').value.trim();
+      var cat = document.getElementById('bizCategory').value;
+      var addr = document.getElementById('bizAddress').value.trim();
+      var pin = document.getElementById('bizPincode').value.trim();
 
-  if (hasGst) {
-    yesBtn.style.background = '#eef4ff';
-    yesBtn.style.color = 'var(--blue)';
-    yesBtn.style.borderColor = 'var(--blue)';
-    noBtn.style.background = 'transparent';
-    noBtn.style.color = 'var(--muted)';
-    noBtn.style.borderColor = 'var(--border)';
-    inputSec.classList.remove('hidden');
-    nonSec.classList.add('hidden');
-  } else {
-    noBtn.style.background = '#eef4ff';
-    noBtn.style.color = 'var(--blue)';
-    noBtn.style.borderColor = 'var(--blue)';
-    yesBtn.style.background = 'transparent';
-    yesBtn.style.color = 'var(--muted)';
-    yesBtn.style.borderColor = 'var(--border)';
-    inputSec.classList.add('hidden');
-    nonSec.classList.remove('hidden');
-  }
-}
+      if (!bName || !oName || !addr) {
+        alert('Please fill out all required fields.');
+        return;
+      }
 
-function verifyGSTIN() {
-  var gstin = document.getElementById('gstinInput').value.trim().toUpperCase();
-  var feedback = document.getElementById('gstFeedback');
-  if (gstin.length !== 15) {
-    feedback.innerHTML = '<div class="verif-box verif-error">Enter a valid 15-character GSTIN.</div>';
-    return;
-  }
-  feedback.innerHTML = '<div class="verif-box" style="background:#eef4ff;color:var(--blue);">Connecting to GST Portal...</div>';
-  setTimeout(function(){
-    state.gst.gstin = gstin;
-    state.gst.verified = true;
-    feedback.innerHTML = '<div class="verif-box verif-success">✓ <strong>GSTIN Active:</strong> Trade Name: ' + (state.basics.bizName.toUpperCase()) + '<br><small>Legal Name matches PAN registered name.</small></div>';
-    autosave();
-  }, 700);
-}
+      state.basics.bizName = bName;
+      state.basics.ownerName = oName;
+      state.basics.category = cat;
+      state.basics.address = addr;
+      state.basics.pincode = pin;
 
-function verifyBank() {
-  var acc = document.getElementById('bankAcc').value.trim();
-  var ifsc = document.getElementById('bankIfsc').value.trim().toUpperCase();
-  var feedback = document.getElementById('bankFeedback');
+      document.getElementById('panRefName').textContent = oName.toUpperCase();
+      goToStep(6);
+    }
 
-  if (!acc || ifsc.length < 8) {
-    feedback.innerHTML = '<div class="verif-box verif-error">Please enter valid account and IFSC.</div>';
-    return;
-  }
+    function verifyPAN() {
+      var pan = document.getElementById('panInput').value.trim().toUpperCase();
+      var feedback = document.getElementById('panFeedback');
+      if (pan.length !== 10) {
+        feedback.innerHTML = '<div class="verif-box verif-error">Please enter a valid 10-digit PAN (e.g. ABCPS1234F).</div>';
+        return;
+      }
+      feedback.innerHTML = '<div class="verif-box" style="background:#eef4ff;color:var(--blue);">Contacting NSDL Verification Server...</div>';
+      setTimeout(function(){
+        state.pan.panNumber = pan;
+        state.pan.registeredName = state.basics.ownerName.toUpperCase();
+        state.pan.verified = true;
+        feedback.innerHTML = '<div class="verif-box verif-success">✓ <strong>PAN Verified:</strong> Legal Reference Name: <strong>' + state.pan.registeredName + '</strong><br><small>Locked as reference identity for Bank Account matching.</small></div>';
+        document.getElementById('panVerifyBtn').classList.add('hidden');
+        document.getElementById('panNextBtn').classList.remove('hidden');
+        autosave();
+      }, 600);
+    }
 
-  feedback.innerHTML = '<div class="verif-box" style="background:#eef4ff;color:var(--blue);">Sending ₹1 Penny Drop Verification...</div>';
-  setTimeout(function(){
-    state.bank.accountNumber = acc;
-    state.bank.ifsc = ifsc;
-    state.bank.verified = true;
-    state.bank.nameMatchScore = 100;
-    feedback.innerHTML = '<div class="verif-box verif-success">✓ <strong>Penny Drop Success!</strong><br>Beneficiary: ' + state.pan.registeredName + '<br><small>100% Name Match against PAN Card.</small></div>';
-    document.getElementById('bankVerifyBtn').classList.add('hidden');
-    document.getElementById('bankNextBtn').classList.remove('hidden');
-    autosave();
-  }, 800);
-}
+    function toggleGstOption(hasGst) {
+      state.gst.hasGst = hasGst;
+      var yesBtn = document.getElementById('hasGstYesBtn');
+      var noBtn = document.getElementById('hasGstNoBtn');
+      var gstSec = document.getElementById('gstInputSection');
+      var nonSec = document.getElementById('nonGstSection');
 
-function checkNextAfterBank() {
-  var cat = state.basics.category;
-  if (cat.includes('Grocery') || cat.includes('Restaurant') || cat.includes('Rides')) {
-    goToStep(9);
-  } else {
-    goToStep(10);
-  }
-}
+      if (hasGst) {
+        yesBtn.style.background = '#eef4ff';
+        yesBtn.style.color = 'var(--blue)';
+        yesBtn.style.borderColor = 'var(--blue)';
+        noBtn.style.background = 'transparent';
+        noBtn.style.color = 'var(--muted)';
+        noBtn.style.borderColor = 'var(--border)';
+        gstSec.classList.remove('hidden');
+        nonSec.classList.add('hidden');
+      } else {
+        noBtn.style.background = '#fffbeb';
+        noBtn.style.color = '#b45309';
+        noBtn.style.borderColor = '#f59e0b';
+        yesBtn.style.background = 'transparent';
+        yesBtn.style.color = 'var(--muted)';
+        yesBtn.style.borderColor = 'var(--border)';
+        gstSec.classList.add('hidden');
+        nonSec.classList.remove('hidden');
+      }
+      autosave();
+    }
 
-function verifyLicence() {
-  var num = document.getElementById('licenceNum').value.trim();
-  var fb = document.getElementById('licenceFeedback');
-  if (!num) return;
-  state.licence.number = num;
-  state.licence.verified = true;
-  fb.style.display = 'flex';
-  autosave();
-}
+    function verifyGSTIN() {
+      var gstin = document.getElementById('gstinInput').value.trim().toUpperCase();
+      var feedback = document.getElementById('gstFeedback');
+      if (gstin.length !== 15) {
+        feedback.innerHTML = '<div class="verif-box verif-error">Enter a valid 15-character GSTIN.</div>';
+        return;
+      }
+      feedback.innerHTML = '<div class="verif-box" style="background:#eef4ff;color:var(--blue);">Connecting to GST Portal...</div>';
+      setTimeout(function(){
+        state.gst.gstin = gstin;
+        state.gst.verified = true;
+        feedback.innerHTML = '<div class="verif-box verif-success">✓ <strong>GSTIN Active:</strong> Trade Name: ' + (state.basics.bizName.toUpperCase()) + '<br><small>Legal Name matches PAN registered name.</small></div>';
+        autosave();
+      }, 700);
+    }
 
-function submitAgreement() {
-  if (!document.getElementById('termsCheck').checked) {
-    alert('Please accept the agreement to continue.');
-    return;
-  }
+    function verifyBank() {
+      var acc = document.getElementById('bankAcc').value.trim();
+      var ifsc = document.getElementById('bankIfsc').value.trim().toUpperCase();
+      var feedback = document.getElementById('bankFeedback');
 
-  // Trigger automated risk decision
-  goToStep(11);
-  var greenDiv = document.getElementById('decisionGreen');
-  var amberDiv = document.getElementById('decisionAmber');
+      if (!acc || ifsc.length < 8) {
+        feedback.innerHTML = '<div class="verif-box verif-error">Please enter valid account number and IFSC code.</div>';
+        return;
+      }
 
-  if (state.bank.nameMatchScore >= 80) {
-    greenDiv.classList.remove('hidden');
-    amberDiv.classList.add('hidden');
-    state.decision = 'GREEN';
-    state.tier = 'STARTER';
-  } else {
-    amberDiv.classList.remove('hidden');
-    greenDiv.classList.add('hidden');
-    state.decision = 'AMBER';
-  }
-  autosave();
-}
+      feedback.innerHTML = '<div class="verif-box" style="background:#eef4ff;color:var(--blue);">Sending ₹1 Penny Drop Verification...</div>';
+      setTimeout(function(){
+        state.bank.accountNumber = acc;
+        state.bank.ifsc = ifsc;
+        state.bank.verified = true;
+        state.bank.nameMatchScore = 100;
+        feedback.innerHTML = '<div class="verif-box verif-success">✓ <strong>Penny Drop Success!</strong><br>Beneficiary: <strong>' + state.pan.registeredName + '</strong><br><small>100% Strong Match against PAN registered identity.</small></div>';
+        document.getElementById('bankVerifyBtn').classList.add('hidden');
+        document.getElementById('bankNextBtn').classList.remove('hidden');
+        autosave();
+      }, 800);
+    }
 
-function reSubmitBank() {
-  state.bank.nameMatchScore = 100;
-  state.decision = 'GREEN';
-  state.tier = 'STARTER';
-  goToDashboard();
-}
+    function checkNextAfterBank() {
+      var cat = state.basics.category;
+      if (cat.includes('Grocery') || cat.includes('Restaurant') || cat.includes('Taxi') || cat.includes('Rides')) {
+        goToStep(9);
+      } else {
+        goToStep(10);
+      }
+    }
 
-function goToDashboard() {
-  document.getElementById('dashStoreName').textContent = state.basics.bizName || 'My Store';
-  document.getElementById('dashCat').textContent = (state.basics.category || 'Retail') + ' · ' + (state.basics.address || 'Rourkela');
-  goToStep(13);
-}
+    function verifyLicence() {
+      var num = document.getElementById('licenceNum').value.trim();
+      var fb = document.getElementById('licenceFeedback');
+      if (!num) return;
+      state.licence.number = num;
+      state.licence.verified = true;
+      fb.style.display = 'flex';
+      autosave();
+    }
 
-function saveFirstProduct() {
-  var title = document.getElementById('prodTitle').value;
-  var price = document.getElementById('prodPrice').value;
-  var stock = document.getElementById('prodStock').value;
-  var sBox = document.getElementById('prodSuccess');
-  if (!title || !price) {
-    alert('Please enter product title and price.');
-    return;
-  }
-  sBox.style.display = 'block';
-  setTimeout(function(){
-    goToStep(13);
-  }, 1200);
-}
+    function submitAgreement() {
+      if (!document.getElementById('termsCheck').checked) {
+        alert('Please accept the agreement to continue.');
+        return;
+      }
 
-function shareWhatsapp() {
-  var text = encodeURI('Hey! I just partnered my business on Apnazo, Rourkela\'s Super App. Sign up using my referral code ' + (state.refCode || 'RKLSELLER') + ' to get 50% discount on commissions: https://apnazo-landing-page.vercel.app/seller');
-  window.open('https://api.whatsapp.com/send?text=' + text, '_blank');
-}
+      goToStep(11);
+      var greenDiv = document.getElementById('decisionGreen');
+      var amberDiv = document.getElementById('decisionAmber');
 
-// Start
-updateProgress(1);
-</script>
+      if (state.bank.nameMatchScore >= 80) {
+        greenDiv.classList.remove('hidden');
+        amberDiv.classList.add('hidden');
+        state.decision = 'GREEN';
+        state.tier = 'STARTER';
+      } else {
+        amberDiv.classList.remove('hidden');
+        greenDiv.classList.add('hidden');
+        state.decision = 'AMBER';
+      }
+      autosave();
+    }
+
+    function reSubmitBank() {
+      state.bank.nameMatchScore = 100;
+      state.decision = 'GREEN';
+      state.tier = 'STARTER';
+      goToDashboard();
+    }
+
+    function goToDashboard() {
+      document.getElementById('dashStoreName').textContent = state.basics.bizName || 'My Store';
+      document.getElementById('dashCat').textContent = (state.basics.category || 'Retail') + ' · ' + (state.basics.address || 'Rourkela');
+      goToStep(13);
+    }
+
+    function saveFirstProduct() {
+      var title = document.getElementById('prodTitle').value;
+      var price = document.getElementById('prodPrice').value;
+      var sBox = document.getElementById('prodSuccess');
+      if (!title || !price) {
+        alert('Please enter product title and price.');
+        return;
+      }
+      sBox.style.display = 'block';
+      setTimeout(function(){
+        goToStep(13);
+      }, 1200);
+    }
+
+    function shareWhatsapp() {
+      var text = encodeURI('Hey! I just partnered my business on Apnazo, Rourkela\'s Super App. Sign up using my referral code ' + (state.refCode || 'RKLSELLER') + ' to get 50% discount on commissions: https://apnazo-landing-page.vercel.app/seller');
+      window.open('https://api.whatsapp.com/send?text=' + text, '_blank');
+    }
+
+    // Initialize progress
+    updateProgress(1);
+  </script>
 
 </body>
 </html>
