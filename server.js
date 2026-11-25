@@ -236,6 +236,32 @@ const server = http.createServer((req, res) => {
   const parsedUrl = new URL(req.url, `http://${req.headers.host}`);
   const pathname = parsedUrl.pathname;
 
+  // Clean URLs: 301 Redirects for .html extensions
+  if (pathname === '/seller.html') {
+    res.writeHead(301, { 'Location': '/seller' });
+    res.end();
+    return;
+  }
+  if (pathname === '/admin.html') {
+    res.writeHead(301, { 'Location': '/admin' });
+    res.end();
+    return;
+  }
+  if (pathname === '/index.html') {
+    res.writeHead(301, { 'Location': '/' });
+    res.end();
+    return;
+  }
+
+  // Clean URL: Route /seller and /partner directly to seller.html
+  if (pathname === '/seller' || pathname === '/partner') {
+    const sellerFilePath = path.join(__dirname, 'seller.html');
+    res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+    fs.createReadStream(sellerFilePath).pipe(res);
+    return;
+  }
+
+
   const jsonResponse = (statusCode, data) => {
     res.writeHead(statusCode, { 'Content-Type': 'application/json; charset=utf-8' });
     res.end(JSON.stringify(data));
@@ -499,7 +525,7 @@ server.listen(PORT, '0.0.0.0', () => {
   console.log(`\n========================================`);
   console.log(`  Apnazo Public Website & Seller Portal`);
   console.log(`  - Local Website:    http://localhost:${PORT}`);
-  console.log(`  - Partner Signup:   http://localhost:${PORT}/seller.html`);
+  console.log(`  - Partner Signup:   http://localhost:${PORT}/seller`);
   console.log(`  - Real OTP API:     /api/auth/otp/send & /verify`);
   console.log(`  - Status:           Active & Isolated`);
   console.log(`========================================\n`);
