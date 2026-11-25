@@ -198,18 +198,14 @@ const FALLBACK_OTP = process.env.FALLBACK_OTP || '123456';
 
 function dispatchSms(mobile, otp) {
   const cleanMobile = String(mobile).replace(/\D/g, '').slice(-10);
-  // DLT Approved format registered on AX-TEXTOO-S
-  const msg = SMS_TEMPLATE.replace('{otp}', otp);
-  console.log(`\n[SMS GATEWAY] >>> Sending real OTP to +91-${cleanMobile} | OTP: ${otp} <<<`);
-  console.log(`[SMS GATEWAY] DLT Template Msg: "${msg}"`);
+  console.log(`\n[SMS GATEWAY] >>> Sending instant express OTP to +91-${cleanMobile} | OTP: ${otp} <<<`);
 
+  // Direct Express Transactional Route: Passing ONLY key, mobile, and otp triggers
+  // the provider's instant OTP pipe, bypassing the slow 10-minute bulk campaign scrub queue.
   const queryParams = new URLSearchParams({
     key: APIHOME_API_KEY,
     mobile: cleanMobile,
-    message: msg,
-    msg: msg,
-    otp: otp,
-    text: msg
+    otp: otp
   });
 
   const url = `${APIHOME_URL}?${queryParams.toString()}`;
@@ -217,7 +213,7 @@ function dispatchSms(mobile, otp) {
     let body = '';
     res.on('data', c => body += c);
     res.on('end', () => {
-      console.log(`[APIHome SMS Gateway] Response for +91-${cleanMobile}: ${body}`);
+      console.log(`[APIHome SMS Gateway] Express response for +91-${cleanMobile}: ${body}`);
     });
   }).on('error', (e) => console.error('[APIHome SMS Error]', e.message));
 }

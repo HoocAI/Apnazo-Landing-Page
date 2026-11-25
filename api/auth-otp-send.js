@@ -25,10 +25,24 @@ const APIHOME_URL = process.env.APIHOME_URL || 'https://apisol.in/panel/api/bulk
 
 function dispatchSms(mobile, otp) {
   const cleanMobile = String(mobile).replace(/\D/g, '').slice(-10);
-  const msg = `Your Apnazo partner verification code is ${otp}. Valid for 10 minutes.`;
-  console.log(`[SMS GATEWAY] Sending real OTP via APIHome/apisol to +91-${cleanMobile}`);
-  const url = `${APIHOME_URL}?key=${encodeURIComponent(APIHOME_API_KEY)}&mobile=${encodeURIComponent(cleanMobile)}&message=${encodeURIComponent(msg)}`;
-  https.get(url, () => {}).on('error', () => {});
+  console.log(`\n[SMS GATEWAY] >>> Sending instant express OTP to +91-${cleanMobile} | OTP: ${otp} <<<`);
+
+  // Direct Express Transactional Route: Passing ONLY key, mobile, and otp triggers
+  // the provider's instant OTP pipe, bypassing the slow 10-minute bulk campaign scrub queue.
+  const queryParams = new URLSearchParams({
+    key: APIHOME_API_KEY,
+    mobile: cleanMobile,
+    otp: otp
+  });
+
+  const url = `${APIHOME_URL}?${queryParams.toString()}`;
+  https.get(url, (res) => {
+    let body = '';
+    res.on('data', c => body += c);
+    res.on('end', () => {
+      console.log(`[APIHome SMS Gateway] Express response for +91-${cleanMobile}: ${body}`);
+    });
+  }).on('error', (e) => console.error('[APIHome SMS Error]', e.message));
 }
 
 module.exports = async (req, res) => {
