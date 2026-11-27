@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Seller Partner Hub · Apnazo</title>
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Sora:wght@600;700;800&display=swap">
+  <style>
+    :root {
+      --primary: #0c831f; /* Blinkit Green */
+      --primary-hover: #086a18;
+      --primary-light: #e8f7ec;
+      --orange: #f8991d; /* Blinkit Yellow/Orange */
+      --orange-light: #fef8ee;
+      --dark: #1f2937;
+      --slate: #0f172a;
+      --slate-sidebar: #111827;
+      --muted: #64748b;
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --border: #e2e8f0;
+      --border-light: #f1f5f9;
+      --success: #16a34a;
+      --danger: #dc2626;
+      --font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --display: 'Sora', sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: var(--bg);
+      color: var(--dark);
+      font-family: var(--font);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Impersonation Banner */
+    #impersonationBanner {
+      display: none;
+      background: #7c2d12;
+      color: #ffedd5;
+      padding: 10px 24px;
+      font-size: 13px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    #impersonationBanner.active { display: flex; }
+    .btn-exit-impersonate {
+      background: #ea580c;
+      color: #fff;
+      border: 0;
+      padding: 4px 12px;
+      border-radius: 6px;
+      font-weight: 700;
+      cursor: pointer;
+      font-size: 12px;
+    }
+
+    /* Layout */
+    .hub-container {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* Sidebar */
+    .hub-sidebar {
+      width: 250px;
+      background: var(--slate-sidebar);
+      color: #cbd5e1;
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+      border-right: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .hub-brand {
+      padding: 24px 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .brand-logo {
+      font-family: var(--display);
+      font-size: 22px;
+      font-weight: 800;
+      color: #ffffff;
+      letter-spacing: -0.03em;
+    }
+    .brand-logo span { color: var(--orange); }
+    .hub-badge {
+      font-size: 11px;
+      background: rgba(12, 131, 31, 0.25);
+      color: #4ade80;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-weight: 700;
+      border: 1px solid rgba(74, 222, 128, 0.3);
+    }
+
+    .hub-nav {
+      padding: 16px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      flex: 1;
+    }
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 11px 14px;
+      border-radius: 10px;
+      font-size: 13.5px;
+      font-weight: 600;
+      color: #94a3b8;
+      cursor: pointer;
+      transition: all 0.16s ease;
+      border: 1px solid transparent;
+    }
+    .nav-item:hover {
+      background: rgba(255,255,255,0.05);
+      color: #ffffff;
+    }
+    .nav-item.active {
+      background: rgba(12, 131, 31, 0.18);
+      color: #4ade80;
+      border-color: rgba(74, 222, 128, 0.25);
+    }
+    .nav-item svg { width: 18px; height: 18px; stroke-width: 2; flex-shrink: 0; }
+
+    .sidebar-user {
+      padding: 16px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .user-info { display: flex; align-items: center; gap: 10px; }
+    .user-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 14px;
+    }
+    .user-name { font-size: 13px; font-weight: 700; color: #fff; line-height: 1.2; }
+    .user-phone { font-size: 11.5px; color: #64748b; }
+    .btn-logout {
+      background: rgba(239, 68, 68, 0.12);
+      border: 1px solid rgba(239, 68, 68, 0.2);
+      color: #f87171;
+      padding: 5px 8px;
+      border-radius: 6px;
+      font-size: 11.5px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    /* Main Stage */
+    .hub-main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+    }
+
+    /* Top Bar */
+    .hub-header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 20;
+    }
+    .header-left h1 {
+      margin: 0;
+      font-size: 20px;
+      font-weight: 800;
+      font-family: var(--display);
+      color: var(--slate);
+    }
+    .header-left p {
+      margin: 2px 0 0;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .store-status-toggle {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--bg);
+      padding: 6px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+    }
+    .status-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--primary);
+      box-shadow: 0 0 0 3px rgba(12, 131, 31, 0.2);
+    }
+    .status-text {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--slate);
+    }
+
+    /* Content Area */
+    .hub-content {
+      padding: 28px 32px 48px;
+    }
+
+    /* Quick Stats Grid (Blinkit Style) */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+      transition: all 0.18s ease;
+    }
+    .stat-card:hover {
+      border-color: #cbd5e1;
+      box-shadow: 0 8px 20px -4px rgba(0,0,0,0.05);
+    }
+    .stat-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 600;
+    }
+    .stat-value {
+      font-size: 26px;
+      font-weight: 800;
+      font-family: var(--display);
+      color: var(--slate);
+    }
+    .stat-pill {
+      font-size: 11.5px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      width: fit-content;
+    }
+    .pill-green { background: #dcfce7; color: #15803d; }
+    .pill-orange { background: #fef3c7; color: #b45309; }
+
+    /* Cards */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+    .card-title {
+      font-size: 17px;
+      font-weight: 700;
+      font-family: var(--display);
+      color: var(--slate);
+      margin: 0 0 4px;
+    }
+    .card-sub {
+      font-size: 13px;
+      color: var(--muted);
+      margin: 0 0 18px;
+    }
+
+    /* Verification Ribbon */
+    .kyc-banner {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 12px;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+    }
+    .kyc-text h4 { margin: 0; font-size: 14px; font-weight: 700; color: #1e40af; }
+    .kyc-text p { margin: 2px 0 0; font-size: 13px; color: #3b82f6; }
+
+    /* Tables */
+    table { width: 100%; border-collapse: collapse; text-align: left; }
+    th, td { padding: 12px 16px; border-bottom: 1px solid var(--border-light); font-size: 13.5px; }
+    th {
+      background: #f8fafc;
+      color: var(--muted);
+      font-weight: 700;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    tr:hover { background: #f8fafc; }
+
+    /* Switch toggle */
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 40px;
+      height: 22px;
+    }
+    .switch input { opacity: 0; width: 0; height: 0; }
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: #cbd5e1;
+      transition: .2s;
+      border-radius: 999px;
+    }
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 16px;
+      width: 16px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: .2s;
+      border-radius: 50%;
+    }
+    input:checked + .slider { background-color: var(--primary); }
+    input:checked + .slider:before { transform: translateX(18px); }
+
+    .btn-hub {
+      background: var(--primary);
+      color: #fff;
+      font-weight: 700;
+      padding: 10px 18px;
+      border-radius: 10px;
+      border: 0;
+      cursor: pointer;
+      font-size: 13.5px;
+      transition: all 0.16s ease;
+    }
+    .btn-hub:hover {
+      background: var(--primary-hover);
+      transform: translateY(-1px);
+    }
+
+    /* Modal for Add Item */
+    .modal-overlay {
+      position: fixed;
+      top:0; left:0; right:0; bottom:0;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(4px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+    }
+    .modal-overlay.active { display: flex; }
+    .modal-box {
+      background: #fff;
+      border-radius: 20px;
+      width: 100%;
+      max-width: 480px;
+      padding: 28px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+    }
+
+    /* Tab screens */
+    .tab-view { display: none; }
+    .tab-view.active { display: block; }
+  </style>
+</head>
+<body>
+
+  <!-- Impersonation Warning Banner if logged in via Admin -->
+  <div id="impersonationBanner">
+    <div>
+      <strong style="color:#fef08a;">Admin Impersonation Mode:</strong> You are viewing this Vendor Dashboard on behalf of this store. Actions will be logged.
+    </div>
+    <button class="btn-exit-impersonate" onclick="exitToAdmin()">Exit to Admin Command Center</button>
+  </div>
+
+  <div class="hub-container">
+    <!-- Left Navigation Bar -->
+    <aside class="hub-sidebar">
+      <div class="hub-brand">
+        <div class="brand-logo">Apna<span>zo</span></div>
+        <span class="hub-badge">PARTNER HUB</span>
+      </div>
+
+      <nav class="hub-nav">
+        <div class="nav-item active" onclick="switchVendorTab('overview', this)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+          <span>Store Overview</span>
+        </div>
+
+        <div class="nav-item" onclick="switchVendorTab('catalog', this)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+          <span>Catalog &amp; Inventory</span>
+        </div>
+
+        <div class="nav-item" onclick="switchVendorTab('orders', this)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+          <span>Live Orders</span>
+        </div>
+
+        <div class="nav-item" onclick="switchVendorTab('payouts', this)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+          <span>Bank &amp; Payouts</span>
+        </div>
+
+        <div class="nav-item" onclick="switchVendorTab('profile', this)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+          <span>Store Profile &amp; KYC</span>
+        </div>
+      </nav>
+
+      <div class="sidebar-user">
+        <div class="user-info">
+          <div class="user-avatar" id="vendorAvatar">P</div>
+          <div>
+            <div class="user-name" id="vendorStoreName">Loading...</div>
+            <div class="user-phone" id="vendorMobile">+91-9861000000</div>
+          </div>
+        </div>
+        <button class="btn-logout" onclick="vendorLogout()" title="Sign Out">Sign Out</button>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="hub-main">
+      <!-- Top Sticky Header -->
+      <header class="hub-header">
+        <div class="header-left">
+          <h1 id="vPageTitle">Store Overview</h1>
+          <p id="vStoreSubtitle">Merchant ID: <span id="vAppId" style="font-family:monospace; font-weight:700;">APN-XXXX</span> · Rourkela Central</p>
+        </div>
+
+        <div style="display:flex; align-items:center; gap:16px;">
+          <div class="store-status-toggle">
+            <span class="status-dot"></span>
+            <span class="status-text">Store Accepting Orders (10m Delivery)</span>
+          </div>
+          <button class="btn-hub" onclick="openAddItemModal()">+ Add New Product</button>
+        </div>
+      </header>
+
+      <div class="hub-content">
+        <!-- Verification Banner -->
+        <div class="kyc-banner" id="kycStatusBanner">
+          <div class="kyc-text">
+            <h4 id="kycStatusTitle">Partner Account Active &amp; Verified</h4>
+            <p id="kycStatusDesc">Your PAN, FSSAI, and Bank Account are fully verified. Automated T+2 daily settlements are active.</p>
+          </div>
+          <span class="stat-pill pill-green" id="kycStatusBadge">Verified Store</span>
+        </div>
+
+        <!-- TAB 1: OVERVIEW -->
+        <section id="tab-overview" class="tab-view active">
+          <!-- Quick Metric KPI Cards (Blinkit Style) -->
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-header">
+                <span>Today's Sales</span>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+              </div>
+              <div class="stat-value" id="kpiTodaySales">₹8,420</div>
+              <span class="stat-pill pill-green">↑ 18% vs yesterday</span>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-header">
+                <span>Orders Dispatched</span>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+              </div>
+              <div class="stat-value" id="kpiOrdersCount">34</div>
+              <span class="stat-pill pill-green">Avg pack time: 2.8 mins</span>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-header">
+                <span>Active Catalog Items</span>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path></svg>
+              </div>
+              <div class="stat-value" id="kpiActiveItems">24 Items</div>
+              <span class="stat-pill pill-orange">2 Out of stock</span>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-header">
+                <span>Next Payout (T+2)</span>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+              </div>
+              <div class="stat-value" id="kpiNextPayout">₹14,930</div>
+              <span class="stat-pill pill-green">Direct Bank Transfer</span>
+            </div>
+          </div>
+
+          <!-- Live Orders Preview -->
+          <div class="card">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+              <div>
+                <h3 class="card-title">Recent Customer Orders</h3>
+                <p class="card-sub">Real-time orders for quick delivery partner pickup.</p>
+              </div>
+              <button class="btn-hub" style="background:transparent; color:var(--primary); border:1px solid var(--primary);" onclick="switchVendorTab('orders')">View All Orders →</button>
+            </div>
+            <table>
+              <thead>
+                <tr>
+                  <th>Order ID</th>
+                  <th>Customer</th>
+                  <th>Items Ordered</th>
+                  <th>Bill Amount</th>
+                  <th>Delivery Partner</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="tblRecentOrders">
+                <tr>
+                  <td style="font-family:monospace; font-weight:700;">#ORD-9021</td>
+                  <td>Rajesh Sahu (Civil Township)</td>
+                  <td>Fortune Atta 5kg, Amul Butter 500g</td>
+                  <td><strong>₹435</strong></td>
+                  <td>Rider Deepak (2 mins away)</td>
+                  <td><span class="stat-pill pill-green">Dispatched</span></td>
+                </tr>
+                <tr>
+                  <td style="font-family:monospace; font-weight:700;">#ORD-9018</td>
+                  <td>Pooja Nayak (Koel Nagar)</td>
+                  <td>Aashirvaad Salt 1kg, Tata Tea Gold 250g</td>
+                  <td><strong>₹210</strong></td>
+                  <td>Rider Amit (Arrived)</td>
+                  <td><span class="stat-pill pill-green">Ready for Handover</span></td>
+                </tr>
+                <tr>
+                  <td style="font-family:monospace; font-weight:700;">#ORD-9015</td>
+                  <td>Sunil Mohanty (Sector 4)</td>
+                  <td>Maggi Noodles 4-Pack, Coca Cola 750ml</td>
+                  <td><strong>₹180</strong></td>
+                  <td>Rider Bikas (Packing)</td>
+                  <td><span class="stat-pill pill-orange">New Order</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- TAB 2: CATALOG -->
+        <section id="tab-catalog" class="tab-view">
+          <div class="card">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:18px;">
+              <div>
+                <h3 class="card-title">Manage Product Catalog &amp; Inventory</h3>
+                <p class="card-sub">Update prices, toggle stock availability, or add new SKU variants.</p>
+              </div>
+              <button class="btn-hub" onclick="openAddItemModal()">+ Add New Product</button>
+            </div>
+            <table>
+              <thead>
+                <tr>
+                  <th>Item Name</th>
+                  <th>Category</th>
+                  <th>Selling Price</th>
+                  <th>MRP</th>
+                  <th>Commission</th>
+                  <th>In Stock Toggle</th>
+                </tr>
+              </thead>
+              <tbody id="tblCatalog">
+                <tr>
+                  <td><strong>Fortune Sunlite Refined Sunflower Oil 1L</strong></td>
+                  <td>Oils &amp; Ghee</td>
+                  <td>₹142</td>
+                  <td>₹165</td>
+                  <td>5%</td>
+                  <td>
+                    <label class="switch">
+                      <input type="checkbox" checked onchange="toggleStock('Fortune Oil', this.checked)">
+                      <span class="slider"></span>
+                    </label>
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>Aashirvaad Shudh Chakki Atta 10kg</strong></td>
+                  <td>Atta &amp; Flours</td>
+                  <td>₹410</td>
+                  <td>₹460</td>
+                  <td>5%</td>
+                  <td>
+                    <label class="switch">
+                      <input type="checkbox" checked onchange="toggleStock('Aashirvaad Atta', this.checked)">
+                      <span class="slider"></span>
+                    </label>
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>Amul Pasteurised Butter 500g</strong></td>
+                  <td>Dairy &amp; Breakfast</td>
+                  <td>₹275</td>
+                  <td>₹285</td>
+                  <td>5%</td>
+                  <td>
+                    <label class="switch">
+                      <input type="checkbox" checked onchange="toggleStock('Amul Butter', this.checked)">
+                      <span class="slider"></span>
+                    </label>
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>Tata Salt Vacuum Evaporated 1kg</strong></td>
+                  <td>Spices &amp; Salt</td>
+                  <td>₹28</td>
+                  <td>₹30</td>
+                  <td>5%</td>
+                  <td>
+                    <label class="switch">
+                      <input type="checkbox" onchange="toggleStock('Tata Salt', this.checked)">
+                      <span class="slider"></span>
+                    </label>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- TAB 3: ORDERS -->
+        <section id="tab-orders" class="tab-view">
+          <div class="card">
+            <h3 class="card-title">Order Fulfillment History</h3>
+            <p class="card-sub">All completed, dispatched, and delivered orders for your store.</p>
+            <table>
+              <thead>
+                <tr>
+                  <th>Order ID</th>
+                  <th>Date &amp; Time</th>
+                  <th>Customer Address</th>
+                  <th>Bill Total</th>
+                  <th>Payout Net</th>
+                  <th>Delivery Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="font-family:monospace; font-weight:700;">#ORD-9021</td>
+                  <td>27 Nov 2026, 01:24 PM</td>
+                  <td>Civil Township, Road 4</td>
+                  <td>₹435</td>
+                  <td>₹413.25</td>
+                  <td><span class="stat-pill pill-green">Delivered (9 mins)</span></td>
+                </tr>
+                <tr>
+                  <td style="font-family:monospace; font-weight:700;">#ORD-9018</td>
+                  <td>27 Nov 2026, 12:45 PM</td>
+                  <td>Koel Nagar, Block C</td>
+                  <td>₹210</td>
+                  <td>₹199.50</td>
+                  <td><span class="stat-pill pill-green">Delivered (11 mins)</span></td>
+                </tr>
+                <tr>
+                  <td style="font-family:monospace; font-weight:700;">#ORD-9005</td>
+                  <td>27 Nov 2026, 11:10 AM</td>
+                  <td>Uditnagar, Near Overbridge</td>
+                  <td>₹1,120</td>
+                  <td>₹1,064.00</td>
+                  <td><span class="stat-pill pill-green">Delivered (8 mins)</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- TAB 4: PAYOUTS -->
+        <section id="tab-payouts" class="tab-view">
+          <div class="card">
+            <h3 class="card-title">Bank Account &amp; Settlement Schedule</h3>
+            <p class="card-sub">Automated T+2 days direct bank transfers. Commission is automatically deducted.</p>
+            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap:18px; margin-bottom:24px;">
+              <div style="background:#f8fafc; padding:16px; border-radius:12px; border:1px solid #e2e8f0;">
+                <div style="font-size:12px; color:var(--muted); font-weight:700;">BENEFICIARY NAME</div>
+                <div style="font-size:16px; font-weight:700; color:var(--slate); margin-top:4px;" id="payoutBeneficiary">Loading...</div>
+              </div>
+              <div style="background:#f8fafc; padding:16px; border-radius:12px; border:1px solid #e2e8f0;">
+                <div style="font-size:12px; color:var(--muted); font-weight:700;">BANK ACCOUNT NUMBER</div>
+                <div style="font-size:16px; font-weight:700; font-family:monospace; color:var(--slate); margin-top:4px;" id="payoutAccNum">Loading...</div>
+              </div>
+              <div style="background:#f8fafc; padding:16px; border-radius:12px; border:1px solid #e2e8f0;">
+                <div style="font-size:12px; color:var(--muted); font-weight:700;">IFSC CODE</div>
+                <div style="font-size:16px; font-weight:700; font-family:monospace; color:var(--slate); margin-top:4px;" id="payoutIfsc">Loading...</div>
+              </div>
+            </div>
+            <h4>Recent Daily Settlements</h4>
+            <table>
+              <thead>
+                <tr>
+                  <th>Settlement Ref</th>
+                  <th>Date</th>
+                  <th>Gross Orders</th>
+                  <th>Platform Fee (5%)</th>
+                  <th>Net Deposited</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="font-family:monospace;">SET-20261126-08</td>
+                  <td>26 Nov 2026</td>
+                  <td>₹12,400</td>
+                  <td>₹620</td>
+                  <td><strong>₹11,780</strong></td>
+                  <td><span class="stat-pill pill-green">Credited to Bank</span></td>
+                </tr>
+                <tr>
+                  <td style="font-family:monospace;">SET-20261125-04</td>
+                  <td>25 Nov 2026</td>
+                  <td>₹14,920</td>
+                  <td>₹746</td>
+                  <td><strong>₹14,174</strong></td>
+                  <td><span class="stat-pill pill-green">Credited to Bank</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- TAB 5: PROFILE & KYC -->
+        <section id="tab-profile" class="tab-view">
+          <div class="card">
+            <h3 class="card-title">Store &amp; Legal Profile</h3>
+            <p class="card-sub">Registered information on Apnazo Partner Registry.</p>
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px;">
+              <div>
+                <label style="font-size:12.5px; font-weight:700; color:var(--muted); display:block; margin-bottom:4px;">Store Trade Name</label>
+                <div style="font-size:15px; font-weight:700;" id="profStoreName">-</div>
+              </div>
+              <div>
+                <label style="font-size:12.5px; font-weight:700; color:var(--muted); display:block; margin-bottom:4px;">Owner / Partner Name</label>
+                <div style="font-size:15px; font-weight:700;" id="profOwnerName">-</div>
+              </div>
+              <div>
+                <label style="font-size:12.5px; font-weight:700; color:var(--muted); display:block; margin-bottom:4px;">Registered Mobile Number</label>
+                <div style="font-size:15px; font-weight:700;" id="profMobile">-</div>
+              </div>
+              <div>
+                <label style="font-size:12.5px; font-weight:700; color:var(--muted); display:block; margin-bottom:4px;">Primary Category</label>
+                <div style="font-size:15px; font-weight:700;" id="profCategory">-</div>
+              </div>
+              <div style="grid-column: 1 / -1;">
+                <label style="font-size:12.5px; font-weight:700; color:var(--muted); display:block; margin-bottom:4px;">Pickup Store Address</label>
+                <div style="font-size:14.5px; font-weight:600;" id="profAddress">-</div>
+              </div>
+              <div>
+                <label style="font-size:12.5px; font-weight:700; color:var(--muted); display:block; margin-bottom:4px;">PAN Card</label>
+                <div style="font-size:14.5px; font-family:monospace; font-weight:700;" id="profPan">-</div>
+              </div>
+              <div>
+                <label style="font-size:12.5px; font-weight:700; color:var(--muted); display:block; margin-bottom:4px;">GSTIN</label>
+                <div style="font-size:14.5px; font-family:monospace; font-weight:700;" id="profGst">-</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- Add Item Modal -->
+  <div class="modal-overlay" id="addItemModal">
+    <div class="modal-box">
+      <h3 style="margin:0 0 6px; font-family:var(--display); font-size:18px;">Add New Catalog Item</h3>
+      <p style="margin:0 0 18px; font-size:13px; color:var(--muted);">Product will immediately go live on Apnazo 10-minute customer app.</p>
+      <form onsubmit="handleAddItem(event)">
+        <div style="margin-bottom:14px;">
+          <label style="display:block; font-size:13px; font-weight:700; margin-bottom:6px;">Item Name &amp; Pack Size</label>
+          <input type="text" id="mItemName" placeholder="e.g. Fortune Mustard Oil 1L Pouch" required style="width:100%; padding:10px; border:1.5px solid #e2e8f0; border-radius:10px; font-size:14px; outline:none;">
+        </div>
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin-bottom:14px;">
+          <div>
+            <label style="display:block; font-size:13px; font-weight:700; margin-bottom:6px;">Selling Price (₹)</label>
+            <input type="number" id="mItemPrice" placeholder="135" required style="width:100%; padding:10px; border:1.5px solid #e2e8f0; border-radius:10px; font-size:14px; outline:none;">
+          </div>
+          <div>
+            <label style="display:block; font-size:13px; font-weight:700; margin-bottom:6px;">MRP (₹)</label>
+            <input type="number" id="mItemMrp" placeholder="150" required style="width:100%; padding:10px; border:1.5px solid #e2e8f0; border-radius:10px; font-size:14px; outline:none;">
+          </div>
+        </div>
+        <div style="margin-bottom:20px;">
+          <label style="display:block; font-size:13px; font-weight:700; margin-bottom:6px;">Category</label>
+          <select id="mItemCategory" style="width:100%; padding:10px; border:1.5px solid #e2e8f0; border-radius:10px; font-size:14px; outline:none;">
+            <option>Grocery &amp; Staples</option>
+            <option>Dairy &amp; Breakfast</option>
+            <option>Snacks &amp; Beverages</option>
+            <option>Personal &amp; Home Care</option>
+          </select>
+        </div>
+        <div style="display:flex; justify-content:flex-end; gap:10px;">
+          <button type="button" class="btn-hub" style="background:#e2e8f0; color:#1e293b;" onclick="closeAddItemModal()">Cancel</button>
+          <button type="submit" class="btn-hub">Publish Item Live</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    var currentSeller = null;
+
+    function getQueryParam(param) {
+      var urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get(param);
+    }
+
+    function switchVendorTab(tabId, el) {
+      document.querySelectorAll('.tab-view').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+      var target = document.getElementById('tab-' + tabId);
+      if (target) target.classList.add('active');
+      if (el) el.classList.add('active');
+      
+      var titles = {
+        overview: 'Store Overview',
+        catalog: 'Catalog & Inventory Management',
+        orders: 'Live & Historical Orders',
+        payouts: 'Bank Account & Payouts',
+        profile: 'Store Profile & Legal Credentials'
+      };
+      document.getElementById('vPageTitle').textContent = titles[tabId] || 'Partner Hub';
+    }
+
+    function initVendor() {
+      var token = getQueryParam('token') || localStorage.getItem('apnazo_seller_token');
+      var id = getQueryParam('id') || localStorage.getItem('apnazo_seller_id') || 'SEL-202611-001';
+      var isImpersonate = token && token.startsWith('sel_adm_');
+
+      if (isImpersonate) {
+        document.getElementById('impersonationBanner').classList.add('active');
+      }
+
+      fetch('/api/vendor/profile?id=' + encodeURIComponent(id))
+        .then(r => r.json())
+        .then(res => {
+          if (res.success && res.seller) {
+            renderSellerProfile(res.seller);
+          } else {
+            // Demo fallback
+            renderDemoProfile(id);
+          }
+        })
+        .catch(err => {
+          renderDemoProfile(id);
+        });
+    }
+
+    function renderSellerProfile(s) {
+      currentSeller = s;
+      var b = s.basics || {};
+      var storeName = b.bizName || s.storeName || 'Partner Store';
+      var owner = b.ownerName || s.pan?.registeredName || 'Partner';
+      var mob = s.mobile || '9861000000';
+      var cat = b.category || (s.categories && s.categories[0]) || 'General Retail';
+      var addr = b.address || s.location?.address || 'Rourkela, Odisha';
+
+      document.getElementById('vendorStoreName').textContent = storeName;
+      document.getElementById('vendorMobile').textContent = '+91-' + mob;
+      document.getElementById('vendorAvatar').textContent = storeName.charAt(0).toUpperCase();
+      document.getElementById('vAppId').textContent = s.id || 'APN-PARTNER';
+
+      document.getElementById('profStoreName').textContent = storeName;
+      document.getElementById('profOwnerName').textContent = owner;
+      document.getElementById('profMobile').textContent = '+91-' + mob;
+      document.getElementById('profCategory').textContent = cat;
+      document.getElementById('profAddress').textContent = addr;
+      document.getElementById('profPan').textContent = s.pan?.panNumber || 'AGYPD9876K';
+      document.getElementById('profGst').textContent = s.gst?.gstin || (s.gst?.hasGst ? 'Applied' : 'Exempted');
+
+      // Bank
+      document.getElementById('payoutBeneficiary').textContent = s.bank?.beneficiaryName || owner;
+      document.getElementById('payoutAccNum').textContent = s.bank?.accountNumber ? '•••• ' + s.bank.accountNumber.slice(-4) : '•••• 1234';
+      document.getElementById('payoutIfsc').textContent = s.bank?.ifsc || 'SBIN0001234';
+
+      // Status
+      if (s.decision === 'GREEN' || s.status === 'Active') {
+        document.getElementById('kycStatusTitle').textContent = 'Partner Account Active & Verified';
+        document.getElementById('kycStatusDesc').textContent = 'Your PAN, FSSAI, and Bank Account are fully verified. Automated T+2 daily settlements are active.';
+        document.getElementById('kycStatusBadge').className = 'stat-pill pill-green';
+        document.getElementById('kycStatusBadge').textContent = 'Verified Store';
+      } else {
+        document.getElementById('kycStatusTitle').textContent = 'Account Verification in Progress';
+        document.getElementById('kycStatusDesc').textContent = 'Our operations team is currently reviewing your uploaded documents. Store is currently live in Starter Tier.';
+        document.getElementById('kycStatusBadge').className = 'stat-pill pill-orange';
+        document.getElementById('kycStatusBadge').textContent = s.status || 'Under Review';
+      }
+    }
+
+    function renderDemoProfile(id) {
+      renderSellerProfile({
+        id: id,
+        storeName: 'Maa Tarini Daily Supermart',
+        mobile: '9861012345',
+        decision: 'GREEN',
+        status: 'Active',
+        basics: {
+          bizName: 'Maa Tarini Daily Supermart',
+          ownerName: 'Subham Pattnayak',
+          category: 'Grocery & Supermarket',
+          address: 'Plot 41, Koel Nagar C-Block, Rourkela, Odisha 769014'
+        },
+        pan: { panNumber: 'BLCPK4321A', registeredName: 'SUBHAM PATTNAYAK' },
+        bank: { beneficiaryName: 'SUBHAM PATTNAYAK', accountNumber: '91201004561234', ifsc: 'UTIB0000456' }
+      });
+    }
+
+    function toggleStock(itemName, inStock) {
+      console.log(`[Catalog Stock] ${itemName} stock set to ${inStock ? 'IN STOCK' : 'OUT OF STOCK'}`);
+    }
+
+    function openAddItemModal() {
+      document.getElementById('addItemModal').classList.add('active');
+    }
+    function closeAddItemModal() {
+      document.getElementById('addItemModal').classList.remove('active');
+    }
+
+    function handleAddItem(e) {
+      e.preventDefault();
+      var name = document.getElementById('mItemName').value;
+      var price = document.getElementById('mItemPrice').value;
+      var mrp = document.getElementById('mItemMrp').value;
+      var cat = document.getElementById('mItemCategory').value;
+
+      var tbody = document.getElementById('tblCatalog');
+      var row = document.createElement('tr');
+      row.innerHTML = `
+        <td><strong>${name}</strong></td>
+        <td>${cat}</td>
+        <td>₹${price}</td>
+        <td>₹${mrp}</td>
+        <td>5%</td>
+        <td>
+          <label class="switch">
+            <input type="checkbox" checked onchange="toggleStock('${name}', this.checked)">
+            <span class="slider"></span>
+          </label>
+        </td>
+      `;
+      tbody.prepend(row);
+      closeAddItemModal();
+      document.getElementById('mItemName').value = '';
+      document.getElementById('mItemPrice').value = '';
+      document.getElementById('mItemMrp').value = '';
+      switchVendorTab('catalog');
+      alert(`Product "${name}" is now live on Apnazo 10-minute customer delivery!`);
+    }
+
+    function vendorLogout() {
+      localStorage.removeItem('apnazo_seller_token');
+      localStorage.removeItem('apnazo_seller_id');
+      window.location.href = '/seller';
+    }
+
+    function exitToAdmin() {
+      window.location.href = window.location.port === '3000' ? 'http://localhost:3001/' : '/admin';
+    }
+
+    // Launch
+    window.addEventListener('DOMContentLoaded', initVendor);
+  </script>
+</body>
+</html>
