@@ -250,6 +250,21 @@ const server = http.createServer((req, res) => {
   }
 
   // Clean URL: Route /seller and /partner directly to seller.html
+  
+  // Clean URLs: Route /privacy and /terms
+  if (pathname === '/privacy' || pathname === '/privacy.html') {
+    const privacyPath = path.join(__dirname, 'privacy.html');
+    res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+    fs.createReadStream(privacyPath).pipe(res);
+    return;
+  }
+  if (pathname === '/terms' || pathname === '/terms.html') {
+    const termsPath = path.join(__dirname, 'terms.html');
+    res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+    fs.createReadStream(termsPath).pipe(res);
+    return;
+  }
+
   if (pathname === '/seller' || pathname === '/partner') {
     const sellerFilePath = path.join(__dirname, 'seller.html');
     res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
