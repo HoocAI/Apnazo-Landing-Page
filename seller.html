@@ -314,87 +314,6 @@
       font-weight: 600;
     }
 
-    /* Completed step edit pill */
-    .step-edit-btn {
-      display: none;
-      font-size: 11px;
-      font-weight: 700;
-      color: var(--brand-orange);
-      background: rgba(255, 122, 0, 0.1);
-      padding: 2px 7px;
-      border-radius: 6px;
-      margin-left: auto;
-      border: 1px solid rgba(255, 122, 0, 0.25);
-      cursor: pointer;
-      transition: all 0.15s ease;
-    }
-    .step-item.completed .step-edit-btn {
-      display: inline-block;
-    }
-    .step-edit-btn:hover {
-      background: var(--brand-orange);
-      color: #ffffff;
-    }
-
-    /* Locked future step items in stepper */
-    .step-item.locked {
-      opacity: 0.55;
-      cursor: not-allowed !important;
-    }
-
-    /* Completed Step Header Banner */
-    .completed-step-banner {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background: #f0fdf4;
-      border: 1px solid #bbf7d0;
-      border-radius: 12px;
-      padding: 12px 18px;
-      margin-bottom: 20px;
-      font-size: 13.5px;
-      color: #166534;
-      font-weight: 600;
-    }
-    .completed-step-banner .btn-step-edit {
-      background: #ffffff;
-      border: 1.5px solid var(--brand-orange);
-      color: var(--brand-orange);
-      border-radius: 8px;
-      padding: 6px 14px;
-      font-size: 12.5px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all 0.15s;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .completed-step-banner .btn-step-edit:hover {
-      background: var(--brand-orange);
-      color: #ffffff;
-    }
-
-    /* Readonly locked inputs when reviewing a completed step */
-    .form-step-locked input:not([type="button"]):not([type="submit"]),
-    .form-step-locked select,
-    .form-step-locked textarea {
-      background-color: #f8fafc !important;
-      border-color: #e2e8f0 !important;
-      color: #64748b !important;
-      cursor: not-allowed !important;
-      pointer-events: none !important;
-    }
-    .form-step-locked .doc-upload-box,
-    .form-step-locked .btn-upload-logo,
-    .form-step-locked .quick-suggest-chip,
-    .form-step-locked .remove-cat,
-    .form-step-locked .btn-remove-doc,
-    .form-step-locked .business-block {
-      pointer-events: none !important;
-      opacity: 0.75 !important;
-    }
-
     /* COLUMN 3: Right Main Stage Content Area */
     .main-stage {
       padding: 40px 48px;
@@ -955,52 +874,8 @@
       align-items: flex-start;
       margin-bottom: 24px;
     }
-    .btn-step-mini-edit {
-      background: #ffffff;
-      border: 1.5px solid #cbd5e1;
-      color: var(--ink-dark);
-      border-radius: 8px;
-      padding: 5px 14px;
-      font-size: 12.5px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all 0.15s ease;
-    }
-    .btn-step-mini-edit:hover {
-      border-color: var(--brand-orange);
-      color: var(--brand-orange);
-      background: #fffaf0;
-    }
-    .btn-step-mini-cancel {
-      background: #ffffff;
-      border: 1.5px solid #cbd5e1;
-      color: #64748b;
-      border-radius: 8px;
-      padding: 5px 12px;
-      font-size: 12.5px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.15s ease;
-    }
-    .btn-step-mini-cancel:hover {
-      background: #f1f5f9;
-      color: var(--ink-dark);
-    }
-    .badge-mini-editing {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      font-size: 11.5px;
-      font-weight: 700;
-      color: #c2410c;
-      background: #fff7ed;
-      border: 1px solid #fed7aa;
-      border-radius: 6px;
-      padding: 4px 9px;
-      margin-right: 8px;
-    }
 
-        /* NEED ASSISTANCE COLLAPSIBLE FLOATING PILL */
+    /* NEED ASSISTANCE COLLAPSIBLE FLOATING PILL */
     .btn-need-assistance {
       position: fixed;
       bottom: 24px;
@@ -1224,45 +1099,37 @@
       <nav class="stepper-col">
         <div class="stepper-title">Complete these steps for easy onboarding</div>
         <div class="step-list">
-          <div class="step-item active" id="navStep1" onclick="jumpToStep(1)">
+          <div class="step-item active" id="navStep1" onclick="goToStep(1)">
             <div class="step-circle">1</div>
             <div class="step-label">Mobile Verification</div>
-            <span class="step-edit-btn" onclick="event.stopPropagation(); jumpToStep(1);">Edit</span>
           </div>
-          <div class="step-item" id="navStep2" onclick="jumpToStep(2)">
+          <div class="step-item" id="navStep2" onclick="goToStep(2)">
             <div class="step-circle">2</div>
             <div class="step-label">Select Business</div>
-            <span class="step-edit-btn" onclick="event.stopPropagation(); jumpToStep(2);">Edit</span>
           </div>
-          <div class="step-item" id="navStep3" onclick="jumpToStep(3)">
+          <div class="step-item" id="navStep3" onclick="goToStep(3)">
             <div class="step-circle">3</div>
             <div class="step-label">Business Details</div>
-            <span class="step-edit-btn" onclick="event.stopPropagation(); jumpToStep(3);">Edit</span>
           </div>
-          <div class="step-item" id="navStep4" onclick="jumpToStep(4)">
+          <div class="step-item" id="navStep4" onclick="goToStep(4)">
             <div class="step-circle">4</div>
             <div class="step-label">Identity &amp; Tax (PAN/GST)</div>
-            <span class="step-edit-btn" onclick="event.stopPropagation(); jumpToStep(4);">Edit</span>
           </div>
-          <div class="step-item" id="navStep5" onclick="jumpToStep(5)">
+          <div class="step-item" id="navStep5" onclick="goToStep(5)">
             <div class="step-circle">5</div>
             <div class="step-label">Bank Details</div>
-            <span class="step-edit-btn" onclick="event.stopPropagation(); jumpToStep(5);">Edit</span>
           </div>
-          <div class="step-item" id="navStep6" onclick="jumpToStep(6)">
+          <div class="step-item" id="navStep6" onclick="goToStep(6)">
             <div class="step-circle">6</div>
             <div class="step-label" id="step6NavLabel">Category Licence &amp; FSSAI</div>
-            <span class="step-edit-btn" onclick="event.stopPropagation(); jumpToStep(6);">Edit</span>
           </div>
-          <div class="step-item" id="navStep7" onclick="jumpToStep(7)">
+          <div class="step-item" id="navStep7" onclick="goToStep(7)">
             <div class="step-circle">7</div>
             <div class="step-label">Partner Agreement</div>
-            <span class="step-edit-btn" onclick="event.stopPropagation(); jumpToStep(7);">Edit</span>
           </div>
-          <div class="step-item" id="navStep8" onclick="jumpToStep(8)">
+          <div class="step-item" id="navStep8" onclick="goToStep(8)">
             <div class="step-circle">8</div>
             <div class="step-label">Listing &amp; Activation</div>
-            <span class="step-edit-btn" onclick="event.stopPropagation(); jumpToStep(8);">Edit</span>
           </div>
         </div>
       </nav>
@@ -1272,12 +1139,9 @@
         
         <!-- STEP 1: MOBILE OTP VERIFICATION -->
         <div class="step-view active" id="viewStep1">
-          <div class="stage-header stage-header-flex">
-            <div>
-              <h1 class="stage-title">Enter your mobile number</h1>
-              <p class="stage-desc">We will send a 6-digit OTP to verify your account and autosave your onboarding progress.</p>
-            </div>
-            <div class="stage-header-actions" id="headerActionsStep1"></div>
+          <div class="stage-header">
+            <h1 class="stage-title">Enter your mobile number</h1>
+            <p class="stage-desc">We will send a 6-digit OTP to verify your account and autosave your onboarding progress.</p>
           </div>
 
           <div class="section-card">
@@ -1323,20 +1187,17 @@
 
           <div class="action-bar">
             <div></div>
-            <button class="btn-save-continue btn-disabled" id="btnStep1Next" onclick="goToStep(2)" disabled>
-              <span>Next &rarr;</span>
+            <button class="btn-save-continue btn-disabled" id="btnStep1Next" onclick="saveStep1AndContinue()" disabled>
+              <span>Save &amp; Next &rarr;</span>
             </button>
           </div>
         </div>
 
         <!-- STEP 2: BLOCK STRUCTURE FOR SELECT YOUR BUSINESS -->
         <div class="step-view" id="viewStep2">
-          <div class="stage-header stage-header-flex">
-            <div>
-              <h1 class="stage-title">Select your business</h1>
-              <p class="stage-desc">Choose the primary business category you will operate on Apnazo. You can add extra services later.</p>
-            </div>
-            <div class="stage-header-actions" id="headerActionsStep2"></div>
+          <div class="stage-header">
+            <h1 class="stage-title">Select your business</h1>
+            <p class="stage-desc">Choose the primary business category you will operate on Apnazo. You can add extra services later.</p>
           </div>
 
           <div class="business-block-grid">
@@ -1397,18 +1258,15 @@
 
           <div class="action-bar">
             <button class="btn-back" onclick="goToStep(1)">&larr; Back</button>
-            <button class="btn-save-continue" id="btnStep2Next" onclick="saveStep2AndContinue()">Save &amp; continue &rarr;</button>
+            <button class="btn-save-continue" id="btnStep2Next" onclick="saveStep2AndContinue()"><span>Save &amp; Next &rarr;</span></button>
           </div>
         </div>
 
         <!-- STEP 3: BUSINESS DETAILS (DYNAMIC LOGO + PINCODE AUTOFETCH + DROPDOWN AUTO-SUGGESTIONS) -->
         <div class="step-view" id="viewStep3">
-          <div class="stage-header stage-header-flex">
-            <div>
-              <h1 class="stage-title">Business details</h1>
-              <p class="stage-desc">Enter the details about your products, store branding, and sales channels.</p>
-            </div>
-            <div class="stage-header-actions" id="headerActionsStep3"></div>
+          <div class="stage-header">
+            <h1 class="stage-title">Business details</h1>
+            <p class="stage-desc">Enter the details about your products, store branding, and sales channels.</p>
           </div>
 
           <!-- DYNAMIC LOGO SECTION -->
@@ -1579,18 +1437,15 @@
 
           <div class="action-bar">
             <button class="btn-back" onclick="goToStep(2)">&larr; Back</button>
-            <button class="btn-save-continue btn-disabled" id="btnStep3Next" onclick="saveStep3AndContinue()" disabled>Save &amp; continue &rarr;</button>
+            <button class="btn-save-continue btn-disabled" id="btnStep3Next" onclick="saveStep3AndContinue()" disabled><span>Save &amp; Next &rarr;</span></button>
           </div>
         </div>
 
         <!-- STEP 4: IDENTITY & TAX (PAN, GSTIN OR GENUINE DOC UPLOAD, EXPIRY DATE & GRACE PERIOD) -->
         <div class="step-view" id="viewStep4">
-          <div class="stage-header stage-header-flex">
-            <div>
-              <h1 class="stage-title">Identity &amp; Tax verification</h1>
-              <p class="stage-desc">Verify your legal entity through PAN card and GST or upload a Genuine Alternative Business Document.</p>
-            </div>
-            <div class="stage-header-actions" id="headerActionsStep4"></div>
+          <div class="stage-header">
+            <h1 class="stage-title">Identity &amp; Tax verification</h1>
+            <p class="stage-desc">Verify your legal entity through PAN card and GST or upload a Genuine Alternative Business Document.</p>
           </div>
 
           <!-- PAN SECTION -->
@@ -1703,18 +1558,15 @@
 
           <div class="action-bar">
             <button class="btn-back" onclick="goToStep(3)">&larr; Back</button>
-            <button class="btn-save-continue btn-disabled" id="btnStep4Next" onclick="saveStep4AndContinue()" disabled>Save &amp; continue &rarr;</button>
+            <button class="btn-save-continue btn-disabled" id="btnStep4Next" onclick="saveStep4AndContinue()" disabled><span>Save &amp; Next &rarr;</span></button>
           </div>
         </div>
 
         <!-- STEP 5: BANK DETAILS & PENNY DROP -->
         <div class="step-view" id="viewStep5">
-          <div class="stage-header stage-header-flex">
-            <div>
-              <h1 class="stage-title">Bank account for payouts</h1>
-              <p class="stage-desc">Daily sales earnings and ride fares will be deposited directly to this account via T+2 automated payout settlements.</p>
-            </div>
-            <div class="stage-header-actions" id="headerActionsStep5"></div>
+          <div class="stage-header">
+            <h1 class="stage-title">Bank account for payouts</h1>
+            <p class="stage-desc">Daily sales earnings and ride fares will be deposited directly to this account via T+2 automated payout settlements.</p>
           </div>
 
           <div class="section-card">
@@ -1756,18 +1608,15 @@
 
           <div class="action-bar">
             <button class="btn-back" onclick="goToStep(4)">&larr; Back</button>
-            <button class="btn-save-continue btn-disabled" id="btnStep5Next" onclick="saveStep5AndContinue()" disabled>Save &amp; continue &rarr;</button>
+            <button class="btn-save-continue btn-disabled" id="btnStep5Next" onclick="saveStep5AndContinue()" disabled><span>Save &amp; Next &rarr;</span></button>
           </div>
         </div>
 
                 <!-- STEP 6: DYNAMIC CATEGORY LICENCE (ADAPTIVE TO BUSINESS CATEGORY) -->
         <div class="step-view" id="viewStep6">
-          <div class="stage-header stage-header-flex">
-            <div>
-              <h1 class="stage-title" id="s6HeaderTitle">Category licence &amp; Food FSSAI</h1>
-              <p class="stage-desc" id="s6HeaderDesc">Food, grocery, restaurant, and pharmacy businesses require a valid licence or registration certificate.</p>
-            </div>
-            <div class="stage-header-actions" id="headerActionsStep6"></div>
+          <div class="stage-header">
+            <h1 class="stage-title" id="s6HeaderTitle">Category licence &amp; Food FSSAI</h1>
+            <p class="stage-desc" id="s6HeaderDesc">Food, grocery, restaurant, and pharmacy businesses require a valid licence or registration certificate.</p>
           </div>
 
           <div class="section-card">
@@ -1818,18 +1667,15 @@
 
           <div class="action-bar">
             <button class="btn-back" onclick="goToStep(5)">&larr; Back</button>
-            <button class="btn-save-continue btn-disabled" id="btnStep6Next" onclick="saveStep6AndContinue()" disabled>Save &amp; continue &rarr;</button>
+            <button class="btn-save-continue btn-disabled" id="btnStep6Next" onclick="saveStep6AndContinue()" disabled><span>Save &amp; Next &rarr;</span></button>
           </div>
         </div>
 
         <!-- STEP 7: PARTNER AGREEMENT & E-SIGN -->
         <div class="step-view" id="viewStep7">
-          <div class="stage-header stage-header-flex">
-            <div>
-              <h1 class="stage-title">Terms &amp; e-Sign agreement</h1>
-              <p class="stage-desc">Please review commercial policies and confirm with OTP acceptance.</p>
-            </div>
-            <div class="stage-header-actions" id="headerActionsStep7"></div>
+          <div class="stage-header">
+            <h1 class="stage-title">Terms &amp; e-Sign agreement</h1>
+            <p class="stage-desc">Please review commercial policies and confirm with OTP acceptance.</p>
           </div>
 
           <div class="section-card">
@@ -1852,7 +1698,7 @@
 
           <div class="action-bar">
             <button class="btn-back" onclick="goToStep(6)">&larr; Back</button>
-            <button class="btn-save-continue btn-disabled" id="btnStep7Next" onclick="submitAgreementAndContinue()" disabled>e-Sign &amp; Complete &rarr;</button>
+            <button class="btn-save-continue btn-disabled" id="btnStep7Next" onclick="submitAgreementAndContinue()" disabled><span>e-Sign &amp; Submit &rarr;</span></button>
           </div>
         </div>
 
@@ -2190,60 +2036,18 @@
       if (!btn) return;
 
       const valid = isStepValid(stepNum);
-      const isCompleted = state.completedSteps && state.completedSteps.includes(stepNum);
-      const isEditing = state.editingSteps && state.editingSteps.includes(stepNum);
-
-      if (stepNum === 1) {
-        btn.innerHTML = `<span>Next &rarr;</span>`;
-        if (state.verified) {
-          btn.disabled = false;
-          btn.classList.remove('btn-disabled');
-          btn.onclick = function() { goToStep(2); };
-        } else {
-          btn.disabled = true;
-          btn.classList.add('btn-disabled');
-          btn.onclick = null;
-        }
-        return;
-      }
-
-      if (isCompleted && !isEditing) {
+      if (valid) {
         btn.disabled = false;
         btn.classList.remove('btn-disabled');
-        btn.innerHTML = `<span>Next &rarr;</span>`;
-        btn.onclick = function() { goToStep(stepNum + 1); };
       } else {
-        if (stepNum === 7) {
-          btn.innerHTML = `<span>e-Sign &amp; Complete &rarr;</span>`;
-        } else {
-          btn.innerHTML = `<span>Save &amp; continue &rarr;</span>`;
-        }
-
-        const stepActions = {
-          2: saveStep2AndContinue,
-          3: saveStep3AndContinue,
-          4: saveStep4AndContinue,
-          5: saveStep5AndContinue,
-          6: saveStep6AndContinue,
-          7: submitAgreementAndContinue
-        };
-        btn.onclick = stepActions[stepNum];
-
-        if (valid) {
-          btn.disabled = false;
-          btn.classList.remove('btn-disabled');
-        } else {
-          btn.disabled = true;
-          btn.classList.add('btn-disabled');
-        }
+        btn.disabled = true;
+        btn.classList.add('btn-disabled');
       }
     }
 
     // STEP ROUTING
     function goToStep(num) {
       state.completedSteps = state.completedSteps || [];
-      state.editingSteps = state.editingSteps || [];
-
       state.step = num;
       document.querySelectorAll('.step-view').forEach(v => v.classList.remove('active'));
       const activeView = document.getElementById('viewStep' + num);
@@ -2253,7 +2057,7 @@
       for (let i = 1; i <= 8; i++) {
         const item = document.getElementById('navStep' + i);
         if (!item) continue;
-        item.classList.remove('active', 'completed', 'locked');
+        item.classList.remove('active', 'completed');
 
         const isCompleted = state.completedSteps.includes(i) || (i === 1 && state.verified);
         if (i === num) {
@@ -2264,10 +2068,7 @@
         }
       }
 
-      const isCompleted = state.completedSteps.includes(num) || (num === 1 && state.verified);
-      const isEditing = state.editingSteps.includes(num);
-
-      renderStepHeaderAndButtons(num, isCompleted, isEditing);
+      updateStepButtonValidity(num);
       window.scrollTo({ top: 0, behavior: 'smooth' });
       saveDraft();
     }
@@ -2276,59 +2077,23 @@
       goToStep(num);
     }
 
-    function unlockStepForEditing(stepNum) {
-      state.editingSteps = state.editingSteps || [];
-      if (!state.editingSteps.includes(stepNum)) {
-        state.editingSteps.push(stepNum);
+    function markStepCompleted(stepNum) {
+      state.completedSteps = state.completedSteps || [];
+      if (!state.completedSteps.includes(stepNum)) {
+        state.completedSteps.push(stepNum);
       }
-      renderStepHeaderAndButtons(stepNum, true, true);
+      const nav = document.getElementById('navStep' + stepNum);
+      if (nav) nav.classList.add('completed');
     }
 
-    function lockStepAfterSaving(stepNum) {
-      state.editingSteps = state.editingSteps || [];
-      state.editingSteps = state.editingSteps.filter(s => s !== stepNum);
-    }
-
-    function cancelEditing(stepNum) {
-      state.editingSteps = (state.editingSteps || []).filter(s => s !== stepNum);
-      renderStepHeaderAndButtons(stepNum, true, false);
-    }
-
-    // MINIMAL STEP HEADER: Simple "Edit" or "Editing / Cancel" (NO VERBOSE PARAGRAPHS)
-    function renderStepHeaderAndButtons(stepNum, isCompleted, isEditing) {
-      const stepView = document.getElementById('viewStep' + stepNum);
-      if (!stepView) return;
-
-      if (isCompleted && !isEditing && stepNum < 8) {
-        stepView.classList.add('form-step-locked');
-      } else {
-        stepView.classList.remove('form-step-locked');
+    function saveStep1AndContinue() {
+      if (!state.verified) {
+        showToast('warning', 'Verification Required', 'Please verify your mobile number with OTP.');
+        return;
       }
-
-      // Remove any legacy banners
-      const oldBanners = stepView.querySelectorAll('.completed-step-banner');
-      oldBanners.forEach(b => b.remove());
-
-      // Render concise top-right header action
-      const headerActions = document.getElementById('headerActionsStep' + stepNum);
-      if (headerActions) {
-        if (isCompleted && stepNum < 8) {
-          if (isEditing) {
-            headerActions.innerHTML = `
-              <span class="badge-mini-editing">Editing</span>
-              <button type="button" class="btn-step-mini-cancel" onclick="cancelEditing(${stepNum})">Cancel</button>
-            `;
-          } else {
-            headerActions.innerHTML = `
-              <button type="button" class="btn-step-mini-edit" onclick="unlockStepForEditing(${stepNum})">Edit</button>
-            `;
-          }
-        } else {
-          headerActions.innerHTML = '';
-        }
-      }
-
-      updateStepButtonValidity(stepNum);
+      markStepCompleted(1);
+      saveDraft();
+      goToStep(2);
     }
 
     function saveDraft() {
@@ -2805,7 +2570,6 @@
     }
 
     function saveStep2AndContinue() {
-      lockStepAfterSaving(2);
       markStepCompleted(2);
       goToStep(3);
     }
@@ -2965,7 +2729,6 @@
         }
       });
 
-      lockStepAfterSaving(3);
       markStepCompleted(3);
       goToStep(4);
     }
@@ -3163,7 +2926,6 @@
         showToast('warning', 'PAN Required', 'Please enter a valid 10-digit PAN card number.');
         return;
       }
-      lockStepAfterSaving(4);
       markStepCompleted(4);
       goToStep(5);
     }
@@ -3182,7 +2944,6 @@
         showToast('warning', 'Mismatch', 'Bank account numbers do not match.');
         return;
       }
-      lockStepAfterSaving(5);
       markStepCompleted(5);
       goToStep(6);
     }
@@ -3211,7 +2972,6 @@
     }
 
     function saveStep6AndContinue() {
-      lockStepAfterSaving(6);
       markStepCompleted(6);
       goToStep(7);
     }
