@@ -1826,7 +1826,27 @@
         } catch(e){}
       }
 
-      // Initialize category suggestions and step-specific configs
+      // Dynamically fetch live support numbers configured in Admin Panel
+      fetch(API_BASE + '/api/settings')
+        .then(r => r.json())
+        .then(d => {
+          if (d && d.settings && d.settings.support) {
+            const s = d.settings.support;
+            const phone = s.sellerHelpline || s.supportPhone || '7355315892';
+            const clean = phone.replace(/\D/g, '').slice(-10);
+            const btn = document.getElementById('assistBtn');
+            if (btn) {
+              btn.href = 'tel:' + clean;
+              btn.title = 'Call Apnazo Support (+91 ' + clean + ')';
+            }
+            document.querySelectorAll('a[href^="tel:"]').forEach(a => {
+              a.href = 'tel:' + clean;
+            });
+          }
+        })
+        .catch(()=>{});
+
+            // Initialize category suggestions and step-specific configs
       updateStep3ForCategory(state.businessRole);
       updateStep6ForCategory(state.businessRole);
       renderCategoryChips();

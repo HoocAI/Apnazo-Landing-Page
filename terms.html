@@ -27,7 +27,7 @@
       padding: 40px 20px;
     }
     .container {
-      max-width: 820px;
+      max-width: 840px;
       margin: 0 auto;
       background: #ffffff;
       border: 1px solid var(--border);
@@ -51,7 +51,7 @@
       color: var(--primary);
       margin-bottom: 8px;
     }
-    .updated { font-size: 13px; color: var(--muted); }
+    .updated { font-size: 13.5px; color: var(--muted); margin-bottom: 24px; }
     h2 {
       font-family: 'Plus Jakarta Sans', sans-serif;
       font-size: 18px;
@@ -72,8 +72,8 @@
       border-radius: 10px;
       font-weight: 600;
       font-size: 13.5px;
-      margin-top: 24px;
     }
+    .btn-back:hover { background: #0a2f80; }
   </style>
 </head>
 <body>
@@ -83,23 +83,60 @@
       <a href="/" class="btn-back">&larr; Back to Home</a>
     </div>
 
-    <h1>Apnazo Merchant &amp; Partner Terms of Service</h1>
-    <div class="updated">Version 1.2 · Effective Date: November 27, 2026</div>
+    <h1 id="termsTitle">Apnazo Merchant &amp; Partner Terms of Service</h1>
+    <div class="updated" id="termsUpdated">Version 1.2 · Effective Date: November 27, 2026</div>
 
-    <h2>1. Commercial Operations &amp; Commission</h2>
-    <p>Apnazo operates a local hyper-delivery and super app platform across Rourkela, Odisha. Platform commission rates are capped between 5% and 10% as specified in your category schedule, with a 0% promotional commission during your first 30 days of active onboarding.</p>
+    <div id="termsBody">
+      <h2>1. Commercial Operations &amp; Commission</h2>
+      <p>Apnazo operates a local hyper-delivery and super app platform across Rourkela, Odisha. Platform commission rates are capped between 5% and 10% as specified in your category schedule, with a 0% promotional commission during your first 30 days of active onboarding.</p>
 
-    <h2>2. Payout Settlements (T+2 Days)</h2>
-    <p>All net order earnings are credited directly to the merchant's verified bank account on a T+2 business day rolling settlement schedule. Zero setup fees or recurring software maintenance charges apply.</p>
+      <h2>2. Payout Settlements (T+2 Days)</h2>
+      <p>All net order earnings are credited directly to the merchant's verified bank account on a T+2 business day rolling settlement schedule. Zero setup fees or recurring software maintenance charges apply.</p>
 
-    <h2>3. Product Quality, Returns &amp; Consumer Protection</h2>
-    <p>Merchants guarantee that all food, grocery, and packaged products delivered are fresh, unexpired, and accurately represented. A standard 24-hour return and replacement window applies to customer orders.</p>
+      <h2>3. Product Quality, Returns &amp; Consumer Protection</h2>
+      <p>Merchants guarantee that all food, grocery, and packaged products delivered are fresh, unexpired, and accurately represented. A standard 24-hour return and replacement window applies to customer orders.</p>
 
-    <h2>4. Statutory Licences &amp; 15-Day Grace Period</h2>
-    <p>Merchants operating in food and grocery categories must maintain an active FSSAI licence. If a licence expires, Apnazo provides an official 15-day grace period during which sales continuity is maintained while renewal documents are processed.</p>
+      <h2>4. Statutory Licences &amp; 15-Day Grace Period</h2>
+      <p>Merchants operating in food and grocery categories must maintain an active FSSAI licence. If a licence expires, Apnazo provides an official 15-day grace period during which sales continuity is maintained while renewal documents are processed.</p>
 
-    <h2>5. Dispute Resolution</h2>
-    <p>Commercial or order fulfillment disputes are reviewed by the Apnazo Partner Desk within 24 hours. Contact our helpline at <a href="tel:7355315892" style="color:var(--primary); font-weight:600;">+91 7355315892</a>.</p>
+      <h2>5. Dispute Resolution</h2>
+      <p>Commercial or order fulfillment disputes are reviewed by the Apnazo Partner Desk within 24 hours. Contact our helpline at <a href="tel:7355315892" id="termsPhoneLink" style="color:var(--primary); font-weight:600;">+91 7355315892</a>.</p>
+    </div>
   </div>
+
+  <script>
+    const API_BASE = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+      ? ''
+      : 'https://apnazo-backend.onrender.com';
+
+    // Dynamic Live Content Sync from Admin Panel
+    fetch(API_BASE + '/api/content/terms')
+      .then(r => r.json())
+      .then(d => {
+        if (d && d.terms) {
+          if (d.terms.title) document.getElementById('termsTitle').innerText = d.terms.title;
+          if (d.terms.version) document.getElementById('termsUpdated').innerText = d.terms.version;
+          if (d.terms.contentHtml) document.getElementById('termsBody').innerHTML = d.terms.contentHtml;
+        }
+      })
+      .catch(()=>{});
+
+    // Dynamic Live Support Helpline Sync
+    fetch(API_BASE + '/api/settings')
+      .then(r => r.json())
+      .then(d => {
+        if (d && d.settings && d.settings.support) {
+          const s = d.settings.support;
+          const phone = s.supportPhone || s.sellerHelpline || '+91 7355315892';
+          const cleanPhone = phone.replace(/\D/g, '').slice(-10);
+          const tLink = document.getElementById('termsPhoneLink');
+          if (tLink) {
+            tLink.href = 'tel:' + cleanPhone;
+            tLink.innerText = phone;
+          }
+        }
+      })
+      .catch(()=>{});
+  </script>
 </body>
 </html>

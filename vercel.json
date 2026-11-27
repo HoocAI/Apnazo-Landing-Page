@@ -21,6 +21,38 @@
   ],
   "rewrites": [
     {
+      "source": "/api/admin/content/terms",
+      "destination": "/api/content-terms"
+    },
+    {
+      "source": "/api/content/terms",
+      "destination": "/api/content-terms"
+    },
+    {
+      "source": "/api/admin/content/privacy",
+      "destination": "/api/content-privacy"
+    },
+    {
+      "source": "/api/content/privacy",
+      "destination": "/api/content-privacy"
+    },
+    {
+      "source": "/api/admin/settings",
+      "destination": "/api/settings"
+    },
+    {
+      "source": "/api/settings",
+      "destination": "/api/settings"
+    },
+    {
+      "source": "/terms",
+      "destination": "/terms.html"
+    },
+    {
+      "source": "/privacy",
+      "destination": "/privacy.html"
+    },
+    {
       "source": "/api/auth/otp/send",
       "destination": "/api/auth-otp-send"
     },

@@ -27,7 +27,7 @@
       padding: 40px 20px;
     }
     .container {
-      max-width: 820px;
+      max-width: 840px;
       margin: 0 auto;
       background: #ffffff;
       border: 1px solid var(--border);
@@ -51,7 +51,7 @@
       color: var(--primary);
       margin-bottom: 8px;
     }
-    .updated { font-size: 13px; color: var(--muted); }
+    .updated { font-size: 13.5px; color: var(--muted); margin-bottom: 24px; }
     h2 {
       font-family: 'Plus Jakarta Sans', sans-serif;
       font-size: 18px;
@@ -72,8 +72,8 @@
       border-radius: 10px;
       font-weight: 600;
       font-size: 13.5px;
-      margin-top: 24px;
     }
+    .btn-back:hover { background: #0a2f80; }
   </style>
 </head>
 <body>
@@ -83,23 +83,66 @@
       <a href="/" class="btn-back">&larr; Back to Home</a>
     </div>
 
-    <h1>Apnazo Partner &amp; User Privacy Policy</h1>
-    <div class="updated">Effective Date: November 27, 2026 · Operating in Rourkela, Odisha</div>
+    <h1 id="privTitle">Apnazo Partner &amp; User Privacy Policy</h1>
+    <div class="updated" id="privUpdated">Effective Date: November 27, 2026 · Operating in Rourkela, Odisha</div>
 
-    <h2>1. Information We Collect</h2>
-    <p>Apnazo collects partner business details including shop name, owner full name, mobile number, shop pickup address, PAN number, GSTIN / alternative genuine business proof, FSSAI licence information, and bank account details for automated payouts.</p>
+    <div id="privBody">
+      <h2>1. Information We Collect</h2>
+      <p>Apnazo collects partner business details including shop name, owner full name, mobile number, shop pickup address, PAN number, GSTIN / alternative genuine business proof, FSSAI licence information, and bank account details for automated payouts.</p>
 
-    <h2>2. How We Use Your Information</h2>
-    <p>Your information is used strictly to verify your merchant identity, enable customer order delivery, execute statutory tax deductions (TDS/TCS), process T+2 rolling direct bank payouts, and send push notifications for licence renewals.</p>
+      <h2>2. How We Use Your Information</h2>
+      <p>Your information is used strictly to verify your merchant identity, enable customer order delivery, execute statutory tax deductions (TDS/TCS), process T+2 rolling direct bank payouts, and send push notifications for licence renewals.</p>
 
-    <h2>3. Data Protection &amp; Confidentiality</h2>
-    <p>All bank and legal identity documents are encrypted and accessible only to authorized Apnazo compliance officers. We do not sell or lease merchant or user data to third parties.</p>
+      <h2>3. Data Protection &amp; Confidentiality</h2>
+      <p>All bank and legal identity documents are encrypted and accessible only to authorized Apnazo compliance officers. We do not sell or lease merchant or user data to third parties.</p>
 
-    <h2>4. 15-Day Renewal Grace Period Monitoring</h2>
-    <p>For food safety and tax compliance, expiry dates of GST and FSSAI licences are automatically tracked to dispatch reminder notifications 15 days in advance, ensuring zero interruption to your trading capabilities.</p>
+      <h2>4. 15-Day Renewal Grace Period Monitoring</h2>
+      <p>For food safety and tax compliance, expiry dates of GST and FSSAI licences are automatically tracked to dispatch reminder notifications 15 days in advance, ensuring zero interruption to your trading capabilities.</p>
 
-    <h2>5. Contact Grievance Officer</h2>
-    <p>For data privacy queries or account updates, reach out to our partner support desk at <a href="tel:7355315892" style="color:var(--primary); font-weight:600;">+91 7355315892</a> or email <a href="mailto:admin@apnazo.com" style="color:var(--primary); font-weight:600;">admin@apnazo.com</a>.</p>
+      <h2>5. Contact Grievance Officer</h2>
+      <p>For data privacy queries or account updates, reach out to our partner support desk at <a href="tel:7355315892" id="privPhoneLink" style="color:var(--primary); font-weight:600;">+91 7355315892</a> or email <a href="mailto:admin@apnazo.com" id="privEmailLink" style="color:var(--primary); font-weight:600;">admin@apnazo.com</a>.</p>
+    </div>
   </div>
+
+  <script>
+    const API_BASE = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+      ? ''
+      : 'https://apnazo-backend.onrender.com';
+
+    // Dynamic Live Content Sync from Admin Panel
+    fetch(API_BASE + '/api/content/privacy')
+      .then(r => r.json())
+      .then(d => {
+        if (d && d.privacy) {
+          if (d.privacy.title) document.getElementById('privTitle').innerText = d.privacy.title;
+          if (d.privacy.effectiveDate) document.getElementById('privUpdated').innerText = d.privacy.effectiveDate;
+          if (d.privacy.contentHtml) document.getElementById('privBody').innerHTML = d.privacy.contentHtml;
+        }
+      })
+      .catch(()=>{});
+
+    // Dynamic Live Support Phone & Grievance Email Sync
+    fetch(API_BASE + '/api/settings')
+      .then(r => r.json())
+      .then(d => {
+        if (d && d.settings && d.settings.support) {
+          const s = d.settings.support;
+          const phone = s.supportPhone || s.sellerHelpline || '+91 7355315892';
+          const cleanPhone = phone.replace(/\D/g, '').slice(-10);
+          const email = s.grievanceEmail || s.supportEmail || 'admin@apnazo.com';
+          const pLink = document.getElementById('privPhoneLink');
+          if (pLink) {
+            pLink.href = 'tel:' + cleanPhone;
+            pLink.innerText = phone;
+          }
+          const eLink = document.getElementById('privEmailLink');
+          if (eLink) {
+            eLink.href = 'mailto:' + email;
+            eLink.innerText = email;
+          }
+        }
+      })
+      .catch(()=>{});
+  </script>
 </body>
 </html>
