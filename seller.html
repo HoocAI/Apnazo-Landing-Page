@@ -535,20 +535,20 @@
       box-shadow: 0 0 0 3px rgba(255, 122, 0, 0.15);
     }
 
-    /* Auto Suggest Dropdown Box */
+    /* Auto Suggest Dropdown Box (Appears directly below search box) */
     .dropdown-suggestions {
       position: absolute;
       top: 100%;
       left: 0;
       right: 0;
       background: #ffffff;
-      border: 1px solid var(--border);
+      border: 1.5px solid var(--border);
       border-radius: 12px;
-      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
-      z-index: 50;
-      max-height: 220px;
+      box-shadow: 0 16px 36px rgba(8, 28, 76, 0.16);
+      z-index: 999;
+      max-height: 240px;
       overflow-y: auto;
-      margin-top: 4px;
+      margin-top: 6px;
       display: none;
     }
 
@@ -1319,8 +1319,10 @@
             <p class="section-help">Add top categories in which you sell your products (Upto 10) *</p>
 
             <div class="field">
-              <input type="text" id="categorySearchInput" placeholder="Search your product &amp; category (e.g. Atta, Dairy, Mobile Charger)" oninput="handleCategorySearch(this.value)">
-              <div class="dropdown-suggestions" id="categorySuggestions"></div>
+              <div style="position: relative; width: 100%;">
+                <input type="text" id="categorySearchInput" placeholder="Search your product &amp; category (e.g. Atta, Dairy, Mobile Charger)" oninput="handleCategorySearch(this.value)">
+                <div class="dropdown-suggestions" id="categorySuggestions"></div>
+              </div>
               <div class="category-chip-container" id="categoryChipContainer">
                 <!-- Dynamically added category chips -->
               </div>
@@ -1329,55 +1331,102 @@
               </div>
             </div>
 
-            <div class="form-grid-3">
-              <div class="field">
-                <label>Select your retail channels</label>
-                <select id="retailChannel">
-                  <option value="Offline Store">Offline Retail Store *</option>
-                  <option value="Swiggy">Swiggy Instamart</option>
-                  <option value="Zomato">Zomato / Blinkit</option>
-                  <option value="Amazon">Amazon India</option>
-                  <option value="Flipkart">Flipkart</option>
-                  <option value="Direct Delivery">Direct Phone / WhatsApp Delivery</option>
-                </select>
+            <!-- DYNAMIC RETAIL CHANNELS (MULTI-ADD WITH CUSTOM CHANNEL SUPPORT) -->
+            <div style="margin-top: 24px; margin-bottom: 24px;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                <label style="font-size:13.5px; font-weight:700; color:var(--ink-dark); margin:0;">Retail Channels &amp; Links</label>
+                <div style="display:flex; gap:8px;">
+                  <button type="button" class="quick-suggest-chip" style="font-weight:700; background:#f0fdf4; color:#15803d; border-color:#86efac;" onclick="addRetailChannelRow()">
+                    + Add Retail Channel
+                  </button>
+                  <button type="button" class="quick-suggest-chip" style="font-weight:700; background:#fef3c7; color:#b45309; border-color:#fde68a;" onclick="addCustomRetailChannelRow()">
+                    + Custom Retail Store
+                  </button>
+                </div>
               </div>
-              <div class="field">
-                <label>Reference Link</label>
-                <input type="text" id="retailRefLink" placeholder="Store or website link">
-              </div>
-              <div class="field">
-                <label>Total monthly sales</label>
-                <select id="monthlySales">
-                  <option value="Below 1 Lakh">Below ₹1,00,000</option>
-                  <option value="1 to 5 Lakhs">₹1,00,000 - ₹5,00,000</option>
-                  <option value="5 to 15 Lakhs">₹5,00,000 - ₹15,00,000</option>
-                  <option value="Above 15 Lakhs">Above ₹15,00,000</option>
-                </select>
+
+              <div id="retailChannelsContainer" style="display:flex; flex-direction:column; gap:12px;">
+                <!-- Retail Row 1 -->
+                <div class="retail-channel-row form-grid-3" style="align-items:flex-start; background:#f8fafc; padding:14px; border-radius:12px; border:1px solid #e2e8f0; position:relative;">
+                  <div class="field" style="margin:0;">
+                    <label style="font-size:12px;">Select retail channel</label>
+                    <select class="retail-channel-select" onchange="checkCustomOption(this, 'retail')">
+                      <option value="Offline Store">Offline Retail Store *</option>
+                      <option value="Amazon India">Amazon India</option>
+                      <option value="Flipkart">Flipkart</option>
+                      <option value="Swiggy Instamart">Swiggy Instamart</option>
+                      <option value="Zomato / Blinkit">Zomato / Blinkit</option>
+                      <option value="Direct Phone Delivery">Direct Phone / Delivery</option>
+                      <option value="__CUSTOM__">✏️ Custom Retail Platform...</option>
+                    </select>
+                    <input type="text" class="custom-retail-name" placeholder="Enter custom retail name" style="display:none; margin-top:6px; font-size:13px; padding:8px 10px;">
+                  </div>
+                  <div class="field" style="margin:0;">
+                    <label style="font-size:12px;">Reference Link</label>
+                    <input type="text" class="retail-ref-link" placeholder="Store or website link">
+                  </div>
+                  <div class="field" style="margin:0;">
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                      <label style="font-size:12px;">Total monthly sales</label>
+                      <button type="button" class="btn-remove-row" onclick="removeChannelRow(this)" style="display:none; background:none; border:none; color:var(--danger); cursor:pointer; font-weight:800; font-size:16px; padding:0;" title="Remove row">&times;</button>
+                    </div>
+                    <select class="retail-sales-select">
+                      <option value="Below 1 Lakh">Below ₹1,00,000</option>
+                      <option value="1 to 5 Lakhs" selected>₹1,00,000 - ₹5,00,000</option>
+                      <option value="5 to 15 Lakhs">₹5,00,000 - ₹15,00,000</option>
+                      <option value="Above 15 Lakhs">Above ₹15,00,000</option>
+                    </select>
+                  </div>
+                </div>
               </div>
             </div>
 
-            <div class="form-grid-3">
-              <div class="field">
-                <label>Select your social channels</label>
-                <select id="socialChannel">
-                  <option value="Instagram">Instagram *</option>
-                  <option value="Facebook">Facebook Page</option>
-                  <option value="WhatsApp">WhatsApp Business Catalog</option>
-                  <option value="YouTube">YouTube</option>
-                </select>
+            <!-- DYNAMIC SOCIAL CHANNELS (MULTI-ADD WITH CUSTOM SOCIAL SUPPORT) -->
+            <div style="margin-bottom: 24px;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                <label style="font-size:13.5px; font-weight:700; color:var(--ink-dark); margin:0;">Social Channels &amp; Links</label>
+                <div style="display:flex; gap:8px;">
+                  <button type="button" class="quick-suggest-chip" style="font-weight:700; background:#f0fdf4; color:#15803d; border-color:#86efac;" onclick="addSocialChannelRow()">
+                    + Add Social Channel
+                  </button>
+                  <button type="button" class="quick-suggest-chip" style="font-weight:700; background:#fef3c7; color:#b45309; border-color:#fde68a;" onclick="addCustomSocialChannelRow()">
+                    + Custom Social Media
+                  </button>
+                </div>
               </div>
-              <div class="field">
-                <label>Social Media Link</label>
-                <input type="text" id="socialLink" placeholder="e.g. instagram.com/myshop">
-              </div>
-              <div class="field">
-                <label>Follower / User Count</label>
-                <select id="userCount">
-                  <option value="1K - 10K">1,000 - 10,000</option>
-                  <option value="10K - 50K">10,000 - 50,000</option>
-                  <option value="50K+">50,000+</option>
-                  <option value="Growing">Growing / Just started</option>
-                </select>
+
+              <div id="socialChannelsContainer" style="display:flex; flex-direction:column; gap:12px;">
+                <!-- Social Row 1 -->
+                <div class="social-channel-row form-grid-3" style="align-items:flex-start; background:#f8fafc; padding:14px; border-radius:12px; border:1px solid #e2e8f0; position:relative;">
+                  <div class="field" style="margin:0;">
+                    <label style="font-size:12px;">Select social channel</label>
+                    <select class="social-channel-select" onchange="checkCustomOption(this, 'social')">
+                      <option value="WhatsApp Business Catalog" selected>WhatsApp Business Catalog</option>
+                      <option value="Instagram">Instagram</option>
+                      <option value="Facebook Page">Facebook Page</option>
+                      <option value="YouTube">YouTube</option>
+                      <option value="LinkedIn">LinkedIn</option>
+                      <option value="__CUSTOM__">✏️ Custom Social Network...</option>
+                    </select>
+                    <input type="text" class="custom-social-name" placeholder="Enter custom social network" style="display:none; margin-top:6px; font-size:13px; padding:8px 10px;">
+                  </div>
+                  <div class="field" style="margin:0;">
+                    <label style="font-size:12px;">Social Media Link</label>
+                    <input type="text" class="social-ref-link" placeholder="e.g. instagram.com/myshop">
+                  </div>
+                  <div class="field" style="margin:0;">
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                      <label style="font-size:12px;">Follower / User Count</label>
+                      <button type="button" class="btn-remove-row" onclick="removeChannelRow(this)" style="display:none; background:none; border:none; color:var(--danger); cursor:pointer; font-weight:800; font-size:16px; padding:0;" title="Remove row">&times;</button>
+                    </div>
+                    <select class="social-followers-select">
+                      <option value="1K - 10K">1,000 - 10,000</option>
+                      <option value="10K - 50K">10,000 - 50,000</option>
+                      <option value="50K+" selected>50,000+</option>
+                      <option value="Growing">Growing / Just started</option>
+                    </select>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -2514,9 +2563,151 @@
         showToast('warning', 'Missing Details', 'Please enter your Business Name and Owner Name.');
         return;
       }
+
+      // Collect Multi-Channel Retail & Social Links
+      state.retailChannels = [];
+      document.querySelectorAll('.retail-channel-row').forEach(row => {
+        const select = row.querySelector('.retail-channel-select');
+        const customInput = row.querySelector('.custom-retail-name');
+        const channelName = (select.value === '__CUSTOM__' && customInput) ? customInput.value.trim() : select.value;
+        const refLink = row.querySelector('.retail-ref-link')?.value.trim() || '';
+        const sales = row.querySelector('.retail-sales-select')?.value || '';
+        if (channelName) {
+          state.retailChannels.push({ channel: channelName, link: refLink, monthlySales: sales });
+        }
+      });
+
+      state.socialChannels = [];
+      document.querySelectorAll('.social-channel-row').forEach(row => {
+        const select = row.querySelector('.social-channel-select');
+        const customInput = row.querySelector('.custom-social-name');
+        const channelName = (select.value === '__CUSTOM__' && customInput) ? customInput.value.trim() : select.value;
+        const link = row.querySelector('.social-ref-link')?.value.trim() || '';
+        const followers = row.querySelector('.social-followers-select')?.value || '';
+        if (channelName) {
+          state.socialChannels.push({ channel: channelName, link: link, followers: followers });
+        }
+      });
+
       lockStepAfterSaving(3);
       markStepCompleted(3);
       goToStep(4);
+    }
+
+    // MULTI-ROW RETAIL & SOCIAL CHANNELS
+    function checkCustomOption(selectEl, type) {
+      const parent = selectEl.parentElement;
+      const customInput = parent.querySelector(type === 'retail' ? '.custom-retail-name' : '.custom-social-name');
+      if (selectEl.value === '__CUSTOM__') {
+        if (customInput) {
+          customInput.style.display = 'block';
+          customInput.focus();
+        }
+      } else {
+        if (customInput) customInput.style.display = 'none';
+      }
+    }
+
+    function addRetailChannelRow(customDefault = false) {
+      const container = document.getElementById('retailChannelsContainer');
+      const div = document.createElement('div');
+      div.className = 'retail-channel-row form-grid-3';
+      div.style.cssText = 'align-items:flex-start; background:#f8fafc; padding:14px; border-radius:12px; border:1px solid #e2e8f0; position:relative;';
+
+      div.innerHTML = `
+        <div class="field" style="margin:0;">
+          <label style="font-size:12px;">Select retail channel</label>
+          <select class="retail-channel-select" onchange="checkCustomOption(this, 'retail')">
+            <option value="Offline Store">Offline Retail Store</option>
+            <option value="Amazon India">Amazon India</option>
+            <option value="Flipkart">Flipkart</option>
+            <option value="Swiggy Instamart">Swiggy Instamart</option>
+            <option value="Zomato / Blinkit">Zomato / Blinkit</option>
+            <option value="JioMart">JioMart</option>
+            <option value="Direct Phone Delivery">Direct Phone / Delivery</option>
+            <option value="__CUSTOM__" ${customDefault ? 'selected' : ''}>✏️ Custom Retail Platform...</option>
+          </select>
+          <input type="text" class="custom-retail-name" placeholder="Enter custom retail name" style="display:${customDefault ? 'block' : 'none'}; margin-top:6px; font-size:13px; padding:8px 10px;">
+        </div>
+        <div class="field" style="margin:0;">
+          <label style="font-size:12px;">Reference Link</label>
+          <input type="text" class="retail-ref-link" placeholder="Store or website link">
+        </div>
+        <div class="field" style="margin:0;">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <label style="font-size:12px;">Total monthly sales</label>
+            <button type="button" class="btn-remove-row" onclick="removeChannelRow(this)" style="background:none; border:none; color:var(--danger); cursor:pointer; font-weight:800; font-size:16px; padding:0;" title="Remove row">&times;</button>
+          </div>
+          <select class="retail-sales-select">
+            <option value="Below 1 Lakh">Below ₹1,00,000</option>
+            <option value="1 to 5 Lakhs" selected>₹1,00,000 - ₹5,00,000</option>
+            <option value="5 to 15 Lakhs">₹5,00,000 - ₹15,00,000</option>
+            <option value="Above 15 Lakhs">Above ₹15,00,000</option>
+          </select>
+        </div>
+      `;
+      container.appendChild(div);
+      if (customDefault) {
+        div.querySelector('.custom-retail-name').focus();
+      }
+    }
+
+    function addCustomRetailChannelRow() {
+      addRetailChannelRow(true);
+    }
+
+    function addSocialChannelRow(customDefault = false) {
+      const container = document.getElementById('socialChannelsContainer');
+      const div = document.createElement('div');
+      div.className = 'social-channel-row form-grid-3';
+      div.style.cssText = 'align-items:flex-start; background:#f8fafc; padding:14px; border-radius:12px; border:1px solid #e2e8f0; position:relative;';
+
+      div.innerHTML = `
+        <div class="field" style="margin:0;">
+          <label style="font-size:12px;">Select social channel</label>
+          <select class="social-channel-select" onchange="checkCustomOption(this, 'social')">
+            <option value="Instagram">Instagram</option>
+            <option value="Facebook Page">Facebook Page</option>
+            <option value="WhatsApp Business Catalog">WhatsApp Business Catalog</option>
+            <option value="YouTube">YouTube</option>
+            <option value="LinkedIn">LinkedIn</option>
+            <option value="Twitter / X">Twitter / X</option>
+            <option value="__CUSTOM__" ${customDefault ? 'selected' : ''}>✏️ Custom Social Network...</option>
+          </select>
+          <input type="text" class="custom-social-name" placeholder="Enter custom social network" style="display:${customDefault ? 'block' : 'none'}; margin-top:6px; font-size:13px; padding:8px 10px;">
+        </div>
+        <div class="field" style="margin:0;">
+          <label style="font-size:12px;">Social Media Link</label>
+          <input type="text" class="social-ref-link" placeholder="e.g. instagram.com/myshop">
+        </div>
+        <div class="field" style="margin:0;">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <label style="font-size:12px;">Follower / User Count</label>
+            <button type="button" class="btn-remove-row" onclick="removeChannelRow(this)" style="background:none; border:none; color:var(--danger); cursor:pointer; font-weight:800; font-size:16px; padding:0;" title="Remove row">&times;</button>
+          </div>
+          <select class="social-followers-select">
+            <option value="1K - 10K">1,000 - 10,000</option>
+            <option value="10K - 50K">10,000 - 50,000</option>
+            <option value="50K+" selected>50,000+</option>
+            <option value="Growing">Growing / Just started</option>
+          </select>
+        </div>
+      `;
+      container.appendChild(div);
+      if (customDefault) {
+        div.querySelector('.custom-social-name').focus();
+      }
+    }
+
+    function addCustomSocialChannelRow() {
+      addSocialChannelRow(true);
+    }
+
+    function removeChannelRow(btn) {
+      const row = btn.closest('.retail-channel-row, .social-channel-row');
+      if (row) {
+        row.remove();
+      }
     }
 
     // STEP 4: IDENTITY & TAX (GENUINE DOC + GST EXPIRY & 15-DAY GRACE PERIOD)
