@@ -1088,10 +1088,15 @@
 
           <div class="section-card">
             <div class="field">
-              <label>Mobile Number *</label>
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                <label style="margin:0;">Mobile Number *</label>
+                <button type="button" id="btnChangeMobile" style="display:none; background:none; border:none; color:var(--brand-blue); font-size:12.5px; font-weight:700; cursor:pointer; padding:0; text-decoration:underline;" onclick="enableMobileEdit()">
+                  Change Number
+                </button>
+              </div>
               <div class="input-wrap">
                 <span class="input-prefix">+91</span>
-                <input type="tel" id="mobileInput" class="has-prefix" placeholder="Enter 10-digit mobile number" maxlength="10">
+                <input type="tel" id="mobileInput" class="has-prefix" placeholder="Enter 10-digit mobile number" maxlength="10" oninput="handleMobileInput(this)">
               </div>
             </div>
 
@@ -1106,8 +1111,9 @@
                   <input type="text" maxlength="1" class="otp-digit" oninput="moveOtpFocus(this, 5)">
                   <input type="text" maxlength="1" class="otp-digit" oninput="moveOtpFocus(this, 6)">
                 </div>
-                <div style="font-size: 12.5px; color: var(--muted); margin-top: 6px;">
-                  Resend code in <strong id="resendCountdown">25s</strong>
+                <div style="font-size: 12.5px; color: var(--muted); margin-top: 8px; display:flex; align-items:center; justify-content:space-between;">
+                  <span>Resend code in <strong id="resendCountdown" style="color:var(--brand-orange); cursor:pointer;" onclick="handleResendClick()">25s</strong></span>
+                  <span style="font-size:11.5px; color:var(--muted);">Didn't receive? Check SMS inbox</span>
                 </div>
               </div>
             </div>
@@ -1908,8 +1914,45 @@
 
     // STEP 1: MOBILE & OTP LOGIC
     let countdownInterval;
+    let lastSentMobile = '';
+
+    function handleMobileInput(input) {
+      const clean = input.value.replace(/\D/g, '').slice(0, 10);
+      input.value = clean;
+
+      // If user altered the phone number while OTP section was visible,
+      // revert button back to "Send OTP" and hide stale OTP inputs so a new OTP must be dispatched
+      if (lastSentMobile && clean !== lastSentMobile) {
+        resetOtpStateForNewNumber();
+      }
+    }
+
+    function enableMobileEdit() {
+      const mobileInput = document.getElementById('mobileInput');
+      mobileInput.disabled = false;
+      mobileInput.focus();
+      resetOtpStateForNewNumber();
+      showToast('info', 'Edit Mobile', 'Enter your updated mobile number and click Send OTP.');
+    }
+
+    function resetOtpStateForNewNumber() {
+      const otpSection = document.getElementById('otpSection');
+      const btn = document.getElementById('btnStep1Next');
+      const btnChange = document.getElementById('btnChangeMobile');
+      const mobileInput = document.getElementById('mobileInput');
+
+      otpSection.style.display = 'none';
+      btn.innerHTML = '<span>Send OTP &rarr;</span>';
+      if (btnChange) btnChange.style.display = 'none';
+      mobileInput.disabled = false;
+      document.querySelectorAll('.otp-digit').forEach(d => d.value = '');
+      clearInterval(countdownInterval);
+      lastSentMobile = '';
+    }
+
     function handleStep1Action() {
-      const mobile = document.getElementById('mobileInput').value.replace(/\D/g, '').slice(-10);
+      const mobileInput = document.getElementById('mobileInput');
+      const mobile = mobileInput.value.replace(/\D/g, '').slice(-10);
       if (mobile.length !== 10) {
         showToast('warning', 'Invalid Mobile', 'Please enter a valid 10-digit mobile number.');
         return;
@@ -1918,10 +1961,13 @@
       state.mobile = mobile;
       const otpSection = document.getElementById('otpSection');
       const btn = document.getElementById('btnStep1Next');
+      const btnChange = document.getElementById('btnChangeMobile');
 
-      if (otpSection.style.display === 'none') {
-        // Send OTP
-        btn.innerHTML = '<span>Verifying...</span>';
+      // If OTP section is hidden OR phone number changed, SEND OTP
+      if (otpSection.style.display === 'none' || mobile !== lastSentMobile) {
+        btn.innerHTML = '<span>Sending OTP...</span>';
+        btn.disabled = true;
+
         fetch(API_BASE + '/api/auth/otp/send', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -1929,20 +1975,32 @@
         })
         .then(res => res.json())
         .then(data => {
+          btn.disabled = false;
+          lastSentMobile = mobile;
           otpSection.style.display = 'block';
           btn.innerHTML = '<span>Verify &amp; Continue &rarr;</span>';
+          if (btnChange) btnChange.style.display = 'inline-block';
           showToast('success', 'OTP Dispatched', 'Express OTP sent to +91 ' + mobile);
           startCountdown(25);
+          // Focus first digit box
+          const firstDigit = document.querySelector('.otp-digit');
+          if (firstDigit) firstDigit.focus();
         })
         .catch(() => {
+          btn.disabled = false;
+          lastSentMobile = mobile;
           otpSection.style.display = 'block';
           btn.innerHTML = '<span>Verify &amp; Continue &rarr;</span>';
+          if (btnChange) btnChange.style.display = 'inline-block';
           startCountdown(25);
         });
       } else {
         // Verify OTP
         const otpDigits = Array.from(document.querySelectorAll('.otp-digit')).map(d => d.value).join('');
         const finalOtp = otpDigits || '000000'; // Supports dev OTP 000000
+
+        btn.disabled = true;
+        btn.innerHTML = '<span>Verifying...</span>';
 
         fetch(API_BASE + '/api/auth/otp/verify', {
           method: 'POST',
@@ -1951,18 +2009,28 @@
         })
         .then(res => res.json())
         .then(data => {
+          btn.disabled = false;
           if (data.success || data.verified) {
             state.verified = true;
             showToast('success', 'Verified', 'Mobile number authenticated successfully!');
             goToStep(2);
           } else {
-            showToast('warning', 'Verification Error', data.error || 'Invalid OTP code.');
+            btn.innerHTML = '<span>Verify &amp; Continue &rarr;</span>';
+            showToast('warning', 'Verification Error', data.error || 'Invalid OTP code. Please re-enter.');
           }
         })
         .catch(() => {
+          btn.disabled = false;
           state.verified = true;
           goToStep(2);
         });
+      }
+    }
+
+    function handleResendClick() {
+      const el = document.getElementById('resendCountdown');
+      if (el && el.innerText.includes('Now')) {
+        handleStep1Action();
       }
     }
 
@@ -1970,6 +2038,7 @@
       let count = sec;
       const el = document.getElementById('resendCountdown');
       clearInterval(countdownInterval);
+      if (el) el.innerText = count + 's';
       countdownInterval = setInterval(() => {
         count--;
         if (el) el.innerText = count + 's';
