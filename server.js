@@ -422,6 +422,48 @@ const server = http.createServer((req, res) => {
     return;
   }
 
+  
+  // API: Export sellers as CSV
+  if (pathname === '/api/admin/sellers/export.csv' && req.method === 'GET') {
+    const sellers = readSellers();
+    const csvHeader = 'Seller_ID,Business_Name,Owner_Name,Mobile,Category,Pincode,City,State,Has_GST,GSTIN,GST_Expiry,Genuine_Doc_Type,Genuine_Doc_Num,FSSAI_Licence,FSSAI_Expiry,Bank_Account,Bank_IFSC,Status,Created_Date\n';
+    const csvRows = sellers.map(s => {
+      const b = s.basics || {};
+      const g = s.gst || {};
+      const l = s.licence || {};
+      const bank = s.bank || {};
+      const clean = (val) => `"${String(val || '').replace(/"/g, '""')}"`;
+      return [
+        clean(s.id),
+        clean(b.bizName),
+        clean(b.ownerName),
+        clean(s.mobile),
+        clean(b.category),
+        clean(b.pincode),
+        clean(b.city || 'Rourkela'),
+        clean(b.state || 'Odisha'),
+        clean(g.hasGst ? 'Yes' : 'No'),
+        clean(g.number || ''),
+        clean(g.expiryDate || ''),
+        clean(g.genuineDocType || ''),
+        clean(g.genuineDocNum || ''),
+        clean(l.number || ''),
+        clean(l.expiryDate || ''),
+        clean(bank.accountNumber || ''),
+        clean(bank.ifsc || ''),
+        clean(s.status || 'Active'),
+        clean(s.createdAt ? new Date(s.createdAt).toLocaleDateString('en-IN') : '')
+      ].join(',');
+    }).join('\n');
+
+    res.writeHead(200, {
+      'Content-Type': 'text/csv; charset=utf-8',
+      'Content-Disposition': 'attachment; filename="apnazo_sellers.csv"'
+    });
+    res.end(csvHeader + csvRows);
+    return;
+  }
+
   // API: Save or autosave seller profile (Public to onboarding sellers)
   if (pathname === '/api/seller/profile/save' && req.method === 'POST') {
     let body = '';
