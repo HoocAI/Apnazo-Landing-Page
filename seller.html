@@ -314,6 +314,59 @@
       font-weight: 600;
     }
 
+    /* Completed step edit pill */
+    .step-edit-btn {
+      display: none;
+      font-size: 11.5px;
+      font-weight: 700;
+      color: var(--brand-orange);
+      background: rgba(255, 122, 0, 0.1);
+      padding: 2px 8px;
+      border-radius: 6px;
+      margin-left: auto;
+      border: 1px solid rgba(255, 122, 0, 0.2);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .step-item.completed:hover .step-edit-btn,
+    .step-item.completed .step-edit-btn {
+      display: inline-block;
+    }
+    .step-edit-btn:hover {
+      background: var(--brand-orange);
+      color: #ffffff;
+    }
+
+    /* Completed Step Header Banner */
+    .completed-step-banner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 12px;
+      padding: 10px 16px;
+      margin-bottom: 20px;
+      font-size: 13px;
+      color: #166534;
+      font-weight: 600;
+    }
+    .completed-step-banner .btn-step-edit {
+      background: #ffffff;
+      border: 1.5px solid #16a34a;
+      color: #16a34a;
+      border-radius: 8px;
+      padding: 4px 12px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .completed-step-banner .btn-step-edit:hover {
+      background: #16a34a;
+      color: #ffffff;
+    }
+
     /* COLUMN 3: Right Main Stage Content Area */
     .main-stage {
       padding: 40px 48px;
@@ -1044,34 +1097,42 @@
           <div class="step-item active" id="navStep1" onclick="jumpToStep(1)">
             <div class="step-circle">1</div>
             <div class="step-label">Mobile Verification</div>
+            <span class="step-edit-btn" onclick="event.stopPropagation(); jumpToStep(1);">Edit</span>
           </div>
           <div class="step-item" id="navStep2" onclick="jumpToStep(2)">
             <div class="step-circle">2</div>
             <div class="step-label">Select Business</div>
+            <span class="step-edit-btn" onclick="event.stopPropagation(); jumpToStep(2);">Edit</span>
           </div>
           <div class="step-item" id="navStep3" onclick="jumpToStep(3)">
             <div class="step-circle">3</div>
             <div class="step-label">Business Details</div>
+            <span class="step-edit-btn" onclick="event.stopPropagation(); jumpToStep(3);">Edit</span>
           </div>
           <div class="step-item" id="navStep4" onclick="jumpToStep(4)">
             <div class="step-circle">4</div>
             <div class="step-label">Identity &amp; Tax (PAN/GST)</div>
+            <span class="step-edit-btn" onclick="event.stopPropagation(); jumpToStep(4);">Edit</span>
           </div>
           <div class="step-item" id="navStep5" onclick="jumpToStep(5)">
             <div class="step-circle">5</div>
             <div class="step-label">Bank Details</div>
+            <span class="step-edit-btn" onclick="event.stopPropagation(); jumpToStep(5);">Edit</span>
           </div>
           <div class="step-item" id="navStep6" onclick="jumpToStep(6)">
             <div class="step-circle">6</div>
             <div class="step-label" id="step6NavLabel">Category Licence &amp; FSSAI</div>
+            <span class="step-edit-btn" onclick="event.stopPropagation(); jumpToStep(6);">Edit</span>
           </div>
           <div class="step-item" id="navStep7" onclick="jumpToStep(7)">
             <div class="step-circle">7</div>
             <div class="step-label">Partner Agreement</div>
+            <span class="step-edit-btn" onclick="event.stopPropagation(); jumpToStep(7);">Edit</span>
           </div>
           <div class="step-item" id="navStep8" onclick="jumpToStep(8)">
             <div class="step-circle">8</div>
             <div class="step-label">Listing &amp; Activation</div>
+            <span class="step-edit-btn" onclick="event.stopPropagation(); jumpToStep(8);">Edit</span>
           </div>
         </div>
       </nav>
@@ -1882,24 +1943,70 @@
     // STEP ROUTING
     function goToStep(num) {
       state.step = num;
+      state.completedSteps = state.completedSteps || [];
       document.querySelectorAll('.step-view').forEach(v => v.classList.remove('active'));
       const activeView = document.getElementById('viewStep' + num);
       if (activeView) activeView.classList.add('active');
 
-      // Update vertical stepper
+      // Update vertical stepper & edit indicators
       for (let i = 1; i <= 8; i++) {
         const item = document.getElementById('navStep' + i);
         if (!item) continue;
         item.classList.remove('active', 'completed');
+        const isCompleted = state.completedSteps.includes(i) || (i === 1 && state.verified);
         if (i === num) {
           item.classList.add('active');
-        } else if (i < num) {
+          if (isCompleted) item.classList.add('completed');
+        } else if (isCompleted || i < num) {
           item.classList.add('completed');
         }
       }
 
+      // Check if current step is already completed -> show "Edit Details" badge and ensure orange button says Next
+      const isCurrentCompleted = state.completedSteps.includes(num) || (num === 1 && state.verified);
+      updateStepActionBar(num, isCurrentCompleted);
+
       window.scrollTo({ top: 0, behavior: 'smooth' });
       saveDraft();
+    }
+
+    function updateStepActionBar(stepNum, isCompleted) {
+      const stepView = document.getElementById('viewStep' + stepNum);
+      if (!stepView) return;
+
+      const continueBtn = stepView.querySelector('.btn-save-continue');
+      if (continueBtn) {
+        if (isCompleted && stepNum < 8) {
+          continueBtn.innerHTML = `<span>Next &rarr;</span>`;
+          continueBtn.title = 'Proceed to next step (Details are saved)';
+        } else if (stepNum === 1 && !state.verified) {
+          const otpSection = document.getElementById('otpSection');
+          if (otpSection && otpSection.style.display !== 'none') {
+            continueBtn.innerHTML = `<span>Verify &amp; Continue &rarr;</span>`;
+          } else {
+            continueBtn.innerHTML = `<span>Send OTP &rarr;</span>`;
+          }
+        }
+      }
+
+      // Ensure completed banner exists if step is completed
+      let banner = stepView.querySelector('.completed-step-banner');
+      if (isCompleted && stepNum < 8) {
+        if (!banner) {
+          const header = stepView.querySelector('.stage-header');
+          if (header) {
+            banner = document.createElement('div');
+            banner.className = 'completed-step-banner';
+            banner.innerHTML = `
+              <div style="display:flex; align-items:center; gap:8px;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                <span>Step ${stepNum} details saved. You can edit any field below or click Next to proceed.</span>
+              </div>
+            `;
+            header.after(banner);
+          }
+        }
+      }
     }
 
     function jumpToStep(num) {
@@ -1943,6 +2050,7 @@
 
       otpSection.style.display = 'none';
       btn.innerHTML = '<span>Send OTP &rarr;</span>';
+      btn.disabled = false;
       if (btnChange) btnChange.style.display = 'none';
       mobileInput.disabled = false;
       document.querySelectorAll('.otp-digit').forEach(d => d.value = '');
@@ -1963,75 +2071,124 @@
       const btn = document.getElementById('btnStep1Next');
       const btnChange = document.getElementById('btnChangeMobile');
 
-      // If OTP section is hidden OR phone number changed, SEND OTP
-      if (otpSection.style.display === 'none' || mobile !== lastSentMobile) {
-        btn.innerHTML = '<span>Sending OTP...</span>';
-        btn.disabled = true;
-
-        fetch(API_BASE + '/api/auth/otp/send', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ mobile: mobile })
-        })
-        .then(res => res.json())
-        .then(data => {
-          btn.disabled = false;
-          lastSentMobile = mobile;
-          otpSection.style.display = 'block';
-          btn.innerHTML = '<span>Verify &amp; Continue &rarr;</span>';
-          if (btnChange) btnChange.style.display = 'inline-block';
-          showToast('success', 'OTP Dispatched', 'Express OTP sent to +91 ' + mobile);
-          startCountdown(25);
-          // Focus first digit box
-          const firstDigit = document.querySelector('.otp-digit');
-          if (firstDigit) firstDigit.focus();
-        })
-        .catch(() => {
-          btn.disabled = false;
-          lastSentMobile = mobile;
-          otpSection.style.display = 'block';
-          btn.innerHTML = '<span>Verify &amp; Continue &rarr;</span>';
-          if (btnChange) btnChange.style.display = 'inline-block';
-          startCountdown(25);
-        });
-      } else {
-        // Verify OTP
+      // If Step 1 is already completed and user is just reviewing, pressing the orange button navigates to next step!
+      if (state.verified && state.completedSteps && state.completedSteps.includes(1) && mobile === lastSentMobile && otpSection.style.display !== 'none') {
         const otpDigits = Array.from(document.querySelectorAll('.otp-digit')).map(d => d.value).join('');
-        const finalOtp = otpDigits || '000000'; // Supports dev OTP 000000
-
-        btn.disabled = true;
-        btn.innerHTML = '<span>Verifying...</span>';
-
-        fetch(API_BASE + '/api/auth/otp/verify', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ mobile: mobile, otp: finalOtp })
-        })
-        .then(res => res.json())
-        .then(data => {
-          btn.disabled = false;
-          if (data.success || data.verified) {
-            state.verified = true;
-            showToast('success', 'Verified', 'Mobile number authenticated successfully!');
-            goToStep(2);
-          } else {
-            btn.innerHTML = '<span>Verify &amp; Continue &rarr;</span>';
-            showToast('warning', 'Verification Error', data.error || 'Invalid OTP code. Please re-enter.');
-          }
-        })
-        .catch(() => {
-          btn.disabled = false;
-          state.verified = true;
+        // If not typed or already verified, proceed to next step directly
+        if (!otpDigits || otpDigits === '000000') {
           goToStep(2);
-        });
+          return;
+        }
+      }
+
+      // If OTP section is hidden OR phone number changed, SEND OTP (never verify!)
+      if (otpSection.style.display === 'none' || mobile !== lastSentMobile) {
+        sendOtpToNumber(mobile);
+      } else {
+        // VERIFY OTP (Only when user explicitly clicks Verify & Continue)
+        verifyOtpCode(mobile);
       }
     }
 
+    function sendOtpToNumber(mobile) {
+      const btn = document.getElementById('btnStep1Next');
+      const otpSection = document.getElementById('otpSection');
+      const btnChange = document.getElementById('btnChangeMobile');
+
+      btn.innerHTML = '<span>Sending OTP...</span>';
+      btn.disabled = true;
+
+      fetch(API_BASE + '/api/auth/otp/send', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ mobile: mobile })
+      })
+      .then(res => res.json())
+      .then(data => {
+        btn.disabled = false;
+        lastSentMobile = mobile;
+        otpSection.style.display = 'block';
+        btn.innerHTML = '<span>Verify &amp; Continue &rarr;</span>';
+        if (btnChange) btnChange.style.display = 'inline-block';
+        showToast('success', 'OTP Dispatched', 'Express OTP sent to +91 ' + mobile);
+        startCountdown(25);
+        const firstDigit = document.querySelector('.otp-digit');
+        if (firstDigit) firstDigit.focus();
+      })
+      .catch(() => {
+        btn.disabled = false;
+        lastSentMobile = mobile;
+        otpSection.style.display = 'block';
+        btn.innerHTML = '<span>Verify &amp; Continue &rarr;</span>';
+        if (btnChange) btnChange.style.display = 'inline-block';
+        startCountdown(25);
+      });
+    }
+
+    function verifyOtpCode(mobile) {
+      const btn = document.getElementById('btnStep1Next');
+      const otpDigits = Array.from(document.querySelectorAll('.otp-digit')).map(d => d.value).join('');
+
+      if (!otpDigits || otpDigits.length < 6) {
+        showToast('warning', 'Enter OTP', 'Please enter all 6 digits of the OTP.');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.innerHTML = '<span>Verifying...</span>';
+
+      fetch(API_BASE + '/api/auth/otp/verify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ mobile: mobile, otp: otpDigits })
+      })
+      .then(res => res.json())
+      .then(data => {
+        btn.disabled = false;
+        if (data.success || data.verified) {
+          state.verified = true;
+          markStepCompleted(1);
+          showToast('success', 'Verified', 'Mobile number authenticated successfully!');
+          goToStep(2);
+        } else {
+          btn.innerHTML = '<span>Verify &amp; Continue &rarr;</span>';
+          showToast('warning', 'Verification Error', data.error || 'Invalid OTP code. Please re-enter.');
+        }
+      })
+      .catch(() => {
+        btn.disabled = false;
+        state.verified = true;
+        markStepCompleted(1);
+        goToStep(2);
+      });
+    }
+
+    // Explicit Resend OTP click: MUST ONLY SEND OTP, NEVER VERIFY!
     function handleResendClick() {
       const el = document.getElementById('resendCountdown');
-      if (el && el.innerText.includes('Now')) {
-        handleStep1Action();
+      const mobileInput = document.getElementById('mobileInput');
+      const mobile = mobileInput.value.replace(/\D/g, '').slice(-10);
+
+      if (!mobile || mobile.length !== 10) {
+        showToast('warning', 'Mobile Number Required', 'Please enter a valid 10-digit mobile number.');
+        return;
       }
+
+      if (el && el.innerText.includes('Now')) {
+        // Clear old digit inputs
+        document.querySelectorAll('.otp-digit').forEach(d => d.value = '');
+        sendOtpToNumber(mobile);
+      } else {
+        showToast('info', 'Please Wait', 'You can request a new OTP once the countdown finishes.');
+      }
+    }
+
+    function markStepCompleted(stepNum) {
+      state.completedSteps = state.completedSteps || [];
+      if (!state.completedSteps.includes(stepNum)) {
+        state.completedSteps.push(stepNum);
+      }
+      saveDraft();
     }
 
     function startCountdown(sec) {
@@ -2097,6 +2254,7 @@
     }
 
     function saveStep2AndContinue() {
+      markStepCompleted(2);
       goToStep(3);
     }
 
@@ -2229,6 +2387,7 @@
         showToast('warning', 'Missing Details', 'Please enter your Business Name and Owner Name.');
         return;
       }
+      markStepCompleted(3);
       goToStep(4);
     }
 
@@ -2309,6 +2468,7 @@
         showToast('warning', 'PAN Required', 'Please enter a valid 10-digit PAN card number.');
         return;
       }
+      markStepCompleted(4);
       goToStep(5);
     }
 
@@ -2326,6 +2486,7 @@
         showToast('warning', 'Mismatch', 'Bank account numbers do not match.');
         return;
       }
+      markStepCompleted(5);
       goToStep(6);
     }
 
@@ -2353,6 +2514,7 @@
     }
 
     function saveStep6AndContinue() {
+      markStepCompleted(6);
       goToStep(7);
     }
 
