@@ -166,7 +166,8 @@ function upsertSeller(sellerData) {
     saveSellers(sellers);
     return sellers[existingIndex];
   } else {
-    const newId = `SEL-${new Date().getFullYear()}${String(new Date().getMonth() + 1).padStart(2, '0')}-${String(sellers.length + 1).padStart(3, '0')}`;
+    const randSuffix = Math.floor(1000 + Math.random() * 9000);
+    const newId = `APN-${new Date().getFullYear()}${String(new Date().getMonth() + 1).padStart(2, '0')}-${String(sellers.length + 1).padStart(3, '0')}-${randSuffix}`;
     const newSeller = {
       id: newId,
       ...sellerData,

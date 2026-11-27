@@ -2193,9 +2193,11 @@
         body: JSON.stringify(payload)
       })
       .then(res => res.json())
-      .then(() => {
+      .then(data => {
+        const uniqueId = data && data.seller ? data.seller.id : null;
+        if (uniqueId) state.applicationId = uniqueId;
         showToast('success', 'Onboarding Complete', 'Welcome to Apnazo Seller Hub!');
-        populateSummaryDossier();
+        populateSummaryDossier(uniqueId);
         goToStep(8);
       })
       .catch(() => {
@@ -2301,7 +2303,24 @@
     }
 
     // POPULATE SUMMARY IN STEP 8 WITH COMPLETE USER INPUTS
-    function populateSummaryDossier() {
+    function populateSummaryDossier(realId) {
+      const appIdEl = document.getElementById('sumAppId');
+      if (appIdEl) {
+        if (realId) {
+          appIdEl.innerText = realId;
+        } else if (state.applicationId) {
+          appIdEl.innerText = state.applicationId;
+        } else {
+          // Generate real unique ID from year, month, mobile slice & random
+          const now = new Date();
+          const yr = now.getFullYear();
+          const mo = String(now.getMonth() + 1).padStart(2, '0');
+          const mobSuffix = (state.mobile || '7355').slice(-4);
+          const rand = Math.floor(100 + Math.random() * 900);
+          state.applicationId = `APN-${yr}${mo}-${mobSuffix}${rand}`;
+          appIdEl.innerText = state.applicationId;
+        }
+      }
       const setVal = (id, val) => {
         const el = document.getElementById(id);
         if (el) el.innerText = val;
