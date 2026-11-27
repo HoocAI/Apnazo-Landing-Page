@@ -9,15 +9,16 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap">
   <style>
     :root {
-      --brand-green: #0c831f;
-      --brand-green-hover: #096818;
-      --brand-green-light: #eaf6ec;
-      --brand-green-border: #bce3c4;
-      --dark-green: #103b29;
-      --dark-green-sidebar: #0d3122;
-      --yellow: #f8c51c;
-      --yellow-light: #fff8e1;
-      --yellow-border: #ffe082;
+      --brand-blue: #0f43b3;
+      --brand-blue-hover: #0a2f80;
+      --brand-blue-light: #eff6ff;
+      --brand-blue-border: #bfdbfe;
+      --dark-blue: #081c4c;
+      --dark-blue-sidebar: #061539;
+      --brand-orange: #ff7a00;
+      --brand-orange-hover: #e86f00;
+      --brand-orange-light: #fff7ed;
+      --brand-orange-border: #fed7aa;
       --ink: #1e293b;
       --ink-dark: #0f172a;
       --muted: #64748b;
@@ -25,12 +26,13 @@
       --bg: #f8fafc;
       --card-bg: #ffffff;
       --border: #e2e8f0;
-      --border-focus: #0c831f;
+      --border-focus: #0f43b3;
       --danger: #ef4444;
       --danger-bg: #fef2f2;
       --danger-border: #fecaca;
       --warning: #f59e0b;
       --warning-bg: #fffbeb;
+      --success: #059669;
       --font-display: 'Plus Jakarta Sans', -apple-system, sans-serif;
       --font-body: 'Inter', -apple-system, sans-serif;
     }
@@ -58,7 +60,7 @@
       border: 1px solid var(--border);
       border-radius: 28px;
       overflow: hidden;
-      box-shadow: 0 20px 45px -10px rgba(16, 59, 41, 0.08), 0 4px 12px rgba(0,0,0,0.03);
+      box-shadow: 0 20px 45px -10px rgba(15, 67, 179, 0.08), 0 4px 12px rgba(0,0,0,0.03);
       display: grid;
       grid-template-columns: 310px 240px 1fr;
       min-height: 720px;
@@ -86,7 +88,7 @@
 
     /* COLUMN 1: Blinkit Deep Green Brand Sidebar */
     .brand-sidebar {
-      background: var(--dark-green);
+      background: var(--dark-blue);
       color: #ffffff;
       padding: 36px 28px;
       display: flex;
@@ -112,7 +114,7 @@
       font-family: var(--font-display);
       font-size: 26px;
       font-weight: 800;
-      color: var(--yellow);
+      color: var(--brand-orange);
       letter-spacing: -0.04em;
       line-height: 1;
     }
@@ -176,7 +178,7 @@
       width: 100%;
     }
     .lang-picker option {
-      background: #103b29;
+      background: #081c4c;
       color: #ffffff;
     }
 
@@ -254,7 +256,7 @@
     }
 
     .step-item.completed:not(:last-child)::after {
-      background: var(--brand-green);
+      background: linear-gradient(135deg, #ff7a00 0%, #ff9500 100%);
     }
 
     .step-circle {
@@ -275,9 +277,9 @@
     }
 
     .step-item.active .step-circle {
-      border-color: var(--brand-green);
+      border-color: var(--brand-orange);
       background: #ffffff;
-      box-shadow: 0 0 0 4px rgba(12, 131, 31, 0.14);
+      box-shadow: 0 0 0 4px rgba(255, 122, 0, 0.14);
     }
 
     .step-item.active .step-circle::after {
@@ -285,12 +287,12 @@
       width: 8px;
       height: 8px;
       border-radius: 50%;
-      background: var(--brand-green);
+      background: linear-gradient(135deg, #ff7a00 0%, #ff9500 100%);
     }
 
     .step-item.completed .step-circle {
-      background: var(--brand-green);
-      border-color: var(--brand-green);
+      background: linear-gradient(135deg, #ff7a00 0%, #ff9500 100%);
+      border-color: var(--brand-orange);
       color: #ffffff;
     }
 
@@ -449,8 +451,8 @@
     }
 
     input:focus, select:focus, textarea:focus {
-      border-color: var(--brand-green);
-      box-shadow: 0 0 0 3px rgba(12, 131, 31, 0.15);
+      border-color: var(--brand-orange);
+      box-shadow: 0 0 0 3px rgba(255, 122, 0, 0.15);
     }
 
     /* Auto Suggest Dropdown Box */
@@ -483,7 +485,7 @@
     }
     .dropdown-item:hover {
       background: #f8fafc;
-      color: var(--brand-green);
+      color: var(--brand-orange);
       font-weight: 600;
     }
     .dropdown-item .badge {
@@ -522,9 +524,9 @@
     }
 
     .business-block.selected {
-      border-color: var(--brand-green);
-      background: var(--brand-green-light);
-      box-shadow: 0 4px 16px rgba(12, 131, 31, 0.12);
+      border-color: var(--brand-orange);
+      background: var(--brand-orange-light);
+      box-shadow: 0 4px 16px rgba(255, 122, 0, 0.12);
     }
 
     .biz-icon-box {
@@ -542,7 +544,7 @@
 
     .business-block.selected .biz-icon-box {
       background: #ffffff;
-      border: 1px solid var(--brand-green-border);
+      border: 1px solid var(--brand-orange-border);
     }
 
     .biz-info h4 {
@@ -576,8 +578,8 @@
     }
 
     .business-block.selected .biz-check-pill {
-      background: var(--brand-green);
-      border-color: var(--brand-green);
+      background: linear-gradient(135deg, #ff7a00 0%, #ff9500 100%);
+      border-color: var(--brand-orange);
       color: #ffffff;
     }
 
@@ -595,8 +597,8 @@
     }
 
     .doc-upload-box:hover, .doc-upload-box.dragover {
-      border-color: var(--brand-green);
-      background: var(--brand-green-light);
+      border-color: var(--brand-orange);
+      background: var(--brand-orange-light);
     }
 
     .doc-upload-box .upload-icon {
@@ -716,8 +718,8 @@
       transition: all 0.15s;
     }
     .btn-upload-logo:hover {
-      border-color: var(--brand-green);
-      color: var(--brand-green);
+      border-color: var(--brand-orange);
+      color: var(--brand-orange);
     }
 
     /* GST & FSSAI EXPIRY & 15-DAY GRACE PERIOD ALERT BANNER */
@@ -763,7 +765,7 @@
 
     .pincode-status-chip.success {
       background: #eaf6ec;
-      color: var(--brand-green);
+      color: var(--brand-orange);
     }
 
     /* ACTION BAR AT BOTTOM */
@@ -797,7 +799,7 @@
 
     .btn-save-continue {
       padding: 12px 28px;
-      background: var(--brand-green);
+      background: linear-gradient(135deg, #ff7a00 0%, #ff9500 100%);
       border: none;
       border-radius: 12px;
       font-size: 14.5px;
@@ -808,12 +810,12 @@
       align-items: center;
       gap: 8px;
       transition: all 0.2s;
-      box-shadow: 0 4px 14px rgba(12, 131, 31, 0.25);
+      box-shadow: 0 4px 14px rgba(255, 122, 0, 0.25);
     }
     .btn-save-continue:hover {
-      background: var(--brand-green-hover);
+      background: var(--brand-orange-hover);
       transform: translateY(-1px);
-      box-shadow: 0 6px 18px rgba(12, 131, 31, 0.35);
+      box-shadow: 0 6px 18px rgba(255, 122, 0, 0.35);
     }
 
     /* NEED ASSISTANCE FLOATING BUTTON */
@@ -821,14 +823,14 @@
       position: fixed;
       bottom: 24px;
       right: 28px;
-      background: var(--dark-green);
+      background: var(--dark-blue);
       color: #ffffff;
       padding: 12px 20px;
       border-radius: 40px;
       font-size: 13.5px;
       font-weight: 700;
       border: 1px solid rgba(255, 255, 255, 0.2);
-      box-shadow: 0 8px 24px rgba(16, 59, 41, 0.24);
+      box-shadow: 0 8px 24px rgba(15, 67, 179, 0.24);
       display: flex;
       align-items: center;
       gap: 8px;
@@ -838,7 +840,7 @@
       text-decoration: none;
     }
     .btn-need-assistance:hover {
-      background: #164e37;
+      background: #0f43b3;
       transform: scale(1.03);
     }
 
@@ -958,14 +960,35 @@
       <!-- ================= COLUMN 1: BLINKIT DARK GREEN SIDEBAR ================= -->
       <aside class="brand-sidebar">
         <div class="brand-header-group">
-          <a href="/" class="brand-logo-wrap">
-            <div class="brand-logo-text">seller hub</div>
-            <div class="brand-subline">by apnazo</div>
+          <a href="/" class="brand-logo-wrap" style="align-items:flex-start;">
+            <div style="background:#ffffff; border-radius:16px; padding:10px 14px; display:inline-flex; align-items:center; box-shadow:0 6px 16px rgba(0,0,0,0.15); margin-bottom:6px;">
+              <img src="/images/apnazo-logo.jpg" alt="Apnazo Logo" style="height:48px; object-fit:contain;">
+            </div>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span style="font-family:var(--font-display); font-size:16px; font-weight:800; color:#ffffff; letter-spacing:-0.02em;">Seller Hub</span>
+              <span style="background:var(--brand-orange); color:#ffffff; font-size:10px; font-weight:800; padding:2px 8px; border-radius:12px; text-transform:uppercase; letter-spacing:0.04em;">Official</span>
+            </div>
+            <div style="font-size:12px; color:rgba(255,255,255,0.7); font-weight:500;">Sab Kuch Apno Ke Liye</div>
           </a>
 
           <div class="hero-pitch">
             <h2>Grow your business with Apnazo</h2>
-            <p>Offer your customers the delight of your products and the convenience of 10-minute local deliveries in Rourkela!</p>
+            <p>Offer your customers the delight of your products and the convenience of quick local deliveries in Rourkela!</p>
+            
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:16px; font-size:11.5px; color:rgba(255,255,255,0.85);">
+              <div style="background:rgba(255,255,255,0.08); padding:8px 10px; border-radius:10px; border:1px solid rgba(255,255,255,0.12); display:flex; align-items:center; gap:6px;">
+                <span>🚚</span> <b>Fast Delivery</b>
+              </div>
+              <div style="background:rgba(255,255,255,0.08); padding:8px 10px; border-radius:10px; border:1px solid rgba(255,255,255,0.12); display:flex; align-items:center; gap:6px;">
+                <span>🛡️</span> <b>Quality Products</b>
+              </div>
+              <div style="background:rgba(255,255,255,0.08); padding:8px 10px; border-radius:10px; border:1px solid rgba(255,255,255,0.12); display:flex; align-items:center; gap:6px;">
+                <span>❤️</span> <b>Trusted By You</b>
+              </div>
+              <div style="background:rgba(255,255,255,0.08); padding:8px 10px; border-radius:10px; border:1px solid rgba(255,255,255,0.12); display:flex; align-items:center; gap:6px;">
+                <span>🤝</span> <b>Apno Jaisi Service</b>
+              </div>
+            </div>
           </div>
 
           <div class="fraud-alert-box">
@@ -1315,7 +1338,7 @@
             <p class="section-help">Do you have a registered GSTIN for this business?</p>
 
             <div style="display: flex; gap: 12px; margin-bottom: 16px;">
-              <button type="button" class="btn-back" id="hasGstYesBtn" style="background:var(--brand-green); color:#fff; border-color:var(--brand-green);" onclick="toggleGstTab(true)">
+              <button type="button" class="btn-back" id="hasGstYesBtn" style="background:var(--brand-orange); color:#fff; border-color:var(--brand-orange);" onclick="toggleGstTab(true)">
                 &check; Yes, I have GST
               </button>
               <button type="button" class="btn-back" id="hasGstNoBtn" onclick="toggleGstTab(false)">
@@ -1522,7 +1545,7 @@
             </div>
 
             <div style="display:flex; align-items:flex-start; gap:10px;">
-              <input type="checkbox" id="agreeCheckbox" style="width:20px; height:20px; margin-top:2px; accent-color:var(--brand-green);">
+              <input type="checkbox" id="agreeCheckbox" style="width:20px; height:20px; margin-top:2px; accent-color:var(--brand-orange);">
               <label for="agreeCheckbox" style="font-size:13.5px; font-weight:600; color:var(--ink-dark); cursor:pointer;">
                 I accept the Apnazo Partner Terms and e-Sign this agreement for my business.
               </label>
@@ -1949,18 +1972,18 @@
       if (hasGst) {
         gstContainer.style.display = 'block';
         genuineContainer.style.display = 'none';
-        yesBtn.style.background = 'var(--brand-green)';
+        yesBtn.style.background = 'var(--brand-orange)';
         yesBtn.style.color = '#fff';
-        yesBtn.style.borderColor = 'var(--brand-green)';
+        yesBtn.style.borderColor = 'var(--brand-orange)';
         noBtn.style.background = '#fff';
         noBtn.style.color = 'var(--ink)';
         noBtn.style.borderColor = '#cbd5e1';
       } else {
         gstContainer.style.display = 'none';
         genuineContainer.style.display = 'block';
-        noBtn.style.background = 'var(--brand-green)';
+        noBtn.style.background = 'var(--brand-orange)';
         noBtn.style.color = '#fff';
-        noBtn.style.borderColor = 'var(--brand-green)';
+        noBtn.style.borderColor = 'var(--brand-orange)';
         yesBtn.style.background = '#fff';
         yesBtn.style.color = 'var(--ink)';
         yesBtn.style.borderColor = '#cbd5e1';
