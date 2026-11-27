@@ -1413,9 +1413,14 @@
 
             <div class="form-grid-2">
               <div class="field">
-                <label>Pin Code (Location Autofetch) *</label>
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                  <label style="margin:0;">Pin Code (Location Autofetch) *</label>
+                  <button type="button" class="quick-suggest-chip" style="font-size:11px; padding:2px 8px; font-weight:700; color:#ea580c; border-color:#fed7aa; background:#fff7ed; cursor:pointer;" onclick="detectRealtimeLocation()">
+                    📍 Detect Current Location
+                  </button>
+                </div>
                 <input type="text" id="pincodeInput" placeholder="Enter 6-digit Pincode (e.g. 769001)" maxlength="6" oninput="handlePincodeLookup(this.value)">
-                <div id="pincodeBadge" class="pincode-status-chip"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> Enter 6 digits for autofetch</div>
+                <div id="pincodeBadge" class="pincode-status-chip"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> Enter 6 digits or click Detect Location</div>
               </div>
               <div class="field">
                 <label>City &amp; State</label>
@@ -1790,6 +1795,129 @@
             <a href="/" class="btn-back" style="text-decoration:none; padding:12px 24px;">
               Go to Apnazo Home &rarr;
             </a>
+          </div>
+        </div>
+
+        <!-- SELLER APPLICATION STATUS: UNDER REVIEW (PENDING) -->
+        <div class="step-view" id="viewSellerPending">
+          <div class="stage-header" style="text-align:center;">
+            <div style="width:68px; height:68px; border-radius:50%; background:#fef3c7; color:#d97706; display:inline-flex; align-items:center; justify-content:center; margin-bottom:14px; box-shadow:0 8px 24px rgba(217,119,6,0.18);">
+              <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            </div>
+            <h1 class="stage-title" style="color:#92400e;">Application Under Review</h1>
+            <p class="stage-desc" style="max-width:540px; margin:0 auto;">Your partner onboarding dossier is authenticated and currently being verified by Apnazo Merchant Operations.</p>
+          </div>
+
+          <div class="section-card" style="max-width:680px; margin:0 auto 24px; border:2px solid #fde68a; background:#fffbeb;">
+            <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1.5px solid #fef3c7; padding-bottom:14px; margin-bottom:16px;">
+              <div>
+                <span style="font-size:11px; font-weight:800; letter-spacing:0.05em; text-transform:uppercase; color:#b45309;">Application Reference ID</span>
+                <div style="font-size:18px; font-weight:800; color:var(--dark-blue);" id="pendingAppId">APN-2026-000</div>
+              </div>
+              <span class="pincode-status-chip" style="background:#fef3c7; color:#92400e; border:1px solid #fcd34d; font-weight:800; font-size:12px; padding:6px 12px;">
+                ⏳ PENDING VERIFICATION
+              </span>
+            </div>
+
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; font-size:13.5px; color:var(--ink);">
+              <div><span style="color:var(--muted); font-size:12px; display:block;">Business / Fleet Name</span><strong id="pendingBizName">-</strong></div>
+              <div><span style="color:var(--muted); font-size:12px; display:block;">Owner / Driver Full Name</span><strong id="pendingOwnerName">-</strong></div>
+              <div><span style="color:var(--muted); font-size:12px; display:block;">Business Vertical</span><strong id="pendingCategory">-</strong></div>
+              <div><span style="color:var(--muted); font-size:12px; display:block;">Registered Mobile</span><strong id="pendingMobile">-</strong></div>
+              <div style="grid-column:1 / -1;"><span style="color:var(--muted); font-size:12px; display:block;">Operating / Stand Address</span><strong id="pendingAddress">-</strong></div>
+            </div>
+
+            <div style="margin-top:18px; padding-top:14px; border-top:1px dashed #fcd34d; display:flex; align-items:center; gap:10px; font-size:12.5px; color:#92400e;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+              <span>Our operations team verifies business proof within <strong>2 to 4 hours</strong>. You will receive an SMS confirmation once approved.</span>
+            </div>
+          </div>
+
+          <div style="text-align:center; display:flex; justify-content:center; gap:12px;">
+            <button type="button" class="btn-back" onclick="refreshSellerStatus()">🔄 Refresh Status</button>
+            <button type="button" class="btn-save-continue" onclick="viewSubmittedSummary()" style="width:auto; padding:12px 24px;"><span>View Submitted Dossier</span></button>
+          </div>
+        </div>
+
+        <!-- SELLER APPLICATION STATUS: APPROVED & LIVE DASHBOARD -->
+        <div class="step-view" id="viewSellerDashboard">
+          <div class="stage-header" style="text-align:center;">
+            <div style="width:68px; height:68px; border-radius:50%; background:#dcfce7; color:#16a34a; display:inline-flex; align-items:center; justify-content:center; margin-bottom:14px; box-shadow:0 8px 24px rgba(22,163,74,0.18);">
+              <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            </div>
+            <h1 class="stage-title" style="color:#15803d;" id="dashStoreTitle">Welcome to Apnazo Partner Portal!</h1>
+            <p class="stage-desc" style="max-width:540px; margin:0 auto;">Your business is approved and active for instant customer orders and bookings in Rourkela.</p>
+          </div>
+
+          <div style="max-width:760px; margin:0 auto 24px;">
+            <!-- Metrics Row -->
+            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:14px; margin-bottom:18px;">
+              <div style="background:#ffffff; border:1.5px solid #bbf7d0; border-radius:16px; padding:18px; box-shadow:0 4px 14px rgba(0,0,0,0.03);">
+                <div style="font-size:12px; font-weight:700; color:var(--muted); text-transform:uppercase;">Store Status</div>
+                <div style="display:flex; align-items:center; gap:8px; margin-top:6px;">
+                  <span style="width:10px; height:10px; border-radius:50%; background:#22c55e; display:inline-block; box-shadow:0 0 8px #22c55e;"></span>
+                  <strong style="font-size:18px; color:#15803d;">Active &amp; Live</strong>
+                </div>
+              </div>
+              <div style="background:#ffffff; border:1.5px solid var(--border); border-radius:16px; padding:18px; box-shadow:0 4px 14px rgba(0,0,0,0.03);">
+                <div style="font-size:12px; font-weight:700; color:var(--muted); text-transform:uppercase;">Partner ID</div>
+                <strong style="font-size:16px; color:var(--dark-blue); display:block; margin-top:6px;" id="dashPartnerId">APN-2026-000</strong>
+              </div>
+              <div style="background:#ffffff; border:1.5px solid var(--border); border-radius:16px; padding:18px; box-shadow:0 4px 14px rgba(0,0,0,0.03);">
+                <div style="font-size:12px; font-weight:700; color:var(--muted); text-transform:uppercase;">Payout Account</div>
+                <strong style="font-size:15px; color:var(--ink-dark); display:block; margin-top:6px;" id="dashPayoutBank">Linked &amp; Verified</strong>
+              </div>
+            </div>
+
+            <!-- Details Card -->
+            <div class="section-card" style="margin-bottom:20px;">
+              <h3 class="section-subtitle" style="font-size:15px; margin-bottom:14px;">Store &amp; Operational Details</h3>
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; font-size:13.5px;">
+                <div><span style="color:var(--muted); font-size:12px; display:block;">Business / Fleet Name</span><strong id="dashBizName">-</strong></div>
+                <div><span style="color:var(--muted); font-size:12px; display:block;">Primary Category</span><strong id="dashCategory">-</strong></div>
+                <div><span style="color:var(--muted); font-size:12px; display:block;">Registered Mobile</span><strong id="dashMobile">-</strong></div>
+                <div><span style="color:var(--muted); font-size:12px; display:block;">Operating City</span><strong>Rourkela, Odisha</strong></div>
+              </div>
+            </div>
+
+            <div style="display:flex; justify-content:center; gap:12px;">
+              <button type="button" class="btn-save-continue" onclick="viewSubmittedSummary()" style="width:auto; padding:12px 24px;"><span>View Full Partner Dossier</span></button>
+              <button type="button" class="btn-back" onclick="logoutSeller()">Logout</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- SELLER APPLICATION STATUS: REJECTED WITH REASON & RE-EDIT -->
+        <div class="step-view" id="viewSellerRejected">
+          <div class="stage-header" style="text-align:center;">
+            <div style="width:68px; height:68px; border-radius:50%; background:#fee2e2; color:#dc2626; display:inline-flex; align-items:center; justify-content:center; margin-bottom:14px; box-shadow:0 8px 24px rgba(220,38,38,0.18);">
+              <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+            </div>
+            <h1 class="stage-title" style="color:#b91c1c;">Application Needs Attention</h1>
+            <p class="stage-desc" style="max-width:540px; margin:0 auto;">Your application was reviewed by our verification team and requires corrections before store activation.</p>
+          </div>
+
+          <!-- Highlighted Rejection Box with Stated Reason -->
+          <div class="section-card" style="max-width:680px; margin:0 auto 24px; border:2px solid #fca5a5; background:#fef2f2;">
+            <div style="display:flex; align-items:flex-start; gap:12px; margin-bottom:14px;">
+              <div style="color:#dc2626; font-size:22px; line-height:1;">⚠️</div>
+              <div style="flex:1;">
+                <h4 style="font-size:14.5px; font-weight:800; color:#991b1b; margin-bottom:6px;">Stated Reason from Operations Team:</h4>
+                <div style="font-size:14px; color:#7f1d1d; background:#ffffff; border:1px solid #fecaca; border-radius:10px; padding:12px 14px; font-weight:600; line-height:1.5;" id="rejectReasonText">
+                  Document verification failed. Please re-upload clear proof.
+                </div>
+              </div>
+            </div>
+
+            <p style="font-size:13px; color:#7f1d1d; margin:0;">
+              You can easily update your details, correct the information, or upload fresh documents right away. Click the button below to edit your application.
+            </p>
+          </div>
+
+          <div style="text-align:center; display:flex; justify-content:center; gap:14px;">
+            <button type="button" class="btn-save-continue" onclick="editAndResubmitApplication()" style="width:auto; padding:14px 32px; background:linear-gradient(135deg, #ff7a00 0%, #ff9500 100%);">
+              <span>✏️ Edit &amp; Re-submit Form &rarr;</span>
+            </button>
           </div>
         </div>
 
@@ -2251,8 +2379,19 @@
       updateStep6ForCategory(state.businessRole);
       renderCategoryChips();
 
-      // Navigate to saved step or step 1 and validate
-      goToStep(state.step || 1);
+      // Location auto-catch on reload: preserve saved pincode or silent auto-detect
+      if (state.pincode) {
+        handlePincodeLookup(state.pincode);
+      } else {
+        detectRealtimeLocation(true);
+      }
+
+      // If user has already verified mobile, check real-time application status from backend
+      if (state.verified && state.mobile) {
+        checkSellerApplicationStatus(state.mobile, true);
+      } else {
+        goToStep(state.step || 1);
+      }
     });
 
     // TOAST SYSTEM
@@ -2348,6 +2487,9 @@
     function goToStep(num) {
       state.completedSteps = state.completedSteps || [];
       state.step = num;
+      const sidebar = document.getElementById('onboardingSidebar');
+      if (sidebar) sidebar.style.display = 'block';
+
       document.querySelectorAll('.step-view').forEach(v => v.classList.remove('active'));
       const activeView = document.getElementById('viewStep' + num);
       if (activeView) activeView.classList.add('active');
@@ -2551,6 +2693,9 @@
       showToast('success', 'Verified', 'Mobile number verified.');
       updateStepButtonValidity(1);
       saveDraft();
+
+      // Check if this mobile number already has an application on file
+      checkSellerApplicationStatus(state.mobile, false);
     }
 
     function handleResendClick() {
@@ -2961,6 +3106,62 @@
       renderQuickSuggestChips(config.suggested);
     }
 
+    function detectRealtimeLocation(silent) {
+      const badge = document.getElementById('pincodeBadge');
+      const pInput = document.getElementById('pincodeInput');
+      const cityState = document.getElementById('cityStateInput');
+      const address = document.getElementById('bizAddress');
+
+      if (!navigator.geolocation) {
+        if (!silent) showToast('info', 'GPS Unavailable', 'Please enter your 6-digit pincode.');
+        return;
+      }
+      if (badge && !silent) {
+        badge.className = 'pincode-status-chip';
+        badge.innerHTML = '📍 Acquiring real-time GPS coordinates...';
+      }
+
+      navigator.geolocation.getCurrentPosition(
+        pos => {
+          const lat = pos.coords.latitude;
+          const lon = pos.coords.longitude;
+          fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&addressdetails=1`)
+            .then(r => r.json())
+            .then(data => {
+              if (data && data.address) {
+                const addr = data.address;
+                const postcode = (addr.postcode || '').replace(/\D/g, '').slice(0, 6);
+                const city = addr.city || addr.town || addr.district || addr.county || 'Rourkela';
+                const st = addr.state || 'Odisha';
+                const area = addr.suburb || addr.neighbourhood || addr.road || city;
+
+                if (postcode && postcode.length === 6) {
+                  if (pInput) pInput.value = postcode;
+                  handlePincodeLookup(postcode);
+                } else {
+                  if (cityState) cityState.value = `${city}, ${st}`;
+                  if (badge) {
+                    badge.className = 'pincode-status-chip success';
+                    badge.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> GPS Located: ${area}, ${city}, ${st}`;
+                  }
+                }
+                if (address && !address.value) address.value = `${area}, ${city}`;
+                saveDraft();
+                updateStepButtonValidity(3);
+                if (!silent) showToast('success', 'Location Detected', `Found: ${area}, ${city}`);
+              }
+            })
+            .catch(() => {
+              if (!silent) showToast('info', 'GPS Lookup', 'Please enter your 6-digit pincode.');
+            });
+        },
+        err => {
+          if (!silent) showToast('info', 'GPS Permission', 'Location permission denied. Enter pincode manually.');
+        },
+        { timeout: 7000, enableHighAccuracy: true }
+      );
+    }
+
     function handlePincodeLookup(pin) {
       const clean = (pin || '').replace(/\D/g, '').slice(0, 6);
       const badge = document.getElementById('pincodeBadge');
@@ -3335,9 +3536,11 @@
           expiryDate: document.getElementById('fssaiExpiryDate').value
         },
         documents: state.documents,
-        status: 'Active',
-        decision: 'GREEN',
-        tier: 'STARTER'
+        status: 'under_review',
+        decision: 'UNDER_REVIEW',
+        tier: 'UNDER_REVIEW',
+        submitted: true,
+        reason: ''
       };
 
       fetch(API_BASE + '/api/seller/profile/save', {
@@ -3347,16 +3550,187 @@
       })
       .then(res => res.json())
       .then(data => {
-        const uniqueId = data && data.seller ? data.seller.id : null;
-        if (uniqueId) state.applicationId = uniqueId;
-        showToast('success', 'Onboarding Complete', 'Welcome to Apnazo Seller Hub!');
-        populateSummaryDossier(uniqueId);
-        goToStep(8);
+        const saved = data && data.seller ? data.seller : payload;
+        state.existingSeller = saved;
+        if (saved.id) state.applicationId = saved.id;
+        populateSummaryDossier(state.applicationId);
+        showToast('success', 'Application Submitted', 'Your registration is under review.');
+        showSellerPending(saved);
       })
       .catch(() => {
-        populateSummaryDossier();
-        goToStep(8);
+        state.existingSeller = payload;
+        populateSummaryDossier(state.applicationId);
+        showToast('success', 'Application Submitted', 'Registration received.');
+        showSellerPending(payload);
       });
+    }
+
+    // SELLER REAL-TIME STATUS & PORTAL VIEWS (ON WEBSITE)
+    function checkSellerApplicationStatus(mobile, isInitialLoad) {
+      if (!mobile) return;
+      fetch(API_BASE + '/api/seller/profile?mobile=' + encodeURIComponent(mobile.trim()))
+        .then(r => r.json())
+        .then(res => {
+          if (res && res.success && res.seller) {
+            const s = res.seller;
+            state.existingSeller = s;
+            state.applicationId = s.id;
+            
+            const dec = (s.decision || '').toUpperCase();
+            const stat = (s.status || '').toLowerCase();
+
+            if (dec === 'APPROVED' || dec === 'GREEN' || stat === 'active') {
+              showSellerDashboard(s);
+            } else if (dec === 'REJECTED' || dec === 'RED' || stat === 'rejected') {
+              showSellerRejected(s);
+            } else if (dec === 'PENDING' || dec === 'UNDER_REVIEW' || dec === 'AMBER' || stat === 'under_review' || stat === 'pending' || stat === 'pending admin review' || s.createdDate) {
+              showSellerPending(s);
+            } else if (isInitialLoad) {
+              goToStep(state.step || 1);
+            }
+          } else if (isInitialLoad) {
+            goToStep(state.step || 1);
+          }
+        })
+        .catch(() => {
+          if (isInitialLoad) goToStep(state.step || 1);
+        });
+    }
+
+    function hideAllViews() {
+      document.querySelectorAll('.step-view').forEach(v => v.classList.remove('active'));
+    }
+
+    function showSellerPending(seller) {
+      hideAllViews();
+      const sidebar = document.getElementById('onboardingSidebar');
+      if (sidebar) sidebar.style.display = 'none';
+
+      const s = seller || state.existingSeller || {};
+      const basics = s.basics || {};
+
+      const appId = s.id || state.applicationId || 'APN-2026-PENDING';
+      const bName = basics.bizName || state.bizName || 'Apnazo Partner Store';
+      const oName = basics.ownerName || state.ownerName || 'Partner Owner';
+      const cat = basics.category || state.businessRole || 'Partner';
+      const mob = s.mobile || state.mobile || '';
+      const addr = (basics.address || state.bizAddress || '') + (basics.pincode ? ` (${basics.pincode})` : '');
+
+      const setEl = (id, val) => { const el = document.getElementById(id); if (el) el.innerText = val; };
+      setEl('pendingAppId', appId);
+      setEl('pendingBizName', bName);
+      setEl('pendingOwnerName', oName);
+      setEl('pendingCategory', cat);
+      setEl('pendingMobile', '+91 ' + mob);
+      setEl('pendingAddress', addr || 'Rourkela, Odisha');
+
+      const view = document.getElementById('viewSellerPending');
+      if (view) view.classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function showSellerDashboard(seller) {
+      hideAllViews();
+      const sidebar = document.getElementById('onboardingSidebar');
+      if (sidebar) sidebar.style.display = 'none';
+
+      const s = seller || state.existingSeller || {};
+      const basics = s.basics || {};
+      const bank = s.bank || {};
+
+      const bName = basics.bizName || state.bizName || 'Apnazo Partner Store';
+      const cat = basics.category || state.businessRole || 'Partner';
+      const mob = s.mobile || state.mobile || '';
+      const acc = bank.accountNumber || state.bankAccNumber || '';
+      const ifsc = bank.ifsc || state.bankIfsc || 'SBIN0001244';
+
+      const setEl = (id, val) => { const el = document.getElementById(id); if (el) el.innerText = val; };
+      setEl('dashStoreTitle', `Welcome, ${bName}!`);
+      setEl('dashPartnerId', s.id || state.applicationId || 'APN-LIVE');
+      setEl('dashBizName', bName);
+      setEl('dashCategory', cat);
+      setEl('dashMobile', '+91 ' + mob);
+      setEl('dashPayoutBank', acc ? `•••• ${acc.slice(-4)} (${ifsc})` : 'Linked & Verified');
+
+      const view = document.getElementById('viewSellerDashboard');
+      if (view) view.classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function showSellerRejected(seller) {
+      hideAllViews();
+      const sidebar = document.getElementById('onboardingSidebar');
+      if (sidebar) sidebar.style.display = 'none';
+
+      const s = seller || state.existingSeller || {};
+      const reason = s.reason || 'Document verification could not be completed. Please review your details and re-upload clear proof.';
+
+      const rEl = document.getElementById('rejectReasonText');
+      if (rEl) rEl.innerText = reason;
+
+      const view = document.getElementById('viewSellerRejected');
+      if (view) view.classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function editAndResubmitApplication() {
+      const s = state.existingSeller;
+      if (s) {
+        if (s.basics) {
+          state.bizName = s.basics.bizName || state.bizName;
+          state.ownerName = s.basics.ownerName || state.ownerName;
+          state.businessRole = s.basics.category || state.businessRole;
+          state.categories = s.basics.categories || state.categories;
+          state.bizAddress = s.basics.address || state.bizAddress;
+          state.pincode = s.basics.pincode || state.pincode;
+          state.logoUrl = s.basics.logoUrl || state.logoUrl;
+        }
+        if (s.pan) {
+          state.panNumber = s.pan.number || s.pan.panNumber || state.panNumber;
+          state.panDob = s.pan.dob || state.panDob;
+        }
+        if (s.gst) {
+          state.hasGst = !!s.gst.hasGst;
+          state.gstNumber = s.gst.number || s.gst.gstin || state.gstNumber;
+          state.gstExpiryDate = s.gst.expiryDate || state.gstExpiryDate;
+          state.genuineDocType = s.gst.genuineDocType || state.genuineDocType;
+          state.genuineDocNum = s.gst.genuineDocNum || state.genuineDocNum;
+        }
+        if (s.bank) {
+          state.bankAccNumber = s.bank.accountNumber || state.bankAccNumber;
+          state.bankAccConfirm = s.bank.accountNumber || state.bankAccConfirm;
+          state.bankIfsc = s.bank.ifsc || state.bankIfsc;
+          state.bankBeneficiary = s.bank.beneficiaryName || state.bankBeneficiary;
+        }
+        restoreFormFromDraft();
+      }
+
+      const sidebar = document.getElementById('onboardingSidebar');
+      if (sidebar) sidebar.style.display = 'block';
+
+      showToast('info', 'Edit Form', 'Please review or update your details, then click Save & Next to re-submit.');
+      goToStep(state.businessRole ? 3 : 2);
+    }
+
+    function viewSubmittedSummary() {
+      const sidebar = document.getElementById('onboardingSidebar');
+      if (sidebar) sidebar.style.display = 'block';
+      goToStep(8);
+    }
+
+    function refreshSellerStatus() {
+      showToast('info', 'Refreshing', 'Checking latest application status...');
+      checkSellerApplicationStatus(state.mobile, false);
+    }
+
+    function logoutSeller() {
+      try {
+        localStorage.removeItem('apnazo_seller_hub_draft');
+      } catch(e){}
+      state.verified = false;
+      state.mobile = '';
+      state.existingSeller = null;
+      window.location.reload();
     }
 
     // PUSH NOTIFICATION SIMULATOR
