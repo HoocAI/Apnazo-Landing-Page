@@ -306,54 +306,93 @@
       background: rgba(15, 67, 179, 0.04);
     }
 
-    /* Sidebar Footer / Admin Profile */
+    /* Sidebar Footer / Admin Profile Card */
     .sidebar-footer {
-      border-top: 1px solid var(--border-light);
-      padding-top: 16px;
+      margin-top: auto;
+      padding: 12px 14px;
+      background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+      border: 1px solid #e2e8f0;
+      border-radius: 16px;
       display: flex;
       align-items: center;
       justify-content: space-between;
+      gap: 10px;
+      box-shadow: 0 4px 12px rgba(15, 67, 179, 0.03);
+      transition: all 0.2s ease;
+    }
+    .sidebar-footer:hover {
+      background: #ffffff;
+      border-color: rgba(15, 67, 179, 0.25);
+      box-shadow: 0 6px 20px rgba(15, 67, 179, 0.08);
     }
     .admin-info {
       display: flex;
       align-items: center;
       gap: 10px;
+      min-width: 0;
     }
     .admin-avatar {
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--primary), var(--orange));
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #0f43b3 0%, #ff7a00 100%);
       color: #fff;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-weight: 700;
+      font-weight: 800;
       font-size: 13px;
+      letter-spacing: 0.5px;
+      box-shadow: 0 4px 12px rgba(15, 67, 179, 0.25);
+      flex-shrink: 0;
     }
     .admin-name {
       font-size: 13px;
       font-weight: 700;
-      color: var(--ink);
+      color: #0b1b45;
+      line-height: 1.25;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
     .admin-email {
-      font-size: 11.5px;
-      color: var(--muted);
+      font-size: 11px;
+      color: #64748b;
+      margin-top: 1px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    #admRoleBadge {
+      font-size: 9.5px;
+      font-weight: 800;
+      background: rgba(16, 185, 129, 0.12);
+      color: #059669;
+      border: 1px solid rgba(16, 185, 129, 0.25);
+      padding: 1.5px 7px;
+      border-radius: 999px;
+      display: inline-block;
+      margin-top: 3px;
+      letter-spacing: 0.03em;
     }
     .btn-signout {
-      padding: 6px 10px;
-      border-radius: 8px;
+      padding: 7px 12px;
+      border-radius: 10px;
       border: 1px solid rgba(239, 68, 68, 0.2);
-      background: rgba(239, 68, 68, 0.05);
-      color: var(--danger);
-      font-size: 12px;
-      font-weight: 600;
+      background: rgba(254, 242, 242, 0.85);
+      color: #dc2626;
+      font-size: 11.5px;
+      font-weight: 700;
       cursor: pointer;
-      transition: all 0.18s ease;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+      flex-shrink: 0;
     }
     .btn-signout:hover {
-      background: var(--danger);
+      background: #dc2626;
       color: #fff;
+      box-shadow: 0 4px 12px rgba(220, 38, 38, 0.25);
+      transform: translateY(-1px);
     }
 
     /* Main Content Stage */
@@ -926,7 +965,9 @@
       <button type="button" class="btn-hamburger" onclick="toggleMobileSidebar()" aria-label="Toggle navigation">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
       </button>
-      <div class="sidebar-logo" style="font-size:20px;">Apna<b>zo</b></div>
+      <div style="display:flex; align-items:center;">
+        <img src="/images/apnazo-logo.png" alt="Apnazo" style="height:32px; object-fit:contain;">
+      </div>
       <div class="admin-avatar" style="width:32px; height:32px; font-size:12px;">AD</div>
     </header>
     <div id="mobileBackdrop" class="mobile-backdrop" onclick="toggleMobileSidebar(false)"></div>
@@ -936,7 +977,9 @@
       <!-- Left Vertical Sidebar (Consolidated & Streamlined) -->
       <aside class="admin-sidebar" id="adminSidebar">
         <div class="sidebar-brand">
-          <a href="/" class="sidebar-logo">Apna<b>zo</b></a>
+          <a href="/" style="display:inline-flex; align-items:center;">
+            <img src="/images/apnazo-logo.png" alt="Apnazo" style="height:42px; max-width:160px; object-fit:contain;">
+          </a>
           <button type="button" class="btn-hamburger" onclick="toggleMobileSidebar(false)" style="display:none; margin-left:auto;" id="mobileCloseBtn">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
           </button>
@@ -1409,15 +1452,9 @@
         <div class="detail-row"><span>Category Licence</span><span id="dLicence">-</span></div>
       </div>
 
-      <div style="display:flex; flex-direction:column; gap: 10px; margin-top: auto; padding-top: 20px;">
-        <button class="btn" style="background:#0c831f; color:#fff; padding:12px; font-weight:700; border-radius:12px; display:flex; align-items:center; justify-content:center; gap:8px;" onclick="openSellerDashboardFromDrawer()">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
-          Open Vendor Dashboard (Impersonate / OTP)
-        </button>
-        <div style="display:flex; gap: 10px;">
-          <button class="btn" style="flex:1; background:var(--primary); color:#fff; padding:12px; font-weight:700; border-radius:12px;" onclick="drawerAction('GREEN', 'STARTER')">Approve Starter</button>
-          <button class="btn" style="flex:1; background:var(--danger-bg); color:var(--danger); padding:12px; font-weight:700; border-radius:12px; border-color:rgba(239,68,68,0.2);" onclick="drawerAction('RED', 'SUSPENDED')">Reject</button>
-        </div>
+      <div style="display:flex; gap: 10px; margin-top: auto; padding-top: 20px;">
+        <button class="btn" style="flex:1; background:var(--primary); color:#fff; padding:12px; font-weight:700; border-radius:12px;" onclick="drawerAction('GREEN', 'STARTER')">Approve Starter</button>
+        <button class="btn" style="flex:1; background:var(--danger-bg); color:var(--danger); padding:12px; font-weight:700; border-radius:12px; border-color:rgba(239,68,68,0.2);" onclick="drawerAction('RED', 'SUSPENDED')">Reject</button>
       </div>
     </div>
   </div>

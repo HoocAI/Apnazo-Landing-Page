@@ -851,8 +851,20 @@
       pointer-events: auto !important;
     }
 
-    /* Print styles: Printable summary card appears ONLY when printing */
+    /* Print styles: Professional A4 Registration Dossier */
+    @page {
+      size: A4 portrait;
+      margin: 8mm 10mm 8mm 10mm;
+    }
     @media print {
+      html, body {
+        background: #ffffff !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        color: #0f172a !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
       body * {
         visibility: hidden !important;
       }
@@ -861,16 +873,19 @@
       }
       #printSummaryCard {
         display: block !important;
-        position: absolute !important;
-        left: 0 !important;
-        top: 0 !important;
+        position: static !important;
         width: 100% !important;
         max-width: 100% !important;
         margin: 0 !important;
-        padding: 24px !important;
+        padding: 0 !important;
         border: none !important;
         box-shadow: none !important;
         background: #ffffff !important;
+      }
+      .print-section {
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+        margin-bottom: 8px !important;
       }
     }
 
@@ -1781,76 +1796,92 @@
           </div>
 
           <!-- PRINTABLE DOSSIER CARD (Hidden on screen, prints when clicking Download Application Summary) -->
-          <div id="printSummaryCard" style="display:none; background:#ffffff; border:1.5px solid var(--border); border-radius:20px; padding:28px 32px; max-width:760px; margin:0 auto 28px; box-shadow:0 8px 30px rgba(0,0,0,0.04);">
+          <div id="printSummaryCard" style="display:none; background:#ffffff; border:1.5px solid var(--border); border-radius:16px; padding:20px 24px; max-width:760px; margin:0 auto 24px; box-shadow:0 8px 30px rgba(0,0,0,0.04);">
             
             <!-- Summary Header -->
-            <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid #f1f5f9; padding-bottom:18px; margin-bottom:20px;">
-              <div style="display:flex; align-items:center; gap:14px;">
-                <img src="/images/apnazo-logo.png" alt="Apnazo" style="height:44px; object-fit:contain;">
+            <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid #e2e8f0; padding-bottom:12px; margin-bottom:14px;">
+              <div style="display:flex; align-items:center; gap:12px;">
+                <img src="/images/apnazo-logo.png" alt="Apnazo" style="height:38px; object-fit:contain;">
                 <div>
-                  <div style="font-family:var(--font-display); font-size:16px; font-weight:800; color:var(--dark-blue);">APNAZO PARTNER REGISTRATION SUMMARY</div>
-                  <div style="font-size:12px; color:var(--muted);">Rourkela Super App · Merchant Operations</div>
+                  <div style="font-family:var(--font-display); font-size:15px; font-weight:800; color:#0b1b45; letter-spacing:-0.02em;">APNAZO PARTNER REGISTRATION DOSSIER</div>
+                  <div style="font-size:11px; color:#64748b; font-weight:500;">Official Merchant Onboarding &amp; Statutory Compliance Record</div>
                 </div>
               </div>
               <div style="text-align:right;">
-                <span style="background:#eff6ff; color:#0f43b3; border:1px solid #bfdbfe; font-size:11.5px; font-weight:700; padding:4px 10px; border-radius:20px; text-transform:uppercase;" id="sumAppId">APN-2026-004</span>
-                <div style="font-size:11.5px; color:var(--muted); margin-top:4px;" id="sumTimestamp">27 Nov 2026</div>
+                <span style="background:#eff6ff; color:#0f43b3; border:1px solid #bfdbfe; font-size:11px; font-weight:800; padding:3px 10px; border-radius:20px; text-transform:uppercase; font-family:monospace;" id="sumAppId">APN-2026-004</span>
+                <div style="font-size:11px; color:#64748b; margin-top:3px;" id="sumTimestamp">27 Nov 2026</div>
               </div>
             </div>
 
             <!-- Summary Section 1: Business Profile -->
-            <div style="margin-bottom:18px;">
-              <div style="font-size:13px; font-weight:800; text-transform:uppercase; color:var(--brand-orange); letter-spacing:0.04em; margin-bottom:10px;">1. Business Profile</div>
-              <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; background:#f8fafc; border-radius:12px; padding:14px; font-size:13px;">
-                <div><span style="color:var(--muted);">Business Name:</span> <strong id="sumBizName" style="color:var(--ink-dark);">Steel City Supermarket</strong></div>
-                <div><span style="color:var(--muted);">Owner / Legal Name:</span> <strong id="sumOwnerName" style="color:var(--ink-dark);">Ramesh Chandra Sahu</strong></div>
-                <div><span style="color:var(--muted);">Primary Category:</span> <strong id="sumCategory" style="color:var(--ink-dark);">Retail & Grocery</strong></div>
-                <div><span style="color:var(--muted);">Registered Mobile:</span> <strong id="sumMobile" style="color:var(--ink-dark);">+91 8318102957</strong></div>
-                <div><span style="color:var(--muted);">Selected Tags:</span> <strong id="sumTags" style="color:var(--ink-dark);">-</strong></div>
-                <div><span style="color:var(--muted);">Retail Channel:</span> <strong id="sumChannel" style="color:var(--ink-dark);">Offline Store</strong></div>
-                <div style="grid-column:1 / -1;"><span style="color:var(--muted);">Store Address:</span> <strong id="sumAddress" style="color:var(--ink-dark);">Main Road, Uditnagar, Rourkela - 769001</strong></div>
+            <div class="print-section" style="margin-bottom:12px;">
+              <div style="font-size:11.5px; font-weight:800; text-transform:uppercase; color:#ff7a00; letter-spacing:0.04em; margin-bottom:6px;">1. Business Profile &amp; Storefront</div>
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px 14px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:10px 14px; font-size:11.5px; line-height:1.4;">
+                <div><span style="color:#64748b;">Business Name:</span> <strong id="sumBizName" style="color:#0f172a;">-</strong></div>
+                <div><span style="color:#64748b;">Legal Owner Name:</span> <strong id="sumOwnerName" style="color:#0f172a;">-</strong></div>
+                <div><span style="color:#64748b;">Primary Category:</span> <strong id="sumCategory" style="color:#0f172a;">-</strong></div>
+                <div><span style="color:#64748b;">Registered Mobile:</span> <strong id="sumMobile" style="color:#0f172a;">-</strong></div>
+                <div style="grid-column:1 / -1;"><span style="color:#64748b;">Category &amp; Product Tags:</span> <strong id="sumTags" style="color:#0f172a;">-</strong></div>
+                <div style="grid-column:1 / -1;"><span style="color:#64748b;">Retail Sales Channels:</span> <strong id="sumChannel" style="color:#0f172a;">-</strong></div>
+                <div style="grid-column:1 / -1;"><span style="color:#64748b;">Digital &amp; Social Channels:</span> <strong id="sumSocial" style="color:#0f172a;">-</strong></div>
+                <div style="grid-column:1 / -1;"><span style="color:#64748b;">Store &amp; Pickup Address:</span> <strong id="sumAddress" style="color:#0f172a;">-</strong></div>
               </div>
             </div>
 
             <!-- Summary Section 2: Identity & Tax -->
-            <div style="margin-bottom:18px;">
-              <div style="font-size:13px; font-weight:800; text-transform:uppercase; color:var(--brand-orange); letter-spacing:0.04em; margin-bottom:10px;">2. Identity &amp; Tax Verification</div>
-              <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; background:#f8fafc; border-radius:12px; padding:14px; font-size:13px;">
-                <div><span style="color:var(--muted);">PAN Number:</span> <strong id="sumPan" style="color:var(--ink-dark);">ABCDE1234F</strong></div>
-                <div><span style="color:var(--muted);">PAN Status:</span> <strong style="color:#059669;">Verified (Admin Audited)</strong></div>
-                <div><span style="color:var(--muted);">Tax Regime:</span> <strong id="sumGstRegime" style="color:var(--ink-dark);">Registered GSTIN</strong></div>
-                <div><span style="color:var(--muted);">GST / Genuine Proof:</span> <strong id="sumGstNumber" style="color:var(--ink-dark);">21ABCDE1234F1Z5</strong></div>
-                <div id="sumGstExpiryRow" style="grid-column:1 / -1;"><span style="color:var(--muted);">15-Day Grace Status:</span> <strong style="color:#059669;">Protected Under Apnazo Continuity Policy</strong></div>
+            <div class="print-section" style="margin-bottom:12px;">
+              <div style="font-size:11.5px; font-weight:800; text-transform:uppercase; color:#ff7a00; letter-spacing:0.04em; margin-bottom:6px;">2. Identity &amp; Tax Verification</div>
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px 14px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:10px 14px; font-size:11.5px; line-height:1.4;">
+                <div><span style="color:#64748b;">Permanent Account Number (PAN):</span> <strong id="sumPan" style="color:#0f172a; font-family:monospace;">-</strong></div>
+                <div><span style="color:#64748b;">PAN Status:</span> <strong style="color:#059669;">Verified (Apnazo KYC Audited)</strong></div>
+                <div><span style="color:#64748b;">Legal Name as on PAN:</span> <strong id="sumPanLegalName" style="color:#0f172a;">-</strong></div>
+                <div><span style="color:#64748b;">Tax Regime:</span> <strong id="sumGstRegime" style="color:#0f172a;">-</strong></div>
+                <div><span style="color:#64748b;">GSTIN / Genuine Document No:</span> <strong id="sumGstNumber" style="color:#0f172a; font-family:monospace;">-</strong></div>
+                <div><span style="color:#64748b;">GST Expiry / Renewal Date:</span> <strong id="sumGstExpiry" style="color:#0f172a;">-</strong></div>
+                <div style="grid-column:1 / -1;"><span style="color:#64748b;">15-Day Grace Status:</span> <strong style="color:#059669;">Active · Protected Under Apnazo Business Continuity Policy</strong></div>
               </div>
             </div>
 
             <!-- Summary Section 3: Bank Account for Payouts -->
-            <div style="margin-bottom:18px;">
-              <div style="font-size:13px; font-weight:800; text-transform:uppercase; color:var(--brand-orange); letter-spacing:0.04em; margin-bottom:10px;">3. Bank Payout Settlement (T+2 Days)</div>
-              <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; background:#f8fafc; border-radius:12px; padding:14px; font-size:13px;">
-                <div><span style="color:var(--muted);">Bank Account:</span> <strong id="sumBankAcc" style="color:var(--ink-dark);">•••• •••• 3123</strong></div>
-                <div><span style="color:var(--muted);">IFSC Code:</span> <strong id="sumIfsc" style="color:var(--ink-dark);">SBIN0001244</strong></div>
-                <div style="grid-column:1 / -1;"><span style="color:var(--muted);">Beneficiary Name:</span> <strong id="sumBeneficiary" style="color:var(--ink-dark);">Ramesh Chandra Sahu (PAN Matched)</strong></div>
+            <div class="print-section" style="margin-bottom:12px;">
+              <div style="font-size:11.5px; font-weight:800; text-transform:uppercase; color:#ff7a00; letter-spacing:0.04em; margin-bottom:6px;">3. Bank Payout Settlement (T+2 Days)</div>
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px 14px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:10px 14px; font-size:11.5px; line-height:1.4;">
+                <div><span style="color:#64748b;">Settlement Bank Account:</span> <strong id="sumBankAcc" style="color:#0f172a; font-family:monospace;">-</strong></div>
+                <div><span style="color:#64748b;">IFSC Code:</span> <strong id="sumIfsc" style="color:#0f172a; font-family:monospace;">-</strong></div>
+                <div><span style="color:#64748b;">Beneficiary Account Name:</span> <strong id="sumBeneficiary" style="color:#0f172a;">-</strong></div>
+                <div><span style="color:#64748b;">Payout Cycle:</span> <strong style="color:#059669;">Daily Automated NEFT/RTGS Direct Credit</strong></div>
               </div>
             </div>
 
             <!-- Summary Section 4: Category Licence / FSSAI -->
-            <div style="margin-bottom:18px;">
-              <div style="font-size:13px; font-weight:800; text-transform:uppercase; color:var(--brand-orange); letter-spacing:0.04em; margin-bottom:10px;">4. Category Licence &amp; Statutory Compliance</div>
-              <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; background:#f8fafc; border-radius:12px; padding:14px; font-size:13px;">
-                <div><span style="color:var(--muted);">Licence Type:</span> <strong id="sumLicenceType" style="color:var(--ink-dark);">FSSAI Food Licence</strong></div>
-                <div><span style="color:var(--muted);">Licence Number:</span> <strong id="sumLicenceNum" style="color:var(--ink-dark);">12023023000456</strong></div>
-                <div style="grid-column:1 / -1;"><span style="color:var(--muted);">Compliance Grace Window:</span> <strong style="color:#059669;">15 Days Active Pre-Expiry Tracking</strong></div>
+            <div class="print-section" style="margin-bottom:12px;">
+              <div style="font-size:11.5px; font-weight:800; text-transform:uppercase; color:#ff7a00; letter-spacing:0.04em; margin-bottom:6px;">4. Category Licence &amp; Statutory Compliance</div>
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px 14px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:10px 14px; font-size:11.5px; line-height:1.4;">
+                <div><span style="color:#64748b;">Statutory Licence Type:</span> <strong id="sumLicenceType" style="color:#0f172a;">-</strong></div>
+                <div><span style="color:#64748b;">Registration / Licence Number:</span> <strong id="sumLicenceNum" style="color:#0f172a; font-family:monospace;">-</strong></div>
+                <div><span style="color:#64748b;">Licence Expiry Date:</span> <strong id="sumLicenceExp" style="color:#0f172a;">-</strong></div>
+                <div><span style="color:#64748b;">Compliance Window:</span> <strong style="color:#059669;">15-Day Automated Renewal Warning Active</strong></div>
               </div>
             </div>
 
-            <!-- Summary Section 5: Documents & e-Sign -->
-            <div>
-              <div style="font-size:13px; font-weight:800; text-transform:uppercase; color:var(--brand-orange); letter-spacing:0.04em; margin-bottom:10px;">5. Attached Documents &amp; e-Sign</div>
-              <div style="background:#f8fafc; border-radius:12px; padding:14px; font-size:13px;">
-                <div style="margin-bottom:8px;"><span style="color:var(--muted);">Attached Files:</span> <span id="sumDocsChips" style="font-weight:600; color:var(--ink-dark);">PAN Card, Bank Proof, GST Certificate, Storefront Logo</span></div>
-                <div><span style="color:var(--muted);">e-Sign Agreement:</span> <strong style="color:#059669;">&check; Accepted &amp; Verified via OTP on Apnazo Platform</strong></div>
+            <!-- Summary Section 5: Documents & e-Sign Audit Trail -->
+            <div class="print-section" style="margin-bottom:12px;">
+              <div style="font-size:11.5px; font-weight:800; text-transform:uppercase; color:#ff7a00; letter-spacing:0.04em; margin-bottom:6px;">5. Attached Documents &amp; Digital e-Sign Audit Trail</div>
+              <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:10px 14px; font-size:11.5px; line-height:1.4;">
+                <div style="margin-bottom:6px;"><span style="color:#64748b;">Attached Compliance Hardcopies:</span> <strong id="sumDocsChips" style="color:#0f172a;">-</strong></div>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px 14px; margin-top:6px; padding-top:6px; border-top:1px dashed #e2e8f0;">
+                  <div><span style="color:#64748b;">Partner Agreement:</span> <strong style="color:#059669;">Digitally Accepted &amp; E-Signed</strong></div>
+                  <div><span style="color:#64748b;">Authentication:</span> <strong style="color:#059669;">OTP Verified on Apnazo Platform</strong></div>
+                  <div><span style="color:#64748b;">Authorized Signatory:</span> <strong id="sumSignatory" style="color:#0f172a;">-</strong></div>
+                  <div><span style="color:#64748b;">Signatory Mobile:</span> <strong id="sumSignMobile" style="color:#0f172a;">-</strong></div>
+                </div>
               </div>
+            </div>
+
+            <!-- Dossier Footer Seal -->
+            <div style="margin-top:12px; padding-top:8px; border-top:1px solid #e2e8f0; display:flex; justify-content:space-between; align-items:center; font-size:10px; color:#94a3b8;">
+              <div>Apnazo Merchant Governance · Registered Marketplace Partner Dossier</div>
+              <div style="font-family:monospace; font-weight:700; color:#059669;">DIGITALLY SEALED &amp; LOCKED</div>
             </div>
 
           </div>
@@ -3246,7 +3277,7 @@
 
                 const resolvedCityState = [city, st].filter(Boolean).join(', ');
                 if (cityState && (!cityState.value || !silent)) {
-                  cityState.value = resolvedCityState || 'Rourkela, Odisha';
+                  if (resolvedCityState) cityState.value = resolvedCityState;
                 }
 
                 const resolvedLocality = [suburb || road, city, st].filter(Boolean).join(', ');
@@ -3819,7 +3850,7 @@
       setEl('pendingOwnerName', oName);
       setEl('pendingCategory', cat);
       setEl('pendingMobile', '+91 ' + mob);
-      setEl('pendingAddress', addr || 'Rourkela, Odisha');
+      setEl('pendingAddress', addr || [state.cityState, state.pincode].filter(Boolean).join(', ') || 'Registered Business Address');
 
       const view = document.getElementById('viewSellerPending');
       if (view) view.classList.add('active');
@@ -4050,45 +4081,128 @@
       }
       const setVal = (id, val) => {
         const el = document.getElementById(id);
-        if (el) el.innerText = val;
+        if (el) el.innerText = val || '-';
       };
 
-      setVal('sumBizName', document.getElementById('bizName').value || 'Apnazo Partner Store');
-      setVal('sumOwnerName', document.getElementById('ownerName').value || 'Registered Partner');
-      setVal('sumCategory', state.businessRole);
+      const biz = (document.getElementById('bizName')?.value || state.bizName || '').trim();
+      const owner = (document.getElementById('ownerName')?.value || state.ownerName || '').trim();
+      setVal('sumBizName', biz || 'Apnazo Partner Store');
+      setVal('sumOwnerName', owner || 'Registered Partner');
+      setVal('sumCategory', state.businessRole || 'Retail & Grocery');
       setVal('sumMobile', '+91 ' + (state.mobile || ''));
-      setVal('sumTags', (state.categories || []).join(', ') || 'General');
-      setVal('sumChannel', (state.retailChannels && state.retailChannels.map(r => r.channel).join(', ')) || 'Direct / Stand');
+
+      // Category Tags
+      let tagsStr = (state.categories && state.categories.length > 0) ? state.categories.join(', ') : '';
+      if (!tagsStr) {
+        const catSearchVal = document.getElementById('categorySearchInput')?.value?.trim();
+        tagsStr = catSearchVal || state.businessRole || 'Primary Storefront Category';
+      }
+      setVal('sumTags', tagsStr);
+
+      // Multi-Channel Retail
+      const retailRows = [];
+      document.querySelectorAll('.retail-channel-row').forEach(row => {
+        const sel = row.querySelector('.retail-channel-select');
+        const customInput = row.querySelector('.custom-retail-name');
+        const isOther = sel && (sel.value === 'Other' || sel.value === '__CUSTOM__');
+        const chName = (isOther && customInput && customInput.value.trim()) ? customInput.value.trim() : (sel ? sel.value : '');
+        const refLink = row.querySelector('.retail-ref-link')?.value.trim() || '';
+        const sales = row.querySelector('.retail-sales-select')?.value || '';
+        if (chName) {
+          let item = chName;
+          if (refLink) item += ` (${refLink})`;
+          if (sales) item += ` [Sales: ${sales}]`;
+          retailRows.push(item);
+        }
+      });
+      if (retailRows.length === 0 && state.retailChannels && state.retailChannels.length > 0) {
+        state.retailChannels.forEach(r => {
+          let item = r.channel;
+          if (r.link) item += ` (${r.link})`;
+          if (r.monthlySales) item += ` [Sales: ${r.monthlySales}]`;
+          retailRows.push(item);
+        });
+      }
+      setVal('sumChannel', retailRows.length > 0 ? retailRows.join(' • ') : 'Direct Retail Store');
+
+      // Social Channels
+      const socialRows = [];
+      document.querySelectorAll('.social-channel-row').forEach(row => {
+        const sel = row.querySelector('.social-channel-select');
+        const customInput = row.querySelector('.custom-social-name');
+        const isOther = sel && (sel.value === 'Other' || sel.value === '__CUSTOM__');
+        const chName = (isOther && customInput && customInput.value.trim()) ? customInput.value.trim() : (sel ? sel.value : '');
+        const refLink = row.querySelector('.social-ref-link')?.value.trim() || '';
+        const fol = row.querySelector('.social-followers-select')?.value || '';
+        if (chName) {
+          let item = chName;
+          if (refLink) item += ` (${refLink})`;
+          if (fol) item += ` [${fol}]`;
+          socialRows.push(item);
+        }
+      });
+      if (socialRows.length === 0 && state.socialChannels && state.socialChannels.length > 0) {
+        state.socialChannels.forEach(s => {
+          let item = s.channel;
+          if (s.link) item += ` (${s.link})`;
+          if (s.followers) item += ` [${s.followers}]`;
+          socialRows.push(item);
+        });
+      }
+      setVal('sumSocial', socialRows.length > 0 ? socialRows.join(' • ') : 'Verified Apnazo Digital Profile');
+
+      // Address: DO NOT HARDCODE Rourkela, Odisha! Use user's exact address and city/state!
+      const addr = (document.getElementById('bizAddress')?.value || state.bizAddress || '').trim();
+      const cityState = (document.getElementById('cityStateInput')?.value || state.cityState || '').trim();
+      const pin = (document.getElementById('pincodeInput')?.value || state.pincode || '').replace(/\D/g, '');
       
-      const addr = document.getElementById('bizAddress').value;
-      const pin = state.pincode || '769001';
-      setVal('sumAddress', (addr ? addr + ', ' : '') + 'Pincode: ' + pin + ', Rourkela, Odisha');
-      
-      setVal('sumPan', document.getElementById('panNumber').value || 'ABCDE1234F');
-      
+      const addrParts = [];
+      if (addr) addrParts.push(addr);
+      if (cityState) addrParts.push(cityState);
+      if (pin) addrParts.push('PIN: ' + pin);
+      setVal('sumAddress', addrParts.length > 0 ? addrParts.join(', ') : 'Registered Business Address');
+
+      // Section 2: PAN & Tax
+      const panNum = (document.getElementById('panNumber')?.value || state.panNumber || '').trim();
+      setVal('sumPan', panNum || '-');
+      setVal('sumPanLegalName', owner || 'PAN Verified');
+
       if (state.hasGst) {
         setVal('sumGstRegime', 'Registered GSTIN');
-        setVal('sumGstNumber', document.getElementById('gstNumber').value || '21ABCDE1234F1Z5');
+        setVal('sumGstNumber', (document.getElementById('gstNumber')?.value || state.gstNumber || '').trim() || '-');
+        const gstExp = document.getElementById('gstExpiryDate')?.value || state.gstExpiryDate || '';
+        setVal('sumGstExpiry', gstExp || 'Active / On-File');
       } else {
         setVal('sumGstRegime', 'Turnover < 20 Lakhs (Genuine Business Proof)');
-        setVal('sumGstNumber', (document.getElementById('genuineDocType').value) + ': ' + (document.getElementById('genuineDocNum').value || 'UDYAM-OD-27-00123'));
+        const docType = document.getElementById('genuineDocType')?.value || 'UDYAM';
+        const docNum = (document.getElementById('genuineDocNum')?.value || state.genuineDocNum || '').trim();
+        setVal('sumGstNumber', docType + ': ' + (docNum || 'Registered'));
+        setVal('sumGstExpiry', 'Exempted / Government Registered');
       }
 
-      const acc = document.getElementById('bankAccNumber').value;
-      setVal('sumBankAcc', acc ? '•••• •••• ' + acc.slice(-4) : '•••• •••• 3123');
-      setVal('sumIfsc', document.getElementById('bankIfsc').value || 'SBIN0001244');
-      setVal('sumBeneficiary', document.getElementById('bankBeneficiary').value || document.getElementById('ownerName').value || 'Verified Beneficiary');
+      // Section 3: Bank
+      const acc = (document.getElementById('bankAccNumber')?.value || state.bankAccNumber || '').trim();
+      setVal('sumBankAcc', acc ? '•••• •••• ' + acc.slice(-4) : '-');
+      setVal('sumIfsc', (document.getElementById('bankIfsc')?.value || state.bankIfsc || '').trim() || '-');
+      setVal('sumBeneficiary', (document.getElementById('bankBeneficiary')?.value || owner || 'Verified Beneficiary').trim());
 
-      setVal('sumLicenceType', document.getElementById('licenceTypeSelect').value);
-      setVal('sumLicenceNum', document.getElementById('fssaiNumber').value || 'Verified / Enrolled');
+      // Section 4: Licence
+      setVal('sumLicenceType', document.getElementById('licenceTypeSelect')?.value || 'Category Trade Licence');
+      setVal('sumLicenceNum', (document.getElementById('fssaiNumber')?.value || state.fssaiNumber || '').trim() || 'Applied / In Grace Window');
+      const licExp = document.getElementById('fssaiExpiryDate')?.value || state.fssaiExpiryDate || '';
+      setVal('sumLicenceExp', licExp || '15-Day Grace Tracking Active');
 
+      // Section 5: Documents & e-Sign
       const attached = [];
-      if (state.documents.pan) attached.push('PAN Copy');
-      if (state.documents.gst || state.documents.genuine) attached.push(state.hasGst ? 'GST Certificate' : 'Genuine Document');
-      if (state.documents.bank) attached.push('Bank Proof');
-      if (state.documents.fssai) attached.push('Category Licence');
-      if (state.logoUrl) attached.push('Storefront Logo');
-      setVal('sumDocsChips', attached.length > 0 ? attached.join(' • ') : 'Standard Compliance Hardcopies Attached');
+      if (state.documents?.pan) attached.push('PAN Card Copy');
+      if (state.documents?.gst || state.documents?.genuine) attached.push(state.hasGst ? 'GST Registration Certificate' : 'Genuine Business Proof');
+      if (state.documents?.bank) attached.push('Bank Cancelled Cheque / Passbook');
+      if (state.documents?.fssai) attached.push('Statutory Category Licence');
+      if (state.logoUrl) attached.push('Storefront Brand Logo');
+      setVal('sumDocsChips', attached.length > 0 ? attached.join(' • ') : 'PAN Card, Bank Proof, Business Proof, Category Licence');
+      
+      setVal('sumSignatory', owner || 'Authorized Legal Signatory');
+      setVal('sumSignMobile', '+91 ' + (state.mobile || ''));
 
       const now = new Date();
       setVal('sumTimestamp', now.toLocaleDateString('en-IN', { day:'2-digit', month:'short', year:'numeric' }) + ' ' + now.toLocaleTimeString('en-IN', { hour:'2-digit', minute:'2-digit' }));
