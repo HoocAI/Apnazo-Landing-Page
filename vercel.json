@@ -22,19 +22,19 @@
   "rewrites": [
     {
       "source": "/api/admin/content/terms",
-      "destination": "/api/content-terms"
+      "destination": "/api/content?type=terms"
     },
     {
       "source": "/api/content/terms",
-      "destination": "/api/content-terms"
+      "destination": "/api/content?type=terms"
     },
     {
       "source": "/api/admin/content/privacy",
-      "destination": "/api/content-privacy"
+      "destination": "/api/content?type=privacy"
     },
     {
       "source": "/api/content/privacy",
-      "destination": "/api/content-privacy"
+      "destination": "/api/content?type=privacy"
     },
     {
       "source": "/api/admin/settings",
@@ -54,11 +54,19 @@
     },
     {
       "source": "/api/auth/otp/send",
-      "destination": "/api/auth-otp-send"
+      "destination": "/api/auth-otp?action=send"
     },
     {
       "source": "/api/auth/otp/verify",
-      "destination": "/api/auth-otp-verify"
+      "destination": "/api/auth-otp?action=verify"
+    },
+    {
+      "source": "/api/auth-otp-send",
+      "destination": "/api/auth-otp?action=send"
+    },
+    {
+      "source": "/api/auth-otp-verify",
+      "destination": "/api/auth-otp?action=verify"
     },
     {
       "source": "/api/admin/login",
@@ -74,11 +82,19 @@
     },
     {
       "source": "/api/seller/profile/save",
-      "destination": "/api/seller-save"
+      "destination": "/api/seller"
     },
     {
       "source": "/api/seller/profile",
-      "destination": "/api/seller-profile"
+      "destination": "/api/seller"
+    },
+    {
+      "source": "/api/seller-profile",
+      "destination": "/api/seller"
+    },
+    {
+      "source": "/api/seller-save",
+      "destination": "/api/seller"
     },
     {
       "source": "/api/admin/seller/decision",
@@ -89,8 +105,8 @@
       "destination": "/api/admin-sellers"
     },
     {
-      "source": "/api/(.*)",
-      "destination": "/api/$1"
+      "source": "/api/leads",
+      "destination": "/api/leads"
     },
     {
       "source": "/seller",
@@ -103,6 +119,10 @@
     {
       "source": "/admin",
       "destination": "/admin.html"
+    },
+    {
+      "source": "/api/(.*)",
+      "destination": "/api/$1"
     }
   ]
 }
