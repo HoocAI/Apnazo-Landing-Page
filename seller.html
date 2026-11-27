@@ -317,24 +317,29 @@
     /* Completed step edit pill */
     .step-edit-btn {
       display: none;
-      font-size: 11.5px;
+      font-size: 11px;
       font-weight: 700;
       color: var(--brand-orange);
       background: rgba(255, 122, 0, 0.1);
-      padding: 2px 8px;
+      padding: 2px 7px;
       border-radius: 6px;
       margin-left: auto;
-      border: 1px solid rgba(255, 122, 0, 0.2);
+      border: 1px solid rgba(255, 122, 0, 0.25);
       cursor: pointer;
       transition: all 0.15s ease;
     }
-    .step-item.completed:hover .step-edit-btn,
     .step-item.completed .step-edit-btn {
       display: inline-block;
     }
     .step-edit-btn:hover {
       background: var(--brand-orange);
       color: #ffffff;
+    }
+
+    /* Locked future step items in stepper */
+    .step-item.locked {
+      opacity: 0.55;
+      cursor: not-allowed !important;
     }
 
     /* Completed Step Header Banner */
@@ -345,26 +350,49 @@
       background: #f0fdf4;
       border: 1px solid #bbf7d0;
       border-radius: 12px;
-      padding: 10px 16px;
+      padding: 12px 18px;
       margin-bottom: 20px;
-      font-size: 13px;
+      font-size: 13.5px;
       color: #166534;
       font-weight: 600;
     }
     .completed-step-banner .btn-step-edit {
       background: #ffffff;
-      border: 1.5px solid #16a34a;
-      color: #16a34a;
+      border: 1.5px solid var(--brand-orange);
+      color: var(--brand-orange);
       border-radius: 8px;
-      padding: 4px 12px;
-      font-size: 12px;
+      padding: 6px 14px;
+      font-size: 12.5px;
       font-weight: 700;
       cursor: pointer;
       transition: all 0.15s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
     }
     .completed-step-banner .btn-step-edit:hover {
-      background: #16a34a;
+      background: var(--brand-orange);
       color: #ffffff;
+    }
+
+    /* Readonly locked inputs when reviewing a completed step */
+    .form-step-locked input:not([type="button"]):not([type="submit"]),
+    .form-step-locked select,
+    .form-step-locked textarea {
+      background-color: #f8fafc !important;
+      border-color: #e2e8f0 !important;
+      color: #64748b !important;
+      cursor: not-allowed !important;
+      pointer-events: none !important;
+    }
+    .form-step-locked .doc-upload-box,
+    .form-step-locked .btn-upload-logo,
+    .form-step-locked .quick-suggest-chip,
+    .form-step-locked .remove-cat,
+    .form-step-locked .btn-remove-doc,
+    .form-step-locked .business-block {
+      pointer-events: none !important;
+      opacity: 0.75 !important;
     }
 
     /* COLUMN 3: Right Main Stage Content Area */
@@ -1940,73 +1968,171 @@
       }, 4000);
     }
 
-    // STEP ROUTING
+    // STEP ROUTING & PROGRESSION GUARDS
     function goToStep(num) {
-      state.step = num;
       state.completedSteps = state.completedSteps || [];
+      state.editingSteps = state.editingSteps || [];
+
+      // PROGRESSION GUARD: User CANNOT skip ahead without verifying previous steps
+      if (num > 1 && !state.verified) {
+        showToast('warning', 'Verification Required', 'Please complete Mobile Verification (Step 1) with OTP first.');
+        goToStep(1);
+        return;
+      }
+
+      // Check max reachable step (highest completed step + 1)
+      let maxAllowedStep = 1;
+      if (state.verified) maxAllowedStep = 2;
+      for (let s = 2; s <= 7; s++) {
+        if (state.completedSteps.includes(s)) {
+          maxAllowedStep = s + 1;
+        } else {
+          break;
+        }
+      }
+
+      if (num > maxAllowedStep) {
+        showToast('warning', 'Save Previous Step', `Please complete and save Step ${maxAllowedStep} first.`);
+        goToStep(maxAllowedStep);
+        return;
+      }
+
+      state.step = num;
       document.querySelectorAll('.step-view').forEach(v => v.classList.remove('active'));
       const activeView = document.getElementById('viewStep' + num);
       if (activeView) activeView.classList.add('active');
 
-      // Update vertical stepper & edit indicators
+      // Update vertical stepper & locked visual states
       for (let i = 1; i <= 8; i++) {
         const item = document.getElementById('navStep' + i);
         if (!item) continue;
-        item.classList.remove('active', 'completed');
+        item.classList.remove('active', 'completed', 'locked');
+
         const isCompleted = state.completedSteps.includes(i) || (i === 1 && state.verified);
         if (i === num) {
           item.classList.add('active');
           if (isCompleted) item.classList.add('completed');
-        } else if (isCompleted || i < num) {
+        } else if (isCompleted) {
           item.classList.add('completed');
+        } else if (i > maxAllowedStep) {
+          item.classList.add('locked');
         }
       }
 
-      // Check if current step is already completed -> show "Edit Details" badge and ensure orange button says Next
-      const isCurrentCompleted = state.completedSteps.includes(num) || (num === 1 && state.verified);
-      updateStepActionBar(num, isCurrentCompleted);
+      // Update Form Edit/Lock State
+      const isCompleted = state.completedSteps.includes(num) || (num === 1 && state.verified);
+      const isEditing = state.editingSteps.includes(num);
+
+      renderStepHeaderAndButtons(num, isCompleted, isEditing);
 
       window.scrollTo({ top: 0, behavior: 'smooth' });
       saveDraft();
     }
 
-    function updateStepActionBar(stepNum, isCompleted) {
+    function jumpToStep(num) {
+      goToStep(num);
+    }
+
+    function unlockStepForEditing(stepNum) {
+      state.editingSteps = state.editingSteps || [];
+      if (!state.editingSteps.includes(stepNum)) {
+        state.editingSteps.push(stepNum);
+      }
+      renderStepHeaderAndButtons(stepNum, true, true);
+      showToast('info', 'Edit Mode Enabled', `You can now make changes to Step ${stepNum}. Click "Save & Continue" when done.`);
+    }
+
+    function lockStepAfterSaving(stepNum) {
+      state.editingSteps = state.editingSteps || [];
+      state.editingSteps = state.editingSteps.filter(s => s !== stepNum);
+    }
+
+    function renderStepHeaderAndButtons(stepNum, isCompleted, isEditing) {
       const stepView = document.getElementById('viewStep' + stepNum);
       if (!stepView) return;
 
-      const continueBtn = stepView.querySelector('.btn-save-continue');
-      if (continueBtn) {
-        if (isCompleted && stepNum < 8) {
-          continueBtn.innerHTML = `<span>Next &rarr;</span>`;
-          continueBtn.title = 'Proceed to next step (Details are saved)';
-        } else if (stepNum === 1 && !state.verified) {
-          const otpSection = document.getElementById('otpSection');
-          if (otpSection && otpSection.style.display !== 'none') {
-            continueBtn.innerHTML = `<span>Verify &amp; Continue &rarr;</span>`;
-          } else {
-            continueBtn.innerHTML = `<span>Send OTP &rarr;</span>`;
-          }
-        }
+      // Handle Form Field Read-only Lock
+      if (isCompleted && !isEditing && stepNum < 8) {
+        stepView.classList.add('form-step-locked');
+      } else {
+        stepView.classList.remove('form-step-locked');
       }
 
-      // Ensure completed banner exists if step is completed
+      // Render Completed Banner with Edit Details Action
       let banner = stepView.querySelector('.completed-step-banner');
       if (isCompleted && stepNum < 8) {
         if (!banner) {
+          banner = document.createElement('div');
+          banner.className = 'completed-step-banner';
           const header = stepView.querySelector('.stage-header');
-          if (header) {
-            banner = document.createElement('div');
-            banner.className = 'completed-step-banner';
-            banner.innerHTML = `
-              <div style="display:flex; align-items:center; gap:8px;">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-                <span>Step ${stepNum} details saved. You can edit any field below or click Next to proceed.</span>
-              </div>
-            `;
-            header.after(banner);
+          if (header) header.after(banner);
+        }
+
+        if (isEditing) {
+          banner.innerHTML = `
+            <div style="display:flex; align-items:center; gap:8px;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ea580c" stroke-width="2.5"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+              <span style="color:#c2410c;"><strong>Editing Step ${stepNum}:</strong> Make your changes below, then click "Save & Continue".</span>
+            </div>
+            <button type="button" class="btn-step-edit" style="border-color:#cbd5e1; color:#64748b;" onclick="cancelEditing(${stepNum})">Cancel Edit</button>
+          `;
+        } else {
+          banner.innerHTML = `
+            <div style="display:flex; align-items:center; gap:8px;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              <span>Step ${stepNum} details verified &amp; saved. Click "Next" to continue or edit details.</span>
+            </div>
+            <button type="button" class="btn-step-edit" onclick="unlockStepForEditing(${stepNum})">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+              Edit Details
+            </button>
+          `;
+        }
+      } else if (banner) {
+        banner.remove();
+      }
+
+      // Manage Bottom Orange Action Button
+      const continueBtn = stepView.querySelector('.btn-save-continue');
+      if (continueBtn) {
+        if (stepNum === 1) {
+          if (state.verified && !isEditing) {
+            continueBtn.innerHTML = `<span>Next &rarr;</span>`;
+            continueBtn.onclick = function() { goToStep(2); };
+          } else {
+            const otpSection = document.getElementById('otpSection');
+            if (otpSection && otpSection.style.display !== 'none') {
+              continueBtn.innerHTML = `<span>Verify &amp; Continue &rarr;</span>`;
+            } else {
+              continueBtn.innerHTML = `<span>Send OTP &rarr;</span>`;
+            }
+            continueBtn.onclick = handleStep1Action;
+          }
+        } else if (stepNum < 8) {
+          if (isCompleted && !isEditing) {
+            continueBtn.innerHTML = `<span>Next &rarr;</span>`;
+            continueBtn.onclick = function() { goToStep(stepNum + 1); };
+          } else {
+            continueBtn.innerHTML = `<span>Save &amp; Continue &rarr;</span>`;
+            // Restore default save step actions
+            const stepActions = {
+              2: saveStep2AndContinue,
+              3: saveStep3AndContinue,
+              4: saveStep4AndContinue,
+              5: saveStep5AndContinue,
+              6: saveStep6AndContinue,
+              7: submitAgreementAndContinue
+            };
+            continueBtn.onclick = stepActions[stepNum];
           }
         }
       }
+    }
+
+    function cancelEditing(stepNum) {
+      state.editingSteps = (state.editingSteps || []).filter(s => s !== stepNum);
+      renderStepHeaderAndButtons(stepNum, true, false);
+      showToast('info', 'Edit Cancelled', 'Restored saved values.');
     }
 
     function jumpToStep(num) {
@@ -2254,6 +2380,7 @@
     }
 
     function saveStep2AndContinue() {
+      lockStepAfterSaving(2);
       markStepCompleted(2);
       goToStep(3);
     }
@@ -2387,6 +2514,7 @@
         showToast('warning', 'Missing Details', 'Please enter your Business Name and Owner Name.');
         return;
       }
+      lockStepAfterSaving(3);
       markStepCompleted(3);
       goToStep(4);
     }
@@ -2468,6 +2596,7 @@
         showToast('warning', 'PAN Required', 'Please enter a valid 10-digit PAN card number.');
         return;
       }
+      lockStepAfterSaving(4);
       markStepCompleted(4);
       goToStep(5);
     }
@@ -2486,6 +2615,7 @@
         showToast('warning', 'Mismatch', 'Bank account numbers do not match.');
         return;
       }
+      lockStepAfterSaving(5);
       markStepCompleted(5);
       goToStep(6);
     }
@@ -2514,6 +2644,7 @@
     }
 
     function saveStep6AndContinue() {
+      lockStepAfterSaving(6);
       markStepCompleted(6);
       goToStep(7);
     }
