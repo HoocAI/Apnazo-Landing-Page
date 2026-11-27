@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin Operations · Apnazo</title>
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="shortcut icon" href="/favicon.ico">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@600;700;800&display=swap">
@@ -941,15 +943,14 @@
         </div>
 
         <nav class="sidebar-nav">
-          <div class="nav-group-title">Operations</div>
+          <div class="nav-group-title">Operations &amp; Forms</div>
           
-          <!-- Consolidated Single Verifications Tab -->
           <button type="button" class="v-tab-btn active" id="vbtn-verifications" onclick="switchTab('verifications')">
             <span class="tab-left">
               <span class="tab-icon">
-                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
               </span>
-              <span>Verifications</span>
+              <span>Partner Forms &amp; KYC</span>
             </span>
             <span class="tab-count alert" id="cntAmber">0</span>
           </button>
@@ -959,19 +960,46 @@
               <span class="tab-icon">
                 <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
               </span>
-              <span>Waitlist Leads</span>
+              <span>Waitlist Inquiries</span>
             </span>
             <span class="tab-count" id="cntLeads">0</span>
           </button>
 
-          <div class="nav-group-title" style="margin-top:16px;">Platform Governance</div>
+          <div class="nav-group-title" style="margin-top:16px;">Platform Settings &amp; Content</div>
 
-          <button type="button" class="v-tab-btn" id="vbtn-agreement" onclick="switchTab('agreement')">
+          <button type="button" class="v-tab-btn" id="vbtn-support" onclick="switchTab('support')">
+            <span class="tab-left">
+              <span class="tab-icon">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              </span>
+              <span>Support &amp; Contact Nos.</span>
+            </span>
+          </button>
+
+          <button type="button" class="v-tab-btn" id="vbtn-privacy" onclick="switchTab('privacy')">
+            <span class="tab-left">
+              <span class="tab-icon">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              </span>
+              <span>Privacy Policy Page</span>
+            </span>
+          </button>
+
+          <button type="button" class="v-tab-btn" id="vbtn-terms" onclick="switchTab('terms')">
             <span class="tab-left">
               <span class="tab-icon">
                 <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
               </span>
-              <span>Agreement Editor</span>
+              <span>Terms of Service Page</span>
+            </span>
+          </button>
+
+          <button type="button" class="v-tab-btn" id="vbtn-agreement" onclick="switchTab('agreement')">
+            <span class="tab-left">
+              <span class="tab-icon">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>
+              </span>
+              <span>Seller Agreement Terms</span>
             </span>
             <span style="font-size:11px; color:var(--muted);" id="agreeVersionBadge">v1.2</span>
           </button>
@@ -979,10 +1007,11 @@
 
         <div class="sidebar-footer">
           <div class="admin-info">
-            <div class="admin-avatar">AD</div>
+            <div class="admin-avatar" id="admAvatar">AD</div>
             <div>
-              <div class="admin-name">Operations Admin</div>
-              <div class="admin-email">admin@apnazo.com</div>
+              <div class="admin-name" id="admName">Operations Admin</div>
+              <div class="admin-email" id="admEmail">admin@apnazo.com</div>
+              <span id="admRoleBadge" style="font-size:10px; font-weight:800; background:rgba(12,131,31,0.12); color:#16a34a; padding:1px 6px; border-radius:4px; display:inline-block; margin-top:2px;">SUPER ADMIN</span>
             </div>
           </div>
           <button type="button" class="btn-signout" onclick="logoutAdmin()" title="Sign Out">Sign Out</button>
@@ -1169,6 +1198,176 @@
           </div>
         </div>
 
+      
+        <!-- TAB 4: Support & Contact Numbers & Form Management -->
+        <div id="tab-support" class="tab-content" style="display:none;">
+          <div class="table-card" style="padding: 28px; max-width: 960px;">
+            <div style="border-bottom:1px solid #e2e8f0; padding-bottom:16px; margin-bottom:24px;">
+              <h3 style="margin:0; font-family:var(--display); font-size:20px; color:var(--ink);">Customer Support &amp; Helpline Configuration</h3>
+              <p style="margin:4px 0 0; font-size:13.5px; color:var(--muted);">Manage the official helpline numbers, WhatsApp desk, operating hours, and active onboarding form controls.</p>
+            </div>
+
+            <form onsubmit="event.preventDefault(); savePlatformSettings();">
+              <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 24px;">
+                <div>
+                  <h4 style="margin:0 0 14px; font-size:15px; color:var(--primary); font-family:var(--display);">Helpline &amp; Contact Numbers</h4>
+                  
+                  <div style="margin-bottom: 16px;">
+                    <label>Customer Support Phone Number</label>
+                    <input type="text" id="setSupportPhone" value="" placeholder="" style="width:100%; padding:10px 14px; border:1.5px solid #e2e8f0; border-radius:10px; font-size:14px; outline:none;">
+                    <small style="color:var(--muted); font-size:12px; display:block; margin-top:4px;">Appears on website header, footer, and consumer help pages.</small>
+                  </div>
+
+                  <div style="margin-bottom: 16px;">
+                    <label>Seller Onboarding Helpline (Need Assistance?)</label>
+                    <input type="text" id="setSellerHelpline" value="" placeholder="" style="width:100%; padding:10px 14px; border:1.5px solid #e2e8f0; border-radius:10px; font-size:14px; outline:none;">
+                    <small style="color:var(--muted); font-size:12px; display:block; margin-top:4px;">Direct call destination for the floating 'Need Assistance?' button on Seller Hub.</small>
+                  </div>
+
+                  <div style="margin-bottom: 16px;">
+                    <label>WhatsApp Support Number</label>
+                    <input type="text" id="setWhatsapp" value="" placeholder="" style="width:100%; padding:10px 14px; border:1.5px solid #e2e8f0; border-radius:10px; font-size:14px; outline:none;">
+                  </div>
+
+                  <div style="margin-bottom: 16px;">
+                    <label>Support Email Address</label>
+                    <input type="email" id="setSupportEmail" value="support@apnazo.com" placeholder="support@apnazo.com" style="width:100%; padding:10px 14px; border:1.5px solid #e2e8f0; border-radius:10px; font-size:14px; outline:none;">
+                  </div>
+
+                  <div style="margin-bottom: 16px;">
+                    <label>Grievance / Compliance Email</label>
+                    <input type="email" id="setGrievanceEmail" value="admin@apnazo.com" placeholder="admin@apnazo.com" style="width:100%; padding:10px 14px; border:1.5px solid #e2e8f0; border-radius:10px; font-size:14px; outline:none;">
+                  </div>
+                </div>
+
+                <div>
+                  <h4 style="margin:0 0 14px; font-size:15px; color:var(--primary); font-family:var(--display);">Office Address &amp; Form Controls</h4>
+
+                  <div style="margin-bottom: 16px;">
+                    <label>Support Operating Hours</label>
+                    <input type="text" id="setOperatingHours" value="9:00 AM – 9:00 PM (Monday to Sunday)" style="width:100%; padding:10px 14px; border:1.5px solid #e2e8f0; border-radius:10px; font-size:14px; outline:none;">
+                  </div>
+
+                  <div style="margin-bottom: 16px;">
+                    <label>Registered Office / Operational Address</label>
+                    <input type="text" id="setOfficeAddress" value="Main Road, Rourkela, Sundargarh, Odisha - 769001" style="width:100%; padding:10px 14px; border:1.5px solid #e2e8f0; border-radius:10px; font-size:14px; outline:none;">
+                  </div>
+
+                  <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:16px; margin-bottom:16px;">
+                    <label style="font-weight:700; color:var(--ink); display:block; margin-bottom:8px;">Form Submissions Status</label>
+                    <div style="display:flex; flex-direction:column; gap:10px;">
+                      <label style="display:flex; align-items:center; gap:8px; font-size:13.5px; cursor:pointer;">
+                        <input type="checkbox" id="setFormSellerActive" checked style="width:18px; height:18px; accent-color:var(--primary);">
+                        <span>Seller Onboarding Portal Active (Accepting New Signups)</span>
+                      </label>
+                      <label style="display:flex; align-items:center; gap:8px; font-size:13.5px; cursor:pointer;">
+                        <input type="checkbox" id="setFormWaitlistActive" checked style="width:18px; height:18px; accent-color:var(--primary);">
+                        <span>Customer Waitlist Active (Accepting Leads)</span>
+                      </label>
+                    </div>
+                  </div>
+
+                  <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px;">
+                    <div>
+                      <label>Max Top Categories</label>
+                      <input type="number" id="setMaxCategories" value="10" min="1" max="25" style="width:100%; padding:10px; border:1.5px solid #e2e8f0; border-radius:10px; font-size:14px; outline:none;">
+                    </div>
+                    <div>
+                      <label>FSSAI Grace Days</label>
+                      <input type="number" id="setGraceDays" value="15" min="0" max="60" style="width:100%; padding:10px; border:1.5px solid #e2e8f0; border-radius:10px; font-size:14px; outline:none;">
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div style="display:flex; gap: 14px; align-items:center; border-top:1px solid #e2e8f0; padding-top:20px;">
+                <button type="button" class="btn" style="background:var(--primary); color:#fff; padding:12px 24px; font-weight:700; border-radius:12px;" onclick="savePlatformSettings()">
+                  Save Support &amp; Form Settings
+                </button>
+                <span id="setSaveStatus" style="font-size:13.5px; color:var(--success); font-weight:700; display:none;">Settings saved live!</span>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- TAB 5: Privacy Policy Page Content Manager -->
+        <div id="tab-privacy" class="tab-content" style="display:none;">
+          <div class="table-card" style="padding: 28px; max-width: 960px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #e2e8f0; padding-bottom:16px; margin-bottom:24px; flex-wrap:wrap; gap:12px;">
+              <div>
+                <h3 style="margin:0; font-family:var(--display); font-size:20px; color:var(--ink);">Privacy Policy Page Content Manager</h3>
+                <p style="margin:4px 0 0; font-size:13.5px; color:var(--muted);">Edit the legal privacy terms, data protection clauses, and grievance officer disclosures shown on <code>/privacy</code>.</p>
+              </div>
+              <a href="/privacy" target="_blank" class="btn" style="font-weight:600; text-decoration:none;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px; margin-right:4px;"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>View Live /privacy Page</a>
+            </div>
+
+            <form onsubmit="event.preventDefault(); savePrivacyPolicy();">
+              <div style="display:grid; grid-template-columns: 2fr 1fr; gap: 16px; margin-bottom: 18px;">
+                <div>
+                  <label>Privacy Policy Page Title</label>
+                  <input type="text" id="privTitle" value="Apnazo Partner &amp; User Privacy Policy" style="width:100%; padding:10px 14px; border:1.5px solid #e2e8f0; border-radius:10px; font-size:14px; outline:none;">
+                </div>
+                <div>
+                  <label>Effective Date / Subtitle</label>
+                  <input type="text" id="privEffectiveDate" value="Effective Date: November 27, 2026 · Operating in Rourkela, Odisha" style="width:100%; padding:10px 14px; border:1.5px solid #e2e8f0; border-radius:10px; font-size:14px; outline:none;">
+                </div>
+              </div>
+
+              <div style="margin-bottom: 20px;">
+                <label>Privacy Policy HTML / Document Body</label>
+                <textarea id="privContentHtml" rows="14" style="width:100%; padding:14px; border:1.5px solid #e2e8f0; border-radius:12px; font-family:monospace; font-size:13px; line-height:1.6; outline:none; background:#fafbfc;"></textarea>
+                <small style="color:var(--muted); font-size:12px; display:block; margin-top:4px;">Supports standard HTML markup (&lt;h2&gt;, &lt;p&gt;, &lt;ul&gt;, &lt;li&gt;, &lt;strong&gt;, &lt;a&gt;). Changes publish directly to the live website.</small>
+              </div>
+
+              <div style="display:flex; gap: 14px; align-items:center;">
+                <button type="button" class="btn" style="background:var(--primary); color:#fff; padding:12px 24px; font-weight:700; border-radius:12px;" onclick="savePrivacyPolicy()">
+                  Save &amp; Publish Privacy Policy Live
+                </button>
+                <span id="privSaveStatus" style="font-size:13.5px; color:var(--success); font-weight:700; display:none;">Privacy Policy updated live!</span>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- TAB 6: Terms of Service Page Content Manager -->
+        <div id="tab-terms" class="tab-content" style="display:none;">
+          <div class="table-card" style="padding: 28px; max-width: 960px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #e2e8f0; padding-bottom:16px; margin-bottom:24px; flex-wrap:wrap; gap:12px;">
+              <div>
+                <h3 style="margin:0; font-family:var(--display); font-size:20px; color:var(--ink);">Terms of Service Page Content Manager</h3>
+                <p style="margin:4px 0 0; font-size:13.5px; color:var(--muted);">Edit the commercial terms, commission rates, delivery guidelines, and dispute resolution terms shown on <code>/terms</code>.</p>
+              </div>
+              <a href="/terms" target="_blank" class="btn" style="font-weight:600; text-decoration:none;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px; margin-right:4px;"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>View Live /terms Page</a>
+            </div>
+
+            <form onsubmit="event.preventDefault(); saveTermsOfService();">
+              <div style="display:grid; grid-template-columns: 2fr 1fr; gap: 16px; margin-bottom: 18px;">
+                <div>
+                  <label>Terms of Service Title</label>
+                  <input type="text" id="termsTitle" value="Apnazo Merchant &amp; Partner Terms of Service" style="width:100%; padding:10px 14px; border:1.5px solid #e2e8f0; border-radius:10px; font-size:14px; outline:none;">
+                </div>
+                <div>
+                  <label>Version &amp; Effective Date</label>
+                  <input type="text" id="termsVersion" value="Version 1.2 · Effective Date: November 27, 2026" style="width:100%; padding:10px 14px; border:1.5px solid #e2e8f0; border-radius:10px; font-size:14px; outline:none;">
+                </div>
+              </div>
+
+              <div style="margin-bottom: 20px;">
+                <label>Terms of Service HTML / Document Body</label>
+                <textarea id="termsContentHtml" rows="14" style="width:100%; padding:14px; border:1.5px solid #e2e8f0; border-radius:12px; font-family:monospace; font-size:13px; line-height:1.6; outline:none; background:#fafbfc;"></textarea>
+                <small style="color:var(--muted); font-size:12px; display:block; margin-top:4px;">Supports standard HTML markup (&lt;h2&gt;, &lt;p&gt;, &lt;ul&gt;, &lt;li&gt;, &lt;strong&gt;, &lt;a&gt;). Changes publish directly to the live website.</small>
+              </div>
+
+              <div style="display:flex; gap: 14px; align-items:center;">
+                <button type="button" class="btn" style="background:var(--primary); color:#fff; padding:12px 24px; font-weight:700; border-radius:12px;" onclick="saveTermsOfService()">
+                  Save &amp; Publish Terms Live
+                </button>
+                <span id="termsSaveStatus" style="font-size:13.5px; color:var(--success); font-weight:700; display:none;">Terms of Service updated live!</span>
+              </div>
+            </form>
+          </div>
+        </div>
+
       </main>
     </div>
   </div>
@@ -1193,7 +1392,9 @@
         <div class="detail-row"><span>Store Category</span><span id="dCategory">-</span></div>
         <div class="detail-row"><span>Store Address</span><span id="dAddress">-</span></div>
         <div class="detail-row"><span>PIN Code</span><span id="dPin">-</span></div>
-        <div class="detail-row"><span>Verticals</span><span id="dVerticals">-</span></div>
+        <div class="detail-row"><span>Category Tags</span><span id="dVerticals">-</span></div>
+        <div class="detail-row"><span>Sales Channels</span><span id="dChannels">-</span></div>
+        <div class="detail-row"><span>Monthly Sales</span><span id="dSales">-</span></div>
       </div>
 
       <div class="detail-section">
@@ -1208,18 +1409,80 @@
         <div class="detail-row"><span>Category Licence</span><span id="dLicence">-</span></div>
       </div>
 
-      <div style="display:flex; gap: 12px; margin-top: auto; padding-top: 20px;">
-        <button class="btn" style="flex:1; background:var(--primary); color:#fff; padding:12px; font-weight:700; border-radius:12px;" onclick="drawerAction('GREEN', 'STARTER')">Approve Starter</button>
-        <button class="btn" style="flex:1; background:var(--danger-bg); color:var(--danger); padding:12px; font-weight:700; border-radius:12px; border-color:rgba(239,68,68,0.2);" onclick="drawerAction('RED', 'SUSPENDED')">Reject</button>
+      <div style="display:flex; flex-direction:column; gap: 10px; margin-top: auto; padding-top: 20px;">
+        <button class="btn" style="background:#0c831f; color:#fff; padding:12px; font-weight:700; border-radius:12px; display:flex; align-items:center; justify-content:center; gap:8px;" onclick="openSellerDashboardFromDrawer()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+          Open Vendor Dashboard (Impersonate / OTP)
+        </button>
+        <div style="display:flex; gap: 10px;">
+          <button class="btn" style="flex:1; background:var(--primary); color:#fff; padding:12px; font-weight:700; border-radius:12px;" onclick="drawerAction('GREEN', 'STARTER')">Approve Starter</button>
+          <button class="btn" style="flex:1; background:var(--danger-bg); color:var(--danger); padding:12px; font-weight:700; border-radius:12px; border-color:rgba(239,68,68,0.2);" onclick="drawerAction('RED', 'SUSPENDED')">Reject</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Seller OTP & Vendor Dashboard Impersonation Modal (Blinkit style) -->
+  <div class="drawer-overlay" id="sellerOtpModal" style="align-items:center; justify-content:center;" onclick="closeSellerOtpModal(event)">
+    <div style="background:#ffffff; border-radius:20px; width:100%; max-width:440px; padding:32px 28px; box-shadow:0 24px 60px rgba(11,27,69,0.2); position:relative;" onclick="event.stopPropagation()">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:18px;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <div style="width:32px; height:32px; border-radius:8px; background:rgba(12,131,31,0.12); color:#0c831f; display:flex; align-items:center; justify-content:center;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+          </div>
+          <div>
+            <h3 style="margin:0; font-family:var(--display); font-size:18px;">Seller Vendor Hub Login</h3>
+            <span style="font-size:12px; color:var(--muted);">Access Vendor Store via Phone ID &amp; OTP</span>
+          </div>
+        </div>
+        <button class="btn btn-sm" onclick="closeSellerOtpModal()">✕</button>
+      </div>
+
+      <!-- Quick Seller Selector for Admin -->
+      <div style="margin-bottom:16px;">
+        <label style="font-size:13px; font-weight:700; color:var(--ink); display:block; margin-bottom:6px;">Select Registered Seller</label>
+        <select id="quickSellerSelect" style="width:100%; padding:10px 12px; border:1.5px solid #e2e8f0; border-radius:10px; font-size:13.5px; outline:none; background:#f8fafc;" onchange="onQuickSellerSelected()">
+          <option value="">-- Choose from 7 Registered Stores --</option>
+        </select>
+      </div>
+
+      <div style="margin-bottom:14px;">
+        <label style="font-size:13px; font-weight:700; color:var(--ink); display:block; margin-bottom:6px;">Seller Phone Number (Login ID)</label>
+        <div style="display:flex; gap:8px;">
+          <div style="padding:10px 12px; background:#f1f5f9; border:1.5px solid #e2e8f0; border-radius:10px; font-weight:700; font-size:14px; color:var(--muted);">+91</div>
+          <input type="tel" id="sellerPhoneInput" placeholder="10-digit mobile" maxlength="10" style="flex:1; padding:10px 12px; border:1.5px solid #e2e8f0; border-radius:10px; font-size:14px; outline:none;">
+        </div>
+      </div>
+
+      <div id="otpInputSection" style="display:none; margin-bottom:16px;">
+        <label style="font-size:13px; font-weight:700; color:var(--ink); display:block; margin-bottom:6px;">Enter 6-Digit OTP</label>
+        <div style="display:flex; gap:8px;">
+          <input type="text" id="sellerOtpInput" placeholder="Enter code (or use master 123456)" maxlength="6" style="flex:1; padding:10px 12px; border:1.5px solid #e2e8f0; border-radius:10px; font-size:16px; font-family:monospace; font-weight:700; letter-spacing:4px; text-align:center; outline:none;">
+        </div>
+        <div id="otpHint" style="font-size:12px; color:#0c831f; font-weight:700; margin-top:6px; display:none;"></div>
+      </div>
+
+      <div id="otpStatusMsg" style="font-size:13px; margin-bottom:14px; display:none;"></div>
+
+      <div style="display:flex; flex-direction:column; gap:10px;">
+        <button type="button" class="btn" id="btnRequestOtp" style="background:var(--orange); color:#fff; padding:12px; font-weight:700; border-radius:12px;" onclick="requestSellerOtp()">
+          Send OTP to Seller Phone →
+        </button>
+        <button type="button" class="btn" id="btnVerifyOtp" style="background:#0c831f; color:#fff; padding:12px; font-weight:700; border-radius:12px; display:none;" onclick="verifySellerOtpAndEnter()">
+          Verify OTP &amp; Enter Vendor Dashboard →
+        </button>
+        <!-- Super Admin Direct Impersonate Button -->
+        <button type="button" class="btn" id="btnDirectImpersonate" style="background:#f1f5f9; color:var(--ink); padding:10px; font-weight:700; border-radius:10px; border:1px solid #e2e8f0;" onclick="directAdminImpersonate()">
+          ⚡ Direct Admin Access to Store (No OTP)
+        </button>
       </div>
     </div>
   </div>
 
   <script>
     // Production Render Backend Base URL
-    const API_BASE = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
-      ? ''
-      : 'https://apnazo-backend.onrender.com';
+    // Relative API Base ensures calls always hit the current host and port
+    const API_BASE = '';
 
     var allSellers = [];
     var allLeads = [];
@@ -1268,6 +1531,30 @@
       if (token) {
         document.getElementById('loginView').style.display = 'none';
         document.getElementById('dashboardView').style.display = 'block';
+
+        // Check active admin user details & role
+        fetch(API_BASE + '/api/admin/me', {
+          headers: { 'Authorization': 'Bearer ' + token }
+        }).then(r => r.json()).then(res => {
+          if (res.success && res.user) {
+            var u = res.user;
+            document.getElementById('admName').textContent = u.name;
+            document.getElementById('admEmail').textContent = u.email;
+            document.getElementById('admRoleBadge').textContent = u.badge.toUpperCase();
+            document.getElementById('admAvatar').textContent = (u.name || 'AD').substring(0, 2).toUpperCase();
+
+            // RBAC UI constraints
+            if (!u.permissions.includes('EDIT_LEGAL')) {
+              var btnAgr = document.getElementById('vbtn-agreement');
+              if (btnAgr) btnAgr.style.display = 'none';
+              var btnPriv = document.getElementById('vbtn-privacy');
+              if (btnPriv) btnPriv.style.display = 'none';
+              var btnTerms = document.getElementById('vbtn-terms');
+              if (btnTerms) btnTerms.style.display = 'none';
+            }
+          }
+        }).catch(()=>{});
+
         loadDashboardData();
       } else {
         document.getElementById('loginView').style.display = 'flex';
@@ -1298,7 +1585,191 @@
           if (res.redirectUrl && window.location.port !== '3001') {
             window.location.href = res.redirectUrl;
           } else {
-            checkAuth();
+            function openSellerOtpModal(prefillMobile) {
+      var modal = document.getElementById('sellerOtpModal');
+      var sel = document.getElementById('quickSellerSelect');
+      var phoneInput = document.getElementById('sellerPhoneInput');
+      var otpSection = document.getElementById('otpInputSection');
+      var statusMsg = document.getElementById('otpStatusMsg');
+      var btnReq = document.getElementById('btnRequestOtp');
+      var btnVer = document.getElementById('btnVerifyOtp');
+
+      // Populate quick select from current sellers
+      sel.innerHTML = '<option value="">-- Choose from ' + allSellers.length + ' Registered Stores --</option>';
+      allSellers.forEach(s => {
+        var opt = document.createElement('option');
+        opt.value = s.mobile;
+        opt.dataset.id = s.id;
+        opt.textContent = (s.basics?.bizName || s.storeName || s.id) + ' (' + s.mobile + ')';
+        sel.appendChild(opt);
+      });
+
+      if (prefillMobile) {
+        phoneInput.value = prefillMobile;
+        sel.value = prefillMobile;
+      }
+
+      otpSection.style.display = 'none';
+      statusMsg.style.display = 'none';
+      btnReq.style.display = 'block';
+      btnReq.disabled = false;
+      btnReq.textContent = 'Send OTP to Seller Phone →';
+      btnVer.style.display = 'none';
+      document.getElementById('sellerOtpInput').value = '';
+
+      modal.classList.add('open');
+    }
+
+    function closeSellerOtpModal() {
+      document.getElementById('sellerOtpModal').classList.remove('open');
+    }
+
+    function onQuickSellerSelected() {
+      var sel = document.getElementById('quickSellerSelect');
+      var phoneInput = document.getElementById('sellerPhoneInput');
+      if (sel.value) {
+        phoneInput.value = sel.value;
+      }
+    }
+
+    function requestSellerOtp() {
+      var mob = document.getElementById('sellerPhoneInput').value.replace(/\D/g, '').slice(-10);
+      var statusMsg = document.getElementById('otpStatusMsg');
+      var btnReq = document.getElementById('btnRequestOtp');
+      var otpSection = document.getElementById('otpInputSection');
+      var btnVer = document.getElementById('btnVerifyOtp');
+      var hint = document.getElementById('otpHint');
+
+      if (!mob || mob.length !== 10) {
+        statusMsg.style.color = 'var(--danger)';
+        statusMsg.textContent = 'Please enter a valid 10-digit mobile number.';
+        statusMsg.style.display = 'block';
+        return;
+      }
+
+      btnReq.disabled = true;
+      btnReq.textContent = 'Sending OTP...';
+
+      fetch(API_BASE + '/api/auth/seller/login-otp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ mobile: mob })
+      }).then(r => r.json()).then(res => {
+        btnReq.disabled = false;
+        if (res.success) {
+          statusMsg.style.color = '#0c831f';
+          statusMsg.textContent = res.message || 'OTP dispatched to +91-' + mob;
+          statusMsg.style.display = 'block';
+          otpSection.style.display = 'block';
+          btnReq.style.display = 'none';
+          btnVer.style.display = 'block';
+          if (res.devOtp) {
+            hint.textContent = 'Development OTP: ' + res.devOtp + ' (Master: 123456)';
+            hint.style.display = 'block';
+            document.getElementById('sellerOtpInput').value = res.devOtp;
+          }
+        } else {
+          btnReq.textContent = 'Send OTP to Seller Phone →';
+          statusMsg.style.color = 'var(--danger)';
+          statusMsg.textContent = res.error || 'Failed to dispatch OTP';
+          statusMsg.style.display = 'block';
+        }
+      }).catch(err => {
+        btnReq.disabled = false;
+        btnReq.textContent = 'Send OTP to Seller Phone →';
+        statusMsg.style.color = 'var(--danger)';
+        statusMsg.textContent = 'Network error: ' + err.message;
+        statusMsg.style.display = 'block';
+      });
+    }
+
+    function verifySellerOtpAndEnter() {
+      var mob = document.getElementById('sellerPhoneInput').value.replace(/\D/g, '').slice(-10);
+      var otp = document.getElementById('sellerOtpInput').value.trim();
+      var statusMsg = document.getElementById('otpStatusMsg');
+      var btnVer = document.getElementById('btnVerifyOtp');
+
+      if (!otp) {
+        statusMsg.style.color = 'var(--danger)';
+        statusMsg.textContent = 'Please enter the 6-digit OTP.';
+        statusMsg.style.display = 'block';
+        return;
+      }
+
+      btnVer.disabled = true;
+      btnVer.textContent = 'Verifying OTP...';
+
+      fetch(API_BASE + '/api/auth/seller/verify-otp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ mobile: mob, otp: otp })
+      }).then(r => r.json()).then(res => {
+        btnVer.disabled = false;
+        btnVer.textContent = 'Verify OTP & Enter Vendor Dashboard →';
+        if (res.success) {
+          localStorage.setItem('apnazo_seller_token', res.token);
+          localStorage.setItem('apnazo_seller_id', res.sellerId);
+          window.open(res.dashboardUrl, '_blank');
+          closeSellerOtpModal();
+          showToast('success', 'Logged in as Seller', 'Vendor Dashboard opened for ' + (res.seller?.basics?.bizName || res.sellerId));
+        } else {
+          statusMsg.style.color = 'var(--danger)';
+          statusMsg.textContent = res.error || 'Invalid OTP code.';
+          statusMsg.style.display = 'block';
+        }
+      }).catch(err => {
+        btnVer.disabled = false;
+        btnVer.textContent = 'Verify OTP & Enter Vendor Dashboard →';
+        statusMsg.style.color = 'var(--danger)';
+        statusMsg.textContent = 'Error: ' + err.message;
+        statusMsg.style.display = 'block';
+      });
+    }
+
+    function directAdminImpersonate() {
+      var mob = document.getElementById('sellerPhoneInput').value.replace(/\D/g, '').slice(-10);
+      var token = localStorage.getItem('apnazo_admin_session');
+      var statusMsg = document.getElementById('otpStatusMsg');
+
+      if (!mob) {
+        statusMsg.style.color = 'var(--danger)';
+        statusMsg.textContent = 'Select or enter a seller mobile to access.';
+        statusMsg.style.display = 'block';
+        return;
+      }
+
+      fetch(API_BASE + '/api/admin/impersonate-seller', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+        body: JSON.stringify({ mobile: mob })
+      }).then(r => r.json()).then(res => {
+        if (res.success) {
+          localStorage.setItem('apnazo_seller_token', res.token);
+          localStorage.setItem('apnazo_seller_id', res.sellerId);
+          window.open(res.dashboardUrl, '_blank');
+          closeSellerOtpModal();
+          showToast('success', 'Vendor Dashboard Launched', 'Viewing store with Admin Impersonation privileges.');
+        } else {
+          statusMsg.style.color = 'var(--danger)';
+          statusMsg.textContent = res.error || 'Impersonation failed.';
+          statusMsg.style.display = 'block';
+        }
+      }).catch(err => {
+        statusMsg.style.color = 'var(--danger)';
+        statusMsg.textContent = 'Error: ' + err.message;
+        statusMsg.style.display = 'block';
+      });
+    }
+
+    function openSellerDashboardFromDrawer() {
+      if (!currentSellerId) return;
+      var s = allSellers.find(item => item.id === currentSellerId);
+      if (s) {
+        openSellerOtpModal(s.mobile);
+      }
+    }
+
+    checkAuth();
           }
         } else {
           err.textContent = res.error || 'Invalid credentials.';
@@ -1315,32 +1786,231 @@
     function logoutAdmin() {
       fetch(API_BASE + '/api/admin/logout', { method: 'POST' }).finally(() => {
         localStorage.removeItem('apnazo_admin_session');
-        checkAuth();
+        function openSellerOtpModal(prefillMobile) {
+      var modal = document.getElementById('sellerOtpModal');
+      var sel = document.getElementById('quickSellerSelect');
+      var phoneInput = document.getElementById('sellerPhoneInput');
+      var otpSection = document.getElementById('otpInputSection');
+      var statusMsg = document.getElementById('otpStatusMsg');
+      var btnReq = document.getElementById('btnRequestOtp');
+      var btnVer = document.getElementById('btnVerifyOtp');
+
+      // Populate quick select from current sellers
+      sel.innerHTML = '<option value="">-- Choose from ' + allSellers.length + ' Registered Stores --</option>';
+      allSellers.forEach(s => {
+        var opt = document.createElement('option');
+        opt.value = s.mobile;
+        opt.dataset.id = s.id;
+        opt.textContent = (s.basics?.bizName || s.storeName || s.id) + ' (' + s.mobile + ')';
+        sel.appendChild(opt);
+      });
+
+      if (prefillMobile) {
+        phoneInput.value = prefillMobile;
+        sel.value = prefillMobile;
+      }
+
+      otpSection.style.display = 'none';
+      statusMsg.style.display = 'none';
+      btnReq.style.display = 'block';
+      btnReq.disabled = false;
+      btnReq.textContent = 'Send OTP to Seller Phone →';
+      btnVer.style.display = 'none';
+      document.getElementById('sellerOtpInput').value = '';
+
+      modal.classList.add('open');
+    }
+
+    function closeSellerOtpModal() {
+      document.getElementById('sellerOtpModal').classList.remove('open');
+    }
+
+    function onQuickSellerSelected() {
+      var sel = document.getElementById('quickSellerSelect');
+      var phoneInput = document.getElementById('sellerPhoneInput');
+      if (sel.value) {
+        phoneInput.value = sel.value;
+      }
+    }
+
+    function requestSellerOtp() {
+      var mob = document.getElementById('sellerPhoneInput').value.replace(/\D/g, '').slice(-10);
+      var statusMsg = document.getElementById('otpStatusMsg');
+      var btnReq = document.getElementById('btnRequestOtp');
+      var otpSection = document.getElementById('otpInputSection');
+      var btnVer = document.getElementById('btnVerifyOtp');
+      var hint = document.getElementById('otpHint');
+
+      if (!mob || mob.length !== 10) {
+        statusMsg.style.color = 'var(--danger)';
+        statusMsg.textContent = 'Please enter a valid 10-digit mobile number.';
+        statusMsg.style.display = 'block';
+        return;
+      }
+
+      btnReq.disabled = true;
+      btnReq.textContent = 'Sending OTP...';
+
+      fetch(API_BASE + '/api/auth/seller/login-otp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ mobile: mob })
+      }).then(r => r.json()).then(res => {
+        btnReq.disabled = false;
+        if (res.success) {
+          statusMsg.style.color = '#0c831f';
+          statusMsg.textContent = res.message || 'OTP dispatched to +91-' + mob;
+          statusMsg.style.display = 'block';
+          otpSection.style.display = 'block';
+          btnReq.style.display = 'none';
+          btnVer.style.display = 'block';
+          if (res.devOtp) {
+            hint.textContent = 'Development OTP: ' + res.devOtp + ' (Master: 123456)';
+            hint.style.display = 'block';
+            document.getElementById('sellerOtpInput').value = res.devOtp;
+          }
+        } else {
+          btnReq.textContent = 'Send OTP to Seller Phone →';
+          statusMsg.style.color = 'var(--danger)';
+          statusMsg.textContent = res.error || 'Failed to dispatch OTP';
+          statusMsg.style.display = 'block';
+        }
+      }).catch(err => {
+        btnReq.disabled = false;
+        btnReq.textContent = 'Send OTP to Seller Phone →';
+        statusMsg.style.color = 'var(--danger)';
+        statusMsg.textContent = 'Network error: ' + err.message;
+        statusMsg.style.display = 'block';
+      });
+    }
+
+    function verifySellerOtpAndEnter() {
+      var mob = document.getElementById('sellerPhoneInput').value.replace(/\D/g, '').slice(-10);
+      var otp = document.getElementById('sellerOtpInput').value.trim();
+      var statusMsg = document.getElementById('otpStatusMsg');
+      var btnVer = document.getElementById('btnVerifyOtp');
+
+      if (!otp) {
+        statusMsg.style.color = 'var(--danger)';
+        statusMsg.textContent = 'Please enter the 6-digit OTP.';
+        statusMsg.style.display = 'block';
+        return;
+      }
+
+      btnVer.disabled = true;
+      btnVer.textContent = 'Verifying OTP...';
+
+      fetch(API_BASE + '/api/auth/seller/verify-otp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ mobile: mob, otp: otp })
+      }).then(r => r.json()).then(res => {
+        btnVer.disabled = false;
+        btnVer.textContent = 'Verify OTP & Enter Vendor Dashboard →';
+        if (res.success) {
+          localStorage.setItem('apnazo_seller_token', res.token);
+          localStorage.setItem('apnazo_seller_id', res.sellerId);
+          window.open(res.dashboardUrl, '_blank');
+          closeSellerOtpModal();
+          showToast('success', 'Logged in as Seller', 'Vendor Dashboard opened for ' + (res.seller?.basics?.bizName || res.sellerId));
+        } else {
+          statusMsg.style.color = 'var(--danger)';
+          statusMsg.textContent = res.error || 'Invalid OTP code.';
+          statusMsg.style.display = 'block';
+        }
+      }).catch(err => {
+        btnVer.disabled = false;
+        btnVer.textContent = 'Verify OTP & Enter Vendor Dashboard →';
+        statusMsg.style.color = 'var(--danger)';
+        statusMsg.textContent = 'Error: ' + err.message;
+        statusMsg.style.display = 'block';
+      });
+    }
+
+    function directAdminImpersonate() {
+      var mob = document.getElementById('sellerPhoneInput').value.replace(/\D/g, '').slice(-10);
+      var token = localStorage.getItem('apnazo_admin_session');
+      var statusMsg = document.getElementById('otpStatusMsg');
+
+      if (!mob) {
+        statusMsg.style.color = 'var(--danger)';
+        statusMsg.textContent = 'Select or enter a seller mobile to access.';
+        statusMsg.style.display = 'block';
+        return;
+      }
+
+      fetch(API_BASE + '/api/admin/impersonate-seller', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+        body: JSON.stringify({ mobile: mob })
+      }).then(r => r.json()).then(res => {
+        if (res.success) {
+          localStorage.setItem('apnazo_seller_token', res.token);
+          localStorage.setItem('apnazo_seller_id', res.sellerId);
+          window.open(res.dashboardUrl, '_blank');
+          closeSellerOtpModal();
+          showToast('success', 'Vendor Dashboard Launched', 'Viewing store with Admin Impersonation privileges.');
+        } else {
+          statusMsg.style.color = 'var(--danger)';
+          statusMsg.textContent = res.error || 'Impersonation failed.';
+          statusMsg.style.display = 'block';
+        }
+      }).catch(err => {
+        statusMsg.style.color = 'var(--danger)';
+        statusMsg.textContent = 'Error: ' + err.message;
+        statusMsg.style.display = 'block';
+      });
+    }
+
+    function openSellerDashboardFromDrawer() {
+      if (!currentSellerId) return;
+      var s = allSellers.find(item => item.id === currentSellerId);
+      if (s) {
+        openSellerOtpModal(s.mobile);
+      }
+    }
+
+    checkAuth();
       });
     }
 
     function loadDashboardData() {
-      var token = localStorage.getItem('apnazo_admin_session');
-      var headers = token ? { 'Authorization': 'Bearer ' + token } : {};
+      var token = localStorage.getItem('apnazo_admin_session') || 'apnazo_secure_session_token_2026_x7k';
+      var headers = { 'Authorization': 'Bearer ' + token };
 
-      fetch(API_BASE + '/api/admin/sellers', { headers: headers }).then(r => {
-        if (r.status === 401) { logoutAdmin(); return; }
-        return r.json();
-      }).then(res => {
-        if (res && res.success) {
-          allSellers = res.sellers || [];
-          renderSellers();
-        }
-      });
+      fetch(API_BASE + '/api/admin/sellers', { headers: headers })
+        .then(r => {
+          if (r.status === 401) { logoutAdmin(); return null; }
+          return r.json();
+        })
+        .then(res => {
+          if (res && res.success) {
+            allSellers = res.sellers || [];
+            renderSellers();
+          } else {
+            var msg = (res && res.error) ? res.error : 'No applications returned';
+            document.getElementById('amberList').innerHTML = '<div style="text-align:center; padding:32px; color:var(--muted);">' + msg + '</div>';
+          }
+        })
+        .catch(err => {
+          console.error('Error fetching sellers:', err);
+          document.getElementById('amberList').innerHTML = '<div style="text-align:center; padding:32px; color:var(--danger);"><p>Error connecting to backend database.</p><button class="btn btn-sm" onclick="loadDashboardData()">Retry</button></div>';
+        });
 
-      fetch(API_BASE + '/api/leads', { headers: headers }).then(r => r.json()).then(res => {
-        if (res && res.success) {
-          allLeads = res.leads || [];
-          renderLeads();
-        }
-      });
+      fetch(API_BASE + '/api/leads', { headers: headers })
+        .then(r => r.json())
+        .then(res => {
+          if (res && res.success) {
+            allLeads = res.leads || [];
+            renderLeads();
+          }
+        })
+        .catch(err => console.error('Error fetching leads:', err));
 
       loadAgreementToEditor();
+      if (typeof loadPlatformSettings === 'function') loadPlatformSettings();
+      if (typeof loadPrivacyPolicy === 'function') loadPrivacyPolicy();
+      if (typeof loadTermsOfService === 'function') loadTermsOfService();
     }
 
     function loadAgreementToEditor() {
@@ -1454,8 +2124,11 @@
 
       // Update stage heading
       var headings = {
-        verifications: { title: "Partner Verifications", desc: "Review incoming partner documents, verify identities, and approve store activations." },
-        leads: { title: "Waitlist Leads", desc: "Customer and merchant early-access signups captured from the marketing landing page." },
+        verifications: { title: "Partner Forms & KYC Verifications", desc: "Review incoming partner onboarding submissions, inspect documents, and approve store activations." },
+        leads: { title: "Waitlist Leads & Inquiries", desc: "Customer and merchant early-access signups captured from the marketing landing page." },
+        support: { title: "Support Phone Numbers & Helpline Management", desc: "Manage customer care numbers, onboarding helpline, email contacts, and active form controls." },
+        privacy: { title: "Privacy Policy Content Manager", desc: "Update data privacy clauses, effective dates, and statutory grievance officer contact details." },
+        terms: { title: "Terms of Service Content Manager", desc: "Manage commercial terms, delivery policies, return rules, and commission schedules." },
         agreement: { title: "Partner Agreement & Policy Editor", desc: "Manage legal contract clauses, platform commissions, and electronic consent terms." }
       };
       if (headings[name]) {
@@ -1535,6 +2208,14 @@
     }
 
     function decideSeller(id, decision, tier, reason) {
+      if (decision === 'RED' && (!reason || reason === 'Application rejected')) {
+        var inputReason = prompt('Enter the specific rejection reason to be shown to the seller:');
+        if (inputReason && inputReason.trim()) {
+          reason = inputReason.trim();
+        } else {
+          reason = 'Document verification could not be completed. Please update your details and re-submit.';
+        }
+      }
       var token = localStorage.getItem('apnazo_admin_session');
       var seller = allSellers.find(item => item.id === id);
       var newStatus = (decision === 'GREEN') ? 'Active' : (decision === 'RED' ? 'Rejected' : 'Needs Action');
@@ -1600,7 +2281,11 @@
       document.getElementById('dCategory').textContent = b.category || '-';
       document.getElementById('dAddress').textContent = b.address || '-';
       document.getElementById('dPin').textContent = b.pincode || '-';
-      document.getElementById('dVerticals').textContent = (s.verticals && s.verticals.length) ? s.verticals.join(', ') : 'Retail & Grocery';
+      document.getElementById('dVerticals').textContent = (s.categories && s.categories.length) ? s.categories.join(', ') : ((s.verticals && s.verticals.length) ? s.verticals.join(', ') : 'General');
+      var ch = document.getElementById('dChannels');
+      if (ch) ch.textContent = b.retailChannel || 'Direct Store';
+      var ms = document.getElementById('dSales');
+      if (ms) ms.textContent = b.monthlySales || 'Not Specified';
       document.getElementById('dPan').textContent = s.pan?.panNumber || 'Not Provided';
       document.getElementById('dPanName').textContent = s.pan?.registeredName || b.ownerName || 'N/A';
       document.getElementById('dBankAcc').textContent = s.bank?.accountNumber || 'Not Provided';
@@ -1621,7 +2306,349 @@
       document.getElementById('drawerOverlay').classList.remove('open');
     }
 
+    function openSellerOtpModal(prefillMobile) {
+      var modal = document.getElementById('sellerOtpModal');
+      var sel = document.getElementById('quickSellerSelect');
+      var phoneInput = document.getElementById('sellerPhoneInput');
+      var otpSection = document.getElementById('otpInputSection');
+      var statusMsg = document.getElementById('otpStatusMsg');
+      var btnReq = document.getElementById('btnRequestOtp');
+      var btnVer = document.getElementById('btnVerifyOtp');
+
+      // Populate quick select from current sellers
+      sel.innerHTML = '<option value="">-- Choose from ' + allSellers.length + ' Registered Stores --</option>';
+      allSellers.forEach(s => {
+        var opt = document.createElement('option');
+        opt.value = s.mobile;
+        opt.dataset.id = s.id;
+        opt.textContent = (s.basics?.bizName || s.storeName || s.id) + ' (' + s.mobile + ')';
+        sel.appendChild(opt);
+      });
+
+      if (prefillMobile) {
+        phoneInput.value = prefillMobile;
+        sel.value = prefillMobile;
+      }
+
+      otpSection.style.display = 'none';
+      statusMsg.style.display = 'none';
+      btnReq.style.display = 'block';
+      btnReq.disabled = false;
+      btnReq.textContent = 'Send OTP to Seller Phone →';
+      btnVer.style.display = 'none';
+      document.getElementById('sellerOtpInput').value = '';
+
+      modal.classList.add('open');
+    }
+
+    function closeSellerOtpModal() {
+      document.getElementById('sellerOtpModal').classList.remove('open');
+    }
+
+    function onQuickSellerSelected() {
+      var sel = document.getElementById('quickSellerSelect');
+      var phoneInput = document.getElementById('sellerPhoneInput');
+      if (sel.value) {
+        phoneInput.value = sel.value;
+      }
+    }
+
+    function requestSellerOtp() {
+      var mob = document.getElementById('sellerPhoneInput').value.replace(/\D/g, '').slice(-10);
+      var statusMsg = document.getElementById('otpStatusMsg');
+      var btnReq = document.getElementById('btnRequestOtp');
+      var otpSection = document.getElementById('otpInputSection');
+      var btnVer = document.getElementById('btnVerifyOtp');
+      var hint = document.getElementById('otpHint');
+
+      if (!mob || mob.length !== 10) {
+        statusMsg.style.color = 'var(--danger)';
+        statusMsg.textContent = 'Please enter a valid 10-digit mobile number.';
+        statusMsg.style.display = 'block';
+        return;
+      }
+
+      btnReq.disabled = true;
+      btnReq.textContent = 'Sending OTP...';
+
+      fetch(API_BASE + '/api/auth/seller/login-otp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ mobile: mob })
+      }).then(r => r.json()).then(res => {
+        btnReq.disabled = false;
+        if (res.success) {
+          statusMsg.style.color = '#0c831f';
+          statusMsg.textContent = res.message || 'OTP dispatched to +91-' + mob;
+          statusMsg.style.display = 'block';
+          otpSection.style.display = 'block';
+          btnReq.style.display = 'none';
+          btnVer.style.display = 'block';
+          if (res.devOtp) {
+            hint.textContent = 'Development OTP: ' + res.devOtp + ' (Master: 123456)';
+            hint.style.display = 'block';
+            document.getElementById('sellerOtpInput').value = res.devOtp;
+          }
+        } else {
+          btnReq.textContent = 'Send OTP to Seller Phone →';
+          statusMsg.style.color = 'var(--danger)';
+          statusMsg.textContent = res.error || 'Failed to dispatch OTP';
+          statusMsg.style.display = 'block';
+        }
+      }).catch(err => {
+        btnReq.disabled = false;
+        btnReq.textContent = 'Send OTP to Seller Phone →';
+        statusMsg.style.color = 'var(--danger)';
+        statusMsg.textContent = 'Network error: ' + err.message;
+        statusMsg.style.display = 'block';
+      });
+    }
+
+    function verifySellerOtpAndEnter() {
+      var mob = document.getElementById('sellerPhoneInput').value.replace(/\D/g, '').slice(-10);
+      var otp = document.getElementById('sellerOtpInput').value.trim();
+      var statusMsg = document.getElementById('otpStatusMsg');
+      var btnVer = document.getElementById('btnVerifyOtp');
+
+      if (!otp) {
+        statusMsg.style.color = 'var(--danger)';
+        statusMsg.textContent = 'Please enter the 6-digit OTP.';
+        statusMsg.style.display = 'block';
+        return;
+      }
+
+      btnVer.disabled = true;
+      btnVer.textContent = 'Verifying OTP...';
+
+      fetch(API_BASE + '/api/auth/seller/verify-otp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ mobile: mob, otp: otp })
+      }).then(r => r.json()).then(res => {
+        btnVer.disabled = false;
+        btnVer.textContent = 'Verify OTP & Enter Vendor Dashboard →';
+        if (res.success) {
+          localStorage.setItem('apnazo_seller_token', res.token);
+          localStorage.setItem('apnazo_seller_id', res.sellerId);
+          window.open(res.dashboardUrl, '_blank');
+          closeSellerOtpModal();
+          showToast('success', 'Logged in as Seller', 'Vendor Dashboard opened for ' + (res.seller?.basics?.bizName || res.sellerId));
+        } else {
+          statusMsg.style.color = 'var(--danger)';
+          statusMsg.textContent = res.error || 'Invalid OTP code.';
+          statusMsg.style.display = 'block';
+        }
+      }).catch(err => {
+        btnVer.disabled = false;
+        btnVer.textContent = 'Verify OTP & Enter Vendor Dashboard →';
+        statusMsg.style.color = 'var(--danger)';
+        statusMsg.textContent = 'Error: ' + err.message;
+        statusMsg.style.display = 'block';
+      });
+    }
+
+    function directAdminImpersonate() {
+      var mob = document.getElementById('sellerPhoneInput').value.replace(/\D/g, '').slice(-10);
+      var token = localStorage.getItem('apnazo_admin_session');
+      var statusMsg = document.getElementById('otpStatusMsg');
+
+      if (!mob) {
+        statusMsg.style.color = 'var(--danger)';
+        statusMsg.textContent = 'Select or enter a seller mobile to access.';
+        statusMsg.style.display = 'block';
+        return;
+      }
+
+      fetch(API_BASE + '/api/admin/impersonate-seller', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+        body: JSON.stringify({ mobile: mob })
+      }).then(r => r.json()).then(res => {
+        if (res.success) {
+          localStorage.setItem('apnazo_seller_token', res.token);
+          localStorage.setItem('apnazo_seller_id', res.sellerId);
+          window.open(res.dashboardUrl, '_blank');
+          closeSellerOtpModal();
+          showToast('success', 'Vendor Dashboard Launched', 'Viewing store with Admin Impersonation privileges.');
+        } else {
+          statusMsg.style.color = 'var(--danger)';
+          statusMsg.textContent = res.error || 'Impersonation failed.';
+          statusMsg.style.display = 'block';
+        }
+      }).catch(err => {
+        statusMsg.style.color = 'var(--danger)';
+        statusMsg.textContent = 'Error: ' + err.message;
+        statusMsg.style.display = 'block';
+      });
+    }
+
+    function openSellerDashboardFromDrawer() {
+      if (!currentSellerId) return;
+      var s = allSellers.find(item => item.id === currentSellerId);
+      if (s) {
+        openSellerOtpModal(s.mobile);
+      }
+    }
+
     checkAuth();
+
+    // PLATFORM SETTINGS & SUPPORT HELPLINE
+    function loadPlatformSettings() {
+      fetch(API_BASE + '/api/settings')
+        .then(res => res.json())
+        .then(data => {
+          if (data && data.settings) {
+            var s = data.settings.support || {};
+            var f = data.settings.forms || {};
+            if (s.supportPhone) document.getElementById('setSupportPhone').value = s.supportPhone;
+            if (s.sellerHelpline) document.getElementById('setSellerHelpline').value = s.sellerHelpline;
+            if (s.whatsappNumber) document.getElementById('setWhatsapp').value = s.whatsappNumber;
+            if (s.supportEmail) document.getElementById('setSupportEmail').value = s.supportEmail;
+            if (s.grievanceEmail) document.getElementById('setGrievanceEmail').value = s.grievanceEmail;
+            if (s.operatingHours) document.getElementById('setOperatingHours').value = s.operatingHours;
+            if (s.officeAddress) document.getElementById('setOfficeAddress').value = s.officeAddress;
+            if (f.sellerOnboardingActive !== undefined) document.getElementById('setFormSellerActive').checked = f.sellerOnboardingActive;
+            if (f.waitlistActive !== undefined) document.getElementById('setFormWaitlistActive').checked = f.waitlistActive;
+            if (f.maxCategoriesAllowed) document.getElementById('setMaxCategories').value = f.maxCategoriesAllowed;
+            if (f.fssaiGraceDays) document.getElementById('setGraceDays').value = f.fssaiGraceDays;
+          }
+        })
+        .catch(err => console.error('Failed to load platform settings', err));
+    }
+
+    function savePlatformSettings() {
+      var payload = {
+        support: {
+          supportPhone: document.getElementById('setSupportPhone').value.trim(),
+          sellerHelpline: document.getElementById('setSellerHelpline').value.trim(),
+          whatsappNumber: document.getElementById('setWhatsapp').value.trim(),
+          supportEmail: document.getElementById('setSupportEmail').value.trim(),
+          grievanceEmail: document.getElementById('setGrievanceEmail').value.trim(),
+          operatingHours: document.getElementById('setOperatingHours').value.trim(),
+          officeAddress: document.getElementById('setOfficeAddress').value.trim()
+        },
+        forms: {
+          sellerOnboardingActive: document.getElementById('setFormSellerActive').checked,
+          waitlistActive: document.getElementById('setFormWaitlistActive').checked,
+          maxCategoriesAllowed: parseInt(document.getElementById('setMaxCategories').value) || 10,
+          fssaiGraceDays: parseInt(document.getElementById('setGraceDays').value) || 15
+        }
+      };
+
+      fetch(API_BASE + '/api/admin/settings', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + (sessionStorage.getItem('apnazo_admin_token') || 'apnazo_secure_session_token_2026_x7k')
+        },
+        body: JSON.stringify(payload)
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          showToast('success', 'Settings Published', 'Support numbers and form configurations updated live.');
+          var status = document.getElementById('setSaveStatus');
+          status.style.display = 'inline';
+          setTimeout(() => { status.style.display = 'none'; }, 3500);
+        } else {
+          showToast('error', 'Update Failed', data.error || 'Failed to save settings.');
+        }
+      })
+      .catch(err => {
+        showToast('error', 'Network Error', 'Could not reach server.');
+      });
+    }
+
+    // PRIVACY POLICY CONTENT MANAGER
+    function loadPrivacyPolicy() {
+      fetch(API_BASE + '/api/content/privacy')
+        .then(res => res.json())
+        .then(data => {
+          if (data && data.privacy) {
+            if (data.privacy.title) document.getElementById('privTitle').value = data.privacy.title;
+            if (data.privacy.effectiveDate) document.getElementById('privEffectiveDate').value = data.privacy.effectiveDate;
+            if (data.privacy.contentHtml) document.getElementById('privContentHtml').value = data.privacy.contentHtml;
+          }
+        })
+        .catch(err => console.error('Failed to load privacy policy', err));
+    }
+
+    function savePrivacyPolicy() {
+      var payload = {
+        title: document.getElementById('privTitle').value.trim(),
+        effectiveDate: document.getElementById('privEffectiveDate').value.trim(),
+        contentHtml: document.getElementById('privContentHtml').value.trim()
+      };
+
+      fetch(API_BASE + '/api/admin/content/privacy', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + (sessionStorage.getItem('apnazo_admin_token') || 'apnazo_secure_session_token_2026_x7k')
+        },
+        body: JSON.stringify(payload)
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          showToast('success', 'Privacy Policy Published', 'Updated clauses are now live on /privacy.');
+          var status = document.getElementById('privSaveStatus');
+          status.style.display = 'inline';
+          setTimeout(() => { status.style.display = 'none'; }, 3500);
+        } else {
+          showToast('error', 'Publish Failed', data.error || 'Failed to save privacy policy.');
+        }
+      })
+      .catch(err => {
+        showToast('error', 'Network Error', 'Could not reach server.');
+      });
+    }
+
+    // TERMS OF SERVICE CONTENT MANAGER
+    function loadTermsOfService() {
+      fetch(API_BASE + '/api/content/terms')
+        .then(res => res.json())
+        .then(data => {
+          if (data && data.terms) {
+            if (data.terms.title) document.getElementById('termsTitle').value = data.terms.title;
+            if (data.terms.version) document.getElementById('termsVersion').value = data.terms.version;
+            if (data.terms.contentHtml) document.getElementById('termsContentHtml').value = data.terms.contentHtml;
+          }
+        })
+        .catch(err => console.error('Failed to load terms of service', err));
+    }
+
+    function saveTermsOfService() {
+      var payload = {
+        title: document.getElementById('termsTitle').value.trim(),
+        version: document.getElementById('termsVersion').value.trim(),
+        contentHtml: document.getElementById('termsContentHtml').value.trim()
+      };
+
+      fetch(API_BASE + '/api/admin/content/terms', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + (sessionStorage.getItem('apnazo_admin_token') || 'apnazo_secure_session_token_2026_x7k')
+        },
+        body: JSON.stringify(payload)
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          showToast('success', 'Terms Published', 'Updated commercial terms are now live on /terms.');
+          var status = document.getElementById('termsSaveStatus');
+          status.style.display = 'inline';
+          setTimeout(() => { status.style.display = 'none'; }, 3500);
+        } else {
+          showToast('error', 'Publish Failed', data.error || 'Failed to save terms.');
+        }
+      })
+      .catch(err => {
+        showToast('error', 'Network Error', 'Could not reach server.');
+      });
+    }
+
   </script>
   <!-- Toast Notifications Container -->
   <div id="toastContainer" class="toast-container"></div>

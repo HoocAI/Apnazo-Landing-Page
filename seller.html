@@ -748,23 +748,48 @@
       margin-top: 1px;
     }
 
-    /* PIN CODE AUTO-FETCH BADGE */
+    /* PIN CODE AUTO-FETCH BADGE & ACTION PILL */
+    .btn-location-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3px 10px;
+      font-size: 11px;
+      font-weight: 700;
+      color: #ea580c;
+      background: #fff7ed;
+      border: 1px solid #fed7aa;
+      border-radius: 20px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.15s;
+    }
+    .btn-location-pill:hover {
+      background: #ffedd5;
+      border-color: #fdba74;
+    }
+
     .pincode-status-chip {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      background: #f1f5f9;
-      border-radius: 6px;
-      padding: 3px 8px;
-      font-size: 11.5px;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 5px 10px;
+      font-size: 12px;
       font-weight: 600;
       color: var(--muted);
-      margin-top: 4px;
+      margin-top: 6px;
+      line-height: 1.4;
+      max-width: 100%;
+      word-break: break-word;
     }
 
     .pincode-status-chip.success {
-      background: #eaf6ec;
-      color: var(--brand-orange);
+      background: #f0fdf4;
+      border-color: #bbf7d0;
+      color: #15803d;
     }
 
     /* ACTION BAR AT BOTTOM */
@@ -818,12 +843,35 @@
     }
     .btn-save-continue:disabled,
     .btn-save-continue.btn-disabled {
-      background: #e2e8f0 !important;
+      background: #f1f5f9 !important;
       color: #94a3b8 !important;
-      cursor: not-allowed !important;
+      cursor: pointer !important;
       box-shadow: none !important;
       transform: none !important;
-      pointer-events: none !important;
+      pointer-events: auto !important;
+    }
+
+    /* Print styles: Printable summary card appears ONLY when printing */
+    @media print {
+      body * {
+        visibility: hidden !important;
+      }
+      #printSummaryCard, #printSummaryCard * {
+        visibility: visible !important;
+      }
+      #printSummaryCard {
+        display: block !important;
+        position: absolute !important;
+        left: 0 !important;
+        top: 0 !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 24px !important;
+        border: none !important;
+        box-shadow: none !important;
+        background: #ffffff !important;
+      }
     }
 
     /* Inline Send OTP Button inside Mobile Input */
@@ -1082,9 +1130,9 @@
         <div class="sidebar-footer">
           <select id="hubLangSelect" class="lang-picker" onchange="changeLanguage(this.value)">
             <option value="en">English</option>
-            <option value="hi">🇮🇳 हिन्दी (Hindi)</option>
+            <option value="hi">हिन्दी (Hindi)</option>
             <option value="or">ଓଡ଼ିଆ (Odia)</option>
-            <option value="bn">🪷 বাংলা (Bengali)</option>
+            <option value="bn">বাংলা (Bengali)</option>
           </select>
           <div class="sidebar-links">
             <a href="/">Home</a>
@@ -1187,7 +1235,7 @@
 
           <div class="action-bar">
             <div></div>
-            <button class="btn-save-continue btn-disabled" id="btnStep1Next" onclick="saveStep1AndContinue()" disabled>
+            <button class="btn-save-continue btn-disabled" id="btnStep1Next" onclick="saveStep1AndContinue()">
               <span>Save &amp; Next &rarr;</span>
             </button>
           </div>
@@ -1413,13 +1461,22 @@
 
             <div class="form-grid-2">
               <div class="field">
-                <label>Pin Code (Location Autofetch) *</label>
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                  <label style="margin:0; font-size:13px; font-weight:700;">Pin Code *</label>
+                  <button type="button" class="btn-location-pill" onclick="detectRealtimeLocation(false)">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                    <span>Auto-detect</span>
+                  </button>
+                </div>
                 <input type="text" id="pincodeInput" placeholder="Enter 6-digit Pincode (e.g. 769001)" maxlength="6" oninput="handlePincodeLookup(this.value)">
-                <div id="pincodeBadge" class="pincode-status-chip"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> Enter 6 digits for autofetch</div>
+                <div id="pincodeBadge" class="pincode-status-chip">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                  <span>Enter 6 digits for autofetch</span>
+                </div>
               </div>
               <div class="field">
-                <label>City &amp; State</label>
-                <input type="text" id="cityStateInput" placeholder="Rourkela, Odisha" readonly style="background:#f8fafc;">
+                <label style="font-size:13px; font-weight:700;">City &amp; State *</label>
+                <input type="text" id="cityStateInput" placeholder="e.g. Ghaziabad, Uttar Pradesh">
               </div>
             </div>
 
@@ -1431,7 +1488,7 @@
 
           <div class="action-bar">
             <button class="btn-back" onclick="goToStep(2)">&larr; Back</button>
-            <button class="btn-save-continue btn-disabled" id="btnStep3Next" onclick="saveStep3AndContinue()" disabled><span>Save &amp; Next &rarr;</span></button>
+            <button class="btn-save-continue btn-disabled" id="btnStep3Next" onclick="saveStep3AndContinue()"><span>Save &amp; Next &rarr;</span></button>
           </div>
         </div>
 
@@ -1465,7 +1522,7 @@
               <input type="file" id="panFileInput" accept="image/*,.pdf" style="display:none;" onchange="handleDocUpload(this, 'pan')">
             </div>
             <div class="doc-preview-chip" id="panDocChip">
-              <div class="doc-name"><span>📎</span> <span id="panDocName">pan_document.jpg</span></div>
+              <div class="doc-name"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> <span id="panDocName">pan_document.jpg</span></div>
               <button class="btn-remove-doc" onclick="removeDoc('pan')">&times;</button>
             </div>
           </div>
@@ -1514,7 +1571,7 @@
                 <input type="file" id="gstFileInput" accept="image/*,.pdf" style="display:none;" onchange="handleDocUpload(this, 'gst')">
               </div>
               <div class="doc-preview-chip" id="gstDocChip">
-                <div class="doc-name"><span>📎</span> <span id="gstDocName">gst_certificate.pdf</span></div>
+                <div class="doc-name"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> <span id="gstDocName">gst_certificate.pdf</span></div>
                 <button class="btn-remove-doc" onclick="removeDoc('gst')">&times;</button>
               </div>
             </div>
@@ -1544,7 +1601,7 @@
                 <input type="file" id="genuineFileInput" accept="image/*,.pdf" style="display:none;" onchange="handleDocUpload(this, 'genuine')">
               </div>
               <div class="doc-preview-chip" id="genuineDocChip">
-                <div class="doc-name"><span>📎</span> <span id="genuineDocName">genuine_document.pdf</span></div>
+                <div class="doc-name"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> <span id="genuineDocName">genuine_document.pdf</span></div>
                 <button class="btn-remove-doc" onclick="removeDoc('genuine')">&times;</button>
               </div>
             </div>
@@ -1552,7 +1609,7 @@
 
           <div class="action-bar">
             <button class="btn-back" onclick="goToStep(3)">&larr; Back</button>
-            <button class="btn-save-continue btn-disabled" id="btnStep4Next" onclick="saveStep4AndContinue()" disabled><span>Save &amp; Next &rarr;</span></button>
+            <button class="btn-save-continue btn-disabled" id="btnStep4Next" onclick="saveStep4AndContinue()"><span>Save &amp; Next &rarr;</span></button>
           </div>
         </div>
 
@@ -1595,14 +1652,14 @@
               <input type="file" id="bankFileInput" accept="image/*,.pdf" style="display:none;" onchange="handleDocUpload(this, 'bank')">
             </div>
             <div class="doc-preview-chip" id="bankDocChip">
-              <div class="doc-name"><span>📎</span> <span id="bankDocName">cancelled_cheque.jpg</span></div>
+              <div class="doc-name"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> <span id="bankDocName">cancelled_cheque.jpg</span></div>
               <button class="btn-remove-doc" onclick="removeDoc('bank')">&times;</button>
             </div>
           </div>
 
           <div class="action-bar">
             <button class="btn-back" onclick="goToStep(4)">&larr; Back</button>
-            <button class="btn-save-continue btn-disabled" id="btnStep5Next" onclick="saveStep5AndContinue()" disabled><span>Save &amp; Next &rarr;</span></button>
+            <button class="btn-save-continue btn-disabled" id="btnStep5Next" onclick="saveStep5AndContinue()"><span>Save &amp; Next &rarr;</span></button>
           </div>
         </div>
 
@@ -1654,14 +1711,14 @@
               <input type="file" id="fssaiFileInput" accept="image/*,.pdf" style="display:none;" onchange="handleDocUpload(this, 'fssai')">
             </div>
             <div class="doc-preview-chip" id="fssaiDocChip">
-              <div class="doc-name"><span>📎</span> <span id="fssaiDocName">licence_document.pdf</span></div>
+              <div class="doc-name"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> <span id="fssaiDocName">licence_document.pdf</span></div>
               <button class="btn-remove-doc" onclick="removeDoc('fssai')">&times;</button>
             </div>
           </div>
 
           <div class="action-bar">
             <button class="btn-back" onclick="goToStep(5)">&larr; Back</button>
-            <button class="btn-save-continue btn-disabled" id="btnStep6Next" onclick="saveStep6AndContinue()" disabled><span>Save &amp; Next &rarr;</span></button>
+            <button class="btn-save-continue btn-disabled" id="btnStep6Next" onclick="saveStep6AndContinue()"><span>Save &amp; Next &rarr;</span></button>
           </div>
         </div>
 
@@ -1692,22 +1749,39 @@
 
           <div class="action-bar">
             <button class="btn-back" onclick="goToStep(6)">&larr; Back</button>
-            <button class="btn-save-continue btn-disabled" id="btnStep7Next" onclick="submitAgreementAndContinue()" disabled><span>e-Sign &amp; Submit &rarr;</span></button>
+            <button class="btn-save-continue btn-disabled" id="btnStep7Next" onclick="submitAgreementAndContinue()"><span>e-Sign &amp; Submit &rarr;</span></button>
           </div>
         </div>
 
-                <!-- STEP 8: APPLICATION SUMMARY & CERTIFICATE OF ONBOARDING -->
+        <!-- STEP 8: APPLICATION SUMMARY & SUBMISSION CONFIRMATION -->
         <div class="step-view" id="viewStep8">
-          <div class="stage-header" style="text-align:center;">
-            <div style="margin-bottom: 12px; display:flex; justify-content:center;">
-              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#ff7a00" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          <div class="stage-header" style="text-align:center; padding-top:20px; margin-bottom:28px;">
+            <div style="width:68px; height:68px; border-radius:50%; background:#ecfdf5; color:#059669; display:inline-flex; align-items:center; justify-content:center; margin-bottom:14px; box-shadow:0 8px 24px rgba(5,150,105,0.18);">
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
             </div>
-            <h1 class="stage-title">Application Submitted Successfully!</h1>
-            <p class="stage-desc">Your partner onboarding dossier has been authenticated and registered with Apnazo operations.</p>
+            <h1 class="stage-title" style="margin-bottom:10px;">Application Submitted Successfully!</h1>
+            <div style="margin-bottom:12px;">
+              <span style="display:inline-block; background:#f1f5f9; border:1.5px solid #cbd5e1; color:var(--dark-blue); font-size:13px; font-weight:800; padding:6px 18px; border-radius:20px; text-transform:uppercase;">
+                Application Reference: <span id="confirmRefId" style="color:var(--brand-orange);">APN-202611-004</span>
+              </span>
+            </div>
+            <p class="stage-desc" style="max-width:540px; margin:0 auto 28px;">Your partner onboarding application is submitted and under review. Partner agreement is digitally signed and details are locked.</p>
+
+            <!-- ONLY TWO OPTIONS: 1) Download Application Summary 2) Go to Apnazo Home -->
+            <div style="display:flex; gap:14px; justify-content:center; align-items:center; flex-wrap:wrap; margin-bottom:20px;">
+              <button type="button" class="btn-save-continue" onclick="printApplicationSummary()" style="padding:14px 28px; font-size:14.5px;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                <span>Download Application Summary</span>
+              </button>
+              <a href="/" class="btn-back" style="text-decoration:none; padding:14px 28px; font-size:14.5px; display:inline-flex; align-items:center; gap:8px; border-radius:12px; font-weight:700;">
+                <span>Go to Apnazo Home</span>
+                <span>&rarr;</span>
+              </a>
+            </div>
           </div>
 
-          <!-- PRINTABLE DOSSIER CARD -->
-          <div id="printSummaryCard" style="background:#ffffff; border:1.5px solid var(--border); border-radius:20px; padding:28px 32px; max-width:760px; margin:0 auto 28px; box-shadow:0 8px 30px rgba(0,0,0,0.04);">
+          <!-- PRINTABLE DOSSIER CARD (Hidden on screen, prints when clicking Download Application Summary) -->
+          <div id="printSummaryCard" style="display:none; background:#ffffff; border:1.5px solid var(--border); border-radius:20px; padding:28px 32px; max-width:760px; margin:0 auto 28px; box-shadow:0 8px 30px rgba(0,0,0,0.04);">
             
             <!-- Summary Header -->
             <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid #f1f5f9; padding-bottom:18px; margin-bottom:20px;">
@@ -1780,17 +1854,6 @@
             </div>
 
           </div>
-
-          <!-- ACTION BUTTONS -->
-          <div style="display:flex; gap:14px; justify-content:center; margin-bottom:16px;">
-            <button class="btn-save-continue" onclick="printApplicationSummary()">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
-              <span>Download / Print Summary</span>
-            </button>
-            <a href="/" class="btn-back" style="text-decoration:none; padding:12px 24px;">
-              Go to Apnazo Home &rarr;
-            </a>
-          </div>
         </div>
 
         <!-- SELLER APPLICATION STATUS: UNDER REVIEW (PENDING) -->
@@ -1809,8 +1872,9 @@
                 <span style="font-size:11px; font-weight:800; letter-spacing:0.05em; text-transform:uppercase; color:#b45309;">Application Reference ID</span>
                 <div style="font-size:18px; font-weight:800; color:var(--dark-blue);" id="pendingAppId">APN-2026-000</div>
               </div>
-              <span class="pincode-status-chip" style="background:#fef3c7; color:#92400e; border:1px solid #fcd34d; font-weight:800; font-size:12px; padding:6px 12px;">
-                ⏳ PENDING VERIFICATION
+              <span class="pincode-status-chip" style="background:#fef3c7; color:#92400e; border:1px solid #fcd34d; font-weight:800; font-size:12px; padding:6px 12px; display:inline-flex; align-items:center; gap:6px;">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                <span>PENDING VERIFICATION</span>
               </span>
             </div>
 
@@ -1829,7 +1893,10 @@
           </div>
 
           <div style="text-align:center; display:flex; justify-content:center; gap:12px;">
-            <button type="button" class="btn-back" onclick="refreshSellerStatus()">🔄 Refresh Status</button>
+            <button type="button" class="btn-back" onclick="refreshSellerStatus()" style="display:inline-flex; align-items:center; gap:6px;">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 4v6h-6"/><path d="M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+              <span>Refresh Status</span>
+            </button>
             <button type="button" class="btn-save-continue" onclick="viewSubmittedSummary()" style="width:auto; padding:12px 24px;"><span>View Submitted Dossier</span></button>
           </div>
         </div>
@@ -1895,7 +1962,9 @@
           <!-- Highlighted Rejection Box with Stated Reason -->
           <div class="section-card" style="max-width:680px; margin:0 auto 24px; border:2px solid #fca5a5; background:#fef2f2;">
             <div style="display:flex; align-items:flex-start; gap:12px; margin-bottom:14px;">
-              <div style="color:#dc2626; font-size:22px; line-height:1;">⚠️</div>
+              <div style="color:#dc2626; display:flex; align-items:center;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              </div>
               <div style="flex:1;">
                 <h4 style="font-size:14.5px; font-weight:800; color:#991b1b; margin-bottom:6px;">Stated Reason from Operations Team:</h4>
                 <div style="font-size:14px; color:#7f1d1d; background:#ffffff; border:1px solid #fecaca; border-radius:10px; padding:12px 14px; font-weight:600; line-height:1.5;" id="rejectReasonText">
@@ -1910,8 +1979,9 @@
           </div>
 
           <div style="text-align:center; display:flex; justify-content:center; gap:14px;">
-            <button type="button" class="btn-save-continue" onclick="editAndResubmitApplication()" style="width:auto; padding:14px 32px; background:linear-gradient(135deg, #ff7a00 0%, #ff9500 100%);">
-              <span>✏️ Edit &amp; Re-submit Form &rarr;</span>
+            <button type="button" class="btn-save-continue" onclick="editAndResubmitApplication()" style="width:auto; padding:14px 32px; background:linear-gradient(135deg, #ff7a00 0%, #ff9500 100%); display:inline-flex; align-items:center; gap:8px;">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>
+              <span>Edit &amp; Re-submit Form &rarr;</span>
             </button>
           </div>
         </div>
@@ -2392,9 +2462,14 @@
       const container = document.getElementById('toastContainer');
       const toast = document.createElement('div');
       toast.className = 'toast';
-      const icon = type === 'success' ? '✅' : type === 'warning' ? '⚠️' : 'ℹ️';
+      let icon = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>';
+      if (type === 'success') {
+        icon = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="8 12 11 15 16 9"/></svg>';
+      } else if (type === 'warning' || type === 'danger' || type === 'error') {
+        icon = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ea580c" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>';
+      }
       toast.innerHTML = `
-        <span style="font-size:18px;">${icon}</span>
+        <span style="display:flex; align-items:center;">${icon}</span>
         <div>
           <div class="toast-title">${title}</div>
           <div class="toast-message">${message}</div>
@@ -2428,11 +2503,11 @@
       if (stepNum === 4) {
         const pan = (document.getElementById('panNumber')?.value || state.panNumber || '').trim();
         const panDob = document.getElementById('panDob')?.value || state.panDob || '';
-        if (!pan || pan.length !== 10 || !panDob) return false;
+        if (!pan || pan.length < 8 || !panDob) return false;
         if (state.hasGst) {
           const gst = (document.getElementById('gstNumber')?.value || state.gstNumber || '').trim();
           const gstExp = document.getElementById('gstExpiryDate')?.value || state.gstExpiryDate || '';
-          return gst.length >= 15 && !!gstExp;
+          return gst.length >= 8 && !!gstExp;
         } else {
           const genuineNum = (document.getElementById('genuineDocNum')?.value || state.genuineDocNum || '').trim();
           return genuineNum.length > 0;
@@ -2459,7 +2534,7 @@
       return true;
     }
 
-    // UPDATE BOTTOM ACTION BUTTON: Stays grey until whole section is filled
+    // UPDATE BOTTOM ACTION BUTTON: Stays clickable, toggles subtle visual state
     function updateStepButtonValidity(stepNum) {
       const stepView = document.getElementById('viewStep' + stepNum);
       if (!stepView) return;
@@ -2467,17 +2542,22 @@
       if (!btn) return;
 
       const valid = isStepValid(stepNum);
+      btn.disabled = false;
       if (valid) {
-        btn.disabled = false;
         btn.classList.remove('btn-disabled');
       } else {
-        btn.disabled = true;
         btn.classList.add('btn-disabled');
       }
     }
 
     // STEP ROUTING
     function goToStep(num) {
+      // Check if application is submitted and locked
+      if ((state.submitted || state.agreementSigned) && num < 8 && !state.allowEdit) {
+        showToast('info', 'Application Locked', 'Your application and partner agreement have already been submitted. Previous details cannot be edited.');
+        return;
+      }
+
       state.completedSteps = state.completedSteps || [];
       state.step = num;
       const sidebar = document.getElementById('onboardingSidebar');
@@ -2491,7 +2571,7 @@
       for (let i = 1; i <= 8; i++) {
         const item = document.getElementById('navStep' + i);
         if (!item) continue;
-        item.classList.remove('active', 'completed');
+        item.classList.remove('active', 'completed', 'locked-step');
 
         const isCompleted = state.completedSteps.includes(i) || (i === 1 && state.verified);
         if (i === num) {
@@ -2500,6 +2580,28 @@
         } else if (isCompleted) {
           item.classList.add('completed');
         }
+
+        // Lock completed steps once submitted
+        if ((state.submitted || state.agreementSigned) && !state.allowEdit && i < 8) {
+          item.classList.add('locked-step');
+          item.style.cursor = 'not-allowed';
+          item.style.opacity = '0.75';
+          item.title = 'Agreement signed. Details locked.';
+        } else {
+          item.style.cursor = 'pointer';
+          item.style.opacity = '1';
+          item.title = '';
+        }
+      }
+
+      if (num === 3) {
+        updateStep3ForCategory(state.businessRole || 'Retail & Grocery');
+        renderCategoryChips();
+        detectRealtimeLocation(true);
+      }
+
+      if (num === 8) {
+        populateSummaryDossier(state.applicationId);
       }
 
       updateStepButtonValidity(num);
@@ -3109,39 +3211,57 @@
         if (!silent) showToast('info', 'GPS Unavailable', 'Please enter your 6-digit pincode.');
         return;
       }
+
+      // If silent auto-detect on tab load, do not overwrite if user has already entered a 6-digit pincode
+      if (silent && pInput && pInput.value && pInput.value.trim().length === 6) {
+        return;
+      }
+
       if (badge && !silent) {
         badge.className = 'pincode-status-chip';
-        badge.innerHTML = '📍 Acquiring real-time GPS coordinates...';
+        badge.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> <span>Acquiring real-time GPS coordinates...</span>';
       }
 
       navigator.geolocation.getCurrentPosition(
         pos => {
           const lat = pos.coords.latitude;
           const lon = pos.coords.longitude;
-          fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&addressdetails=1`)
+          fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&zoom=18&addressdetails=1`)
             .then(r => r.json())
             .then(data => {
               if (data && data.address) {
                 const addr = data.address;
                 const postcode = (addr.postcode || '').replace(/\D/g, '').slice(0, 6);
-                const city = addr.city || addr.town || addr.district || addr.county || 'Rourkela';
-                const st = addr.state || 'Odisha';
-                const area = addr.suburb || addr.neighbourhood || addr.road || city;
+                const road = addr.road || addr.street || '';
+                const suburb = addr.suburb || addr.neighbourhood || addr.residential || addr.quarter || addr.subdistrict || addr.village || '';
+                const city = addr.city || addr.town || addr.city_district || addr.district || addr.county || '';
+                const st = addr.state || '';
 
                 if (postcode && postcode.length === 6) {
-                  if (pInput) pInput.value = postcode;
-                  handlePincodeLookup(postcode);
-                } else {
-                  if (cityState) cityState.value = `${city}, ${st}`;
-                  if (badge) {
-                    badge.className = 'pincode-status-chip success';
-                    badge.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> GPS Located: ${area}, ${city}, ${st}`;
+                  if (pInput) {
+                    pInput.value = postcode;
+                    state.pincode = postcode;
                   }
                 }
-                if (address && !address.value) address.value = `${area}, ${city}`;
+
+                const resolvedCityState = [city, st].filter(Boolean).join(', ');
+                if (cityState && (!cityState.value || !silent)) {
+                  cityState.value = resolvedCityState || 'Rourkela, Odisha';
+                }
+
+                const resolvedLocality = [suburb || road, city, st].filter(Boolean).join(', ');
+                if (badge) {
+                  badge.className = 'pincode-status-chip success';
+                  badge.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> Autofetched: ${resolvedLocality || 'Location Detected'}${postcode ? ' (' + postcode + ')' : ''}`;
+                }
+
+                if (address && (!address.value || !silent)) {
+                  address.value = [suburb, road, city, st].filter(Boolean).join(', ');
+                }
+
                 saveDraft();
                 updateStepButtonValidity(3);
-                if (!silent) showToast('success', 'Location Detected', `Found: ${area}, ${city}`);
+                if (!silent) showToast('success', 'Location Detected', `Found: ${resolvedLocality}`);
               }
             })
             .catch(() => {
@@ -3151,7 +3271,7 @@
         err => {
           if (!silent) showToast('info', 'GPS Permission', 'Location permission denied. Enter pincode manually.');
         },
-        { timeout: 7000, enableHighAccuracy: true }
+        { timeout: 10000, enableHighAccuracy: true, maximumAge: 0 }
       );
     }
 
@@ -3168,35 +3288,37 @@
           state.area = area;
           badge.className = 'pincode-status-chip success';
           badge.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> Location Autofetched: ${area}`;
-          cityState.value = 'Rourkela (Sundargarh), Odisha';
-          if (!address.value) {
+          if (cityState) cityState.value = 'Rourkela (Sundargarh), Odisha';
+          if (address && !address.value) {
             address.value = area;
           }
           showToast('success', 'Location Autofetched', `Mapped Pincode ${clean} to ${area}`);
         } else {
           // National Pincode Fallback API
           badge.className = 'pincode-status-chip';
-          badge.innerHTML = '🔍 Fetching Postal Data...';
+          badge.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> <span>Fetching Postal Data...</span>';
           fetch(`https://api.postalpincode.in/pincode/${clean}`)
             .then(res => res.json())
             .then(data => {
               if (data && data[0] && data[0].PostOffice && data[0].PostOffice.length > 0) {
-                const po = data[0].PostOffice[0];
-                const locStr = `${po.Name}, ${po.District}, ${po.State}`;
+                const poList = data[0].PostOffice;
+                const po = poList[0];
+                const district = po.District || '';
+                const stateName = po.State || '';
+                const areas = [...new Set(poList.map(p => p.Name))].slice(0, 3).join(', ');
+                const locStr = `${areas ? areas + ', ' : ''}${district}, ${stateName}`;
                 badge.className = 'pincode-status-chip success';
                 badge.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> Autofetched: ${locStr}`;
-                cityState.value = `${po.District}, ${po.State}`;
-                if (!address.value) address.value = po.Name;
+                if (cityState) cityState.value = [district, stateName].filter(Boolean).join(', ');
+                if (address && !address.value) address.value = areas || district;
               } else {
-                badge.className = 'pincode-status-chip';
-                badge.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> Pincode ${clean} Verified (Odisha Region)`;
-                cityState.value = 'Rourkela, Odisha';
+                badge.className = 'pincode-status-chip success';
+                badge.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> Pincode ${clean} Verified`;
               }
             })
             .catch(() => {
               badge.className = 'pincode-status-chip success';
-              badge.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> Pincode ${clean} Set (Rourkela, Odisha)`;
-              cityState.value = 'Rourkela, Odisha';
+              badge.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> Pincode ${clean} Recorded`;
             });
         }
       } else {
@@ -3206,12 +3328,48 @@
     }
 
     function saveStep3AndContinue() {
-      const bizName = document.getElementById('bizName').value.trim();
-      const ownerName = document.getElementById('ownerName').value.trim();
-      if (!bizName || !ownerName) {
-        showToast('warning', 'Missing Details', 'Please enter your Business Name and Owner Name.');
+      const bizName = (document.getElementById('bizName')?.value || '').trim();
+      const ownerName = (document.getElementById('ownerName')?.value || '').trim();
+      const pin = (document.getElementById('pincodeInput')?.value || '').replace(/\D/g, '').slice(0, 6);
+      const cityState = (document.getElementById('cityStateInput')?.value || '').trim();
+      const addr = (document.getElementById('bizAddress')?.value || '').trim();
+
+      if (!bizName) {
+        showToast('warning', 'Business Name Required', 'Please enter your Business / Shop / Fleet Name.');
+        const el = document.getElementById('bizName');
+        if (el) { el.focus(); el.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
         return;
       }
+      if (!ownerName) {
+        showToast('warning', 'Owner Name Required', 'Please enter Owner Full Name as on PAN Card.');
+        const el = document.getElementById('ownerName');
+        if (el) { el.focus(); el.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+        return;
+      }
+      if (!state.categories || state.categories.length === 0) {
+        showToast('warning', 'Category Required', 'Please select or add at least one category or service tag.');
+        const el = document.getElementById('categorySearchInput');
+        if (el) { el.focus(); el.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+        return;
+      }
+      if (!pin || pin.length !== 6) {
+        showToast('warning', 'Pincode Required', 'Please enter a valid 6-digit Pincode.');
+        const el = document.getElementById('pincodeInput');
+        if (el) { el.focus(); el.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+        return;
+      }
+      if (!addr) {
+        showToast('warning', 'Address Required', 'Please enter your complete pickup / store address.');
+        const el = document.getElementById('bizAddress');
+        if (el) { el.focus(); el.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+        return;
+      }
+
+      state.bizName = bizName;
+      state.ownerName = ownerName;
+      state.pincode = pin;
+      state.cityState = cityState;
+      state.bizAddress = addr;
 
       // Collect Multi-Channel Retail & Social Links
       state.retailChannels = [];
@@ -3241,6 +3399,7 @@
       });
 
       markStepCompleted(3);
+      saveDraft();
       goToStep(4);
     }
 
@@ -3394,7 +3553,7 @@
       alertBox.style.display = 'flex';
       if (diffDays <= 15 && diffDays >= 0) {
         alertBox.className = 'expiry-grace-alert active-grace';
-        text.innerHTML = `<strong>⚠️ GST Renewal Warning:</strong> Expires in <strong>${diffDays} days</strong>. Push notifications enabled 15 days in advance. 15-day Grace Period active to keep your orders running.`;
+        text.innerHTML = `<strong>GST Renewal Warning:</strong> Expires in <strong>${diffDays} days</strong>. Push notifications enabled 15 days in advance. 15-day Grace Period active to keep your orders running.`;
         showToast('info', 'GST Grace Period Active', `GST expires in ${diffDays} days. 15-day grace period is running.`);
       } else if (diffDays < 0) {
         alertBox.className = 'expiry-grace-alert';
@@ -3426,12 +3585,50 @@
     }
 
     function saveStep4AndContinue() {
-      const pan = document.getElementById('panNumber').value.trim();
-      if (!pan || pan.length !== 10) {
-        showToast('warning', 'PAN Required', 'Please enter a valid 10-digit PAN card number.');
+      const pan = (document.getElementById('panNumber')?.value || state.panNumber || '').trim();
+      const panDob = (document.getElementById('panDob')?.value || state.panDob || '').trim();
+      if (!pan || pan.length < 8) {
+        showToast('warning', 'PAN Required', 'Please enter your valid PAN card number.');
+        const el = document.getElementById('panNumber');
+        if (el) { el.focus(); el.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
         return;
       }
+      if (!panDob) {
+        showToast('warning', 'Date of Birth Required', 'Please select Date of Birth / Incorporation Date as on PAN card.');
+        const el = document.getElementById('panDob');
+        if (el) { el.focus(); el.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+        return;
+      }
+
+      if (state.hasGst) {
+        const gst = (document.getElementById('gstNumber')?.value || state.gstNumber || '').trim();
+        const gstExp = (document.getElementById('gstExpiryDate')?.value || state.gstExpiryDate || '').trim();
+        if (!gst || gst.length < 8) {
+          showToast('warning', 'GSTIN Required', 'Please enter your GSTIN number.');
+          const el = document.getElementById('gstNumber');
+          if (el) { el.focus(); el.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+          return;
+        }
+        if (!gstExp) {
+          showToast('warning', 'GST Expiry Date Required', 'Please select the GST Expiry / Renewal Date.');
+          const el = document.getElementById('gstExpiryDate');
+          if (el) { el.focus(); el.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+          return;
+        }
+      } else {
+        const genuineNum = (document.getElementById('genuineDocNum')?.value || state.genuineDocNum || '').trim();
+        if (!genuineNum) {
+          showToast('warning', 'Document Number Required', 'Please enter your genuine business document registration number.');
+          const el = document.getElementById('genuineDocNum');
+          if (el) { el.focus(); el.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+          return;
+        }
+      }
+
+      state.panNumber = pan;
+      state.panDob = panDob;
       markStepCompleted(4);
+      saveDraft();
       goToStep(5);
     }
 
@@ -3465,14 +3662,14 @@
       alertBox.style.display = 'flex';
       if (diffDays <= 15 && diffDays >= 0) {
         alertBox.className = 'expiry-grace-alert active-grace';
-        text.innerHTML = `<strong>⚠️ FSSAI Renewal Alert:</strong> Expires in <strong>${diffDays} days</strong>. Push alert queued. 15-day Grace Period active to ensure food business continuity.`;
-        showToast('info', 'FSSAI Grace Period Active', `Licence expires in ${diffDays} days. 15-day grace period is running.`);
+        text.innerHTML = `<strong>Licence Renewal Alert:</strong> Expires in <strong>${diffDays} days</strong>. Push alert queued. 15-day Grace Period active to ensure business continuity.`;
+        showToast('info', 'Licence Grace Period Active', `Licence expires in ${diffDays} days. 15-day grace period is running.`);
       } else if (diffDays < 0) {
         alertBox.className = 'expiry-grace-alert';
-        text.innerHTML = `<strong>15-Day Grace Period Running:</strong> FSSAI expired ${Math.abs(diffDays)} days ago. You have ${15 - Math.abs(diffDays)} days remaining to upload renewed certificate.`;
+        text.innerHTML = `<strong>15-Day Grace Period Running:</strong> Licence expired ${Math.abs(diffDays)} days ago. You have ${15 - Math.abs(diffDays)} days remaining under grace period policy.`;
       } else {
         alertBox.className = 'expiry-grace-alert active-grace';
-        text.innerHTML = `FSSAI valid until ${dateVal}. Automatic 15-day pre-expiry push notification scheduled.`;
+        text.innerHTML = `Licence valid until ${dateVal}. Automatic 15-day pre-expiry push notification scheduled.`;
       }
     }
 
@@ -3488,6 +3685,13 @@
         showToast('warning', 'Agreement Required', 'Please check the box to accept the Partner Agreement.');
         return;
       }
+
+      state.agreementSigned = true;
+      state.submitted = true;
+      state.allowEdit = false;
+      markStepCompleted(7);
+      markStepCompleted(8);
+      saveDraft();
 
       // Prepare payload to save
       const payload = {
@@ -3547,14 +3751,14 @@
         state.existingSeller = saved;
         if (saved.id) state.applicationId = saved.id;
         populateSummaryDossier(state.applicationId);
-        showToast('success', 'Application Submitted', 'Your registration is under review.');
-        showSellerPending(saved);
+        showToast('success', 'Application Submitted', 'Your registration is submitted and locked for review.');
+        goToStep(8);
       })
       .catch(() => {
         state.existingSeller = payload;
         populateSummaryDossier(state.applicationId);
         showToast('success', 'Application Submitted', 'Registration received.');
-        showSellerPending(payload);
+        goToStep(8);
       });
     }
 
@@ -3667,6 +3871,9 @@
     }
 
     function editAndResubmitApplication() {
+      state.allowEdit = true;
+      state.submitted = false;
+      state.agreementSigned = false;
       const s = state.existingSeller;
       if (s) {
         if (s.basics) {
@@ -3885,21 +4092,27 @@
 
       const now = new Date();
       setVal('sumTimestamp', now.toLocaleDateString('en-IN', { day:'2-digit', month:'short', year:'numeric' }) + ' ' + now.toLocaleTimeString('en-IN', { hour:'2-digit', minute:'2-digit' }));
+
+      // Also update onscreen confirmation card on Step 8
+      const confId = document.getElementById('confirmRefId');
+      if (confId) confId.innerText = state.applicationId;
+      const confName = document.getElementById('confirmBizName');
+      if (confName) confName.innerText = (document.getElementById('bizName')?.value || state.bizName || 'Business Partner Store');
     }
 
-        // STRICT SUMMARY DOWNLOAD VALIDATION
+    // STRICT SUMMARY DOWNLOAD / PRINT
     function printApplicationSummary() {
       // Validate that all required fields across onboarding are filled
-      const bizName = (document.getElementById('bizName').value || '').trim();
-      const ownerName = (document.getElementById('ownerName').value || '').trim();
-      const pan = (document.getElementById('panNumber').value || '').trim();
-      const bankAcc = (document.getElementById('bankAccNumber').value || '').trim();
-      const ifsc = (document.getElementById('bankIfsc').value || '').trim();
+      const bizName = (document.getElementById('bizName')?.value || state.bizName || '').trim();
+      const ownerName = (document.getElementById('ownerName')?.value || state.ownerName || '').trim();
+      const pan = (document.getElementById('panNumber')?.value || state.panNumber || '').trim();
+      const bankAcc = (document.getElementById('bankAccNumber')?.value || state.bankAccNumber || '').trim();
+      const ifsc = (document.getElementById('bankIfsc')?.value || state.bankIfsc || '').trim();
       
       const missing = [];
       if (!bizName) missing.push('Business Name');
       if (!ownerName) missing.push('Owner Name');
-      if (!pan || pan.length !== 10) missing.push('Valid 10-digit PAN');
+      if (!pan || pan.length < 8) missing.push('Valid PAN');
       if (!bankAcc) missing.push('Bank Account Number');
       if (!ifsc) missing.push('Bank IFSC Code');
 
@@ -3908,7 +4121,7 @@
         return;
       }
 
-      populateSummaryDossier();
+      populateSummaryDossier(state.applicationId);
       window.print();
     }
 
