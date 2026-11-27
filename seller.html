@@ -892,10 +892,112 @@
       transition: all 0.2s;
       box-shadow: 0 4px 14px rgba(255, 122, 0, 0.25);
     }
-    .btn-save-continue:hover {
+    .btn-save-continue:hover:not(:disabled) {
       background: var(--brand-orange-hover);
       transform: translateY(-1px);
       box-shadow: 0 6px 18px rgba(255, 122, 0, 0.35);
+    }
+    .btn-save-continue:disabled,
+    .btn-save-continue.btn-disabled {
+      background: #e2e8f0 !important;
+      color: #94a3b8 !important;
+      cursor: not-allowed !important;
+      box-shadow: none !important;
+      transform: none !important;
+      pointer-events: none !important;
+    }
+
+    /* Inline Send OTP Button inside Mobile Input */
+    .btn-inline-otp {
+      position: absolute;
+      right: 6px;
+      top: 6px;
+      bottom: 6px;
+      padding: 0 16px;
+      border-radius: 9px;
+      background: linear-gradient(135deg, #ff7a00 0%, #ff9500 100%);
+      color: #ffffff;
+      font-size: 13px;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+      z-index: 5;
+      box-shadow: 0 2px 8px rgba(255, 122, 0, 0.25);
+    }
+    .btn-inline-otp:hover:not(:disabled) {
+      background: var(--brand-orange-hover);
+    }
+    .btn-inline-otp:disabled,
+    .btn-inline-otp.btn-disabled {
+      background: #e2e8f0 !important;
+      color: #94a3b8 !important;
+      cursor: not-allowed !important;
+      box-shadow: none !important;
+      pointer-events: none !important;
+    }
+    .btn-inline-otp.verified {
+      background: #dcfce7 !important;
+      color: #15803d !important;
+      border: 1px solid #86efac !important;
+      cursor: default !important;
+      box-shadow: none !important;
+      pointer-events: none !important;
+    }
+
+    /* Minimalist Step Header Actions */
+    .stage-header-flex {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 24px;
+    }
+    .btn-step-mini-edit {
+      background: #ffffff;
+      border: 1.5px solid #cbd5e1;
+      color: var(--ink-dark);
+      border-radius: 8px;
+      padding: 5px 14px;
+      font-size: 12.5px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .btn-step-mini-edit:hover {
+      border-color: var(--brand-orange);
+      color: var(--brand-orange);
+      background: #fffaf0;
+    }
+    .btn-step-mini-cancel {
+      background: #ffffff;
+      border: 1.5px solid #cbd5e1;
+      color: #64748b;
+      border-radius: 8px;
+      padding: 5px 12px;
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .btn-step-mini-cancel:hover {
+      background: #f1f5f9;
+      color: var(--ink-dark);
+    }
+    .badge-mini-editing {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #c2410c;
+      background: #fff7ed;
+      border: 1px solid #fed7aa;
+      border-radius: 6px;
+      padding: 4px 9px;
+      margin-right: 8px;
     }
 
         /* NEED ASSISTANCE COLLAPSIBLE FLOATING PILL */
@@ -1170,9 +1272,12 @@
         
         <!-- STEP 1: MOBILE OTP VERIFICATION -->
         <div class="step-view active" id="viewStep1">
-          <div class="stage-header">
-            <h1 class="stage-title">Enter your mobile number</h1>
-            <p class="stage-desc">We will send a 6-digit OTP to verify your account and autosave your onboarding progress.</p>
+          <div class="stage-header stage-header-flex">
+            <div>
+              <h1 class="stage-title">Enter your mobile number</h1>
+              <p class="stage-desc">We will send a 6-digit OTP to verify your account and autosave your onboarding progress.</p>
+            </div>
+            <div class="stage-header-actions" id="headerActionsStep1"></div>
           </div>
 
           <div class="section-card">
@@ -1180,12 +1285,15 @@
               <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
                 <label style="margin:0;">Mobile Number *</label>
                 <button type="button" id="btnChangeMobile" style="display:none; background:none; border:none; color:var(--brand-blue); font-size:12.5px; font-weight:700; cursor:pointer; padding:0; text-decoration:underline;" onclick="enableMobileEdit()">
-                  Change Number
+                  Change
                 </button>
               </div>
-              <div class="input-wrap">
+              <div class="input-wrap" style="position:relative;">
                 <span class="input-prefix">+91</span>
-                <input type="tel" id="mobileInput" class="has-prefix" placeholder="Enter 10-digit mobile number" maxlength="10" oninput="handleMobileInput(this)">
+                <input type="tel" id="mobileInput" class="has-prefix" placeholder="Enter 10-digit mobile number" maxlength="10" oninput="handleMobileInput(this)" style="padding-right:116px;">
+                <button type="button" id="btnInlineSendOtp" class="btn-inline-otp" onclick="handleSendOtpClick()" disabled>
+                  Send OTP
+                </button>
               </div>
             </div>
 
@@ -1201,8 +1309,8 @@
                   <input type="text" maxlength="1" class="otp-digit" oninput="moveOtpFocus(this, 6)">
                 </div>
                 <div style="font-size: 12.5px; color: var(--muted); margin-top: 8px; display:flex; align-items:center; justify-content:space-between;">
-                  <span>Resend code in <strong id="resendCountdown" style="color:var(--brand-orange); cursor:pointer;" onclick="handleResendClick()">25s</strong></span>
-                  <span style="font-size:11.5px; color:var(--muted);">Didn't receive? Check SMS inbox</span>
+                  <span>Resend in <strong id="resendCountdown" style="color:var(--brand-orange); cursor:pointer;" onclick="handleResendClick()">25s</strong></span>
+                  <span style="font-size:11.5px; color:var(--muted);">Check SMS inbox</span>
                 </div>
               </div>
             </div>
@@ -1215,17 +1323,20 @@
 
           <div class="action-bar">
             <div></div>
-            <button class="btn-save-continue" id="btnStep1Next" onclick="handleStep1Action()">
-              <span>Send OTP &rarr;</span>
+            <button class="btn-save-continue btn-disabled" id="btnStep1Next" onclick="goToStep(2)" disabled>
+              <span>Next &rarr;</span>
             </button>
           </div>
         </div>
 
         <!-- STEP 2: BLOCK STRUCTURE FOR SELECT YOUR BUSINESS -->
         <div class="step-view" id="viewStep2">
-          <div class="stage-header">
-            <h1 class="stage-title">Select your business</h1>
-            <p class="stage-desc">Choose the primary business category you will operate on Apnazo. You can add extra services later.</p>
+          <div class="stage-header stage-header-flex">
+            <div>
+              <h1 class="stage-title">Select your business</h1>
+              <p class="stage-desc">Choose the primary business category you will operate on Apnazo. You can add extra services later.</p>
+            </div>
+            <div class="stage-header-actions" id="headerActionsStep2"></div>
           </div>
 
           <div class="business-block-grid">
@@ -1286,15 +1397,18 @@
 
           <div class="action-bar">
             <button class="btn-back" onclick="goToStep(1)">&larr; Back</button>
-            <button class="btn-save-continue" onclick="saveStep2AndContinue()">Save &amp; continue &rarr;</button>
+            <button class="btn-save-continue" id="btnStep2Next" onclick="saveStep2AndContinue()">Save &amp; continue &rarr;</button>
           </div>
         </div>
 
         <!-- STEP 3: BUSINESS DETAILS (DYNAMIC LOGO + PINCODE AUTOFETCH + DROPDOWN AUTO-SUGGESTIONS) -->
         <div class="step-view" id="viewStep3">
-          <div class="stage-header">
-            <h1 class="stage-title">Business details</h1>
-            <p class="stage-desc">Enter the details about your products, store branding, and sales channels.</p>
+          <div class="stage-header stage-header-flex">
+            <div>
+              <h1 class="stage-title">Business details</h1>
+              <p class="stage-desc">Enter the details about your products, store branding, and sales channels.</p>
+            </div>
+            <div class="stage-header-actions" id="headerActionsStep3"></div>
           </div>
 
           <!-- DYNAMIC LOGO SECTION -->
@@ -1465,15 +1579,18 @@
 
           <div class="action-bar">
             <button class="btn-back" onclick="goToStep(2)">&larr; Back</button>
-            <button class="btn-save-continue" onclick="saveStep3AndContinue()">Save &amp; continue &rarr;</button>
+            <button class="btn-save-continue btn-disabled" id="btnStep3Next" onclick="saveStep3AndContinue()" disabled>Save &amp; continue &rarr;</button>
           </div>
         </div>
 
         <!-- STEP 4: IDENTITY & TAX (PAN, GSTIN OR GENUINE DOC UPLOAD, EXPIRY DATE & GRACE PERIOD) -->
         <div class="step-view" id="viewStep4">
-          <div class="stage-header">
-            <h1 class="stage-title">Identity &amp; Tax verification</h1>
-            <p class="stage-desc">Verify your legal entity through PAN card and GST or upload a Genuine Alternative Business Document.</p>
+          <div class="stage-header stage-header-flex">
+            <div>
+              <h1 class="stage-title">Identity &amp; Tax verification</h1>
+              <p class="stage-desc">Verify your legal entity through PAN card and GST or upload a Genuine Alternative Business Document.</p>
+            </div>
+            <div class="stage-header-actions" id="headerActionsStep4"></div>
           </div>
 
           <!-- PAN SECTION -->
@@ -1586,15 +1703,18 @@
 
           <div class="action-bar">
             <button class="btn-back" onclick="goToStep(3)">&larr; Back</button>
-            <button class="btn-save-continue" onclick="saveStep4AndContinue()">Save &amp; continue &rarr;</button>
+            <button class="btn-save-continue btn-disabled" id="btnStep4Next" onclick="saveStep4AndContinue()" disabled>Save &amp; continue &rarr;</button>
           </div>
         </div>
 
         <!-- STEP 5: BANK DETAILS & PENNY DROP -->
         <div class="step-view" id="viewStep5">
-          <div class="stage-header">
-            <h1 class="stage-title">Bank account for payouts</h1>
-            <p class="stage-desc">Daily sales earnings and ride fares will be deposited directly to this account via T+2 automated payout settlements.</p>
+          <div class="stage-header stage-header-flex">
+            <div>
+              <h1 class="stage-title">Bank account for payouts</h1>
+              <p class="stage-desc">Daily sales earnings and ride fares will be deposited directly to this account via T+2 automated payout settlements.</p>
+            </div>
+            <div class="stage-header-actions" id="headerActionsStep5"></div>
           </div>
 
           <div class="section-card">
@@ -1636,15 +1756,18 @@
 
           <div class="action-bar">
             <button class="btn-back" onclick="goToStep(4)">&larr; Back</button>
-            <button class="btn-save-continue" onclick="saveStep5AndContinue()">Save &amp; continue &rarr;</button>
+            <button class="btn-save-continue btn-disabled" id="btnStep5Next" onclick="saveStep5AndContinue()" disabled>Save &amp; continue &rarr;</button>
           </div>
         </div>
 
                 <!-- STEP 6: DYNAMIC CATEGORY LICENCE (ADAPTIVE TO BUSINESS CATEGORY) -->
         <div class="step-view" id="viewStep6">
-          <div class="stage-header">
-            <h1 class="stage-title" id="s6HeaderTitle">Category licence &amp; Food FSSAI</h1>
-            <p class="stage-desc" id="s6HeaderDesc">Food, grocery, restaurant, and pharmacy businesses require a valid licence or registration certificate.</p>
+          <div class="stage-header stage-header-flex">
+            <div>
+              <h1 class="stage-title" id="s6HeaderTitle">Category licence &amp; Food FSSAI</h1>
+              <p class="stage-desc" id="s6HeaderDesc">Food, grocery, restaurant, and pharmacy businesses require a valid licence or registration certificate.</p>
+            </div>
+            <div class="stage-header-actions" id="headerActionsStep6"></div>
           </div>
 
           <div class="section-card">
@@ -1695,15 +1818,18 @@
 
           <div class="action-bar">
             <button class="btn-back" onclick="goToStep(5)">&larr; Back</button>
-            <button class="btn-save-continue" onclick="saveStep6AndContinue()">Save &amp; continue &rarr;</button>
+            <button class="btn-save-continue btn-disabled" id="btnStep6Next" onclick="saveStep6AndContinue()" disabled>Save &amp; continue &rarr;</button>
           </div>
         </div>
 
         <!-- STEP 7: PARTNER AGREEMENT & E-SIGN -->
         <div class="step-view" id="viewStep7">
-          <div class="stage-header">
-            <h1 class="stage-title">Terms &amp; e-Sign agreement</h1>
-            <p class="stage-desc">Please review commercial policies and confirm with OTP acceptance.</p>
+          <div class="stage-header stage-header-flex">
+            <div>
+              <h1 class="stage-title">Terms &amp; e-Sign agreement</h1>
+              <p class="stage-desc">Please review commercial policies and confirm with OTP acceptance.</p>
+            </div>
+            <div class="stage-header-actions" id="headerActionsStep7"></div>
           </div>
 
           <div class="section-card">
@@ -1726,7 +1852,7 @@
 
           <div class="action-bar">
             <button class="btn-back" onclick="goToStep(6)">&larr; Back</button>
-            <button class="btn-save-continue" onclick="submitAgreementAndContinue()">e-Sign &amp; Complete &rarr;</button>
+            <button class="btn-save-continue btn-disabled" id="btnStep7Next" onclick="submitAgreementAndContinue()" disabled>e-Sign &amp; Complete &rarr;</button>
           </div>
         </div>
 
@@ -1952,23 +2078,8 @@
     // Initialize
     window.addEventListener('DOMContentLoaded', () => {
       setupOtpDigits();
-
-      // Check URL parameters or saved profile
-      const saved = localStorage.getItem('apnazo_seller_hub_draft');
-      if (saved) {
-        try {
-          const parsed = JSON.parse(saved);
-          // Purge legacy auto-selected dummy tags from old drafts
-          if (parsed.categories && parsed.categories.length === 2 &&
-              parsed.categories.includes('Grocery & Supermarket') &&
-              parsed.categories.includes('Daily Essentials')) {
-            parsed.categories = [];
-          }
-          Object.assign(state, parsed);
-          if (state.mobile) document.getElementById('mobileInput').value = state.mobile;
-          if (state.pincode) handlePincodeLookup(state.pincode);
-        } catch(e){}
-      }
+      restoreFormFromDraft();
+      setupLiveValidationListeners();
 
       // Dynamically fetch live support numbers configured in Admin Panel
       fetch(API_BASE + '/api/settings')
@@ -1990,10 +2101,13 @@
         })
         .catch(()=>{});
 
-            // Initialize category suggestions and step-specific configs
+      // Initialize category suggestions and step-specific configs
       updateStep3ForCategory(state.businessRole);
       updateStep6ForCategory(state.businessRole);
       renderCategoryChips();
+
+      // Navigate to saved step or step 1 and validate
+      goToStep(state.step || 1);
     });
 
     // TOAST SYSTEM
@@ -2014,44 +2128,128 @@
         toast.style.opacity = '0';
         toast.style.transform = 'translateX(100%)';
         setTimeout(() => toast.remove(), 250);
-      }, 4000);
+      }, 3500);
     }
 
-    // STEP ROUTING & PROGRESSION GUARDS
+    // REAL-TIME SECTION VALIDATION: Action button stays grey until whole section is filled
+    function isStepValid(stepNum) {
+      if (stepNum === 1) {
+        const mob = (document.getElementById('mobileInput')?.value || state.mobile || '').replace(/\D/g, '');
+        return mob.length === 10 && !!state.verified;
+      }
+      if (stepNum === 2) {
+        return !!state.businessRole;
+      }
+      if (stepNum === 3) {
+        const bizName = (document.getElementById('bizName')?.value || state.bizName || '').trim();
+        const ownerName = (document.getElementById('ownerName')?.value || state.ownerName || '').trim();
+        const pin = (document.getElementById('pincodeInput')?.value || state.pincode || '').replace(/\D/g, '');
+        const addr = (document.getElementById('bizAddress')?.value || state.bizAddress || '').trim();
+        const hasCategory = state.categories && state.categories.length > 0;
+        return !!(bizName && ownerName && pin.length === 6 && addr && hasCategory);
+      }
+      if (stepNum === 4) {
+        const pan = (document.getElementById('panNumber')?.value || state.panNumber || '').trim();
+        const panDob = document.getElementById('panDob')?.value || state.panDob || '';
+        if (!pan || pan.length !== 10 || !panDob) return false;
+        if (state.hasGst) {
+          const gst = (document.getElementById('gstNumber')?.value || state.gstNumber || '').trim();
+          const gstExp = document.getElementById('gstExpiryDate')?.value || state.gstExpiryDate || '';
+          return gst.length >= 15 && !!gstExp;
+        } else {
+          const genuineNum = (document.getElementById('genuineDocNum')?.value || state.genuineDocNum || '').trim();
+          return genuineNum.length > 0;
+        }
+      }
+      if (stepNum === 5) {
+        const acc = (document.getElementById('bankAccNumber')?.value || state.bankAccNumber || '').trim();
+        const confirm = (document.getElementById('bankAccConfirm')?.value || state.bankAccConfirm || '').trim();
+        const ifsc = (document.getElementById('bankIfsc')?.value || state.bankIfsc || '').trim();
+        const beneficiary = (document.getElementById('bankBeneficiary')?.value || state.bankBeneficiary || '').trim();
+        return !!(acc && acc.length >= 8 && acc === confirm && ifsc.length === 11 && beneficiary);
+      }
+      if (stepNum === 6) {
+        const licType = document.getElementById('licenceTypeSelect')?.value || state.licenceType || 'FSSAI';
+        if (licType === 'Exempt') return true;
+        const num = (document.getElementById('fssaiNumber')?.value || state.fssaiNumber || '').trim();
+        const exp = document.getElementById('fssaiExpiryDate')?.value || state.fssaiExpiryDate || '';
+        return !!(num && exp);
+      }
+      if (stepNum === 7) {
+        const agree = document.getElementById('agreeCheckbox');
+        return agree ? agree.checked : false;
+      }
+      return true;
+    }
+
+    // UPDATE BOTTOM ACTION BUTTON: Stays grey until whole section is filled
+    function updateStepButtonValidity(stepNum) {
+      const stepView = document.getElementById('viewStep' + stepNum);
+      if (!stepView) return;
+      const btn = stepView.querySelector('.btn-save-continue');
+      if (!btn) return;
+
+      const valid = isStepValid(stepNum);
+      const isCompleted = state.completedSteps && state.completedSteps.includes(stepNum);
+      const isEditing = state.editingSteps && state.editingSteps.includes(stepNum);
+
+      if (stepNum === 1) {
+        btn.innerHTML = `<span>Next &rarr;</span>`;
+        if (state.verified) {
+          btn.disabled = false;
+          btn.classList.remove('btn-disabled');
+          btn.onclick = function() { goToStep(2); };
+        } else {
+          btn.disabled = true;
+          btn.classList.add('btn-disabled');
+          btn.onclick = null;
+        }
+        return;
+      }
+
+      if (isCompleted && !isEditing) {
+        btn.disabled = false;
+        btn.classList.remove('btn-disabled');
+        btn.innerHTML = `<span>Next &rarr;</span>`;
+        btn.onclick = function() { goToStep(stepNum + 1); };
+      } else {
+        if (stepNum === 7) {
+          btn.innerHTML = `<span>e-Sign &amp; Complete &rarr;</span>`;
+        } else {
+          btn.innerHTML = `<span>Save &amp; continue &rarr;</span>`;
+        }
+
+        const stepActions = {
+          2: saveStep2AndContinue,
+          3: saveStep3AndContinue,
+          4: saveStep4AndContinue,
+          5: saveStep5AndContinue,
+          6: saveStep6AndContinue,
+          7: submitAgreementAndContinue
+        };
+        btn.onclick = stepActions[stepNum];
+
+        if (valid) {
+          btn.disabled = false;
+          btn.classList.remove('btn-disabled');
+        } else {
+          btn.disabled = true;
+          btn.classList.add('btn-disabled');
+        }
+      }
+    }
+
+    // STEP ROUTING
     function goToStep(num) {
       state.completedSteps = state.completedSteps || [];
       state.editingSteps = state.editingSteps || [];
-
-      // PROGRESSION GUARD: User CANNOT skip ahead without verifying previous steps
-      if (num > 1 && !state.verified) {
-        showToast('warning', 'Verification Required', 'Please complete Mobile Verification (Step 1) with OTP first.');
-        goToStep(1);
-        return;
-      }
-
-      // Check max reachable step (highest completed step + 1)
-      let maxAllowedStep = 1;
-      if (state.verified) maxAllowedStep = 2;
-      for (let s = 2; s <= 7; s++) {
-        if (state.completedSteps.includes(s)) {
-          maxAllowedStep = s + 1;
-        } else {
-          break;
-        }
-      }
-
-      if (num > maxAllowedStep) {
-        showToast('warning', 'Save Previous Step', `Please complete and save Step ${maxAllowedStep} first.`);
-        goToStep(maxAllowedStep);
-        return;
-      }
 
       state.step = num;
       document.querySelectorAll('.step-view').forEach(v => v.classList.remove('active'));
       const activeView = document.getElementById('viewStep' + num);
       if (activeView) activeView.classList.add('active');
 
-      // Update vertical stepper & locked visual states
+      // Update vertical stepper
       for (let i = 1; i <= 8; i++) {
         const item = document.getElementById('navStep' + i);
         if (!item) continue;
@@ -2063,17 +2261,13 @@
           if (isCompleted) item.classList.add('completed');
         } else if (isCompleted) {
           item.classList.add('completed');
-        } else if (i > maxAllowedStep) {
-          item.classList.add('locked');
         }
       }
 
-      // Update Form Edit/Lock State
       const isCompleted = state.completedSteps.includes(num) || (num === 1 && state.verified);
       const isEditing = state.editingSteps.includes(num);
 
       renderStepHeaderAndButtons(num, isCompleted, isEditing);
-
       window.scrollTo({ top: 0, behavior: 'smooth' });
       saveDraft();
     }
@@ -2088,7 +2282,6 @@
         state.editingSteps.push(stepNum);
       }
       renderStepHeaderAndButtons(stepNum, true, true);
-      showToast('info', 'Edit Mode Enabled', `You can now make changes to Step ${stepNum}. Click "Save & Continue" when done.`);
     }
 
     function lockStepAfterSaving(stepNum) {
@@ -2096,96 +2289,46 @@
       state.editingSteps = state.editingSteps.filter(s => s !== stepNum);
     }
 
+    function cancelEditing(stepNum) {
+      state.editingSteps = (state.editingSteps || []).filter(s => s !== stepNum);
+      renderStepHeaderAndButtons(stepNum, true, false);
+    }
+
+    // MINIMAL STEP HEADER: Simple "Edit" or "Editing / Cancel" (NO VERBOSE PARAGRAPHS)
     function renderStepHeaderAndButtons(stepNum, isCompleted, isEditing) {
       const stepView = document.getElementById('viewStep' + stepNum);
       if (!stepView) return;
 
-      // Handle Form Field Read-only Lock
       if (isCompleted && !isEditing && stepNum < 8) {
         stepView.classList.add('form-step-locked');
       } else {
         stepView.classList.remove('form-step-locked');
       }
 
-      // Render Completed Banner with Edit Details Action
-      let banner = stepView.querySelector('.completed-step-banner');
-      if (isCompleted && stepNum < 8) {
-        if (!banner) {
-          banner = document.createElement('div');
-          banner.className = 'completed-step-banner';
-          const header = stepView.querySelector('.stage-header');
-          if (header) header.after(banner);
-        }
+      // Remove any legacy banners
+      const oldBanners = stepView.querySelectorAll('.completed-step-banner');
+      oldBanners.forEach(b => b.remove());
 
-        if (isEditing) {
-          banner.innerHTML = `
-            <div style="display:flex; align-items:center; gap:8px;">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ea580c" stroke-width="2.5"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
-              <span style="color:#c2410c;"><strong>Editing Step ${stepNum}:</strong> Make your changes below, then click "Save & Continue".</span>
-            </div>
-            <button type="button" class="btn-step-edit" style="border-color:#cbd5e1; color:#64748b;" onclick="cancelEditing(${stepNum})">Cancel Edit</button>
-          `;
+      // Render concise top-right header action
+      const headerActions = document.getElementById('headerActionsStep' + stepNum);
+      if (headerActions) {
+        if (isCompleted && stepNum < 8) {
+          if (isEditing) {
+            headerActions.innerHTML = `
+              <span class="badge-mini-editing">Editing</span>
+              <button type="button" class="btn-step-mini-cancel" onclick="cancelEditing(${stepNum})">Cancel</button>
+            `;
+          } else {
+            headerActions.innerHTML = `
+              <button type="button" class="btn-step-mini-edit" onclick="unlockStepForEditing(${stepNum})">Edit</button>
+            `;
+          }
         } else {
-          banner.innerHTML = `
-            <div style="display:flex; align-items:center; gap:8px;">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-              <span>Step ${stepNum} details verified &amp; saved. Click "Next" to continue or edit details.</span>
-            </div>
-            <button type="button" class="btn-step-edit" onclick="unlockStepForEditing(${stepNum})">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
-              Edit Details
-            </button>
-          `;
-        }
-      } else if (banner) {
-        banner.remove();
-      }
-
-      // Manage Bottom Orange Action Button
-      const continueBtn = stepView.querySelector('.btn-save-continue');
-      if (continueBtn) {
-        if (stepNum === 1) {
-          if (state.verified && !isEditing) {
-            continueBtn.innerHTML = `<span>Next &rarr;</span>`;
-            continueBtn.onclick = function() { goToStep(2); };
-          } else {
-            const otpSection = document.getElementById('otpSection');
-            if (otpSection && otpSection.style.display !== 'none') {
-              continueBtn.innerHTML = `<span>Verify &amp; Continue &rarr;</span>`;
-            } else {
-              continueBtn.innerHTML = `<span>Send OTP &rarr;</span>`;
-            }
-            continueBtn.onclick = handleStep1Action;
-          }
-        } else if (stepNum < 8) {
-          if (isCompleted && !isEditing) {
-            continueBtn.innerHTML = `<span>Next &rarr;</span>`;
-            continueBtn.onclick = function() { goToStep(stepNum + 1); };
-          } else {
-            continueBtn.innerHTML = `<span>Save &amp; Continue &rarr;</span>`;
-            // Restore default save step actions
-            const stepActions = {
-              2: saveStep2AndContinue,
-              3: saveStep3AndContinue,
-              4: saveStep4AndContinue,
-              5: saveStep5AndContinue,
-              6: saveStep6AndContinue,
-              7: submitAgreementAndContinue
-            };
-            continueBtn.onclick = stepActions[stepNum];
-          }
+          headerActions.innerHTML = '';
         }
       }
-    }
 
-    function cancelEditing(stepNum) {
-      state.editingSteps = (state.editingSteps || []).filter(s => s !== stepNum);
-      renderStepHeaderAndButtons(stepNum, true, false);
-      showToast('info', 'Edit Cancelled', 'Restored saved values.');
-    }
-
-    function jumpToStep(num) {
-      goToStep(num);
+      updateStepButtonValidity(stepNum);
     }
 
     function saveDraft() {
@@ -2194,19 +2337,51 @@
       } catch(e){}
     }
 
-    // STEP 1: MOBILE & OTP LOGIC
+    // STEP 1: MOBILE & INLINE OTP LOGIC
     let countdownInterval;
     let lastSentMobile = '';
 
     function handleMobileInput(input) {
       const clean = input.value.replace(/\D/g, '').slice(0, 10);
       input.value = clean;
+      state.mobile = clean;
 
-      // If user altered the phone number while OTP section was visible,
-      // revert button back to "Send OTP" and hide stale OTP inputs so a new OTP must be dispatched
+      const inlineBtn = document.getElementById('btnInlineSendOtp');
+      if (inlineBtn) {
+        if (clean.length === 10) {
+          if (state.verified && clean === lastSentMobile) {
+            inlineBtn.className = 'btn-inline-otp verified';
+            inlineBtn.innerText = '✓ Verified';
+            inlineBtn.disabled = true;
+          } else {
+            inlineBtn.className = 'btn-inline-otp';
+            inlineBtn.innerText = 'Send OTP';
+            inlineBtn.disabled = false;
+          }
+        } else {
+          inlineBtn.className = 'btn-inline-otp';
+          inlineBtn.innerText = 'Send OTP';
+          inlineBtn.disabled = true;
+          state.verified = false;
+        }
+      }
+
       if (lastSentMobile && clean !== lastSentMobile) {
         resetOtpStateForNewNumber();
       }
+
+      updateStepButtonValidity(1);
+      saveDraft();
+    }
+
+    function handleSendOtpClick() {
+      const mobileInput = document.getElementById('mobileInput');
+      const mobile = mobileInput.value.replace(/\D/g, '').slice(-10);
+      if (mobile.length !== 10) {
+        showToast('warning', 'Invalid Mobile', 'Enter a 10-digit mobile number.');
+        return;
+      }
+      sendOtpToNumber(mobile);
     }
 
     function enableMobileEdit() {
@@ -2214,64 +2389,38 @@
       mobileInput.disabled = false;
       mobileInput.focus();
       resetOtpStateForNewNumber();
-      showToast('info', 'Edit Mobile', 'Enter your updated mobile number and click Send OTP.');
     }
 
     function resetOtpStateForNewNumber() {
       const otpSection = document.getElementById('otpSection');
-      const btn = document.getElementById('btnStep1Next');
       const btnChange = document.getElementById('btnChangeMobile');
       const mobileInput = document.getElementById('mobileInput');
+      const inlineBtn = document.getElementById('btnInlineSendOtp');
 
-      otpSection.style.display = 'none';
-      btn.innerHTML = '<span>Send OTP &rarr;</span>';
-      btn.disabled = false;
+      if (otpSection) otpSection.style.display = 'none';
       if (btnChange) btnChange.style.display = 'none';
-      mobileInput.disabled = false;
+      if (mobileInput) mobileInput.disabled = false;
+      if (inlineBtn) {
+        inlineBtn.className = 'btn-inline-otp';
+        inlineBtn.innerText = 'Send OTP';
+        inlineBtn.disabled = (mobileInput?.value.length !== 10);
+      }
       document.querySelectorAll('.otp-digit').forEach(d => d.value = '');
       clearInterval(countdownInterval);
       lastSentMobile = '';
-    }
-
-    function handleStep1Action() {
-      const mobileInput = document.getElementById('mobileInput');
-      const mobile = mobileInput.value.replace(/\D/g, '').slice(-10);
-      if (mobile.length !== 10) {
-        showToast('warning', 'Invalid Mobile', 'Please enter a valid 10-digit mobile number.');
-        return;
-      }
-
-      state.mobile = mobile;
-      const otpSection = document.getElementById('otpSection');
-      const btn = document.getElementById('btnStep1Next');
-      const btnChange = document.getElementById('btnChangeMobile');
-
-      // If Step 1 is already completed and user is just reviewing, pressing the orange button navigates to next step!
-      if (state.verified && state.completedSteps && state.completedSteps.includes(1) && mobile === lastSentMobile && otpSection.style.display !== 'none') {
-        const otpDigits = Array.from(document.querySelectorAll('.otp-digit')).map(d => d.value).join('');
-        // If not typed or already verified, proceed to next step directly
-        if (!otpDigits || otpDigits === '000000') {
-          goToStep(2);
-          return;
-        }
-      }
-
-      // If OTP section is hidden OR phone number changed, SEND OTP (never verify!)
-      if (otpSection.style.display === 'none' || mobile !== lastSentMobile) {
-        sendOtpToNumber(mobile);
-      } else {
-        // VERIFY OTP (Only when user explicitly clicks Verify & Continue)
-        verifyOtpCode(mobile);
-      }
+      state.verified = false;
+      updateStepButtonValidity(1);
     }
 
     function sendOtpToNumber(mobile) {
-      const btn = document.getElementById('btnStep1Next');
+      const inlineBtn = document.getElementById('btnInlineSendOtp');
       const otpSection = document.getElementById('otpSection');
       const btnChange = document.getElementById('btnChangeMobile');
 
-      btn.innerHTML = '<span>Sending OTP...</span>';
-      btn.disabled = true;
+      if (inlineBtn) {
+        inlineBtn.innerText = 'Sending...';
+        inlineBtn.disabled = true;
+      }
 
       fetch(API_BASE + '/api/auth/otp/send', {
         method: 'POST',
@@ -2280,37 +2429,32 @@
       })
       .then(res => res.json())
       .then(data => {
-        btn.disabled = false;
         lastSentMobile = mobile;
-        otpSection.style.display = 'block';
-        btn.innerHTML = '<span>Verify &amp; Continue &rarr;</span>';
+        if (otpSection) otpSection.style.display = 'block';
         if (btnChange) btnChange.style.display = 'inline-block';
-        showToast('success', 'OTP Dispatched', 'Express OTP sent to +91 ' + mobile);
+        showToast('success', 'OTP Sent', 'Code sent to +91 ' + mobile);
         startCountdown(25);
         const firstDigit = document.querySelector('.otp-digit');
         if (firstDigit) firstDigit.focus();
       })
       .catch(() => {
-        btn.disabled = false;
         lastSentMobile = mobile;
-        otpSection.style.display = 'block';
-        btn.innerHTML = '<span>Verify &amp; Continue &rarr;</span>';
+        if (otpSection) otpSection.style.display = 'block';
         if (btnChange) btnChange.style.display = 'inline-block';
         startCountdown(25);
       });
     }
 
     function verifyOtpCode(mobile) {
-      const btn = document.getElementById('btnStep1Next');
+      const inlineBtn = document.getElementById('btnInlineSendOtp');
       const otpDigits = Array.from(document.querySelectorAll('.otp-digit')).map(d => d.value).join('');
 
       if (!otpDigits || otpDigits.length < 6) {
-        showToast('warning', 'Enter OTP', 'Please enter all 6 digits of the OTP.');
+        showToast('warning', 'Enter OTP', 'Please enter 6-digit OTP.');
         return;
       }
 
-      btn.disabled = true;
-      btn.innerHTML = '<span>Verifying...</span>';
+      if (inlineBtn) inlineBtn.innerText = 'Verifying...';
 
       fetch(API_BASE + '/api/auth/otp/verify', {
         method: 'POST',
@@ -2319,64 +2463,71 @@
       })
       .then(res => res.json())
       .then(data => {
-        btn.disabled = false;
         if (data.success || data.verified) {
-          state.verified = true;
-          markStepCompleted(1);
-          showToast('success', 'Verified', 'Mobile number authenticated successfully!');
-          goToStep(2);
+          onOtpVerified();
         } else {
-          btn.innerHTML = '<span>Verify &amp; Continue &rarr;</span>';
-          showToast('warning', 'Verification Error', data.error || 'Invalid OTP code. Please re-enter.');
+          if (inlineBtn) inlineBtn.innerText = 'Send OTP';
+          showToast('warning', 'Invalid OTP', data.error || 'Incorrect OTP code.');
         }
       })
       .catch(() => {
-        btn.disabled = false;
-        state.verified = true;
-        markStepCompleted(1);
-        goToStep(2);
+        onOtpVerified();
       });
     }
 
-    // Explicit Resend OTP click: MUST ONLY SEND OTP, NEVER VERIFY!
+    function onOtpVerified() {
+      state.verified = true;
+      markStepCompleted(1);
+      const inlineBtn = document.getElementById('btnInlineSendOtp');
+      if (inlineBtn) {
+        inlineBtn.className = 'btn-inline-otp verified';
+        inlineBtn.innerText = '✓ Verified';
+        inlineBtn.disabled = true;
+      }
+      showToast('success', 'Verified', 'Mobile number verified.');
+      updateStepButtonValidity(1);
+      saveDraft();
+    }
+
     function handleResendClick() {
       const el = document.getElementById('resendCountdown');
       const mobileInput = document.getElementById('mobileInput');
       const mobile = mobileInput.value.replace(/\D/g, '').slice(-10);
 
       if (!mobile || mobile.length !== 10) {
-        showToast('warning', 'Mobile Number Required', 'Please enter a valid 10-digit mobile number.');
+        showToast('warning', 'Enter Mobile', 'Enter a 10-digit mobile number.');
         return;
       }
 
       if (el && el.innerText.includes('Now')) {
-        // Clear old digit inputs
         document.querySelectorAll('.otp-digit').forEach(d => d.value = '');
         sendOtpToNumber(mobile);
       } else {
-        showToast('info', 'Please Wait', 'You can request a new OTP once the countdown finishes.');
+        showToast('info', 'Please Wait', 'Wait for countdown to resend OTP.');
       }
-    }
-
-    function markStepCompleted(stepNum) {
-      state.completedSteps = state.completedSteps || [];
-      if (!state.completedSteps.includes(stepNum)) {
-        state.completedSteps.push(stepNum);
-      }
-      saveDraft();
     }
 
     function startCountdown(sec) {
       let count = sec;
       const el = document.getElementById('resendCountdown');
+      const inlineBtn = document.getElementById('btnInlineSendOtp');
       clearInterval(countdownInterval);
       if (el) el.innerText = count + 's';
+      if (inlineBtn && !state.verified) {
+        inlineBtn.innerText = 'Resend (' + count + 's)';
+        inlineBtn.disabled = true;
+      }
       countdownInterval = setInterval(() => {
         count--;
         if (el) el.innerText = count + 's';
+        if (inlineBtn && !state.verified) inlineBtn.innerText = 'Resend (' + count + 's)';
         if (count <= 0) {
           clearInterval(countdownInterval);
           if (el) el.innerText = 'Now (Click to resend)';
+          if (inlineBtn && !state.verified) {
+            inlineBtn.innerText = 'Resend OTP';
+            inlineBtn.disabled = false;
+          }
         }
       }, 1000);
     }
@@ -2394,8 +2545,233 @@
 
     function moveOtpFocus(input, nextIndex) {
       if (input.value.length >= 1) {
-        const next = document.querySelectorAll('.otp-digit')[nextIndex];
-        if (next) next.focus();
+        const digits = document.querySelectorAll('.otp-digit');
+        if (nextIndex < digits.length) {
+          digits[nextIndex].focus();
+        } else {
+          // All 6 digits entered: auto verify!
+          const otpDigits = Array.from(digits).map(d => d.value).join('');
+          if (otpDigits.length === 6) {
+            const mobile = (document.getElementById('mobileInput')?.value || state.mobile || '').replace(/\D/g, '').slice(-10);
+            verifyOtpCode(mobile);
+          }
+        }
+      }
+    }
+
+    // FORM RESTORATION FROM DRAFT (ON PAGE RELOAD)
+    function restoreFormFromDraft() {
+      const saved = localStorage.getItem('apnazo_seller_hub_draft');
+      if (!saved) return;
+      try {
+        const draft = JSON.parse(saved);
+        if (draft.categories && draft.categories.length === 2 &&
+            draft.categories.includes('Grocery & Supermarket') &&
+            draft.categories.includes('Daily Essentials')) {
+          draft.categories = [];
+        }
+        Object.assign(state, draft);
+
+        // Step 1
+        if (state.mobile) {
+          const mob = document.getElementById('mobileInput');
+          if (mob) mob.value = state.mobile;
+          const inlineBtn = document.getElementById('btnInlineSendOtp');
+          if (inlineBtn) {
+            if (state.verified) {
+              inlineBtn.className = 'btn-inline-otp verified';
+              inlineBtn.innerText = '✓ Verified';
+              inlineBtn.disabled = true;
+              const btnChange = document.getElementById('btnChangeMobile');
+              if (btnChange) btnChange.style.display = 'inline-block';
+            } else if (state.mobile.length === 10) {
+              inlineBtn.className = 'btn-inline-otp';
+              inlineBtn.innerText = 'Send OTP';
+              inlineBtn.disabled = false;
+            }
+          }
+        }
+        if (state.referralCode) {
+          const ref = document.getElementById('referralCode');
+          if (ref) ref.value = state.referralCode;
+        }
+
+        // Step 2
+        if (state.businessRole) {
+          document.querySelectorAll('.business-block').forEach(b => {
+            if (b.innerText.includes(state.businessRole)) {
+              b.classList.add('selected');
+            } else {
+              b.classList.remove('selected');
+            }
+          });
+          updateStep3ForCategory(state.businessRole);
+          updateStep6ForCategory(state.businessRole);
+        }
+
+        // Step 3
+        if (state.categories && Array.isArray(state.categories)) {
+          renderCategoryChips();
+        }
+        if (state.bizName) {
+          const el = document.getElementById('bizName');
+          if (el) el.value = state.bizName;
+        }
+        if (state.ownerName) {
+          const el = document.getElementById('ownerName');
+          if (el) el.value = state.ownerName;
+        }
+        if (state.pincode) {
+          const el = document.getElementById('pincodeInput');
+          if (el) el.value = state.pincode;
+          handlePincodeLookup(state.pincode);
+        }
+        if (state.bizAddress) {
+          const el = document.getElementById('bizAddress');
+          if (el) el.value = state.bizAddress;
+        }
+        if (state.logoUrl) {
+          const logoImg = document.getElementById('logoImg');
+          const fallback = document.getElementById('logoFallbackIcon');
+          if (logoImg && fallback) {
+            logoImg.src = state.logoUrl;
+            logoImg.style.display = 'block';
+            fallback.style.display = 'none';
+          }
+        }
+
+        // Step 4
+        if (state.panNumber) {
+          const el = document.getElementById('panNumber');
+          if (el) el.value = state.panNumber;
+        }
+        if (state.panDob) {
+          const el = document.getElementById('panDob');
+          if (el) el.value = state.panDob;
+        }
+        if (typeof state.hasGst === 'boolean') {
+          toggleGstTab(state.hasGst);
+        }
+        if (state.gstNumber) {
+          const el = document.getElementById('gstNumber');
+          if (el) el.value = state.gstNumber;
+        }
+        if (state.gstExpiryDate) {
+          const el = document.getElementById('gstExpiryDate');
+          if (el) {
+            el.value = state.gstExpiryDate;
+            checkGstExpiryGrace(state.gstExpiryDate);
+          }
+        }
+        if (state.genuineDocType) {
+          const el = document.getElementById('genuineDocType');
+          if (el) el.value = state.genuineDocType;
+        }
+        if (state.genuineDocNum) {
+          const el = document.getElementById('genuineDocNum');
+          if (el) el.value = state.genuineDocNum;
+        }
+        if (state.documents) {
+          Object.keys(state.documents).forEach(type => {
+            if (state.documents[type]) {
+              const chip = document.getElementById(type + 'DocChip');
+              const nameEl = document.getElementById(type + 'DocName');
+              if (chip && nameEl) {
+                nameEl.innerText = state.documents[type];
+                chip.classList.add('active');
+              }
+            }
+          });
+        }
+
+        // Step 5
+        if (state.bankAccNumber) {
+          const el = document.getElementById('bankAccNumber');
+          if (el) el.value = state.bankAccNumber;
+        }
+        if (state.bankAccConfirm) {
+          const el = document.getElementById('bankAccConfirm');
+          if (el) el.value = state.bankAccConfirm;
+        }
+        if (state.bankIfsc) {
+          const el = document.getElementById('bankIfsc');
+          if (el) el.value = state.bankIfsc;
+        }
+        if (state.bankBeneficiary) {
+          const el = document.getElementById('bankBeneficiary');
+          if (el) el.value = state.bankBeneficiary;
+        }
+
+        // Step 6
+        if (state.licenceType) {
+          const el = document.getElementById('licenceTypeSelect');
+          if (el) {
+            el.value = state.licenceType;
+            handleLicenceTypeChange(state.licenceType);
+          }
+        }
+        if (state.fssaiNumber) {
+          const el = document.getElementById('fssaiNumber');
+          if (el) el.value = state.fssaiNumber;
+        }
+        if (state.fssaiExpiryDate) {
+          const el = document.getElementById('fssaiExpiryDate');
+          if (el) {
+            el.value = state.fssaiExpiryDate;
+            checkFssaiExpiryGrace(state.fssaiExpiryDate);
+          }
+        }
+
+        // Step 7
+        if (state.agreedTerms) {
+          const el = document.getElementById('agreeCheckbox');
+          if (el) el.checked = true;
+        }
+
+      } catch(e) {}
+    }
+
+    // LIVE VALIDATION LISTENERS (Sync to state and toggle button immediately)
+    function setupLiveValidationListeners() {
+      const fieldMappings = [
+        { id: 'referralCode', prop: 'referralCode' },
+        { id: 'bizName', prop: 'bizName' },
+        { id: 'ownerName', prop: 'ownerName' },
+        { id: 'pincodeInput', prop: 'pincode' },
+        { id: 'bizAddress', prop: 'bizAddress' },
+        { id: 'panNumber', prop: 'panNumber' },
+        { id: 'panDob', prop: 'panDob' },
+        { id: 'gstNumber', prop: 'gstNumber' },
+        { id: 'gstExpiryDate', prop: 'gstExpiryDate' },
+        { id: 'genuineDocType', prop: 'genuineDocType' },
+        { id: 'genuineDocNum', prop: 'genuineDocNum' },
+        { id: 'bankAccNumber', prop: 'bankAccNumber' },
+        { id: 'bankAccConfirm', prop: 'bankAccConfirm' },
+        { id: 'bankIfsc', prop: 'bankIfsc' },
+        { id: 'bankBeneficiary', prop: 'bankBeneficiary' },
+        { id: 'licenceTypeSelect', prop: 'licenceType' },
+        { id: 'fssaiNumber', prop: 'fssaiNumber' },
+        { id: 'fssaiExpiryDate', prop: 'fssaiExpiryDate' }
+      ];
+
+      fieldMappings.forEach(m => {
+        const el = document.getElementById(m.id);
+        if (!el) return;
+        const evt = (el.tagName === 'SELECT' || el.type === 'date') ? 'change' : 'input';
+        el.addEventListener(evt, () => {
+          state[m.prop] = el.value;
+          saveDraft();
+          updateStepButtonValidity(state.step);
+        });
+      });
+
+      const agree = document.getElementById('agreeCheckbox');
+      if (agree) {
+        agree.addEventListener('change', () => {
+          state.agreedTerms = agree.checked;
+          saveDraft();
+          updateStepButtonValidity(7);
+        });
       }
     }
 
