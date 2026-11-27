@@ -1265,8 +1265,8 @@
         <!-- STEP 3: BUSINESS DETAILS (DYNAMIC LOGO + PINCODE AUTOFETCH + DROPDOWN AUTO-SUGGESTIONS) -->
         <div class="step-view" id="viewStep3">
           <div class="stage-header">
-            <h1 class="stage-title">Business details</h1>
-            <p class="stage-desc">Enter the details about your products, store branding, and sales channels.</p>
+            <h1 class="stage-title" id="s3HeaderTitle">Business details</h1>
+            <p class="stage-desc" id="s3HeaderDesc">Enter the details about your products, store branding, and sales channels.</p>
           </div>
 
           <!-- DYNAMIC LOGO SECTION -->
@@ -1276,19 +1276,19 @@
               <img id="logoImg" src="" style="display:none;" alt="Store Logo">
             </div>
             <div class="logo-controls">
-              <h4>Store Logo / Branding</h4>
-              <p>Upload your store logo or storefront picture for instant customer recognition.</p>
+              <h4 id="storeLogoTitle">Store Logo / Branding</h4>
+              <p id="storeLogoDesc">Upload your store logo or storefront picture for instant customer recognition.</p>
               <input type="file" id="storeLogoInput" accept="image/*" style="display:none;" onchange="handleLogoUpload(this)">
               <button type="button" class="btn-upload-logo" onclick="document.getElementById('storeLogoInput').click()">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg> Upload Storefront Logo
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg> <span id="storeLogoBtnText">Upload Storefront Logo</span>
               </button>
             </div>
           </div>
 
           <!-- CATEGORY & SALES AUTO-SUGGESTIONS (MATCHING BLINKIT REFERENCE IMAGE) -->
           <div class="section-card">
-            <h3 class="section-subtitle">Category &amp; sales details</h3>
-            <p class="section-help">Add top categories in which you sell your products (Upto 10) *</p>
+            <h3 class="section-subtitle" id="catSectionTitle">Category &amp; sales details</h3>
+            <p class="section-help" id="catSectionHelp">Add top categories in which you sell your products (Upto 10) *</p>
 
             <div class="field">
               <div style="position: relative; width: 100%;">
@@ -1303,16 +1303,13 @@
               </div>
             </div>
 
-            <!-- DYNAMIC RETAIL CHANNELS (MULTI-ADD WITH CUSTOM CHANNEL SUPPORT) -->
+            <!-- DYNAMIC RETAIL CHANNELS (MULTI-ADD) -->
             <div style="margin-top: 24px; margin-bottom: 24px;">
               <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-                <label style="font-size:13.5px; font-weight:700; color:var(--ink-dark); margin:0;">Retail Channels &amp; Links</label>
-                <div style="display:flex; gap:8px;">
-                  <button type="button" class="quick-suggest-chip" style="font-weight:700; background:#f0fdf4; color:#15803d; border-color:#86efac;" onclick="addRetailChannelRow()">
+                <label style="font-size:13.5px; font-weight:700; color:var(--ink-dark); margin:0;" id="retailChannelLabel">Retail Channels &amp; Links</label>
+                <div>
+                  <button type="button" class="quick-suggest-chip" style="font-weight:700; background:#f0fdf4; color:#15803d; border-color:#86efac;" onclick="addRetailChannelRow()" id="btnAddRetailRow">
                     + Add Retail Channel
-                  </button>
-                  <button type="button" class="quick-suggest-chip" style="font-weight:700; background:#fef3c7; color:#b45309; border-color:#fde68a;" onclick="addCustomRetailChannelRow()">
-                    + Custom Retail Store
                   </button>
                 </div>
               </div>
@@ -1321,28 +1318,28 @@
                 <!-- Retail Row 1 -->
                 <div class="retail-channel-row form-grid-3" style="align-items:flex-start; background:#f8fafc; padding:14px; border-radius:12px; border:1px solid #e2e8f0; position:relative;">
                   <div class="field" style="margin:0;">
-                    <label style="font-size:12px;">Select retail channel</label>
+                    <label style="font-size:12px;" id="retailSelectLabel">Select retail channel</label>
                     <select class="retail-channel-select" onchange="checkCustomOption(this, 'retail')">
-                      <option value="Offline Store">Offline Retail Store *</option>
+                      <option value="Offline Store">Offline Retail Store</option>
                       <option value="Amazon India">Amazon India</option>
                       <option value="Flipkart">Flipkart</option>
                       <option value="Swiggy Instamart">Swiggy Instamart</option>
                       <option value="Zomato / Blinkit">Zomato / Blinkit</option>
                       <option value="Direct Phone Delivery">Direct Phone / Delivery</option>
-                      <option value="__CUSTOM__">✏️ Custom Retail Platform...</option>
+                      <option value="Other">Other</option>
                     </select>
-                    <input type="text" class="custom-retail-name" placeholder="Enter custom retail name" style="display:none; margin-top:6px; font-size:13px; padding:8px 10px;">
+                    <input type="text" class="custom-retail-name" placeholder="Enter other channel name" style="display:none; margin-top:6px; font-size:13px; padding:8px 10px;">
                   </div>
                   <div class="field" style="margin:0;">
-                    <label style="font-size:12px;">Reference Link</label>
-                    <input type="text" class="retail-ref-link" placeholder="Store or website link">
+                    <label style="font-size:12px;" id="retailRefLabel">Reference Link</label>
+                    <input type="text" class="retail-ref-link" id="firstRetailRefLink" placeholder="Store or website link">
                   </div>
                   <div class="field" style="margin:0;">
                     <div style="display:flex; justify-content:space-between; align-items:center;">
-                      <label style="font-size:12px;">Total monthly sales</label>
+                      <label style="font-size:12px;" id="retailSalesLabel">Total monthly sales</label>
                       <button type="button" class="btn-remove-row" onclick="removeChannelRow(this)" style="display:none; background:none; border:none; color:var(--danger); cursor:pointer; font-weight:800; font-size:16px; padding:0;" title="Remove row">&times;</button>
                     </div>
-                    <select class="retail-sales-select">
+                    <select class="retail-sales-select" id="firstRetailSalesSelect">
                       <option value="Below 1 Lakh">Below ₹1,00,000</option>
                       <option value="1 to 5 Lakhs" selected>₹1,00,000 - ₹5,00,000</option>
                       <option value="5 to 15 Lakhs">₹5,00,000 - ₹15,00,000</option>
@@ -1353,16 +1350,13 @@
               </div>
             </div>
 
-            <!-- DYNAMIC SOCIAL CHANNELS (MULTI-ADD WITH CUSTOM SOCIAL SUPPORT) -->
+            <!-- DYNAMIC SOCIAL CHANNELS (MULTI-ADD) -->
             <div style="margin-bottom: 24px;">
               <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
                 <label style="font-size:13.5px; font-weight:700; color:var(--ink-dark); margin:0;">Social Channels &amp; Links</label>
-                <div style="display:flex; gap:8px;">
+                <div>
                   <button type="button" class="quick-suggest-chip" style="font-weight:700; background:#f0fdf4; color:#15803d; border-color:#86efac;" onclick="addSocialChannelRow()">
                     + Add Social Channel
-                  </button>
-                  <button type="button" class="quick-suggest-chip" style="font-weight:700; background:#fef3c7; color:#b45309; border-color:#fde68a;" onclick="addCustomSocialChannelRow()">
-                    + Custom Social Media
                   </button>
                 </div>
               </div>
@@ -1378,9 +1372,9 @@
                       <option value="Facebook Page">Facebook Page</option>
                       <option value="YouTube">YouTube</option>
                       <option value="LinkedIn">LinkedIn</option>
-                      <option value="__CUSTOM__">✏️ Custom Social Network...</option>
+                      <option value="Other">Other</option>
                     </select>
-                    <input type="text" class="custom-social-name" placeholder="Enter custom social network" style="display:none; margin-top:6px; font-size:13px; padding:8px 10px;">
+                    <input type="text" class="custom-social-name" placeholder="Enter other social platform" style="display:none; margin-top:6px; font-size:13px; padding:8px 10px;">
                   </div>
                   <div class="field" style="margin:0;">
                     <label style="font-size:12px;">Social Media Link</label>
@@ -1405,14 +1399,14 @@
 
           <!-- STORE PROFILE & LOCATION AUTOFETCH WITH PIN CODE -->
           <div class="section-card">
-            <h3 class="section-subtitle">Store details &amp; Location</h3>
+            <h3 class="section-subtitle" id="locSectionTitle">Store details &amp; Location</h3>
             <div class="form-grid-2">
               <div class="field">
-                <label>Business / Shop Name *</label>
+                <label id="bizNameLabel">Business / Shop Name *</label>
                 <input type="text" id="bizName" placeholder="e.g. Steel City Supermarket">
               </div>
               <div class="field">
-                <label>Owner Full Name * <span class="opt">As on PAN Card</span></label>
+                <label id="ownerNameLabel">Owner Full Name * <span class="opt">As on PAN Card</span></label>
                 <input type="text" id="ownerName" placeholder="e.g. Ramesh Chandra Sahu">
               </div>
             </div>
@@ -1430,7 +1424,7 @@
             </div>
 
             <div class="field">
-              <label>Complete Store / Pickup Address *</label>
+              <label id="bizAddressLabel">Complete Store / Pickup Address *</label>
               <input type="text" id="bizAddress" placeholder="e.g. Shop #14, Main Road, Daily Market, Uditnagar">
             </div>
           </div>
@@ -1853,50 +1847,355 @@
     };
 
     // Dropdown Categories Database
-    const ALL_CATEGORIES = [
-      'Grocery & Supermarket', 'Atta, Flours & Grains', 'Edible Oils & Ghee', 'Dairy, Milk & Paneer',
-      'Fresh Fruits & Vegetables', 'Bakery, Cakes & Breads', 'Snacks, Chips & Namkeen', 'Beverages & Soft Drinks',
-      'Restaurant Meals & Thali', 'Biryani & Fast Food', 'Sweets & Desserts', 'Cafe & Cold Coffee',
-      'Smartphones & Accessories', 'Mobile Chargers & Cables', 'Home & Kitchen Appliances',
-      'Men Clothing & T-Shirts', 'Women Ethnic Wear & Sarees', 'Kids Wear & Footwear',
-      'Electrician & Wire Fixing', 'Plumbing & Pipe Repair', 'AC Repair & Service',
-      'Auto Rickshaw Rides', 'Bike Taxi Rides', 'Outstation & City Cabs'
-    ];
-
-    // Business Category Definitions & Suggested Top Tags
+    // Business Category Definitions & Comprehensive Category Database per Business Type
     const BIZ_CATEGORIES = {
       'Retail & Grocery': {
+        s3Title: 'Store & inventory details',
+        s3Desc: 'Enter details about your store, FMCG/grocery categories, and sales channels.',
+        logoTitle: 'Store Logo / Branding',
+        logoDesc: 'Upload your store logo or storefront picture for instant customer recognition.',
+        logoBtnText: 'Upload Storefront Logo',
+        title: 'Category & sales details',
+        help: 'Add top categories in which you sell your products (Upto 10) *',
         placeholder: 'Search products & categories (e.g. Atta, Dairy, Spices, FMCG, Oils)',
-        suggested: ['Grocery & Supermarket', 'Atta, Flours & Grains', 'Edible Oils & Ghee', 'Dairy, Milk & Paneer', 'Fresh Fruits & Vegetables', 'Bakery & Breads', 'Snacks & Namkeen']
+        retailLabel: 'Retail Channels & Online Stores',
+        retailAddBtn: '+ Add Retail Channel',
+        retailSelectLabel: 'Select retail channel',
+        retailRefLabel: 'Reference Link',
+        retailRefPlaceholder: 'Store or website link',
+        retailSalesLabel: 'Total monthly sales',
+        salesOptions: ['Below ₹1,00,000', '₹1,00,000 - ₹5,00,000', '₹5,00,000 - ₹15,00,000', 'Above ₹15,00,000'],
+        locTitle: 'Store details & Location',
+        bizNameLabel: 'Business / Shop Name *',
+        bizNamePlaceholder: 'e.g. Steel City Supermarket',
+        ownerNameLabel: 'Owner Full Name * (As on PAN Card)',
+        ownerNamePlaceholder: 'e.g. Ramesh Chandra Sahu',
+        addressLabel: 'Complete Store / Pickup Address *',
+        addressPlaceholder: 'e.g. Shop #14, Main Road, Daily Market, Uditnagar',
+        retailOptions: [
+          'Offline Retail Store',
+          'Amazon India',
+          'Flipkart',
+          'Swiggy Instamart',
+          'Zomato / Blinkit',
+          'JioMart',
+          'Direct Phone / Delivery'
+        ],
+        suggested: ['Grocery & Supermarket', 'Atta, Flours & Grains', 'Edible Oils & Ghee', 'Dairy, Milk & Paneer', 'Fresh Fruits & Vegetables', 'Bakery & Breads', 'Snacks & Namkeen'],
+        categories: [
+          'Grocery & Supermarket', 'Atta, Flours & Grains', 'Edible Oils & Pure Ghee', 'Rice, Pulses & Dal',
+          'Dairy, Milk & Paneer', 'Fresh Fruits & Vegetables', 'Bakery, Cakes & Breads', 'Snacks, Chips & Namkeen',
+          'Biscuits, Cookies & Rusks', 'Beverages, Soft Drinks & Juices', 'Tea, Coffee & Health Drinks',
+          'Spices, Masala & Seasonings', 'Dry Fruits, Nuts & Seeds', 'Packaged Foods & Noodles',
+          'Chocolates & Candies', 'Personal Care, Soaps & Shampoos', 'Home Cleaning, Detergents & Dishwash',
+          'Baby Care & Diapers', 'Puja & Spiritual Needs', 'Paan, Supari & Refreshments'
+        ]
       },
       'Restaurant & Food': {
-        placeholder: 'Search cuisine or food items (e.g. Biryani, Pizza, Thali, Bakery, Sweets)',
-        suggested: ['Restaurant Meals & Thali', 'Biryani & Fast Food', 'Bakery, Cakes & Pastries', 'Sweets & Desserts', 'Cafe & Cold Coffee', 'Chinese & Rolls']
+        s3Title: 'Restaurant & kitchen details',
+        s3Desc: 'Enter details about your kitchen, dining menu, and food delivery channels.',
+        logoTitle: 'Restaurant Logo / Signboard',
+        logoDesc: 'Upload your restaurant logo, dining board or kitchen picture.',
+        logoBtnText: 'Upload Restaurant Logo',
+        title: 'Cuisines & food menu',
+        help: 'Add top food cuisines and meal categories you serve (Upto 10) *',
+        placeholder: 'Search cuisines & food (e.g. Biryani, Pizza, Thali, Sweets, Cafe)',
+        retailLabel: 'Food & Delivery Channels',
+        retailAddBtn: '+ Add Delivery Channel',
+        retailSelectLabel: 'Select delivery channel',
+        retailRefLabel: 'Zomato / Swiggy Link',
+        retailRefPlaceholder: 'e.g. zomato.com/rourkela/myrestaurant',
+        retailSalesLabel: 'Total monthly food sales',
+        salesOptions: ['Below ₹1,00,000', '₹1,00,000 - ₹5,00,000', '₹5,00,000 - ₹15,00,000', 'Above ₹15,00,000'],
+        locTitle: 'Kitchen & Dining Location',
+        bizNameLabel: 'Restaurant / Cloud Kitchen Name *',
+        bizNamePlaceholder: 'e.g. Royal Biryani & Fast Food',
+        ownerNameLabel: 'Owner / Head Chef Full Name * (As on PAN / FSSAI)',
+        ownerNamePlaceholder: 'e.g. Mohammad Irfan',
+        addressLabel: 'Kitchen / Restaurant Full Address *',
+        addressPlaceholder: 'e.g. Shop #5, Bisra Road, Daily Market, Rourkela',
+        retailOptions: [
+          'Dine-in / Walk-in Counter',
+          'Swiggy',
+          'Zomato',
+          'Magicpin',
+          'Direct Phone / WhatsApp Order',
+          'Own Website / App'
+        ],
+        suggested: ['Restaurant Meals & Thali', 'Biryani & Fast Food', 'Bakery, Cakes & Pastries', 'Sweets & Desserts', 'Cafe & Cold Coffee', 'Chinese & Rolls'],
+        categories: [
+          'Restaurant Meals & Thali', 'Biryani, Pulao & Rice Bowls', 'Fast Food & Burgers',
+          'Bakery, Cakes & Pastries', 'Sweets & Traditional Desserts', 'Cafe, Shakes & Cold Coffee',
+          'Chinese, Momos & Noodles', 'Kathi Rolls & Frankie', 'Pizza & Italian',
+          'South Indian (Dosa, Idli, Vada)', 'North Indian Curries & Naan', 'Mughlai & Kebabs',
+          'Street Food & Chaat', 'Ice Creams, Kulfi & Waffles', 'Cloud Kitchen & Tiffin Services',
+          'Beverages, Fresh Juices & Chai', 'Healthy Salads & Diet Bowls'
+        ]
       },
       'Taxi & City Rides': {
-        placeholder: 'Search ride services (e.g. Auto Rickshaw, Bike Taxi, Sedan Cab)',
-        suggested: ['Auto Rickshaw Rides', 'Bike Taxi Rides', 'Outstation & City Cabs', 'Sedan & Hatchback Cabs', 'Prime SUV Rides']
+        s3Title: 'Ride & vehicle details',
+        s3Desc: 'Enter details about your vehicle, booking platforms, and operating area.',
+        logoTitle: 'Driver Photo / Vehicle Picture',
+        logoDesc: 'Upload your profile photo or vehicle front view for customer verification.',
+        logoBtnText: 'Upload Photo / Vehicle Picture',
+        title: 'Ride types & vehicle details',
+        help: 'Select vehicle categories and ride services you offer (Upto 10) *',
+        placeholder: 'Search ride services (e.g. Auto, Bike Taxi, Sedan, City Cab)',
+        retailLabel: 'Ride Platforms & Stands',
+        retailAddBtn: '+ Add Ride Platform',
+        retailSelectLabel: 'Select ride platform / stand',
+        retailRefLabel: 'Stand Name or Contact',
+        retailRefPlaceholder: 'e.g. Railway Station Auto Stand / Ola ID',
+        retailSalesLabel: 'Monthly ride earnings',
+        salesOptions: ['Below ₹25,000', '₹25,000 - ₹50,000', '₹50,000 - ₹1,00,000', 'Above ₹1,00,000'],
+        locTitle: 'Vehicle Operator & Stand Location',
+        bizNameLabel: 'Driver / Fleet Name *',
+        bizNamePlaceholder: 'e.g. Maa Tarini Auto Service / Rajesh Cabs',
+        ownerNameLabel: 'Driver / Vehicle Owner Full Name * (As on Driving Licence)',
+        ownerNamePlaceholder: 'e.g. Rajesh Kumar Mohanty',
+        addressLabel: 'Stand Location / Operating Area Address *',
+        addressPlaceholder: 'e.g. Rourkela Railway Station Auto Stand / Sector 19',
+        retailOptions: [
+          'Local Auto Stand / Taxi Stand',
+          'Ola Cabs',
+          'Uber',
+          'Rapido',
+          'InDrive',
+          'Direct Phone / WhatsApp Booking',
+          'Travel Agency / Hotel Booking'
+        ],
+        suggested: ['Auto Rickshaw Rides', 'Bike Taxi Rides', 'Outstation & City Cabs', 'Sedan & Hatchback Cabs', 'Prime SUV Rides'],
+        categories: [
+          'Auto Rickshaw Rides', 'Bike Taxi Rides', 'Hatchback Cabs (Mini)',
+          'Sedan Cabs (Prime / Comfort)', 'SUV & MUV Cabs (Innova / Ertiga)',
+          'Outstation & Intercity Rides', 'Airport Pickup & Drop', 'Hourly Rental Cabs',
+          'Daily Office Commute', 'Commercial Tempo / Pickup (Tata Ace)',
+          'Night Shift Rides', 'Tourist & Sightseeing Packages', 'Emergency Hospital Transit',
+          'Shared Auto / Cab Rides', 'School & College Transit'
+        ]
       },
       'Home Services & Repairs': {
+        s3Title: 'Service & trade details',
+        s3Desc: 'Enter details about your maintenance services, technician profile, and service channels.',
+        logoTitle: 'Technician Photo / Trade Card',
+        logoDesc: 'Upload your professional photo, visiting card, or workshop picture.',
+        logoBtnText: 'Upload Technician Photo',
+        title: 'Services & repairs offered',
+        help: 'Select repair and home services you offer to customers (Upto 10) *',
         placeholder: 'Search home services (e.g. Electrician, AC Repair, Plumbing, Cleaning)',
-        suggested: ['Electrician & Wire Fixing', 'Plumbing & Pipe Repair', 'AC Repair & Service', 'Home Deep Cleaning', 'Appliance & TV Repair', 'Salon & Beauty at Home']
+        retailLabel: 'Service Platforms & Directories',
+        retailAddBtn: '+ Add Service Platform',
+        retailSelectLabel: 'Select service channel',
+        retailRefLabel: 'Profile or Reference Link',
+        retailRefPlaceholder: 'Justdial, Urban Company or website link',
+        retailSalesLabel: 'Monthly service income',
+        salesOptions: ['Below ₹25,000', '₹25,000 - ₹50,000', '₹50,000 - ₹1,00,000', 'Above ₹1,00,000'],
+        locTitle: 'Service Agency & Workshop Location',
+        bizNameLabel: 'Service / Trade Business Name *',
+        bizNamePlaceholder: 'e.g. Rourkela Electrical Works / Expert AC Service',
+        ownerNameLabel: 'Lead Technician / Owner Full Name *',
+        ownerNamePlaceholder: 'e.g. Sunil Kumar Swain',
+        addressLabel: 'Workshop / Base Location Address *',
+        addressPlaceholder: 'e.g. Workshop #12, Chhend Colony, Rourkela',
+        retailOptions: [
+          'Direct Customer Phone Calls',
+          'Urban Company',
+          'Justdial',
+          'Sulekha',
+          'Local Society / Word of Mouth',
+          'NoBroker / Online Directory'
+        ],
+        suggested: ['Electrician & Wire Fixing', 'Plumbing & Pipe Repair', 'AC Repair & Service', 'Home Deep Cleaning', 'Appliance & TV Repair', 'Salon & Beauty at Home'],
+        categories: [
+          'Electrician & Wire Fixing', 'Plumbing & Pipe Repair', 'AC Repair & Service',
+          'AC Installation & Gas Refill', 'Refrigerator & Fridge Repair', 'Washing Machine Repair',
+          'Water Purifier / RO Service', 'Geyser & Water Heater Service', 'Home Deep Cleaning & Sanitization',
+          'Sofa & Carpet Cleaning', 'Salon & Beauty at Home', 'Men Haircut & Grooming at Home',
+          'Carpentry & Furniture Repair', 'Painting & Waterproofing', 'Pest Control Services',
+          'CCTV & Inverter Installation', 'Chimney & Hob Repair', 'Locksmith & Key Making'
+        ]
       },
       'Fashion & Lifestyle': {
-        placeholder: 'Search clothing & lifestyle (e.g. Sarees, T-Shirts, Footwear, Jewellery)',
-        suggested: ['Men Clothing & T-Shirts', 'Women Ethnic Wear & Sarees', 'Kids Wear & Footwear', 'Boutique & Tailoring', 'Jewellery & Watches']
+        s3Title: 'Boutique & fashion details',
+        s3Desc: 'Enter details about your apparel collections, brand, and retail channels.',
+        logoTitle: 'Boutique / Brand Logo',
+        logoDesc: 'Upload your boutique signboard or fashion brand logo.',
+        logoBtnText: 'Upload Brand Logo',
+        title: 'Apparel & fashion categories',
+        help: 'Select clothing collections and fashion categories you sell (Upto 10) *',
+        placeholder: 'Search fashion (e.g. Sarees, T-Shirts, Footwear, Jewellery, Suits)',
+        retailLabel: 'Fashion Stores & Marketplaces',
+        retailAddBtn: '+ Add Fashion Channel',
+        retailSelectLabel: 'Select fashion channel',
+        retailRefLabel: 'Store or Instagram Link',
+        retailRefPlaceholder: 'e.g. instagram.com/myboutique',
+        retailSalesLabel: 'Total monthly sales',
+        salesOptions: ['Below ₹1,00,000', '₹1,00,000 - ₹5,00,000', '₹5,00,000 - ₹15,00,000', 'Above ₹15,00,000'],
+        locTitle: 'Boutique & Store Location',
+        bizNameLabel: 'Boutique / Brand Name *',
+        bizNamePlaceholder: 'e.g. Rourkela Fashion Hub / Sambalpuri Sarees',
+        ownerNameLabel: 'Proprietor / Designer Full Name *',
+        ownerNamePlaceholder: 'e.g. Priya Sharma',
+        addressLabel: 'Boutique / Studio Full Address *',
+        addressPlaceholder: 'e.g. Ground Floor, City Centre, Sector 5',
+        retailOptions: [
+          'Offline Boutique / Retail Store',
+          'Amazon India',
+          'Flipkart',
+          'Myntra',
+          'Ajio / Meesho',
+          'Instagram Shop',
+          'Direct WhatsApp Catalogue'
+        ],
+        suggested: ['Men Clothing & T-Shirts', 'Women Ethnic Wear & Sarees', 'Kids Wear & Footwear', 'Boutique & Tailoring', 'Jewellery & Watches'],
+        categories: [
+          'Men Casual Wear & T-Shirts', 'Men Formal Shirts & Trousers', 'Women Ethnic Wear & Sarees',
+          'Salwar Suits & Kurtis', 'Western Wear & Tops', 'Kids Clothing & Baby Wear',
+          'Men & Women Footwear / Shoes', 'Sandals, Slippers & Chappals', 'Boutique & Custom Tailoring',
+          'Jewellery, Gold & Artificial Ornaments', 'Watches, Clocks & Eyewear', 'Handbags, Purses & Wallets',
+          'Backpacks, Luggage & Travel Bags', 'Cosmetics, Makeup & Perfumes', 'Nightwear & Loungewear',
+          'Traditional Odia Handloom & Sambalpuri'
+        ]
       },
       'Electronics & Mobiles': {
-        placeholder: 'Search electronics & gadgets (e.g. Smartphones, Chargers, Laptops)',
-        suggested: ['Smartphones & Accessories', 'Mobile Chargers & Cables', 'Earphones & Headphones', 'Home & Kitchen Appliances', 'Computer & Mobile Repair']
+        s3Title: 'Electronics & gadget details',
+        s3Desc: 'Enter details about your electronics showroom, gadgets, and sales channels.',
+        logoTitle: 'Showroom Signboard / Logo',
+        logoDesc: 'Upload your electronics showroom picture or store logo.',
+        logoBtnText: 'Upload Showroom Logo',
+        title: 'Electronics & gadgets categories',
+        help: 'Select electronics and device categories you sell or service (Upto 10) *',
+        placeholder: 'Search electronics (e.g. Smartphones, Chargers, Laptops, TV)',
+        retailLabel: 'Electronics Stores & Platforms',
+        retailAddBtn: '+ Add Electronics Channel',
+        retailSelectLabel: 'Select electronics channel',
+        retailRefLabel: 'Store or Catalog Link',
+        retailRefPlaceholder: 'e.g. myelectronicstore.com',
+        retailSalesLabel: 'Total monthly sales',
+        salesOptions: ['Below ₹1,00,000', '₹1,00,000 - ₹5,00,000', '₹5,00,000 - ₹15,00,000', 'Above ₹15,00,000'],
+        locTitle: 'Showroom & Store Location',
+        bizNameLabel: 'Electronics Showroom / Shop Name *',
+        bizNamePlaceholder: 'e.g. Sharma Mobile & Electronics',
+        ownerNameLabel: 'Owner / Dealer Full Name *',
+        ownerNamePlaceholder: 'e.g. Amit Sharma',
+        addressLabel: 'Showroom / Store Full Address *',
+        addressPlaceholder: 'e.g. Shop #8, Main Road, Rourkela',
+        retailOptions: [
+          'Offline Electronics Store',
+          'Amazon India',
+          'Flipkart',
+          'JioMart / Tata Cliq',
+          'Direct Walk-in / Phone',
+          'Own Online Store'
+        ],
+        suggested: ['Smartphones & Accessories', 'Mobile Chargers & Cables', 'Earphones & Headphones', 'Home & Kitchen Appliances', 'Computer & Mobile Repair'],
+        categories: [
+          'Smartphones & 5G Mobiles', 'Feature Phones', 'Mobile Chargers, Cables & Adapters',
+          'Mobile Covers, Glass & Protection', 'Earphones, Headphones & TWS Buds', 'Bluetooth Speakers & Soundbars',
+          'Smartwatches & Fitness Bands', 'Power Banks & Batteries', 'Laptops, Desktops & Tablets',
+          'Computer Accessories, Mouse & Keyboards', 'Printers, Inks & Toner', 'Smart TVs & Android Boxes',
+          'Home & Kitchen Appliances', 'Cameras & Memory Cards', 'Mobile Repair & Screen Replacement'
+        ]
       }
     };
 
     function updateStep3ForCategory(category) {
       const config = BIZ_CATEGORIES[category] || BIZ_CATEGORIES['Retail & Grocery'];
+
+      // Header
+      const s3TitleEl = document.getElementById('s3HeaderTitle');
+      if (s3TitleEl && config.s3Title) s3TitleEl.innerText = config.s3Title;
+      const s3DescEl = document.getElementById('s3HeaderDesc');
+      if (s3DescEl && config.s3Desc) s3DescEl.innerText = config.s3Desc;
+
+      // Logo / Picture box
+      const logoTitleEl = document.getElementById('storeLogoTitle');
+      if (logoTitleEl && config.logoTitle) logoTitleEl.innerText = config.logoTitle;
+      const logoDescEl = document.getElementById('storeLogoDesc');
+      if (logoDescEl && config.logoDesc) logoDescEl.innerText = config.logoDesc;
+      const logoBtnTextEl = document.getElementById('storeLogoBtnText');
+      if (logoBtnTextEl && config.logoBtnText) logoBtnTextEl.innerText = config.logoBtnText;
+
+      // Category Section
       const searchInput = document.getElementById('categorySearchInput');
       if (searchInput) {
         searchInput.placeholder = config.placeholder;
       }
+      const titleEl = document.getElementById('catSectionTitle');
+      if (titleEl && config.title) titleEl.innerText = config.title;
+      const helpEl = document.getElementById('catSectionHelp');
+      if (helpEl && config.help) helpEl.innerText = config.help;
+
+      // Retail / Platform Section
+      const retailLabelEl = document.getElementById('retailChannelLabel');
+      if (retailLabelEl && config.retailLabel) retailLabelEl.innerText = config.retailLabel;
+      const addRetailBtn = document.getElementById('btnAddRetailRow');
+      if (addRetailBtn && config.retailAddBtn) addRetailBtn.innerText = config.retailAddBtn;
+      const retailSelectLabel = document.getElementById('retailSelectLabel');
+      if (retailSelectLabel && config.retailSelectLabel) retailSelectLabel.innerText = config.retailSelectLabel;
+      const retailRefLabel = document.getElementById('retailRefLabel');
+      if (retailRefLabel && config.retailRefLabel) retailRefLabel.innerText = config.retailRefLabel;
+      const firstRetailRefLink = document.getElementById('firstRetailRefLink');
+      if (firstRetailRefLink && config.retailRefPlaceholder) firstRetailRefLink.placeholder = config.retailRefPlaceholder;
+      const retailSalesLabel = document.getElementById('retailSalesLabel');
+      if (retailSalesLabel && config.retailSalesLabel) retailSalesLabel.innerText = config.retailSalesLabel;
+
+      // Update all rows in retailChannelsContainer
+      const retailContainer = document.getElementById('retailChannelsContainer');
+      if (retailContainer) {
+        const options = config.retailOptions || ['Offline Store', 'Other'];
+        const rows = retailContainer.querySelectorAll('.retail-channel-row');
+        rows.forEach((row) => {
+          const select = row.querySelector('.retail-channel-select');
+          if (select) {
+            const currentVal = select.value;
+            select.innerHTML = options.map(o => `<option value="${o}">${o}</option>`).join('') +
+              '<option value="Other">Other</option>';
+            if (options.includes(currentVal)) {
+              select.value = currentVal;
+            } else if (currentVal === 'Other') {
+              select.value = 'Other';
+            } else {
+              select.selectedIndex = 0;
+            }
+          }
+          const sLabel = row.querySelector('.field:nth-child(1) label');
+          if (sLabel && config.retailSelectLabel) sLabel.innerText = config.retailSelectLabel;
+          const refLabel = row.querySelector('.field:nth-child(2) label');
+          if (refLabel && config.retailRefLabel) refLabel.innerText = config.retailRefLabel;
+          const refInput = row.querySelector('.retail-ref-link');
+          if (refInput && config.retailRefPlaceholder) refInput.placeholder = config.retailRefPlaceholder;
+          const salesLabel = row.querySelector('.field:nth-child(3) label');
+          if (salesLabel && config.retailSalesLabel) salesLabel.innerText = config.retailSalesLabel;
+          const salesSelect = row.querySelector('.retail-sales-select');
+          if (salesSelect && config.salesOptions) {
+            const curSales = salesSelect.value;
+            salesSelect.innerHTML = config.salesOptions.map(s => `<option value="${s}">${s}</option>`).join('');
+            if (config.salesOptions.includes(curSales)) {
+              salesSelect.value = curSales;
+            } else {
+              salesSelect.selectedIndex = 1;
+            }
+          }
+        });
+      }
+
+      // Store Details & Location Section
+      const locTitleEl = document.getElementById('locSectionTitle');
+      if (locTitleEl && config.locTitle) locTitleEl.innerText = config.locTitle;
+      const bizNameLabel = document.getElementById('bizNameLabel');
+      if (bizNameLabel && config.bizNameLabel) bizNameLabel.innerText = config.bizNameLabel;
+      const bizNameInput = document.getElementById('bizName');
+      if (bizNameInput && config.bizNamePlaceholder) bizNameInput.placeholder = config.bizNamePlaceholder;
+      const ownerNameLabel = document.getElementById('ownerNameLabel');
+      if (ownerNameLabel && config.ownerNameLabel) ownerNameLabel.innerText = config.ownerNameLabel;
+      const ownerNameInput = document.getElementById('ownerName');
+      if (ownerNameInput && config.ownerNamePlaceholder) ownerNameInput.placeholder = config.ownerNamePlaceholder;
+      const bizAddressLabel = document.getElementById('bizAddressLabel');
+      if (bizAddressLabel && config.addressLabel) bizAddressLabel.innerText = config.addressLabel;
+      const bizAddressInput = document.getElementById('bizAddress');
+      if (bizAddressInput && config.addressPlaceholder) bizAddressInput.placeholder = config.addressPlaceholder;
+
       renderQuickSuggestChips(config.suggested);
     }
 
@@ -2547,9 +2846,21 @@
       const prevRole = state.businessRole;
       state.businessRole = role;
 
-      // If user switches business type, reset categories to avoid cross-industry tags
-      if (prevRole !== role && state.categories.length > 0) {
+      // If user switches business type, reset categories & retail rows to avoid cross-industry tags
+      if (prevRole !== role) {
         state.categories = [];
+        state.retailChannels = [];
+        const catInput = document.getElementById('categorySearchInput');
+        if (catInput) catInput.value = '';
+        const drop = document.getElementById('categorySuggestions');
+        if (drop) drop.style.display = 'none';
+
+        // Keep only row 1 in retail container
+        const retailContainer = document.getElementById('retailChannelsContainer');
+        if (retailContainer) {
+          const rows = retailContainer.querySelectorAll('.retail-channel-row');
+          for (let i = 1; i < rows.length; i++) rows[i].remove();
+        }
       }
 
       updateStep3ForCategory(role);
@@ -2597,14 +2908,18 @@
         return;
       }
 
-      const matches = ALL_CATEGORIES.filter(c => c.toLowerCase().includes(query));
+      const role = state.businessRole || 'Retail & Grocery';
+      const config = BIZ_CATEGORIES[role] || BIZ_CATEGORIES['Retail & Grocery'];
+      const categoriesPool = config.categories || config.suggested;
+
+      const matches = categoriesPool.filter(c => c.toLowerCase().includes(query));
       if (matches.length === 0) {
-        drop.innerHTML = `<div class="dropdown-item" onclick="addCategory('${val}')"><span>+ Add "<strong>${val}</strong>"</span> <span class="badge">Custom</span></div>`;
+        drop.innerHTML = `<div class="dropdown-item" onclick="addCategory('${val.replace(/'/g, "\\'")}')"><span>+ Add "<strong>${val}</strong>"</span> <span class="badge">Custom</span></div>`;
       } else {
-        drop.innerHTML = matches.slice(0, 6).map(m => `
-          <div class="dropdown-item" onclick="addCategory('${m}')">
+        drop.innerHTML = matches.slice(0, 8).map(m => `
+          <div class="dropdown-item" onclick="addCategory('${m.replace(/'/g, "\\'")}')">
             <span>${m}</span>
-            <span class="badge">Category</span>
+            <span class="badge">${role.split('&')[0].trim()}</span>
           </div>
         `).join('');
       }
@@ -2709,7 +3024,8 @@
       document.querySelectorAll('.retail-channel-row').forEach(row => {
         const select = row.querySelector('.retail-channel-select');
         const customInput = row.querySelector('.custom-retail-name');
-        const channelName = (select.value === '__CUSTOM__' && customInput) ? customInput.value.trim() : select.value;
+        const isOther = select && (select.value === 'Other' || select.value === '__CUSTOM__');
+        const channelName = (isOther && customInput) ? customInput.value.trim() : (select ? select.value : '');
         const refLink = row.querySelector('.retail-ref-link')?.value.trim() || '';
         const sales = row.querySelector('.retail-sales-select')?.value || '';
         if (channelName) {
@@ -2721,7 +3037,8 @@
       document.querySelectorAll('.social-channel-row').forEach(row => {
         const select = row.querySelector('.social-channel-select');
         const customInput = row.querySelector('.custom-social-name');
-        const channelName = (select.value === '__CUSTOM__' && customInput) ? customInput.value.trim() : select.value;
+        const isOther = select && (select.value === 'Other' || select.value === '__CUSTOM__');
+        const channelName = (isOther && customInput) ? customInput.value.trim() : (select ? select.value : '');
         const link = row.querySelector('.social-ref-link')?.value.trim() || '';
         const followers = row.querySelector('.social-followers-select')?.value || '';
         if (channelName) {
@@ -2737,7 +3054,7 @@
     function checkCustomOption(selectEl, type) {
       const parent = selectEl.parentElement;
       const customInput = parent.querySelector(type === 'retail' ? '.custom-retail-name' : '.custom-social-name');
-      if (selectEl.value === '__CUSTOM__') {
+      if (selectEl.value === 'Other' || selectEl.value === '__CUSTOM__') {
         if (customInput) {
           customInput.style.display = 'block';
           customInput.focus();
@@ -2747,55 +3064,56 @@
       }
     }
 
-    function addRetailChannelRow(customDefault = false) {
+    function addRetailChannelRow() {
       const container = document.getElementById('retailChannelsContainer');
+      const role = state.businessRole || 'Retail & Grocery';
+      const config = BIZ_CATEGORIES[role] || BIZ_CATEGORIES['Retail & Grocery'];
+      const options = config.retailOptions || [
+        'Offline Retail Store',
+        'Amazon India',
+        'Flipkart',
+        'Swiggy Instamart',
+        'Zomato / Blinkit',
+        'Direct Phone / Delivery'
+      ];
+      const salesOpts = config.salesOptions || [
+        'Below ₹1,00,000',
+        '₹1,00,000 - ₹5,00,000',
+        '₹5,00,000 - ₹15,00,000',
+        'Above ₹15,00,000'
+      ];
+
       const div = document.createElement('div');
       div.className = 'retail-channel-row form-grid-3';
       div.style.cssText = 'align-items:flex-start; background:#f8fafc; padding:14px; border-radius:12px; border:1px solid #e2e8f0; position:relative;';
 
       div.innerHTML = `
         <div class="field" style="margin:0;">
-          <label style="font-size:12px;">Select retail channel</label>
+          <label style="font-size:12px;">${config.retailSelectLabel || 'Select channel'}</label>
           <select class="retail-channel-select" onchange="checkCustomOption(this, 'retail')">
-            <option value="Offline Store">Offline Retail Store</option>
-            <option value="Amazon India">Amazon India</option>
-            <option value="Flipkart">Flipkart</option>
-            <option value="Swiggy Instamart">Swiggy Instamart</option>
-            <option value="Zomato / Blinkit">Zomato / Blinkit</option>
-            <option value="JioMart">JioMart</option>
-            <option value="Direct Phone Delivery">Direct Phone / Delivery</option>
-            <option value="__CUSTOM__" ${customDefault ? 'selected' : ''}>✏️ Custom Retail Platform...</option>
+            ${options.map(o => `<option value="${o}">${o}</option>`).join('')}
+            <option value="Other">Other</option>
           </select>
-          <input type="text" class="custom-retail-name" placeholder="Enter custom retail name" style="display:${customDefault ? 'block' : 'none'}; margin-top:6px; font-size:13px; padding:8px 10px;">
+          <input type="text" class="custom-retail-name" placeholder="Enter other name" style="display:none; margin-top:6px; font-size:13px; padding:8px 10px;">
         </div>
         <div class="field" style="margin:0;">
-          <label style="font-size:12px;">Reference Link</label>
-          <input type="text" class="retail-ref-link" placeholder="Store or website link">
+          <label style="font-size:12px;">${config.retailRefLabel || 'Reference Link'}</label>
+          <input type="text" class="retail-ref-link" placeholder="${config.retailRefPlaceholder || 'Store or website link'}">
         </div>
         <div class="field" style="margin:0;">
           <div style="display:flex; justify-content:space-between; align-items:center;">
-            <label style="font-size:12px;">Total monthly sales</label>
+            <label style="font-size:12px;">${config.retailSalesLabel || 'Monthly sales / earnings'}</label>
             <button type="button" class="btn-remove-row" onclick="removeChannelRow(this)" style="background:none; border:none; color:var(--danger); cursor:pointer; font-weight:800; font-size:16px; padding:0;" title="Remove row">&times;</button>
           </div>
           <select class="retail-sales-select">
-            <option value="Below 1 Lakh">Below ₹1,00,000</option>
-            <option value="1 to 5 Lakhs" selected>₹1,00,000 - ₹5,00,000</option>
-            <option value="5 to 15 Lakhs">₹5,00,000 - ₹15,00,000</option>
-            <option value="Above 15 Lakhs">Above ₹15,00,000</option>
+            ${salesOpts.map((s, idx) => `<option value="${s}" ${idx===1 ? 'selected' : ''}>${s}</option>`).join('')}
           </select>
         </div>
       `;
       container.appendChild(div);
-      if (customDefault) {
-        div.querySelector('.custom-retail-name').focus();
-      }
     }
 
-    function addCustomRetailChannelRow() {
-      addRetailChannelRow(true);
-    }
-
-    function addSocialChannelRow(customDefault = false) {
+    function addSocialChannelRow() {
       const container = document.getElementById('socialChannelsContainer');
       const div = document.createElement('div');
       div.className = 'social-channel-row form-grid-3';
@@ -2805,15 +3123,15 @@
         <div class="field" style="margin:0;">
           <label style="font-size:12px;">Select social channel</label>
           <select class="social-channel-select" onchange="checkCustomOption(this, 'social')">
+            <option value="WhatsApp Business Catalog">WhatsApp Business Catalog</option>
             <option value="Instagram">Instagram</option>
             <option value="Facebook Page">Facebook Page</option>
-            <option value="WhatsApp Business Catalog">WhatsApp Business Catalog</option>
             <option value="YouTube">YouTube</option>
             <option value="LinkedIn">LinkedIn</option>
             <option value="Twitter / X">Twitter / X</option>
-            <option value="__CUSTOM__" ${customDefault ? 'selected' : ''}>✏️ Custom Social Network...</option>
+            <option value="Other">Other</option>
           </select>
-          <input type="text" class="custom-social-name" placeholder="Enter custom social network" style="display:${customDefault ? 'block' : 'none'}; margin-top:6px; font-size:13px; padding:8px 10px;">
+          <input type="text" class="custom-social-name" placeholder="Enter other social platform" style="display:none; margin-top:6px; font-size:13px; padding:8px 10px;">
         </div>
         <div class="field" style="margin:0;">
           <label style="font-size:12px;">Social Media Link</label>
@@ -2833,13 +3151,6 @@
         </div>
       `;
       container.appendChild(div);
-      if (customDefault) {
-        div.querySelector('.custom-social-name').focus();
-      }
-    }
-
-    function addCustomSocialChannelRow() {
-      addSocialChannelRow(true);
     }
 
     function removeChannelRow(btn) {
@@ -2996,8 +3307,10 @@
           pincode: state.pincode,
           city: 'Rourkela',
           state: 'Odisha',
-          retailChannel: document.getElementById('retailChannel').value,
-          socialChannel: document.getElementById('socialChannel').value,
+          retailChannel: (state.retailChannels && state.retailChannels[0]?.channel) || 'Direct',
+          retailChannels: state.retailChannels || [],
+          socialChannel: (state.socialChannels && state.socialChannels[0]?.channel) || 'Direct',
+          socialChannels: state.socialChannels || [],
           logoUrl: state.logoUrl
         },
         pan: {
@@ -3171,7 +3484,7 @@
       setVal('sumCategory', state.businessRole);
       setVal('sumMobile', '+91 ' + (state.mobile || ''));
       setVal('sumTags', (state.categories || []).join(', ') || 'General');
-      setVal('sumChannel', document.getElementById('retailChannel').value);
+      setVal('sumChannel', (state.retailChannels && state.retailChannels.map(r => r.channel).join(', ')) || 'Direct / Stand');
       
       const addr = document.getElementById('bizAddress').value;
       const pin = state.pincode || '769001';
