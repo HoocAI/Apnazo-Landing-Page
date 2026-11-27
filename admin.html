@@ -1216,6 +1216,11 @@
   </div>
 
   <script>
+    // Production Render Backend Base URL
+    const API_BASE = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+      ? ''
+      : 'https://apnazo-backend.onrender.com';
+
     var allSellers = [];
     var allLeads = [];
     var currentSellerId = null;
@@ -1281,7 +1286,7 @@
       btn.disabled = true;
       btn.textContent = 'Verifying...';
 
-      fetch('/api/admin/login', {
+      fetch(API_BASE + '/api/admin/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username: u, password: p })
@@ -1308,7 +1313,7 @@
     });
 
     function logoutAdmin() {
-      fetch('/api/admin/logout', { method: 'POST' }).finally(() => {
+      fetch(API_BASE + '/api/admin/logout', { method: 'POST' }).finally(() => {
         localStorage.removeItem('apnazo_admin_session');
         checkAuth();
       });
@@ -1318,7 +1323,7 @@
       var token = localStorage.getItem('apnazo_admin_session');
       var headers = token ? { 'Authorization': 'Bearer ' + token } : {};
 
-      fetch('/api/admin/sellers', { headers: headers }).then(r => {
+      fetch(API_BASE + '/api/admin/sellers', { headers: headers }).then(r => {
         if (r.status === 401) { logoutAdmin(); return; }
         return r.json();
       }).then(res => {
@@ -1328,7 +1333,7 @@
         }
       });
 
-      fetch('/api/leads', { headers: headers }).then(r => r.json()).then(res => {
+      fetch(API_BASE + '/api/leads', { headers: headers }).then(r => r.json()).then(res => {
         if (res && res.success) {
           allLeads = res.leads || [];
           renderLeads();
@@ -1339,7 +1344,7 @@
     }
 
     function loadAgreementToEditor() {
-      fetch('/api/agreement').then(r => r.json()).then(res => {
+      fetch(API_BASE + '/api/agreement').then(r => r.json()).then(res => {
         if (res && res.success && res.agreement) {
           var a = res.agreement;
           if (a.title) document.getElementById('agTitle').value = a.title;
@@ -1378,7 +1383,7 @@
         fullAgreementText: fullText
       };
 
-      fetch('/api/admin/agreement', {
+      fetch(API_BASE + '/api/admin/agreement', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
         body: JSON.stringify(payload)
@@ -1569,7 +1574,7 @@
       }
 
       // 5. Send update to backend
-      fetch('/api/admin/seller/decision', {
+      fetch(API_BASE + '/api/admin/seller/decision', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
         body: JSON.stringify({ id: id, decision: decision, tier: newTier, reason: reason })

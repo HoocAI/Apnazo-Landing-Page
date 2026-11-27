@@ -1564,6 +1564,11 @@
   </div>
 
   <script>
+    // Production Render Backend Base URL
+    const API_BASE = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+      ? ''
+      : 'https://apnazo-backend.onrender.com';
+
     // State Store
     const state = {
       step: 1,
@@ -1708,7 +1713,7 @@
       if (otpSection.style.display === 'none') {
         // Send OTP
         btn.innerHTML = '<span>Verifying...</span>';
-        fetch('/api/auth/otp/send', {
+        fetch(API_BASE + '/api/auth/otp/send', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ mobile: mobile })
@@ -1730,7 +1735,7 @@
         const otpDigits = Array.from(document.querySelectorAll('.otp-digit')).map(d => d.value).join('');
         const finalOtp = otpDigits || '000000'; // Supports dev OTP 000000
 
-        fetch('/api/auth/otp/verify', {
+        fetch(API_BASE + '/api/auth/otp/verify', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ mobile: mobile, otp: finalOtp })
@@ -2108,7 +2113,7 @@
         tier: 'STARTER'
       };
 
-      fetch('/api/seller/profile/save', {
+      fetch(API_BASE + '/api/seller/profile/save', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)

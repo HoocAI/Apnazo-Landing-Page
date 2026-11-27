@@ -2450,6 +2450,11 @@
 </footer>
 
 <script>
+    // Production Render Backend Base URL
+    const API_BASE = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+      ? ''
+      : 'https://apnazo-backend.onrender.com';
+
 (function(){
   // Wire contact form submission with visual feedback and backend persistence
   function wire(fid, iid, nid, sourceName){
@@ -2486,7 +2491,7 @@
         } catch(storageErr){}
 
         // Call backend API
-        var resp = await fetch('/api/contact', {
+        var resp = await fetch(API_BASE + '/api/contact', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ contact: v, source: sourceName })
