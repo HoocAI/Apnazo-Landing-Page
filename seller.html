@@ -902,7 +902,44 @@
       .print-section {
         page-break-inside: avoid !important;
         break-inside: avoid !important;
+        margin-bottom: 6px !important;
+      }
+      .doc-table {
+        width: 100% !important;
+        border-collapse: collapse !important;
         margin-bottom: 8px !important;
+        font-size: 10.5px !important;
+        line-height: 1.35 !important;
+      }
+      .doc-table th, .doc-table td {
+        border: 1px solid #cbd5e1 !important;
+        padding: 4.5px 8px !important;
+        text-align: left !important;
+        vertical-align: middle !important;
+      }
+      .doc-table th {
+        background: #f1f5f9 !important;
+        color: #0f172a !important;
+        font-weight: 700 !important;
+      }
+      .doc-table td.doc-label {
+        background: #f8fafc !important;
+        color: #334155 !important;
+        font-weight: 600 !important;
+      }
+      .doc-table td.doc-val {
+        color: #0f172a !important;
+        font-weight: 700 !important;
+      }
+      .doc-section-title {
+        font-size: 10.5px !important;
+        font-weight: 800 !important;
+        text-transform: uppercase !important;
+        color: #0f172a !important;
+        letter-spacing: 0.05em !important;
+        margin: 8px 0 3px !important;
+        padding-bottom: 2px !important;
+        border-bottom: 1.5px solid #0f172a !important;
       }
     }
 
@@ -1956,112 +1993,141 @@
   <div id="printSummaryCard" style="display:none;">
 
     <!-- ======================================================================= -->
-    <!-- DOSSIER PAGE 1: APNAZO BRAND OVERVIEW, ECOSYSTEM & WELCOME CHARTER      -->
+    <!-- DOSSIER PAGE 1: APNAZO CORPORATE CHARTER & MERCHANT ONBOARDING RECORD   -->
     <!-- ======================================================================= -->
     <div class="dossier-page" id="dossierPage1">
       
-      <!-- Page 1 Header with Official Apnazo Branding -->
-      <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2.5px solid #0f43b3; padding-bottom:12px; margin-bottom:14px;">
+      <!-- Corporate Formal Header -->
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; border-bottom:2px solid #0f172a; padding-bottom:10px; margin-bottom:12px;">
         <div style="display:flex; align-items:center; gap:12px;">
           <img src="/images/apnazo-logo.png" alt="Apnazo" style="height:44px; object-fit:contain;">
           <div>
-            <div style="font-family:var(--font-display); font-size:16px; font-weight:800; color:#0b1b45; letter-spacing:-0.02em;">APNAZO MERCHANT ONBOARDING CHARTER</div>
-            <div style="font-size:11px; color:#ff7a00; font-weight:700;">Rourkela's Hyperlocal Quick-Commerce Super App · Official Partner Network</div>
+            <div style="font-size:15px; font-weight:800; color:#0f172a; letter-spacing:0.02em;">APNAZO TECHNOLOGIES PRIVATE LIMITED</div>
+            <div style="font-size:11px; font-weight:700; color:#334155; text-transform:uppercase; letter-spacing:0.04em;">Merchant Partner Onboarding Charter &amp; Master Agreement</div>
+            <div style="font-size:9.5px; color:#64748b;">CIN: U72900OR2026PTC048912 · Reg. Office: Main Road, Uditnagar, Rourkela, Odisha - 769001</div>
           </div>
         </div>
         <div style="text-align:right;">
-          <span style="background:#eff6ff; color:#0f43b3; border:1px solid #bfdbfe; font-size:11px; font-weight:800; padding:3px 10px; border-radius:20px; text-transform:uppercase; font-family:monospace;" class="sumAppIdDisplay">APN-202611-0000</span>
-          <div style="font-size:10.5px; color:#64748b; margin-top:3px;" class="sumTimestampDisplay">27 Nov 2026</div>
+          <div style="font-size:9.5px; color:#64748b; text-transform:uppercase; font-weight:600;">Dossier Reference</div>
+          <div style="font-family:monospace; font-size:12px; font-weight:800; color:#0f172a;" class="sumAppIdDisplay">APN-202611-0000</div>
+          <div style="font-size:10px; color:#475569; margin-top:2px;" class="sumTimestampDisplay">27 Nov 2026</div>
         </div>
       </div>
 
-      <!-- Official Welcome Letter Box -->
-      <div style="background:linear-gradient(135deg, #f8fafc 0%, #eff6ff 100%); border:1.5px solid #bfdbfe; border-radius:12px; padding:14px 18px; margin-bottom:14px;">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-          <span style="font-size:11.5px; font-weight:800; text-transform:uppercase; color:#0f43b3; letter-spacing:0.04em;">Official Welcome &amp; Registration Acknowledgment</span>
-          <span style="background:#dcfce7; color:#15803d; border:1px solid #86efac; font-size:10px; font-weight:700; padding:2px 8px; border-radius:999px;">Application Registered &amp; Authenticated</span>
-        </div>
-        <div style="font-size:12px; color:#0b1b45; line-height:1.55;">
-          Dear <strong id="p1OwnerName" style="color:#0f43b3;">Partner</strong> &amp; the Team at <strong id="p1BizName" style="color:#0f43b3;">Partner Store</strong>,<br>
-          Welcome to the <strong>Apnazo Merchant Partner Ecosystem</strong>! We are honored to partner with your business. Apnazo is built to connect verified local retailers, restaurants, supermarkets, pharmacies, and specialty stores across Rourkela directly to thousands of ready customers with lightning-fast <strong>10–15 minute doorstep delivery</strong>.
-          <br><br>
-          This official document confirms that your partner application, business credentials, and digital partner agreement have been successfully recorded under <strong>Reference ID <span class="sumAppIdDisplay" style="font-family:monospace; font-weight:700;">APN-202611-0000</span></strong> and submitted to our Merchant Operations Desk for priority activation.
-        </div>
+      <!-- Formal Registration Particulars Table -->
+      <table class="doc-table" style="margin-bottom:12px;">
+        <tr>
+          <td class="doc-label" style="width:22%;">Applicant Legal Entity</td>
+          <td class="doc-val" style="width:28%;"><strong id="p1BizName">-</strong></td>
+          <td class="doc-label" style="width:22%;">Authorized Signatory</td>
+          <td class="doc-val" style="width:28%;"><strong id="p1OwnerName">-</strong></td>
+        </tr>
+        <tr>
+          <td class="doc-label">Primary Industry Segment</td>
+          <td class="doc-val"><span id="p1Category">-</span></td>
+          <td class="doc-label">Registered Mobile (OTP Auth)</td>
+          <td class="doc-val"><span id="p1Mobile">-</span></td>
+        </tr>
+        <tr>
+          <td class="doc-label">Application Status</td>
+          <td class="doc-val"><span style="color:#0f172a; font-weight:700;">FORMALLY RECORDED &amp; LOCKED FOR AUDIT</span></td>
+          <td class="doc-label">Governing Jurisdiction</td>
+          <td class="doc-val">Rourkela (Sundargarh), Odisha, India</td>
+        </tr>
+      </table>
+
+      <!-- Section I: Official Onboarding Acknowledgment -->
+      <div class="doc-section-title">Section I: Official Onboarding Acknowledgment</div>
+      <div style="font-size:10.5px; color:#1e293b; line-height:1.55; text-align:justify; margin-bottom:10px; padding:4px 0;">
+        This document serves as the formal corporate acknowledgment and onboarding record between <strong>Apnazo Technologies Private Limited</strong> ("Apnazo") and the merchant entity named herein ("Merchant Partner"). The Merchant Partner has submitted all required statutory compliance documentation, business credentials, and bank account particulars for integration into the Apnazo Quick-Commerce Logistics Network across Rourkela, Odisha.
+        <br><br>
+        By digital acceptance and One-Time-Password (OTP) authentication, the Merchant Partner agrees to adhere to the terms and statutory standards set forth in this Master Onboarding Charter, the Apnazo Merchant Services Agreement, and applicable regulations under the Information Technology Act, 2000 and the Consumer Protection (E-Commerce) Rules, 2020.
       </div>
 
-      <!-- What Apnazo Delivers (4 Pillar Grid) -->
-      <div style="margin-bottom:14px;">
-        <div style="font-size:11.5px; font-weight:800; text-transform:uppercase; color:#ff7a00; letter-spacing:0.04em; margin-bottom:8px;">The Apnazo Partner Advantage</div>
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:9px; font-size:11px;">
-          
-          <div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:10px; padding:10px 12px; border-left:3.5px solid #0f43b3;">
-            <strong style="color:#0b1b45; font-size:11.5px; display:block; margin-bottom:2px;">10–15 Minute Hyperlocal Delivery</strong>
-            <span style="color:#64748b; line-height:1.4; display:block;">Dedicated localized delivery fleet equipped with real-time GPS routing delivers your products across Rourkela with unmatched speed and zero operational burden on your store.</span>
-          </div>
+      <!-- Section II: Commercial & Operating Framework Table -->
+      <div class="doc-section-title">Section II: Commercial &amp; Operating Framework</div>
+      <table class="doc-table" style="margin-bottom:12px;">
+        <thead>
+          <tr>
+            <th style="width:25%;">Operating Clause</th>
+            <th style="width:55%;">Specification &amp; Standard Operating Procedure</th>
+            <th style="width:20%;">Enforcement Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="font-weight:700; color:#0f172a;">1. Hyperlocal Logistics (10–15 Min)</td>
+            <td style="color:#334155;">Apnazo dedicated delivery fleet executes doorstep dispatch within a 10–15 minute customer delivery window from order acceptance.</td>
+            <td style="font-weight:700; color:#0f172a;">Active Operational Tier</td>
+          </tr>
+          <tr>
+            <td style="font-weight:700; color:#0f172a;">2. Commission &amp; Platform Fees</td>
+            <td style="color:#334155;">0% platform commission applies during the first 30 days of active operations under the Apnazo Merchant Starter Plan.</td>
+            <td style="font-weight:700; color:#0f172a;">Starter Rate (0%)</td>
+          </tr>
+          <tr>
+            <td style="font-weight:700; color:#0f172a;">3. Settlement Cadence (Daily T+2)</td>
+            <td style="color:#334155;">Net commercial payouts are settled automatically to the registered bank account via NEFT/RTGS on a daily T+2 business day cycle.</td>
+            <td style="font-weight:700; color:#0f172a;">Automated Daily Payout</td>
+          </tr>
+          <tr>
+            <td style="font-weight:700; color:#0f172a;">4. Inventory &amp; Compliance Hub</td>
+            <td style="color:#334155;">Real-time stock, pricing, and active operating hours managed directly via the authenticated Apnazo Merchant Management System.</td>
+            <td style="font-weight:700; color:#0f172a;">Portal Provisioned</td>
+          </tr>
+        </tbody>
+      </table>
 
-          <div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:10px; padding:10px 12px; border-left:3.5px solid #ff7a00;">
-            <strong style="color:#0b1b45; font-size:11.5px; display:block; margin-bottom:2px;">0% Commission Starter Plan</strong>
-            <span style="color:#64748b; line-height:1.4; display:block;">Enjoy zero commission on your orders during your initial 30-day onboarding window. Keep 100% of your earnings while growing your loyal customer base rapidly.</span>
-          </div>
+      <!-- Section III: Onboarding & Verification Stages -->
+      <div class="doc-section-title">Section III: Onboarding &amp; Verification Protocol</div>
+      <table class="doc-table" style="margin-bottom:12px;">
+        <thead>
+          <tr>
+            <th style="width:22%;">Verification Stage</th>
+            <th style="width:48%;">Operational Milestone Description</th>
+            <th style="width:30%;">Current Verification State</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="font-weight:700;">Stage 1: Documentation</td>
+            <td>Submission of PAN, GST/Proof, Bank Details, and e-Signature</td>
+            <td style="font-weight:700; color:#0f172a;">RECORDED &amp; LOCKED</td>
+          </tr>
+          <tr>
+            <td style="font-weight:700;">Stage 2: KYC &amp; Statutory Audit</td>
+            <td>Verification of tax records, identity, and statutory compliance</td>
+            <td style="font-weight:700; color:#0f172a;">IN PROGRESS (2–4 Hours)</td>
+          </tr>
+          <tr>
+            <td style="font-weight:700;">Stage 3: Catalog Digitalization</td>
+            <td>Assisted listing of product inventory and SKU image validation</td>
+            <td style="color:#475569;">QUEUED (Post Audit)</td>
+          </tr>
+          <tr>
+            <td style="font-weight:700;">Stage 4: Store Activation</td>
+            <td>Enabling live order receiving on Apnazo Customer Super App</td>
+            <td style="color:#475569;">PENDING ACTIVATION</td>
+          </tr>
+        </tbody>
+      </table>
 
-          <div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:10px; padding:10px 12px; border-left:3.5px solid #059669;">
-            <strong style="color:#0b1b45; font-size:11.5px; display:block; margin-bottom:2px;">Daily Automated Payouts (T+2)</strong>
-            <span style="color:#64748b; line-height:1.4; display:block;">Transparent automated bank settlements credited directly to your registered bank account on a daily T+2 schedule with complete invoice breakdown available 24/7.</span>
-          </div>
-
-          <div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:10px; padding:10px 12px; border-left:3.5px solid #7c3aed;">
-            <strong style="color:#0b1b45; font-size:11.5px; display:block; margin-bottom:2px;">Live Merchant Partner Hub</strong>
-            <span style="color:#64748b; line-height:1.4; display:block;">Full control over your store: live inventory tracking, catalog updates, price adjustments, operational surge controls, and instant customer reviews.</span>
-          </div>
-
-        </div>
-      </div>
-
-      <!-- Onboarding Journey & Next Milestones -->
-      <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:12px 16px; margin-bottom:14px;">
-        <div style="font-size:11.5px; font-weight:800; text-transform:uppercase; color:#0b1b45; letter-spacing:0.04em; margin-bottom:8px;">Onboarding Milestones &amp; Next Steps</div>
-        <div style="display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:8px; font-size:10.5px; text-align:center;">
-          <div style="background:#ffffff; border:1px solid #86efac; border-radius:8px; padding:8px 6px;">
-            <div style="color:#15803d; font-weight:800; font-size:11px; margin-bottom:1px;">Step 1: Done</div>
-            <strong style="color:#0f172a; display:block; font-size:10.5px;">Application Filed</strong>
-            <span style="color:#64748b; font-size:9.5px;">Agreement e-signed</span>
-          </div>
-          <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:8px; padding:8px 6px;">
-            <div style="color:#0f43b3; font-weight:800; font-size:11px; margin-bottom:1px;">Step 2: In Review</div>
-            <strong style="color:#0f172a; display:block; font-size:10.5px;">Document Audit</strong>
-            <span style="color:#64748b; font-size:9.5px;">Est. 2-4 Hours</span>
-          </div>
-          <div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:8px; padding:8px 6px;">
-            <div style="color:#64748b; font-weight:700; font-size:11px; margin-bottom:1px;">Step 3: Queued</div>
-            <strong style="color:#0f172a; display:block; font-size:10.5px;">Catalog Setup</strong>
-            <span style="color:#64748b; font-size:9.5px;">Assisted Listing</span>
-          </div>
-          <div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:8px; padding:8px 6px;">
-            <div style="color:#64748b; font-weight:700; font-size:11px; margin-bottom:1px;">Step 4: Go Live</div>
-            <strong style="color:#0f172a; display:block; font-size:10.5px;">Store Activation</strong>
-            <span style="color:#64748b; font-size:9.5px;">Accept Orders</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Official Merchant Support & Governance Desk -->
-      <div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:12px; padding:10px 16px; margin-bottom:14px; font-size:11px;">
+      <!-- Document Sign-off & Regional Desk Particulars -->
+      <div style="border:1px solid #cbd5e1; background:#f8fafc; padding:6px 12px; font-size:10px; color:#334155; margin-bottom:8px;">
         <div style="display:flex; justify-content:space-between; align-items:center;">
           <div>
-            <strong style="color:#0b1b45; display:block;">Merchant Operations &amp; Grievance Desk</strong>
-            <span style="color:#64748b;">Email: admin@apnazo.com · Merchant Help: support@apnazo.com</span>
+            <strong>Apnazo Merchant Operations Desk:</strong> admin@apnazo.com | Support: support@apnazo.com
           </div>
-          <div style="text-align:right;">
-            <strong style="color:#0b1b45; display:block;">Regional Office (Rourkela, Odisha)</strong>
-            <span style="color:#64748b;">Civil Township / Main Road, Uditnagar - 769001</span>
+          <div>
+            <strong>Rourkela Regional Office:</strong> Civil Township / Main Road, Uditnagar, Rourkela - 769001
           </div>
         </div>
       </div>
 
-      <!-- Page 1 Footer -->
-      <div style="margin-top:auto; border-top:1px solid #e2e8f0; padding-top:6px; display:flex; justify-content:space-between; align-items:center; font-size:10px; color:#94a3b8;">
-        <div>Apnazo Merchant Ecosystem · Official Onboarding Charter &amp; Brand Overview</div>
-        <div style="font-weight:700; color:#0f43b3;">Page 1 of 2</div>
+      <!-- Formal Footer -->
+      <div style="margin-top:auto; border-top:1px solid #0f172a; padding-top:4px; display:flex; justify-content:space-between; align-items:center; font-size:9.5px; color:#475569;">
+        <div>Apnazo Technologies Private Limited · Merchant Onboarding Charter</div>
+        <div style="font-weight:700; color:#0f172a;">Page 1 of 2</div>
       </div>
 
     </div>
@@ -2074,90 +2140,152 @@
     <!-- ======================================================================= -->
     <div class="dossier-page" id="dossierPage2">
       
-      <!-- Page 2 Header -->
-      <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid #e2e8f0; padding-bottom:10px; margin-bottom:12px;">
+      <!-- Page 2 Formal Corporate Header -->
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; border-bottom:2px solid #0f172a; padding-bottom:8px; margin-bottom:10px;">
         <div style="display:flex; align-items:center; gap:10px;">
-          <img src="/images/apnazo-logo.png" alt="Apnazo" style="height:34px; object-fit:contain;">
+          <img src="/images/apnazo-logo.png" alt="Apnazo" style="height:36px; object-fit:contain;">
           <div>
-            <div style="font-family:var(--font-display); font-size:14.5px; font-weight:800; color:#0b1b45; letter-spacing:-0.02em;">APNAZO PARTNER REGISTRATION DOSSIER</div>
-            <div style="font-size:10.5px; color:#64748b; font-weight:500;">Verified Merchant Onboarding &amp; Statutory Compliance Record</div>
+            <div style="font-size:14px; font-weight:800; color:#0f172a; letter-spacing:0.02em;">APNAZO PARTNER REGISTRATION SPECIFICATION</div>
+            <div style="font-size:10px; font-weight:600; color:#475569; text-transform:uppercase;">Verified Commercial &amp; Statutory Compliance Record</div>
           </div>
         </div>
         <div style="text-align:right;">
-          <span style="background:#eff6ff; color:#0f43b3; border:1px solid #bfdbfe; font-size:10.5px; font-weight:800; padding:2px 8px; border-radius:20px; text-transform:uppercase; font-family:monospace;" class="sumAppIdDisplay" id="sumAppId">APN-202611-0000</span>
-          <div style="font-size:10px; color:#64748b; margin-top:2px;" class="sumTimestampDisplay" id="sumTimestamp">27 Nov 2026</div>
+          <div style="font-family:monospace; font-size:11.5px; font-weight:800; color:#0f172a;" class="sumAppIdDisplay" id="sumAppId">APN-202611-0000</div>
+          <div style="font-size:10px; color:#475569;" class="sumTimestampDisplay" id="sumTimestamp">27 Nov 2026</div>
         </div>
       </div>
 
-      <!-- Summary Section 1: Business Profile -->
-      <div class="print-section" style="margin-bottom:8px;">
-        <div style="font-size:11px; font-weight:800; text-transform:uppercase; color:#ff7a00; letter-spacing:0.04em; margin-bottom:4px;">1. Business Profile &amp; Storefront</div>
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:4px 12px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:8px 12px; font-size:11px; line-height:1.4;">
-          <div><span style="color:#64748b;">Business Name:</span> <strong id="sumBizName" style="color:#0f172a;">-</strong></div>
-          <div><span style="color:#64748b;">Legal Owner Name:</span> <strong id="sumOwnerName" style="color:#0f172a;">-</strong></div>
-          <div><span style="color:#64748b;">Primary Category:</span> <strong id="sumCategory" style="color:#0f172a;">-</strong></div>
-          <div><span style="color:#64748b;">Registered Mobile:</span> <strong id="sumMobile" style="color:#0f172a;">-</strong></div>
-          <div style="grid-column:1 / -1;"><span style="color:#64748b;">Category &amp; Product Tags:</span> <strong id="sumTags" style="color:#0f172a;">-</strong></div>
-          <div style="grid-column:1 / -1;"><span style="color:#64748b;">Retail Sales Channels:</span> <strong id="sumChannel" style="color:#0f172a;">-</strong></div>
-          <div style="grid-column:1 / -1;"><span style="color:#64748b;">Digital &amp; Social Channels:</span> <strong id="sumSocial" style="color:#0f172a;">-</strong></div>
-          <div style="grid-column:1 / -1;"><span style="color:#64748b;">Store &amp; Pickup Address:</span> <strong id="sumAddress" style="color:#0f172a;">-</strong></div>
+      <!-- Table 1: Business Profile & Physical Location -->
+      <div class="doc-section-title">1. Business Profile &amp; Storefront Particulars</div>
+      <table class="doc-table">
+        <tr>
+          <td class="doc-label" style="width:22%;">Business Legal Name</td>
+          <td class="doc-val" style="width:28%;"><strong id="sumBizName">-</strong></td>
+          <td class="doc-label" style="width:22%;">Authorized Signatory</td>
+          <td class="doc-val" style="width:28%;"><strong id="sumOwnerName">-</strong></td>
+        </tr>
+        <tr>
+          <td class="doc-label">Primary Industry Category</td>
+          <td class="doc-val"><span id="sumCategory">-</span></td>
+          <td class="doc-label">Registered Mobile</td>
+          <td class="doc-val"><span id="sumMobile">-</span></td>
+        </tr>
+        <tr>
+          <td class="doc-label">Category &amp; Product Tags</td>
+          <td class="doc-val" colspan="3"><span id="sumTags">-</span></td>
+        </tr>
+        <tr>
+          <td class="doc-label">Retail Distribution Channels</td>
+          <td class="doc-val" colspan="3"><span id="sumChannel">-</span></td>
+        </tr>
+        <tr>
+          <td class="doc-label">Digital &amp; Social Presence</td>
+          <td class="doc-val" colspan="3"><span id="sumSocial">-</span></td>
+        </tr>
+        <tr>
+          <td class="doc-label">Storefront &amp; Pickup Address</td>
+          <td class="doc-val" colspan="3"><strong id="sumAddress">-</strong></td>
+        </tr>
+      </table>
+
+      <!-- Table 2: Statutory Identity & Tax Verification -->
+      <div class="doc-section-title">2. Identity &amp; Taxation Compliance</div>
+      <table class="doc-table">
+        <tr>
+          <td class="doc-label" style="width:22%;">Permanent Account Number (PAN)</td>
+          <td class="doc-val" style="width:28%;"><strong id="sumPan" style="font-family:monospace;">-</strong></td>
+          <td class="doc-label" style="width:22%;">PAN Audit Status</td>
+          <td class="doc-val" style="width:28%;"><strong>Verified (Admin Audited)</strong></td>
+        </tr>
+        <tr>
+          <td class="doc-label">Name as on PAN Record</td>
+          <td class="doc-val"><span id="sumPanLegalName">-</span></td>
+          <td class="doc-label">Taxation Classification</td>
+          <td class="doc-val"><span id="sumGstRegime">-</span></td>
+        </tr>
+        <tr>
+          <td class="doc-label">GSTIN / Genuine Document No.</td>
+          <td class="doc-val"><strong id="sumGstNumber" style="font-family:monospace;">-</strong></td>
+          <td class="doc-label">GST Expiry / Renewal Date</td>
+          <td class="doc-val"><span id="sumGstExpiry">-</span></td>
+        </tr>
+        <tr>
+          <td class="doc-label">15-Day Renewal Grace Protocol</td>
+          <td class="doc-val" colspan="3"><strong>Active · Protected under Apnazo Merchant Continuity Policy</strong></td>
+        </tr>
+      </table>
+
+      <!-- Table 3: Banking Particulars for Payout Settlement -->
+      <div class="doc-section-title">3. Banking &amp; Automated Payout Settlement</div>
+      <table class="doc-table">
+        <tr>
+          <td class="doc-label" style="width:22%;">Settlement Account Title</td>
+          <td class="doc-val" style="width:28%;"><strong id="sumBeneficiary">-</strong></td>
+          <td class="doc-label" style="width:22%;">Bank Account Number</td>
+          <td class="doc-val" style="width:28%;"><strong id="sumBankAcc" style="font-family:monospace;">-</strong></td>
+        </tr>
+        <tr>
+          <td class="doc-label">IFSC Code</td>
+          <td class="doc-val"><strong id="sumIfsc" style="font-family:monospace;">-</strong></td>
+          <td class="doc-label">Disbursement Cycle</td>
+          <td class="doc-val"><strong>Daily Automated Direct Bank Credit (T+2 Days)</strong></td>
+        </tr>
+      </table>
+
+      <!-- Table 4: Category Licences & Statutory Standards -->
+      <div class="doc-section-title">4. Category Licence &amp; Statutory Standards</div>
+      <table class="doc-table">
+        <tr>
+          <td class="doc-label" style="width:22%;">Statutory Licence Classification</td>
+          <td class="doc-val" style="width:28%;"><strong id="sumLicenceType">-</strong></td>
+          <td class="doc-label" style="width:22%;">Licence / Registration Number</td>
+          <td class="doc-val" style="width:28%;"><strong id="sumLicenceNum" style="font-family:monospace;">-</strong></td>
+        </tr>
+        <tr>
+          <td class="doc-label">Licence Expiry / Renewal Date</td>
+          <td class="doc-val"><span id="sumLicenceExp">-</span></td>
+          <td class="doc-label">Statutory Compliance Status</td>
+          <td class="doc-val"><strong>Active Pre-Expiry Tracking Enabled (15-Day Alert)</strong></td>
+        </tr>
+      </table>
+
+      <!-- Table 5: Document Submission & Digital Execution Audit Trail -->
+      <div class="doc-section-title">5. Documentation &amp; Digital Execution Audit Trail</div>
+      <table class="doc-table" style="margin-bottom:8px;">
+        <tr>
+          <td class="doc-label" style="width:22%;">Submitted Compliance Hardcopies</td>
+          <td class="doc-val" colspan="3"><span id="sumDocsChips">-</span></td>
+        </tr>
+        <tr>
+          <td class="doc-label">Master Agreement Execution</td>
+          <td class="doc-val"><strong>Digitally Accepted &amp; E-Signed</strong></td>
+          <td class="doc-label">Signature Authentication</td>
+          <td class="doc-val"><strong>OTP Verified via Apnazo Secure Gateway</strong></td>
+        </tr>
+        <tr>
+          <td class="doc-label">Authorized Signatory Name</td>
+          <td class="doc-val"><strong id="sumSignatory">-</strong></td>
+          <td class="doc-label">Signatory Mobile Identifier</td>
+          <td class="doc-val"><strong id="sumSignMobile">-</strong></td>
+        </tr>
+      </table>
+
+      <!-- Official Digital Seal Block -->
+      <div style="border:1px solid #0f172a; background:#f8fafc; padding:6px 12px; display:flex; justify-content:space-between; align-items:center; font-size:9.5px; color:#1e293b; margin-top:4px;">
+        <div>
+          <strong>APNAZO MERCHANT GOVERNANCE &amp; COMPLIANCE DESK</strong><br>
+          This document is an authenticated corporate record generated under the electronic onboarding protocol.
+        </div>
+        <div style="text-align:right; font-family:monospace; font-weight:800; font-size:10px;">
+          AUTHENTICATED &amp; ARCHIVED<br>
+          <span style="font-weight:400; color:#64748b;">SHA-256 DIGITAL ATTESTATION</span>
         </div>
       </div>
 
-      <!-- Summary Section 2: Identity & Tax -->
-      <div class="print-section" style="margin-bottom:8px;">
-        <div style="font-size:11px; font-weight:800; text-transform:uppercase; color:#ff7a00; letter-spacing:0.04em; margin-bottom:4px;">2. Identity &amp; Tax Verification</div>
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:4px 12px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:8px 12px; font-size:11px; line-height:1.4;">
-          <div><span style="color:#64748b;">Permanent Account Number (PAN):</span> <strong id="sumPan" style="color:#0f172a; font-family:monospace;">-</strong></div>
-          <div><span style="color:#64748b;">PAN Status:</span> <strong style="color:#059669;">Verified (Apnazo KYC Audited)</strong></div>
-          <div><span style="color:#64748b;">Legal Name as on PAN:</span> <strong id="sumPanLegalName" style="color:#0f172a;">-</strong></div>
-          <div><span style="color:#64748b;">Tax Regime:</span> <strong id="sumGstRegime" style="color:#0f172a;">-</strong></div>
-          <div><span style="color:#64748b;">GSTIN / Genuine Document No:</span> <strong id="sumGstNumber" style="color:#0f172a; font-family:monospace;">-</strong></div>
-          <div><span style="color:#64748b;">GST Expiry / Renewal Date:</span> <strong id="sumGstExpiry" style="color:#0f172a;">-</strong></div>
-          <div style="grid-column:1 / -1;"><span style="color:#64748b;">15-Day Grace Status:</span> <strong style="color:#059669;">Active · Protected Under Apnazo Business Continuity Policy</strong></div>
-        </div>
-      </div>
-
-      <!-- Summary Section 3: Bank Account for Payouts -->
-      <div class="print-section" style="margin-bottom:8px;">
-        <div style="font-size:11px; font-weight:800; text-transform:uppercase; color:#ff7a00; letter-spacing:0.04em; margin-bottom:4px;">3. Bank Payout Settlement (T+2 Days)</div>
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:4px 12px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:8px 12px; font-size:11px; line-height:1.4;">
-          <div><span style="color:#64748b;">Settlement Bank Account:</span> <strong id="sumBankAcc" style="color:#0f172a; font-family:monospace;">-</strong></div>
-          <div><span style="color:#64748b;">IFSC Code:</span> <strong id="sumIfsc" style="color:#0f172a; font-family:monospace;">-</strong></div>
-          <div><span style="color:#64748b;">Beneficiary Account Name:</span> <strong id="sumBeneficiary" style="color:#0f172a;">-</strong></div>
-          <div><span style="color:#64748b;">Payout Cycle:</span> <strong style="color:#059669;">Daily Automated NEFT/RTGS Direct Credit</strong></div>
-        </div>
-      </div>
-
-      <!-- Summary Section 4: Category Licence / FSSAI -->
-      <div class="print-section" style="margin-bottom:8px;">
-        <div style="font-size:11px; font-weight:800; text-transform:uppercase; color:#ff7a00; letter-spacing:0.04em; margin-bottom:4px;">4. Category Licence &amp; Statutory Compliance</div>
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:4px 12px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:8px 12px; font-size:11px; line-height:1.4;">
-          <div><span style="color:#64748b;">Statutory Licence Type:</span> <strong id="sumLicenceType" style="color:#0f172a;">-</strong></div>
-          <div><span style="color:#64748b;">Registration / Licence Number:</span> <strong id="sumLicenceNum" style="color:#0f172a; font-family:monospace;">-</strong></div>
-          <div><span style="color:#64748b;">Licence Expiry Date:</span> <strong id="sumLicenceExp" style="color:#0f172a;">-</strong></div>
-          <div><span style="color:#64748b;">Compliance Window:</span> <strong style="color:#059669;">15-Day Automated Renewal Warning Active</strong></div>
-        </div>
-      </div>
-
-      <!-- Summary Section 5: Documents & e-Sign Audit Trail -->
-      <div class="print-section" style="margin-bottom:8px;">
-        <div style="font-size:11px; font-weight:800; text-transform:uppercase; color:#ff7a00; letter-spacing:0.04em; margin-bottom:4px;">5. Attached Documents &amp; Digital e-Sign Audit Trail</div>
-        <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:8px 12px; font-size:11px; line-height:1.4;">
-          <div style="margin-bottom:4px;"><span style="color:#64748b;">Attached Compliance Hardcopies:</span> <strong id="sumDocsChips" style="color:#0f172a;">-</strong></div>
-          <div style="display:grid; grid-template-columns:1fr 1fr; gap:4px 12px; margin-top:4px; padding-top:4px; border-top:1px dashed #e2e8f0;">
-            <div><span style="color:#64748b;">Partner Agreement:</span> <strong style="color:#059669;">Digitally Accepted &amp; E-Signed</strong></div>
-            <div><span style="color:#64748b;">Authentication:</span> <strong style="color:#059669;">OTP Verified on Apnazo Platform</strong></div>
-            <div><span style="color:#64748b;">Authorized Signatory:</span> <strong id="sumSignatory" style="color:#0f172a;">-</strong></div>
-            <div><span style="color:#64748b;">Signatory Mobile:</span> <strong id="sumSignMobile" style="color:#0f172a;">-</strong></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Dossier Footer Seal -->
-      <div style="margin-top:auto; border-top:1px solid #e2e8f0; padding-top:6px; display:flex; justify-content:space-between; align-items:center; font-size:10px; color:#94a3b8;">
-        <div>Apnazo Merchant Governance · Registered Marketplace Partner Dossier</div>
-        <div style="font-weight:700; color:#0f43b3;">Page 2 of 2</div>
+      <!-- Formal Footer -->
+      <div style="margin-top:auto; border-top:1px solid #0f172a; padding-top:4px; display:flex; justify-content:space-between; align-items:center; font-size:9.5px; color:#475569;">
+        <div>Apnazo Technologies Private Limited · Merchant Registration Dossier</div>
+        <div style="font-weight:700; color:#0f172a;">Page 2 of 2</div>
       </div>
 
     </div>
