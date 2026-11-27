@@ -100,7 +100,7 @@
       <p>For food safety and tax compliance, expiry dates of GST and FSSAI licences are automatically tracked to dispatch reminder notifications 15 days in advance, ensuring zero interruption to your trading capabilities.</p>
 
       <h2>5. Contact Grievance Officer</h2>
-      <p>For data privacy queries or account updates, reach out to our partner support desk at <a href="tel:7355315892" id="privPhoneLink" style="color:var(--primary); font-weight:600;">+91 7355315892</a> or email <a href="mailto:admin@apnazo.com" id="privEmailLink" style="color:var(--primary); font-weight:600;">admin@apnazo.com</a>.</p>
+      <p>For data privacy queries or account updates, reach out to our partner support desk at <a href="javascript:void(0)" id="privPhoneLink" style="color:var(--primary); font-weight:600;"></a> or email <a href="mailto:admin@apnazo.com" id="privEmailLink" style="color:var(--primary); font-weight:600;">admin@apnazo.com</a>.</p>
     </div>
   </div>
 
@@ -127,7 +127,7 @@
       .then(d => {
         if (d && d.settings && d.settings.support) {
           const s = d.settings.support;
-          const phone = s.supportPhone || s.sellerHelpline || '+91 7355315892';
+          const phone = s.supportPhone || s.sellerHelpline || '';
           const cleanPhone = phone.replace(/\D/g, '').slice(-10);
           const email = s.grievanceEmail || s.supportEmail || 'admin@apnazo.com';
           const pLink = document.getElementById('privPhoneLink');

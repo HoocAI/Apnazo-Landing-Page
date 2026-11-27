@@ -100,7 +100,7 @@
       <p>Merchants operating in food and grocery categories must maintain an active FSSAI licence. If a licence expires, Apnazo provides an official 15-day grace period during which sales continuity is maintained while renewal documents are processed.</p>
 
       <h2>5. Dispute Resolution</h2>
-      <p>Commercial or order fulfillment disputes are reviewed by the Apnazo Partner Desk within 24 hours. Contact our helpline at <a href="tel:7355315892" id="termsPhoneLink" style="color:var(--primary); font-weight:600;">+91 7355315892</a>.</p>
+      <p>Commercial or order fulfillment disputes are reviewed by the Apnazo Partner Desk within 24 hours. Contact our helpline at <a href="javascript:void(0)" id="termsPhoneLink" style="color:var(--primary); font-weight:600;"></a>.</p>
     </div>
   </div>
 
@@ -127,7 +127,7 @@
       .then(d => {
         if (d && d.settings && d.settings.support) {
           const s = d.settings.support;
-          const phone = s.supportPhone || s.sellerHelpline || '+91 7355315892';
+          const phone = s.supportPhone || s.sellerHelpline || '';
           const cleanPhone = phone.replace(/\D/g, '').slice(-10);
           const tLink = document.getElementById('termsPhoneLink');
           if (tLink) {

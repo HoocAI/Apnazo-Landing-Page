@@ -25,9 +25,9 @@ module.exports = async function handler(req, res) {
     }
     return {
       support: {
-        supportPhone: "+91 7355315892",
-        sellerHelpline: "+91 7355315892",
-        whatsappNumber: "+91 7355315892",
+        supportPhone: "",
+        sellerHelpline: "",
+        whatsappNumber: "",
         supportEmail: "support@apnazo.com",
         grievanceEmail: "admin@apnazo.com",
         officeAddress: "Main Road, Rourkela, Sundargarh, Odisha - 769001",
