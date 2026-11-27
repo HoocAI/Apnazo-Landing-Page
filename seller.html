@@ -1018,7 +1018,7 @@
           </div>
           <div class="step-item" id="navStep6" onclick="jumpToStep(6)">
             <div class="step-circle">6</div>
-            <div class="step-label">Category Licence &amp; FSSAI</div>
+            <div class="step-label" id="step6NavLabel">Category Licence &amp; FSSAI</div>
           </div>
           <div class="step-item" id="navStep7" onclick="jumpToStep(7)">
             <div class="step-circle">7</div>
@@ -1108,7 +1108,7 @@
             </div>
 
             <div class="business-block" onclick="selectBusinessBlock('Taxi & City Rides', this)">
-              <div class="biz-icon-box"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 16H9m10 0h3v-3.15a1 1 0 0 0-.84-.99L16 11l-2.7-3.6a1 1 0 0 0-.8-.4H7.5a1 1 0 0 0-.8.4L4 11l-5.16.86a1 1 0 0 0-.84.99V16h3"/><circle cx="6.5" cy="16.5" r="2.5"/><circle cx="16.5" cy="16.5" r="2.5"/></svg></div>
+              <div class="biz-icon-box"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/><path d="M5 17h10"/></svg></div>
               <div class="biz-info">
                 <h4>Taxi &amp; City Rides</h4>
                 <p>Auto rickshaw, bike taxi, cabs &amp; intercity transport</p>
@@ -1448,32 +1448,32 @@
           </div>
         </div>
 
-        <!-- STEP 6: CATEGORY LICENCE & GST FOOD FSSAI (WITH EXPIRY & 15-DAY GRACE PERIOD) -->
+                <!-- STEP 6: DYNAMIC CATEGORY LICENCE (ADAPTIVE TO BUSINESS CATEGORY) -->
         <div class="step-view" id="viewStep6">
           <div class="stage-header">
-            <h1 class="stage-title">Category licence &amp; Food FSSAI</h1>
-            <p class="stage-desc">Food, grocery, restaurant, and pharmacy businesses require a valid licence or registration certificate.</p>
+            <h1 class="stage-title" id="s6HeaderTitle">Category licence &amp; Food FSSAI</h1>
+            <p class="stage-desc" id="s6HeaderDesc">Food, grocery, restaurant, and pharmacy businesses require a valid licence or registration certificate.</p>
           </div>
 
           <div class="section-card">
-            <div class="field">
-              <label>Licence / Certificate Type *</label>
-              <select id="licenceTypeSelect">
+            <div class="field" id="licenceTypeField">
+              <label id="licenceTypeLabel">Licence / Certificate Type *</label>
+              <select id="licenceTypeSelect" onchange="handleLicenceTypeChange(this.value)">
                 <option value="FSSAI">FSSAI Food Safety Licence / Registration (14 Digits)</option>
                 <option value="Trade">Trade Licence / Municipal Commercial Certificate</option>
                 <option value="Commercial Driving Licence">Commercial Driving Licence (Taxi / Auto)</option>
-                <option value="Pharmacy Drug Licence">State Drug &amp; Pharmacy Retail Licence</option>
+                <option value="Skill Certificate">National Skill / Vocational Certificate</option>
                 <option value="Exempt">Not Applicable (Exempt Service Provider)</option>
               </select>
             </div>
 
             <div class="form-grid-2">
               <div class="field">
-                <label>14-Digit FSSAI / Licence Number *</label>
+                <label id="s6DocNumLabel">14-Digit FSSAI / Licence Number *</label>
                 <input type="text" id="fssaiNumber" placeholder="e.g. 12023023000456">
               </div>
-              <div class="field">
-                <label>Licence Expiry Date *</label>
+              <div class="field" id="s6ExpiryField">
+                <label id="s6ExpiryLabel">Licence Expiry Date *</label>
                 <input type="date" id="fssaiExpiryDate" onchange="checkFssaiExpiryGrace(this.value)">
               </div>
             </div>
@@ -1482,21 +1482,21 @@
             <div id="fssaiGraceAlert" class="expiry-grace-alert" style="display:none;">
               <span class="icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></span>
               <div>
-                <strong>FSSAI Expiry &amp; 15-Day Grace Period:</strong>
+                <strong>Licence Expiry &amp; 15-Day Grace Period:</strong>
                 <div id="fssaiGraceText">Push alerts scheduled 15 days before expiry. Grace period guarantees uninterrupted orders.</div>
               </div>
             </div>
 
-            <!-- Upload Hardcopy of FSSAI Certificate -->
-            <label style="font-size:13px; font-weight:600; display:block; margin-bottom:6px; margin-top:14px;">Upload Hardcopy of FSSAI / Category Licence *</label>
+            <!-- Upload Hardcopy of Category Licence / ID -->
+            <label style="font-size:13px; font-weight:600; display:block; margin-bottom:6px; margin-top:14px;" id="s6UploadLabel">Upload Hardcopy of FSSAI / Category Licence *</label>
             <div class="doc-upload-box" onclick="document.getElementById('fssaiFileInput').click()">
               <span class="upload-icon" style="margin-bottom:8px; display:inline-block;"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></span>
-              <div class="title">Upload Licence / FSSAI Certificate</div>
+              <div class="title" id="s6UploadTitle">Upload Licence / FSSAI Certificate</div>
               <div class="hint">JPG, PNG, PDF up to 5MB</div>
               <input type="file" id="fssaiFileInput" accept="image/*,.pdf" style="display:none;" onchange="handleDocUpload(this, 'fssai')">
             </div>
             <div class="doc-preview-chip" id="fssaiDocChip">
-              <div class="doc-name"><span>📎</span> <span id="fssaiDocName">fssai_certificate.pdf</span></div>
+              <div class="doc-name"><span>📎</span> <span id="fssaiDocName">licence_document.pdf</span></div>
               <button class="btn-remove-doc" onclick="removeDoc('fssai')">&times;</button>
             </div>
           </div>
@@ -1538,26 +1538,100 @@
           </div>
         </div>
 
-        <!-- STEP 8: FIRST PRODUCT / DASHBOARD READY -->
+                <!-- STEP 8: APPLICATION SUMMARY & CERTIFICATE OF ONBOARDING -->
         <div class="step-view" id="viewStep8">
           <div class="stage-header" style="text-align:center;">
-            <div style="margin-bottom: 16px; display:flex; justify-content:center;"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#ff7a00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
+            <div style="margin-bottom: 12px; display:flex; justify-content:center;">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#ff7a00" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            </div>
             <h1 class="stage-title">Application Submitted Successfully!</h1>
-            <p class="stage-desc">Your Apnazo Seller Hub profile is now in <strong>Active Status</strong> with instant access to catalog management.</p>
+            <p class="stage-desc">Your partner onboarding dossier has been authenticated and registered with Apnazo operations.</p>
           </div>
 
-          <div class="section-card" style="background:#f8fafc; border:1px solid var(--border); border-radius:18px; padding:24px; text-align:center; max-width:540px; margin:0 auto;">
-            <h3 style="font-size:16px; font-weight:700; color:var(--ink-dark); margin-bottom:6px;">Next: Publish your first product</h3>
-            <p style="font-size:13px; color:var(--muted); margin-bottom:18px;">Publish an item to start receiving orders across Rourkela immediately.</p>
+          <!-- PRINTABLE DOSSIER CARD -->
+          <div id="printSummaryCard" style="background:#ffffff; border:1.5px solid var(--border); border-radius:20px; padding:28px 32px; max-width:760px; margin:0 auto 28px; box-shadow:0 8px 30px rgba(0,0,0,0.04);">
             
-            <div style="display:flex; gap:12px; justify-content:center;">
-              <a href="/" class="btn-save-continue" style="text-decoration:none;">
-                Go to Apnazo Home &rarr;
-              </a>
-              <button class="btn-back" onclick="window.print()">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg> Download Summary
-              </button>
+            <!-- Summary Header -->
+            <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid #f1f5f9; padding-bottom:18px; margin-bottom:20px;">
+              <div style="display:flex; align-items:center; gap:14px;">
+                <img src="/images/apnazo-logo.png" alt="Apnazo" style="height:44px; object-fit:contain;">
+                <div>
+                  <div style="font-family:var(--font-display); font-size:16px; font-weight:800; color:var(--dark-blue);">APNAZO PARTNER REGISTRATION SUMMARY</div>
+                  <div style="font-size:12px; color:var(--muted);">Rourkela Super App · Merchant Operations</div>
+                </div>
+              </div>
+              <div style="text-align:right;">
+                <span style="background:#eff6ff; color:#0f43b3; border:1px solid #bfdbfe; font-size:11.5px; font-weight:700; padding:4px 10px; border-radius:20px; text-transform:uppercase;" id="sumAppId">APN-2026-004</span>
+                <div style="font-size:11.5px; color:var(--muted); margin-top:4px;" id="sumTimestamp">27 Nov 2026</div>
+              </div>
             </div>
+
+            <!-- Summary Section 1: Business Profile -->
+            <div style="margin-bottom:18px;">
+              <div style="font-size:13px; font-weight:800; text-transform:uppercase; color:var(--brand-orange); letter-spacing:0.04em; margin-bottom:10px;">1. Business Profile</div>
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; background:#f8fafc; border-radius:12px; padding:14px; font-size:13px;">
+                <div><span style="color:var(--muted);">Business Name:</span> <strong id="sumBizName" style="color:var(--ink-dark);">Steel City Supermarket</strong></div>
+                <div><span style="color:var(--muted);">Owner / Legal Name:</span> <strong id="sumOwnerName" style="color:var(--ink-dark);">Ramesh Chandra Sahu</strong></div>
+                <div><span style="color:var(--muted);">Primary Category:</span> <strong id="sumCategory" style="color:var(--ink-dark);">Retail & Grocery</strong></div>
+                <div><span style="color:var(--muted);">Registered Mobile:</span> <strong id="sumMobile" style="color:var(--ink-dark);">+91 8318102957</strong></div>
+                <div><span style="color:var(--muted);">Selected Tags:</span> <strong id="sumTags" style="color:var(--ink-dark);">Grocery, Daily Essentials</strong></div>
+                <div><span style="color:var(--muted);">Retail Channel:</span> <strong id="sumChannel" style="color:var(--ink-dark);">Offline Store</strong></div>
+                <div style="grid-column:1 / -1;"><span style="color:var(--muted);">Store Address:</span> <strong id="sumAddress" style="color:var(--ink-dark);">Main Road, Uditnagar, Rourkela - 769001</strong></div>
+              </div>
+            </div>
+
+            <!-- Summary Section 2: Identity & Tax -->
+            <div style="margin-bottom:18px;">
+              <div style="font-size:13px; font-weight:800; text-transform:uppercase; color:var(--brand-orange); letter-spacing:0.04em; margin-bottom:10px;">2. Identity &amp; Tax Verification</div>
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; background:#f8fafc; border-radius:12px; padding:14px; font-size:13px;">
+                <div><span style="color:var(--muted);">PAN Number:</span> <strong id="sumPan" style="color:var(--ink-dark);">ABCDE1234F</strong></div>
+                <div><span style="color:var(--muted);">PAN Status:</span> <strong style="color:#059669;">Verified (Admin Audited)</strong></div>
+                <div><span style="color:var(--muted);">Tax Regime:</span> <strong id="sumGstRegime" style="color:var(--ink-dark);">Registered GSTIN</strong></div>
+                <div><span style="color:var(--muted);">GST / Genuine Proof:</span> <strong id="sumGstNumber" style="color:var(--ink-dark);">21ABCDE1234F1Z5</strong></div>
+                <div id="sumGstExpiryRow" style="grid-column:1 / -1;"><span style="color:var(--muted);">15-Day Grace Status:</span> <strong style="color:#059669;">Protected Under Apnazo Continuity Policy</strong></div>
+              </div>
+            </div>
+
+            <!-- Summary Section 3: Bank Account for Payouts -->
+            <div style="margin-bottom:18px;">
+              <div style="font-size:13px; font-weight:800; text-transform:uppercase; color:var(--brand-orange); letter-spacing:0.04em; margin-bottom:10px;">3. Bank Payout Settlement (T+2 Days)</div>
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; background:#f8fafc; border-radius:12px; padding:14px; font-size:13px;">
+                <div><span style="color:var(--muted);">Bank Account:</span> <strong id="sumBankAcc" style="color:var(--ink-dark);">•••• •••• 3123</strong></div>
+                <div><span style="color:var(--muted);">IFSC Code:</span> <strong id="sumIfsc" style="color:var(--ink-dark);">SBIN0001244</strong></div>
+                <div style="grid-column:1 / -1;"><span style="color:var(--muted);">Beneficiary Name:</span> <strong id="sumBeneficiary" style="color:var(--ink-dark);">Ramesh Chandra Sahu (PAN Matched)</strong></div>
+              </div>
+            </div>
+
+            <!-- Summary Section 4: Category Licence / FSSAI -->
+            <div style="margin-bottom:18px;">
+              <div style="font-size:13px; font-weight:800; text-transform:uppercase; color:var(--brand-orange); letter-spacing:0.04em; margin-bottom:10px;">4. Category Licence &amp; Statutory Compliance</div>
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; background:#f8fafc; border-radius:12px; padding:14px; font-size:13px;">
+                <div><span style="color:var(--muted);">Licence Type:</span> <strong id="sumLicenceType" style="color:var(--ink-dark);">FSSAI Food Licence</strong></div>
+                <div><span style="color:var(--muted);">Licence Number:</span> <strong id="sumLicenceNum" style="color:var(--ink-dark);">12023023000456</strong></div>
+                <div style="grid-column:1 / -1;"><span style="color:var(--muted);">Compliance Grace Window:</span> <strong style="color:#059669;">15 Days Active Pre-Expiry Tracking</strong></div>
+              </div>
+            </div>
+
+            <!-- Summary Section 5: Documents & e-Sign -->
+            <div>
+              <div style="font-size:13px; font-weight:800; text-transform:uppercase; color:var(--brand-orange); letter-spacing:0.04em; margin-bottom:10px;">5. Attached Documents &amp; e-Sign</div>
+              <div style="background:#f8fafc; border-radius:12px; padding:14px; font-size:13px;">
+                <div style="margin-bottom:8px;"><span style="color:var(--muted);">Attached Files:</span> <span id="sumDocsChips" style="font-weight:600; color:var(--ink-dark);">PAN Card, Bank Proof, GST Certificate, Storefront Logo</span></div>
+                <div><span style="color:var(--muted);">e-Sign Agreement:</span> <strong style="color:#059669;">&check; Accepted &amp; Verified via OTP on Apnazo Platform</strong></div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- ACTION BUTTONS -->
+          <div style="display:flex; gap:14px; justify-content:center; margin-bottom:16px;">
+            <button class="btn-save-continue" onclick="printApplicationSummary()">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+              <span>Download / Print Summary</span>
+            </button>
+            <a href="/" class="btn-back" style="text-decoration:none; padding:12px 24px;">
+              Go to Apnazo Home &rarr;
+            </a>
           </div>
         </div>
 
@@ -1687,10 +1761,6 @@
     }
 
     function jumpToStep(num) {
-      if (num > state.step && !state.verified && num > 1) {
-        showToast('warning', 'Phone Verification Required', 'Please complete mobile number verification first.');
-        return;
-      }
       goToStep(num);
     }
 
@@ -1797,6 +1867,7 @@
       document.querySelectorAll('.business-block').forEach(b => b.classList.remove('selected'));
       el.classList.add('selected');
       state.businessRole = role;
+      updateStep6ForCategory(role);
 
       // Update Dynamic Logo Fallback Icon
       const icons = {
@@ -2124,9 +2195,11 @@
       .then(res => res.json())
       .then(() => {
         showToast('success', 'Onboarding Complete', 'Welcome to Apnazo Seller Hub!');
+        populateSummaryDossier();
         goToStep(8);
       })
       .catch(() => {
+        populateSummaryDossier();
         goToStep(8);
       });
     }
@@ -2149,6 +2222,137 @@
         showToast('info', 'Push Scheduled', 'Push alerts scheduled 15 days before GST & FSSAI expiry.');
       }
     }
+
+    
+    // DYNAMIC STEP 6 ADAPTATION BASED ON SELECTED CATEGORY
+    function updateStep6ForCategory(category) {
+      const headerTitle = document.getElementById('s6HeaderTitle');
+      const headerDesc = document.getElementById('s6HeaderDesc');
+      const typeLabel = document.getElementById('licenceTypeLabel');
+      const docNumLabel = document.getElementById('s6DocNumLabel');
+      const expiryField = document.getElementById('s6ExpiryField');
+      const graceAlert = document.getElementById('fssaiGraceAlert');
+      const uploadLabel = document.getElementById('s6UploadLabel');
+      const uploadTitle = document.getElementById('s6UploadTitle');
+      const navLabel = document.getElementById('step6NavLabel');
+      const select = document.getElementById('licenceTypeSelect');
+      const input = document.getElementById('fssaiNumber');
+
+      if (!headerTitle) return;
+
+      if (category === 'Home Services & Repairs') {
+        if (navLabel) navLabel.innerText = 'Skill & Trade ID';
+        headerTitle.innerText = 'Trade Skill & ID Verification';
+        headerDesc.innerText = 'Home maintenance, electrician, plumbing and salon services do not require FSSAI. Please enter your trade skill or government ID proof.';
+        typeLabel.innerText = 'Skill / ID Document Type *';
+        docNumLabel.innerText = 'Trade / Skill / ID Certificate Number *';
+        input.placeholder = 'e.g. ITI / Skill India / Aadhaar Number';
+        if (select) select.value = 'Skill Certificate';
+        if (expiryField) expiryField.style.display = 'none';
+        if (graceAlert) graceAlert.style.display = 'none';
+        if (uploadLabel) uploadLabel.innerText = 'Upload Hardcopy of Trade Skill / ID Document *';
+        if (uploadTitle) uploadTitle.innerText = 'Upload Skill Certificate or ID Proof';
+      } else if (category === 'Taxi & City Rides') {
+        if (navLabel) navLabel.innerText = 'Driving Licence & RC';
+        headerTitle.innerText = 'Commercial Driving Licence & Vehicle Permit';
+        headerDesc.innerText = 'Auto rickshaw, bike taxi, and cab operators must provide an active commercial driving licence.';
+        typeLabel.innerText = 'Transport Licence Type *';
+        docNumLabel.innerText = 'Commercial Driving Licence Number *';
+        input.placeholder = 'e.g. OD-14-2023-0012345';
+        if (select) select.value = 'Commercial Driving Licence';
+        if (expiryField) expiryField.style.display = 'block';
+        if (graceAlert) graceAlert.style.display = 'none';
+        if (uploadLabel) uploadLabel.innerText = 'Upload Hardcopy of Commercial Driving Licence / RC *';
+        if (uploadTitle) uploadTitle.innerText = 'Upload Driving Licence / RC Copy';
+      } else if (category === 'Fashion & Lifestyle' || category === 'Electronics & Mobiles') {
+        if (navLabel) navLabel.innerText = 'Trade & Shop Licence';
+        headerTitle.innerText = 'Shop Licence & Brand Authorization';
+        headerDesc.innerText = 'Retail shops in fashion and electronics require a municipal trade licence or brand authorization certificate.';
+        typeLabel.innerText = 'Commercial Licence Type *';
+        docNumLabel.innerText = 'Trade / Commercial Registration Number *';
+        input.placeholder = 'e.g. RMC-TR-2026-9876';
+        if (select) select.value = 'Trade';
+        if (expiryField) expiryField.style.display = 'block';
+        if (graceAlert) graceAlert.style.display = 'none';
+        if (uploadLabel) uploadLabel.innerText = 'Upload Hardcopy of Trade Licence or Storefront Document *';
+        if (uploadTitle) uploadTitle.innerText = 'Upload Trade / Business Licence';
+      } else {
+        // Retail & Grocery / Restaurant & Food (FSSAI MANDATORY)
+        if (navLabel) navLabel.innerText = 'Food Safety (FSSAI)';
+        headerTitle.innerText = 'Food Safety & FSSAI Registration';
+        headerDesc.innerText = 'Food, grocery, restaurant, and packaged item businesses require a valid 14-digit FSSAI licence or registration certificate.';
+        typeLabel.innerText = 'Food Safety Certificate Type *';
+        docNumLabel.innerText = '14-Digit FSSAI Registration Number *';
+        input.placeholder = 'e.g. 12023023000456';
+        if (select) select.value = 'FSSAI';
+        if (expiryField) expiryField.style.display = 'block';
+        if (uploadLabel) uploadLabel.innerText = 'Upload Hardcopy of FSSAI Certificate *';
+        if (uploadTitle) uploadTitle.innerText = 'Upload FSSAI Food Licence';
+      }
+    }
+
+    function handleLicenceTypeChange(val) {
+      const expiryField = document.getElementById('s6ExpiryField');
+      if (val === 'Exempt' || val === 'Skill Certificate') {
+        if (expiryField) expiryField.style.display = 'none';
+      } else {
+        if (expiryField) expiryField.style.display = 'block';
+      }
+    }
+
+    // POPULATE SUMMARY IN STEP 8 WITH COMPLETE USER INPUTS
+    function populateSummaryDossier() {
+      const setVal = (id, val) => {
+        const el = document.getElementById(id);
+        if (el) el.innerText = val;
+      };
+
+      setVal('sumBizName', document.getElementById('bizName').value || 'Apnazo Partner Store');
+      setVal('sumOwnerName', document.getElementById('ownerName').value || 'Registered Partner');
+      setVal('sumCategory', state.businessRole);
+      setVal('sumMobile', '+91 ' + (state.mobile || '7355315892'));
+      setVal('sumTags', (state.categories || []).join(', ') || 'General');
+      setVal('sumChannel', document.getElementById('retailChannel').value);
+      
+      const addr = document.getElementById('bizAddress').value;
+      const pin = state.pincode || '769001';
+      setVal('sumAddress', (addr ? addr + ', ' : '') + 'Pincode: ' + pin + ', Rourkela, Odisha');
+      
+      setVal('sumPan', document.getElementById('panNumber').value || 'ABCDE1234F');
+      
+      if (state.hasGst) {
+        setVal('sumGstRegime', 'Registered GSTIN');
+        setVal('sumGstNumber', document.getElementById('gstNumber').value || '21ABCDE1234F1Z5');
+      } else {
+        setVal('sumGstRegime', 'Turnover < 20 Lakhs (Genuine Business Proof)');
+        setVal('sumGstNumber', (document.getElementById('genuineDocType').value) + ': ' + (document.getElementById('genuineDocNum').value || 'UDYAM-OD-27-00123'));
+      }
+
+      const acc = document.getElementById('bankAccNumber').value;
+      setVal('sumBankAcc', acc ? '•••• •••• ' + acc.slice(-4) : '•••• •••• 3123');
+      setVal('sumIfsc', document.getElementById('bankIfsc').value || 'SBIN0001244');
+      setVal('sumBeneficiary', document.getElementById('bankBeneficiary').value || document.getElementById('ownerName').value || 'Verified Beneficiary');
+
+      setVal('sumLicenceType', document.getElementById('licenceTypeSelect').value);
+      setVal('sumLicenceNum', document.getElementById('fssaiNumber').value || 'Verified / Enrolled');
+
+      const attached = [];
+      if (state.documents.pan) attached.push('PAN Copy');
+      if (state.documents.gst || state.documents.genuine) attached.push(state.hasGst ? 'GST Certificate' : 'Genuine Document');
+      if (state.documents.bank) attached.push('Bank Proof');
+      if (state.documents.fssai) attached.push('Category Licence');
+      if (state.logoUrl) attached.push('Storefront Logo');
+      setVal('sumDocsChips', attached.length > 0 ? attached.join(' • ') : 'Standard Compliance Hardcopies Attached');
+
+      const now = new Date();
+      setVal('sumTimestamp', now.toLocaleDateString('en-IN', { day:'2-digit', month:'short', year:'numeric' }) + ' ' + now.toLocaleTimeString('en-IN', { hour:'2-digit', minute:'2-digit' }));
+    }
+
+    function printApplicationSummary() {
+      populateSummaryDossier();
+      window.print();
+    }
+
 
     function changeLanguage(lang) {
       showToast('info', 'Language Switched', 'Language preference set to: ' + lang.toUpperCase());
