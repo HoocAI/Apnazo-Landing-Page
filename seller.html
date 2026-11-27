@@ -1413,14 +1413,9 @@
 
             <div class="form-grid-2">
               <div class="field">
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-                  <label style="margin:0;">Pin Code (Location Autofetch) *</label>
-                  <button type="button" class="quick-suggest-chip" style="font-size:11px; padding:2px 8px; font-weight:700; color:#ea580c; border-color:#fed7aa; background:#fff7ed; cursor:pointer;" onclick="detectRealtimeLocation()">
-                    📍 Detect Current Location
-                  </button>
-                </div>
+                <label>Pin Code (Location Autofetch) *</label>
                 <input type="text" id="pincodeInput" placeholder="Enter 6-digit Pincode (e.g. 769001)" maxlength="6" oninput="handlePincodeLookup(this.value)">
-                <div id="pincodeBadge" class="pincode-status-chip"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> Enter 6 digits or click Detect Location</div>
+                <div id="pincodeBadge" class="pincode-status-chip"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> Enter 6 digits for autofetch</div>
               </div>
               <div class="field">
                 <label>City &amp; State</label>
@@ -2379,11 +2374,9 @@
       updateStep6ForCategory(state.businessRole);
       renderCategoryChips();
 
-      // Location auto-catch on reload: preserve saved pincode or silent auto-detect
+      // Location auto-catch on reload: preserve saved pincode
       if (state.pincode) {
         handlePincodeLookup(state.pincode);
-      } else {
-        detectRealtimeLocation(true);
       }
 
       // If user has already verified mobile, check real-time application status from backend
